@@ -226,7 +226,7 @@ const Settings = () => {
           <div className="col-span-1 md:col-span-2 mt-4">
             <button
               onClick={handleUpdateSettings}
-              className="w-full bg-[var(--color-accent)] hover:bg-yellow-500 text-white font-bold py-3 px-4 rounded-lg transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg-secondary)]"
+              className="w-full bg-[var(--color-accent)] hover:bg-yellow-500 cursor-pointer text-white font-bold py-3 px-4 rounded-lg transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg-secondary)]"
             >
               Update Settings
             </button>
@@ -248,7 +248,7 @@ const Settings = () => {
             <div className="flex-1 w-full sm:w-auto">
               <DateRangePicker />
             </div>
-            <button className="bg-[var(--color-accent)] hover:bg-yellow-600 text-white font-bold py-3 px-4 rounded-lg transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg-secondary)]">
+            <button className="bg-[var(--color-accent)] hover:bg-yellow-600 cursor-pointer text-white font-bold py-3 px-4 rounded-lg transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 focus:ring-offset-[var(--color-bg-secondary)]">
               Go
             </button>
           </div>

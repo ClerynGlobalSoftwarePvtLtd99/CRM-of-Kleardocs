@@ -20,6 +20,7 @@ const dummyData = [
   { name: '30', leads: 349, interacted: 430, sales: 4300, salesCount: 28 },
 ]
 
+
 // Custom Tooltip for dark theme
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
