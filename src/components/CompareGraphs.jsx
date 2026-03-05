@@ -13,9 +13,6 @@ const CompareGraphs = () => {
       <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl p-6">
         <div className="flex flex-col md:flex-row items-center gap-4">
           <DateRangePicker label="Select Date Range 1" />
-          <span className="text-[var(--color-text-secondary)] font-medium">
-            VS
-          </span>
           <DateRangePicker label="Select Date Range 2" />
 
           <div className="w-full md:w-auto mt-4 md:mt-0 md:ml-auto">
