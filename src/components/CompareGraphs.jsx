@@ -16,7 +16,7 @@ const CompareGraphs = () => {
           <DateRangePicker label="Select Date Range 2" />
 
           <div className="w-full md:w-auto mt-4 md:mt-0 md:ml-auto">
-            <button className="w-full md:w-auto flex items-center justify-center gap-2 bg-[var(--color-accent)] text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-[#c29e46] transition-colors shadow-md">
+            <button className="w-full md:w-auto flex items-center justify-center gap-2 bg-[var(--color-accent)] text-white hover:bg-yellow-500 cursor-pointer px-6 py-2.5 rounded-lg font-semibold hover:bg-[#c29e46] transition-colors shadow-md">
               <BarChart2 size={18} />
               Load Graph
             </button>

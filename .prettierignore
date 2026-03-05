@@ -1,0 +1,54 @@
+# Dependency directories
+node_modules/
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+out/
+coverage/
+
+# Next.js / framework specific
+.next/
+.nuxt/
+.output/
+.vercel/
+
+# Caches
+.cache/
+.temp/
+
+# Configuration and locks
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+.env
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Public static assets
+public/
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Output of 'npm pack'
+*.tgz
+
+# Minified files
+*.min.js
+*.min.css
+
+# Miscellaneous
+.DS_Store
+*.log
