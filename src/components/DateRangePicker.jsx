@@ -266,24 +266,28 @@ const DateRangePicker = () => {
     <div className="relative z-50" ref={popoverRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-2 rounded-lg text-sm text-[var(--color-text-primary)] hover:border-[var(--color-accent)] transition-colors"
+        className="flex items-center justify-between w-[250px] sm:w-auto gap-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-2 rounded-lg text-sm text-[var(--color-text-primary)] hover:border-[var(--color-accent)] transition-colors"
       >
-        <Calendar size={18} className="text-[var(--color-accent)]" />
-        <span className="hidden sm:inline-block font-medium">
-          {displayString}
-        </span>
-        <span className="sm:hidden font-medium">Dates</span>
+        <div className="flex items-center gap-2 overflow-hidden">
+          <Calendar size={18} className="text-[var(--color-accent)] shrink-0" />
+          <span className="hidden sm:inline-block font-medium truncate">
+            {displayString}
+          </span>
+          <span className="sm:hidden font-medium truncate">
+            {displayString}
+          </span>
+        </div>
 
         {dateRange.start && dateRange.end ? (
           <X
             size={16}
-            className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors ml-1"
+            className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors ml-1 shrink-0"
             onClick={handleClear}
           />
         ) : (
           <ChevronDown
             size={16}
-            className="text-[var(--color-text-secondary)] ml-1"
+            className="text-[var(--color-text-secondary)] ml-1 shrink-0"
           />
         )}
       </button>

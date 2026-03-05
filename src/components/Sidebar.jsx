@@ -71,8 +71,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed md:relative inset-y-0 left-0 z-40 bg-[var(--color-bg-secondary)] transform transition-all duration-300 ease-in-out border-r border-[var(--color-bg-tertiary)] flex flex-col h-full
-        ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        className={`fixed md:relative inset-y-0 right-0 z-40 bg-[var(--color-bg-secondary)] transform transition-all duration-300 ease-in-out border-r border-[var(--color-bg-tertiary)] flex flex-col h-full
+        ${isOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}
         ${isCollapsed ? 'md:w-20' : 'md:w-64'} w-64`}
       >
         {/* Logo Area */}
@@ -86,7 +86,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           )}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="hidden md:flex p-1.5 rounded-lg text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-colors"
+            className="hidden md:flex p-1.5 rounded-lg cursor-pointer text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-colors"
           >
             <Menu size={22} />
           </button>
@@ -126,6 +126,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                 <li key={item.name}>
                   <NavLink
                     to={item.path || '#'}
+                    onClick={() => setIsOpen(false)}
                     className={`w-full flex items-center px-3 py-2.5 rounded-lg transition-colors group
                       ${
                         isActive
