@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router'
 import AdminLayout from './components/AdminLayout'
 import Dashboard from './pages/Dashboard'
+import Settings from './pages/Settings'
 import Loader from './components/Loader'
 
 function App() {
@@ -19,9 +21,14 @@ function App() {
   }
 
   return (
-    <AdminLayout>
-      <Dashboard />
-    </AdminLayout>
+    <BrowserRouter>
+      <AdminLayout>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
+      </AdminLayout>
+    </BrowserRouter>
   )
 }
 

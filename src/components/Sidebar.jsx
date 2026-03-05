@@ -9,8 +9,8 @@ import {
   FileText,
   Repeat,
   CreditCard,
-  LayoutTemplate,
   BookOpen,
+  LayoutTemplate,
   Users2,
   Settings,
   Sliders,
@@ -18,27 +18,45 @@ import {
   Menu,
   X,
 } from 'lucide-react'
+import { NavLink, useLocation } from 'react-router'
 
-const Sidebar = () => {
+const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [showLogoutPopup, setShowLogoutPopup] = useState(false)
+  const location = useLocation()
 
   const menuItems = [
-    { name: 'Dashboard', icon: <LayoutDashboard size={20} />, active: true },
-    { name: 'Leads', icon: <Users size={20} /> },
-    { name: 'Customers', icon: <UserCheck size={20} /> },
-    { name: 'Services', icon: <Briefcase size={20} /> },
-    { name: 'Compliances', icon: <FileCheck size={20} /> },
-    { name: 'Add Invoice', icon: <FilePlus size={20} /> },
-    { name: 'Invoice', icon: <FileText size={20} /> },
-    { name: 'Recurring Invoice', icon: <Repeat size={20} /> },
-    { name: 'Payments', icon: <CreditCard size={20} /> },
-    { name: 'Template', icon: <LayoutTemplate size={20} /> },
-    { name: 'Accountant Jobs', icon: <BookOpen size={20} /> },
-    { name: 'Users', icon: <Users2 size={20} /> },
-    { name: 'Compliance Settings', icon: <Sliders size={20} /> },
-    { name: 'Settings', icon: <Settings size={20} /> },
-    { name: 'Logout', icon: <LogOut size={20} /> },
+    { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/' },
+    { name: 'Leads', icon: <Users size={20} />, path: '/leads' },
+    { name: 'Customers', icon: <UserCheck size={20} />, path: '/customers' },
+    { name: 'Services', icon: <Briefcase size={20} />, path: '/services' },
+    {
+      name: 'Compliances',
+      icon: <FileCheck size={20} />,
+      path: '/compliances',
+    },
+    { name: 'Add Invoice', icon: <FilePlus size={20} />, path: '/add-invoice' },
+    { name: 'Invoice', icon: <FileText size={20} />, path: '/invoice' },
+    {
+      name: 'Recurring Invoice',
+      icon: <Repeat size={20} />,
+      path: '/recurring-invoice',
+    },
+    { name: 'Payments', icon: <CreditCard size={20} />, path: '/payments' },
+    { name: 'Template', icon: <LayoutTemplate size={20} />, path: '/template' },
+    {
+      name: 'Accountant Jobs',
+      icon: <BookOpen size={20} />,
+      path: '/accountant-jobs',
+    },
+    { name: 'Users', icon: <Users2 size={20} />, path: '/users' },
+    {
+      name: 'Compliance Settings',
+      icon: <Sliders size={20} />,
+      path: '/compliance-settings',
+    },
+    { name: 'Settings', icon: <Settings size={20} />, path: '/settings' },
+    { name: 'Logout', icon: <LogOut size={20} />, action: 'logout' },
   ]
 
   return (
@@ -53,44 +71,83 @@ const Sidebar = () => {
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed md:static inset-y-0 left-0 z-40 w-64 bg-[var(--color-bg-secondary)] transform transition-transform duration-300 ease-in-out border-r border-[var(--color-bg-tertiary)] flex flex-col h-full
-        ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}
+        className={`fixed md:relative inset-y-0 left-0 z-40 bg-[var(--color-bg-secondary)] transform transition-all duration-300 ease-in-out border-r border-[var(--color-bg-tertiary)] flex flex-col h-full
+        ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        ${isCollapsed ? 'md:w-20' : 'md:w-64'} w-64`}
       >
         {/* Logo Area */}
-        <div className="flex items-center justify-center h-20 border-b border-[var(--color-bg-tertiary)]">
-          <h1 className="text-2xl font-bold text-[var(--color-accent)]">
-            Kleardocs
-          </h1>
+        <div
+          className={`flex items-center h-20 border-b border-[var(--color-bg-tertiary)] ${isCollapsed ? 'justify-center' : 'justify-between px-4'}`}
+        >
+          {!isCollapsed && (
+            <h1 className="text-2xl font-bold text-[var(--color-accent)] truncate">
+              Kleardocs
+            </h1>
+          )}
+          <button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="hidden md:flex p-1.5 rounded-lg text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] hover:text-[var(--color-text-primary)] transition-colors"
+          >
+            <Menu size={22} />
+          </button>
         </div>
 
         {/* Navigation Menu */}
         <nav className="flex-1 overflow-y-auto py-4 scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)]">
           <ul className="space-y-1 px-3">
-            {menuItems.map((item) => (
-              <li key={item.name}>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault()
-                    if (item.name === 'Logout') {
-                      setShowLogoutPopup(true)
-                    }
-                  }}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors group
-                    ${
-                      item.active
-                        ? 'bg-[var(--color-accent)] text-white cursor-pointer hover:bg-yellow-500 hover:text-white'
-                        : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] cursor-pointer hover:text-[var(--color-text-primary)]'
-                    }`}
-                >
-                  <span
-                    className={`${item.active ? 'text-white' : 'text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)]'} transition-colors`}
+            {menuItems.map((item) => {
+              const isActive = location.pathname === item.path
+
+              if (item.action === 'logout') {
+                return (
+                  <li key={item.name}>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault()
+                        setShowLogoutPopup(true)
+                      }}
+                      className={`w-full flex items-center px-3 py-2.5 rounded-lg transition-colors group text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] cursor-pointer hover:text-[var(--color-text-primary)] ${isCollapsed ? 'justify-center' : 'gap-3'}`}
+                      title={isCollapsed ? item.name : ''}
+                    >
+                      <span className="text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors shrink-0">
+                        {item.icon}
+                      </span>
+                      {!isCollapsed && (
+                        <span className="font-medium text-sm truncate">
+                          {item.name}
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                )
+              }
+
+              return (
+                <li key={item.name}>
+                  <NavLink
+                    to={item.path || '#'}
+                    className={`w-full flex items-center px-3 py-2.5 rounded-lg transition-colors group
+                      ${
+                        isActive
+                          ? 'bg-[var(--color-accent)] text-white cursor-pointer hover:bg-yellow-500 hover:text-white'
+                          : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-tertiary)] cursor-pointer hover:text-[var(--color-text-primary)]'
+                      } ${isCollapsed ? 'justify-center' : 'gap-3'}`}
+                    title={isCollapsed ? item.name : ''}
                   >
-                    {item.icon}
-                  </span>
-                  <span className="font-medium text-sm">{item.name}</span>
-                </button>
-              </li>
-            ))}
+                    <span
+                      className={`${isActive ? 'text-white' : 'text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)]'} transition-colors shrink-0`}
+                    >
+                      {item.icon}
+                    </span>
+                    {!isCollapsed && (
+                      <span className="font-medium text-sm truncate">
+                        {item.name}
+                      </span>
+                    )}
+                  </NavLink>
+                </li>
+              )
+            })}
           </ul>
         </nav>
       </aside>
