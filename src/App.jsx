@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router'
 import AdminLayout from './components/AdminLayout'
 import Dashboard from './pages/Dashboard'
 import Settings from './pages/Settings'
+import ComplianceSettings from './pages/ComplianceSettings'
 import Loader from './components/Loader'
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/compliance-settings" element={<ComplianceSettings />} />
         </Routes>
       </AdminLayout>
     </BrowserRouter>
