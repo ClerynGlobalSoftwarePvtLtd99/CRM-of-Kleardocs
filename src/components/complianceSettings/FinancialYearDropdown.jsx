@@ -33,7 +33,7 @@ const FinancialYearDropdown = ({
       <button
         onClick={onLoad}
         disabled={!selectedYear}
-        className="w-full sm:w-auto bg-[#1f2937] hover:bg-[#374151] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-white font-bold py-2.5 px-6 rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1f2937]"
+        className="w-full sm:w-auto bg-[var(--color-accent)] hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-white font-bold py-2.5 px-6 rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1f2937]"
       >
         Load
       </button>
