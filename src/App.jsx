@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard'
 import Settings from './pages/Settings'
 import ComplianceSettings from './pages/ComplianceSettings'
 import Users from './pages/Users'
+import AccountantJobs from './pages/AccountantJobs'
 import Loader from './components/Loader'
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/compliance-settings" element={<ComplianceSettings />} />
+          <Route path="/accountantjobs" element={<AccountantJobs />} />
           <Route path="/users" element={<Users />} />
         </Routes>
       </AdminLayout>

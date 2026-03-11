@@ -47,7 +47,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
     {
       name: 'Accountant Jobs',
       icon: <BookOpen size={20} />,
-      path: '/accountant-jobs',
+      path: '/accountantjobs',
     },
     { name: 'Users', icon: <Users2 size={20} />, path: '/users' },
     {
