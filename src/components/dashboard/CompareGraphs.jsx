@@ -1,5 +1,5 @@
 import React from 'react'
-import DateRangePicker from './DateRangePicker'
+import DateRangePicker from '../DateRangePicker'
 import { BarChart2 } from 'lucide-react'
 
 const CompareGraphs = () => {
