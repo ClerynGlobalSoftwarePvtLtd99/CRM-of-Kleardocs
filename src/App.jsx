@@ -6,6 +6,7 @@ import Settings from './pages/Settings'
 import ComplianceSettings from './pages/ComplianceSettings'
 import Users from './pages/Users'
 import AccountantJobs from './pages/AccountantJobs'
+import Templates from './pages/Templates'
 import Loader from './components/Loader'
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/compliance-settings" element={<ComplianceSettings />} />
           <Route path="/accountantjobs" element={<AccountantJobs />} />
+          <Route path="/templates" element={<Templates />} />
           <Route path="/users" element={<Users />} />
         </Routes>
       </AdminLayout>

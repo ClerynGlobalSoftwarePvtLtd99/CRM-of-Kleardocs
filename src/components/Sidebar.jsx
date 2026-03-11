@@ -43,7 +43,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       path: '/recurring-invoice',
     },
     { name: 'Payments', icon: <CreditCard size={20} />, path: '/payments' },
-    { name: 'Template', icon: <LayoutTemplate size={20} />, path: '/template' },
+    { name: 'Template', icon: <LayoutTemplate size={20} />, path: '/templates' },
     {
       name: 'Accountant Jobs',
       icon: <BookOpen size={20} />,
