@@ -1,0 +1,96 @@
+import React from 'react'
+import { Link } from 'react-router'
+import { ChevronRight } from 'lucide-react'
+
+const RecurringInvoicesTable = ({ invoices }) => {
+  return (
+    <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl overflow-hidden shadow-sm flex flex-col h-[65vh] min-h-[400px]">
+      <div className="overflow-auto scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] flex-1 px-4">
+        <table className="w-full text-left relative" style={{ borderSpacing: '0 10px', borderCollapse: 'separate' }}>
+          <thead>
+            <tr className="text-[var(--color-text-secondary)] text-sm uppercase tracking-wider">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
+                Created
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
+                Customer Name & Company
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
+                Linked Services
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
+                Start Date
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
+                End Date
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
+                Interval
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
+                Next Invoice Date
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)]">
+                Status
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)]">
+                Details
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {invoices.map((inv) => (
+              <tr key={inv.id} className="bg-[var(--color-bg-primary)] hover:bg-[var(--color-bg-tertiary)] transition-colors group rounded-md shadow-sm">
+                <td className="px-4 py-3 text-sm rounded-l-lg text-[var(--color-text-secondary)] min-w-[100px]">
+                  {inv.created}
+                </td>
+                <td className="px-4 py-3 text-sm">
+                  <div className="flex flex-col gap-0.5 w-full min-w-[150px]">
+                    <Link to={`/customer/${inv.customerId}`} className="font-medium text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors underline decoration-[var(--color-bg-tertiary)] underline-offset-4 hover:decoration-[var(--color-accent)] break-words" title={inv.customerName}>
+                      {inv.customerName}
+                    </Link>
+                    <span className="text-xs text-[var(--color-text-secondary)] break-words" title={inv.customerCompany}>{inv.customerCompany}</span>
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-sm text-[var(--color-text-secondary)] min-w-[100px]">
+                  {inv.linkedServices}
+                </td>
+                <td className="px-4 py-3 text-sm text-[var(--color-text-secondary)] min-w-[90px]">
+                  {inv.startDate}
+                </td>
+                <td className="px-4 py-3 text-sm text-[var(--color-text-secondary)] min-w-[90px]">
+                  {inv.endDate}
+                </td>
+                <td className="px-4 py-3 text-sm text-[var(--color-text-secondary)] min-w-[80px]">
+                  {inv.interval}
+                </td>
+                <td className="px-4 py-3 text-sm text-[var(--color-text-secondary)] min-w-[100px]">
+                  {inv.nextInvoiceDate}
+                </td>
+                <td className="px-4 py-3 text-sm text-center">
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${inv.status.toLowerCase() === 'active' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+                    {inv.status}
+                  </span>
+                </td>
+                <td className="px-4 py-3 rounded-r-lg font-semibold text-center">
+                  <Link to={`/customer/${inv.customerId}`} className="px-4 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md text-xs font-semibold shadow-sm transition-colors cursor-pointer text-white">
+                    Details
+                  </Link>
+                </td>
+              </tr>
+            ))}
+            {invoices.length === 0 && (
+              <tr>
+                <td colSpan="9" className="px-4 py-8 text-center text-[var(--color-text-secondary)] bg-[var(--color-bg-primary)] rounded-lg">
+                   No recurring invoices found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
+export default RecurringInvoicesTable

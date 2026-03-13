@@ -9,6 +9,7 @@ import AccountantJobs from './pages/AccountantJobs'
 import Templates from './pages/Templates'
 import Loader from './components/Loader'
 import Payments from './pages/Payments'
+import RecurringInvoices from './pages/RecurringInvoices'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -36,6 +37,7 @@ function App() {
           <Route path="/templates" element={<Templates />} />
           <Route path="/users" element={<Users />} />
           <Route path="/payments" element={<Payments />} />
+          <Route path="/recurringinvoices" element={<RecurringInvoices />} />
         </Routes>
       </AdminLayout>
     </BrowserRouter>
