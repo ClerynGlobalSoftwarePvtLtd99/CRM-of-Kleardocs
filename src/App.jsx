@@ -10,6 +10,8 @@ import Templates from './pages/Templates'
 import Loader from './components/Loader'
 import Payments from './pages/Payments'
 import RecurringInvoices from './pages/RecurringInvoices'
+import Invoices from './pages/Invoices'
+import InvoiceDetails from './pages/InvoiceDetails'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -38,6 +40,8 @@ function App() {
           <Route path="/users" element={<Users />} />
           <Route path="/payments" element={<Payments />} />
           <Route path="/recurringinvoices" element={<RecurringInvoices />} />
+          <Route path="/invoices" element={<Invoices />} />
+          <Route path="/invoice/:id" element={<InvoiceDetails />} />
         </Routes>
       </AdminLayout>
     </BrowserRouter>
