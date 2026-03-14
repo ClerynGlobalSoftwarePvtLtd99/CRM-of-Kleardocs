@@ -45,19 +45,19 @@ const InvoiceDetails = () => {
       <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-6 gap-4">
         <h1 className="text-2xl font-bold">Invoice Details</h1>
         <div className="flex flex-wrap items-center gap-2">
-          <button onClick={() => setShowEmailModal(true)} className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors flex items-center gap-2 font-medium shadow-sm text-sm">
+          <button onClick={() => setShowEmailModal(true)} className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors flex items-center gap-2 font-medium shadow-sm text-sm cursor-pointer">
             <Send size={16} /> Email Invoice
           </button>
-          <button onClick={() => setShowPaymentModal(true)} className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors flex items-center gap-2 font-medium shadow-sm text-sm">
+          <button onClick={() => setShowPaymentModal(true)} className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors flex items-center gap-2 font-medium shadow-sm text-sm cursor-pointer">
             <CreditCard size={16} /> Add Payment
           </button>
-          <button onClick={() => setShowDeleteModal(true)} className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors flex items-center gap-2 font-medium shadow-sm text-sm">
+          <button onClick={() => setShowDeleteModal(true)} className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors flex items-center gap-2 font-medium shadow-sm text-sm cursor-pointer">
             <Trash2 size={16} /> Delete Invoice
           </button>
-          <a href={`https://crm.startupstation.in/api/v1/invoice/view/${id}`} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors flex items-center gap-2 font-medium shadow-sm text-sm">
+          <a href={`https://crm.startupstation.in/api/v1/invoice/view/${id}`} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors flex items-center gap-2 font-medium shadow-sm text-sm cursor-pointer">
             <Eye size={16} /> View
           </a>
-          <button className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors flex items-center gap-2 font-medium shadow-sm text-sm">
+          <button className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors flex items-center gap-2 font-medium shadow-sm text-sm cursor-pointer">
             <Download size={16} /> Download
           </button>
         </div>
@@ -66,45 +66,45 @@ const InvoiceDetails = () => {
       <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl shadow-sm mb-6 p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-3 gap-2 py-2 border-b border-[var(--color-bg-tertiary)]">
+            <div className="flex flex-col gap-1 py-2 border-b border-[var(--color-bg-tertiary)]">
               <span className="text-[var(--color-text-secondary)] font-medium text-sm">Invoice No</span>
-              <span className="col-span-2 font-semibold">{INVOICE_DATA.invoiceNo}</span>
+              <span className="font-semibold">{INVOICE_DATA.invoiceNo}</span>
             </div>
-            <div className="grid grid-cols-3 gap-2 py-2 border-b border-[var(--color-bg-tertiary)]">
+            <div className="flex flex-col gap-1 py-2 border-b border-[var(--color-bg-tertiary)]">
               <span className="text-[var(--color-text-secondary)] font-medium text-sm">Invoice Date</span>
-              <span className="col-span-2 font-semibold">{INVOICE_DATA.invoiceDate}</span>
+              <span className="font-semibold">{INVOICE_DATA.invoiceDate}</span>
             </div>
-            <div className="grid grid-cols-3 gap-2 py-2 border-b border-[var(--color-bg-tertiary)]">
+            <div className="flex flex-col gap-1 py-2 border-b border-[var(--color-bg-tertiary)]">
               <span className="text-[var(--color-text-secondary)] font-medium text-sm">Place of Supply</span>
-              <span className="col-span-2 font-semibold">{INVOICE_DATA.placeOfSupply}</span>
+              <span className="font-semibold">{INVOICE_DATA.placeOfSupply}</span>
             </div>
-            <div className="grid grid-cols-3 gap-2 py-2 border-b border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-tertiary)]/50 rounded-md transition-colors items-center">
-              <span className="text-[var(--color-text-secondary)] font-medium text-sm pl-2">Company Name</span>
-              <span className="col-span-2 font-semibold">
+            <div className="flex flex-col gap-1 py-2 border-b border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-tertiary)]/50 rounded-md transition-colors">
+              <span className="text-[var(--color-text-secondary)] font-medium text-sm">Company Name</span>
+              <span className="font-semibold">
                 {INVOICE_DATA.companyName}
               </span>
             </div>
           </div>
           <div className="flex flex-col gap-4">
-             <div className="grid grid-cols-3 gap-2 py-2 border-b border-[var(--color-bg-tertiary)]">
+             <div className="flex flex-col gap-1 py-2 border-b border-[var(--color-bg-tertiary)]">
                 <span className="text-[var(--color-text-secondary)] font-medium text-sm">Customer Name</span>
-                <span className="col-span-2 font-semibold">
+                <span className="font-semibold">
                   <Link to={`/customer/${INVOICE_DATA.customerId}`} className="text-[var(--color-accent)] hover:text-yellow-600 underline underline-offset-4 decoration-[var(--color-bg-tertiary)] hover:decoration-yellow-600 transition-colors">
                     {INVOICE_DATA.customerName}
                   </Link>
                 </span>
              </div>
-             <div className="grid grid-cols-3 gap-2 py-2 border-b border-[var(--color-bg-tertiary)]">
+             <div className="flex flex-col gap-1 py-2 border-b border-[var(--color-bg-tertiary)]">
                 <span className="text-[var(--color-text-secondary)] font-medium text-sm">Customer Phone</span>
-                <span className="col-span-2 font-semibold">{INVOICE_DATA.customerPhone}</span>
+                <span className="font-semibold">{INVOICE_DATA.customerPhone}</span>
              </div>
-             <div className="grid grid-cols-3 gap-2 py-2 border-b border-[var(--color-bg-tertiary)]">
+             <div className="flex flex-col gap-1 py-2 border-b border-[var(--color-bg-tertiary)]">
                 <span className="text-[var(--color-text-secondary)] font-medium text-sm">Emails</span>
-                <span className="col-span-2 font-semibold">{INVOICE_DATA.customerEmail}</span>
+                <span className="font-semibold">{INVOICE_DATA.customerEmail}</span>
              </div>
-             <div className="grid grid-cols-3 gap-2 py-2 border-b border-[var(--color-bg-tertiary)]">
+             <div className="flex flex-col gap-1 py-2 border-b border-[var(--color-bg-tertiary)]">
                 <span className="text-[var(--color-text-secondary)] font-medium text-sm">Customer Address</span>
-                <span className="col-span-2 font-medium text-sm leading-relaxed">{INVOICE_DATA.customerAddress}</span>
+                <span className="font-medium text-sm leading-relaxed">{INVOICE_DATA.customerAddress}</span>
              </div>
           </div>
         </div>
@@ -145,7 +145,7 @@ const InvoiceDetails = () => {
         </div>
       </div>
 
-      <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl shadow-sm mb-6 w-full max-w-md ml-auto">
+      <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl shadow-sm mb-6 w-full">
         <div className="p-4 border-b border-[var(--color-bg-tertiary)] bg-[var(--color-bg-tertiary)]/30">
           <h2 className="text-lg font-bold">Totals</h2>
         </div>
