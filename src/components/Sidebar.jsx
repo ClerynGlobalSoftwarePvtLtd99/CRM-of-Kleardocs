@@ -35,7 +35,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       icon: <FileCheck size={20} />,
       path: '/compliances',
     },
-    { name: 'Add Invoice', icon: <FilePlus size={20} />, path: '/add-invoice' },
+    { name: 'Add Invoice', icon: <FilePlus size={20} />, path: '/addinvoice' },
     { name: 'Invoice', icon: <FileText size={20} />, path: '/invoices' },
     {
       name: 'Recurring Invoices',

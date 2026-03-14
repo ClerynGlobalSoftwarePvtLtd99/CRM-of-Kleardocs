@@ -82,10 +82,10 @@ const InvoicesTable = ({ invoices }) => {
                 </td>
                 <td className="px-4 py-3 rounded-r-lg text-center font-semibold">
                   <div className="flex items-center justify-center gap-2">
-                    <button className="p-1.5 text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors rounded hover:bg-[var(--color-bg-tertiary)]" title="View PDF">
+                    <button className="p-1.5 text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors rounded hover:bg-[var(--color-bg-tertiary)] cursor-pointer" title="View PDF">
                       <Eye size={18} />
                     </button>
-                    <button className="p-1.5 text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors rounded hover:bg-[var(--color-bg-tertiary)]" title="Download PDF">
+                    <button className="p-1.5 text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors rounded hover:bg-[var(--color-bg-tertiary)] cursor-pointer" title="Download PDF">
                       <Download size={18} />
                     </button>
                   </div>

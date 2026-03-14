@@ -180,7 +180,7 @@ const InvoiceDetails = () => {
           <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-2xl shadow-2xl w-full max-w-[80%] flex flex-col max-h-[90vh]">
             <div className="flex justify-between items-center p-5 border-b border-[var(--color-bg-tertiary)]">
               <h2 className="text-xl font-bold flex items-center gap-2"><Send size={20}/> Send Email Invoice</h2>
-              <button onClick={() => setShowEmailModal(false)} className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors">
+              <button onClick={() => setShowEmailModal(false)} className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer">
                 <X size={24} />
               </button>
             </div>
@@ -203,8 +203,8 @@ const InvoiceDetails = () => {
             </div>
 
             <div className="p-5 border-t border-[var(--color-bg-tertiary)] flex justify-end gap-3 flex-shrink-0">
-               <button onClick={() => setShowEmailModal(false)} className="px-6 py-2.5 border border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-tertiary)] rounded-lg font-semibold transition-colors">Cancel</button>
-               <button onClick={() => setShowEmailModal(false)} className="px-8 py-2.5 bg-[var(--color-accent)] hover:bg-yellow-500 text-white rounded-lg font-bold flex items-center gap-2 transition-colors">
+               <button onClick={() => setShowEmailModal(false)} className="px-6 py-2.5 border border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-tertiary)] rounded-lg font-semibold transition-colors cursor-pointer">Cancel</button>
+               <button onClick={() => setShowEmailModal(false)} className="px-8 py-2.5 bg-[var(--color-accent)] hover:bg-yellow-500 text-white rounded-lg font-bold flex items-center gap-2 transition-colors cursor-pointer">
                  <Send size={18} /> Send Invoice
                </button>
             </div>
@@ -219,7 +219,7 @@ const InvoiceDetails = () => {
            <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl shadow-2xl p-6 w-full max-w-md flex flex-col">
              <div className="flex justify-between items-center mb-6">
                <h2 className="text-xl font-bold text-[var(--color-accent)] flex items-center gap-2"><CreditCard size={20}/> Add Payment</h2>
-               <button onClick={() => setShowPaymentModal(false)} className="text-[var(--color-text-secondary)] hover:text-white transition-colors">
+               <button onClick={() => setShowPaymentModal(false)} className="text-[var(--color-text-secondary)] hover:text-white transition-colors cursor-pointer">
                  <X size={24} />
                </button>
              </div>
@@ -246,8 +246,8 @@ const InvoiceDetails = () => {
                  <input type="date" value={paymentDate} onChange={(e) => setPaymentDate(e.target.value)} className="w-full px-4 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] transition-colors" />
                </div>
                <div className="flex gap-3 justify-end mt-6 pt-4 border-t border-[var(--color-bg-tertiary)]">
-                 <button onClick={() => setShowPaymentModal(false)} className="flex-1 px-4 py-2 border border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-tertiary)] rounded-lg font-medium transition-colors">Cancel</button>
-                 <button onClick={() => setShowPaymentModal(false)} className="flex-1 px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors">
+                 <button onClick={() => setShowPaymentModal(false)} className="flex-1 px-4 py-2 border border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-tertiary)] rounded-lg font-medium transition-colors cursor-pointer">Cancel</button>
+                 <button onClick={() => setShowPaymentModal(false)} className="flex-1 px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors cursor-pointer">
                    Add Payment
                  </button>
                </div>

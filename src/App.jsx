@@ -12,6 +12,7 @@ import Payments from './pages/Payments'
 import RecurringInvoices from './pages/RecurringInvoices'
 import Invoices from './pages/Invoices'
 import InvoiceDetails from './pages/InvoiceDetails'
+import AddInvoice from './pages/AddInvoice'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -42,6 +43,7 @@ function App() {
           <Route path="/recurringinvoices" element={<RecurringInvoices />} />
           <Route path="/invoices" element={<Invoices />} />
           <Route path="/invoice/:id" element={<InvoiceDetails />} />
+          <Route path="/addinvoice" element={<AddInvoice />} />
         </Routes>
       </AdminLayout>
     </BrowserRouter>
