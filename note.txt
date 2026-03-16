@@ -1,0 +1,6 @@
+
+ClerynGlobalSoftwarePvtLtd99
+clerynglobalsoftwareprivatelim@gmail.com
+
+git config --global user.email "clerynglobalsoftwareprivatelim@gmail.com"
+git config --global user.name "ClerynGlobalSoftwarePvtLtd99"
