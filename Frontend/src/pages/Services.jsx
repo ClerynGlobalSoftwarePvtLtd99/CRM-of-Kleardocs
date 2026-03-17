@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ServicesHeader from "../components/services/ServicesHeader";
 import ServicesTable from "../components/services/ServicesTable";
-import ServiceFormModal from "../components/services/ServiceFormModal";
+import ServiceFormModal from "../components/services/AddServicesForm";
 
 const Services = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
