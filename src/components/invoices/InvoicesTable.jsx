@@ -4,15 +4,15 @@ import { Eye, Download } from 'lucide-react'
 
 const InvoicesTable = ({ invoices }) => {
   return (
-    <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl overflow-hidden shadow-sm flex flex-col h-[65vh] min-h-[400px]">
+    <div className="bg-bg-secondary border border-bg-tertiary rounded-xl overflow-hidden shadow-sm flex flex-col h-[65vh] min-h-100">
       <div className="overflow-auto scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] flex-1 px-4">
         <table className="w-full text-left relative" style={{ borderSpacing: '0 10px', borderCollapse: 'separate' }}>
           <thead>
-            <tr className="text-[var(--color-text-secondary)] text-sm uppercase tracking-wider">
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
+            <tr className="text-text-secondary text-sm uppercase tracking-wider">
+              <th className="sticky top-0 z-20 bg-bg-secondary px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
                 Invoice No
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-bg-secondary px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
                 Invoice Date
               </th>
               <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
