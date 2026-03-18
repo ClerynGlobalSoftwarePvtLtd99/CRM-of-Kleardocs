@@ -1,0 +1,77 @@
+import React, { useState, useEffect } from 'react'
+import { Toaster } from 'react-hot-toast'
+import { BrowserRouter, Routes, Route } from 'react-router'
+import AdminLayout from './components/AdminLayout'
+import Dashboard from './pages/Dashboard'
+import Settings from './pages/Settings'
+import ComplianceSettings from './pages/ComplianceSettings'
+import Users from './pages/Users'
+import AccountantJobs from './pages/AccountantJobs'
+import Templates from './pages/Templates'
+import Loader from './components/Loader'
+import Payments from './pages/Payments'
+import RecurringInvoices from './pages/RecurringInvoices'
+import Invoices from './pages/Invoices'
+import InvoiceDetails from './pages/InvoiceDetails'
+import AddInvoice from './pages/AddInvoice'
+import Compliances from './pages/Compliances'
+import Services from './pages/Services'
+import Leads from './pages/Leads'
+import LeadDetailsPage from './pages/LeadDetailsPage'
+import CustomerDetailsPage from './pages/CustomerDetailsPage'
+
+function App() {
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    // Simulate initial loading for 1 second to show the loader as requested
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 1000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+  return (
+    <>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: "var(--color-bg-secondary)",
+            color: "var(--color-text-primary)",
+            border: "1px solid var(--color-bg-tertiary)",
+          },
+        }}
+      />
+      
+      <BrowserRouter>
+        <AdminLayout>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/compliance-settings" element={<ComplianceSettings />} />
+            <Route path="/accountantjobs" element={<AccountantJobs />} />
+            <Route path="/templates" element={<Templates />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/payments" element={<Payments />} />
+            <Route path="/recurringinvoices" element={<RecurringInvoices />} />
+            <Route path="/invoices" element={<Invoices />} />
+            <Route path="/invoice/:id" element={<InvoiceDetails />} />
+            <Route path="/addinvoice" element={<AddInvoice />} />
+            <Route path='/compliances' element={<Compliances/>}/>
+            <Route path='/services' element={<Services/>}/>
+            <Route path='/leads' element={<Leads/>}/>
+            <Route path="/lead/:id" element={<LeadDetailsPage />} />
+            <Route path="/customer/:id" element={<CustomerDetailsPage />} />
+          </Routes>
+        </AdminLayout>
+      </BrowserRouter>
+    </>
+  )
+}
+
+export default App

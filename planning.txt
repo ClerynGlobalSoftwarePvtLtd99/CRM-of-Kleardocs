@@ -1,0 +1,7954 @@
+# 
+
+Kleardocs CRM Planing from Startup Station CRM(**Customer relationship management)**
+
+# **(Tech Stack) Express.js, React, MySql and Prisma(For orm)**
+
+# Left Side Menu Bar
+
+1. Dashboard
+2. Leads
+3. Customers
+4. Services
+5. Compliances
+6. Add Invoice
+7. Invoice
+8. Recurring Invoice
+9. Payments
+10. Template
+11. Accountant Jobs
+12. Users
+13. Compliance Settings
+14. Settings
+15. Logout
+
+Make a loader page for good UI.
+
+(After any create or update or delete show toaster toggle bottom right side)
+
+============================================
+
+# Dashboard menu All Functionality
+
+https://crm.startupstation.in/(after login show dashboard)
+
+# Dashboard
+
+- i)  Select Date Range at top of dashboard
+
+(Select range of month calender left side current month and right side current)
+(Mar 01, 2026 - Mar 31, 2026 (cross button))(Show all data to dashboard according to select date range)
+(Blow left side i)Today ii) Yesterday iii) Last 7 Days and right side has ok button for cofirm date range)
+
+c) Select Data Range
+(Two month range show left current month calender and right next months)
+(Blow left side i)Today ii) Yesterday iii) Last 7 Days and right side has ok button for cofirm date range)
+
+- (Right side) ii)  User identity(logo SM (Sanjoy Maity) (Welcome full name)
+
+- iii) Leads (section)
+1. Total Leads (count)
+2. New Leads (Count)
+3. Interacted Leads (Count)
+4. Hot Leads(Count)
+5. Cold Leads(Count)
+
+- iv) Customer
+
+    a) Total Customer (Count of Customer)
+
+    b) Customer with Annual Compliance
+
+- v) Sales(Section)
+a. Total Invoices(Count)
+
+       b. Total Sales(total money)
+
+       c. Total Payments(count)
+
+       d.Payment Received(total money)
+
+       e. Upaid/Partial Paid Invoices
+
+       f. Total Dues (Total money)
+
+- vi) Complianes & Jobs
+
+        a. Expired Not Done Compliances(Count)
+
+        b. Not Done Compliances(Count)
+
+        c. Ongoing Compliances
+
+        d. Expired Not Done Jobs
+
+       e. Not Done Jobs
+
+        f. Ongoing Jobs
+
+- vi) Compare Graphs(Column Chart)
+Types of graph visualization
+(https://www.datylon.com/blog/types-of-charts-graphs-examples-data-visualization)
+
+   Select Date Range and button (we can see graph of date range as our wish)(When i select range this time sh
+a) Daily New Leads
+
+b)Daily Interacted Leads
+
+c) Daily Sales
+
+d)Daily Sales Count
+
+There have 4 graph section (Column Chart)( the range will by default one month)
+
+a) Daily New Leads
+
+b)Daily Interacted Leads
+
+c) Daily Sales
+
+d)Daily Sales Count
+
+  
+
+================================================
+
+# Leads menu All Functionality
+
+https://crm.startupstation.in/leads
+
+# Leads
+
+left side Leads(total leads count) and right side New Lead(Button)
+
+New Leads button after click get pop up middle screen form submission.
+
+In form there have multiple input fields of this form submission.
+
+ Add New Leads
+
+Name:-
+
+Phone:-
+
+Company Name:-
+
+Service:-(all services dropdown menu)
+
+Source:-(all social media dropdown menu)
+
+Type:-(Hot and Cold)
+
+Priority:- High,Medium,Low,None
+
+Address:-(Textarea)
+
+State:- (Show dropdown menu of all state of india)
+
+Agent :- (Show dropdown menu of all 
+
+Add new lead(Button)
+
+# Filtering section of leads
+
+# First Row
+
+a)Name/Phone/Company Name
+
+b)Data Types(select options)
+
+     i)Created 
+
+     ii)Last Followup
+
+     iii)Next Followup
+
+c) Select Data Range
+(Two month range show left current month calender and right next months)
+(Blow left side i)Today ii) Yesterday iii) Last 7 Days and right side has ok button for cofirm date range)
+
+d) Service (Show all services dropdown menu)
+
+# Second Row
+
+e)Agent(Show all agent name dropdown menu)
+
+f)Source(Show all dropdown menu source of client like social media instagram,facebook,Whatsapp,Others)
+
+g) Type of client (Show dropdown menu of clients type Hot, Cold)
+
+h)Priority(Show dropdown menu client priority i)High ii)Medium iii)Low
+
+i)Response(Show all dropdown menu a)Interested b) Medium c)Not Interested )
+
+right side have filter button and cross button.
+
+After complete form fill up of make details section content ralated form data.
+
+In content show (row wise)
+
+Column 1
+(logo name show first word first letter and first letter of second word)
+
+Column 2
+
+Name
+
+Mobile 
+
+Column 3
+After complete create cusomer details row content then go the details page select (customer tablet section)
+
+Column 4
+
+1st row company name 
+
+2nd row (Which services)
+
+column 5
+1st row (Social media )
+
+2nd row (Created: date,months,year, time with AM/PM)
+
+column 6
+
+agent name 
+
+show response tablet(Interested)
+
+Column 7
+Next follow up section:-date ,year,
+Last : date,month,year , Time with (A.M/P.M)
+
+Column 8
+Type client (Hot)
+
+Column 9 
+Priority (High)
+
+Column 10
+Details(Button)
+
+After Click Details Open that client specific details page (localhost:5173/lead/client_unique_id)
+
+====================================
+
+https://crm.startupstation.in/lead/678f8daa1b59325fcdf734a4
+
+# This is details page endpoint
+
+# This is one specific client details page.
+
+Section 1
+
+first row
+Left side (Lead Details)  Right side couple of button with different color like (Convert to customer,Next Followup,Emails,Edit)
+
+These three button functionality Step By Step
+( 1)Convert to customer 2)Next Followup, 3)Emails, 4)Edit )
+
+1)Convert to customer  button
+(When new lead come this time add lead details to lead section by “Add new lead” button this it time . It is not customer. After some days if customer agree than add customer button show a form like blow
+
+### **Convert to Customer**
+
+Company Name *
+
+Address *
+
+State *
+
+GST
+
+Type *(Dropdown menu types of company)
+like “Private company “
+
+“Partnership”
+….so on
+
+Incorporation Date
+
+Newly Incorporated?(Toggle button)
+
+Username *
+
+Convert to Customer (Button)
+
+after click this customer all details add to customer section on left side main menu
+
+After update convert to customer 
+https://crm.startupstation.in/customer/698092c965b9911c9c0b0033
+this endpoint show 
+
+### Customer Details(left side)
+right side have button
+
+1)Director report
+
+2)Board Resolution
+
+3)Emails
+
+4)Data Accountant job
+
+5)Edit
+
+6)Send Template
+
+(left)Customer Name
+
+New Incorportation
+
+(right side have these button when a normal leads convert custmer)
+
+1)Consent Letter
+2)Auditors’s  Report
+3)Send Whatsapp template
+4)Add DIrector
+
+5)Add Services
+
+**Customer Name: Test
+Customer Phone: 1111
+Company Name: khgjghjvbh
+Type: Private Limited Company
+Onboarding Date: 2nd February 2026
+Incorporation Date: 2nd February 2016
+Sales Person: Ritu Kaur**
+
+**Emails**
+
+### **Address**
+
+werertsdff
+
+### **State: DELHI**
+
+### **Username: hhhhhh**
+
+### **Password: e2y22gb2**
+
+1)Next Followup button functionaliy
+
+Blow is the popup of small form 
+
+### Next Followup Date
+
+Followup Date (Calender date) set a next followup date.
+
+Also make a phone call?(This is toogle button)
+after click “Set Next Followup button”
+
+# Emails button functionality
+
+After Click Emails button 
+Show a form popup of Edit email form at middle portion page.
+In this emails edit form there have 
+
+### **Edit Emails(There we can add multiple email after click add button one by one)**
+
+[sanjoykumarmaity05@gmail.com](mailto:sanjoykumarmaity05@gmail.com)       delete(logo)
+
+[sanjoykumarmaity055@gmail.com](mailto:sanjoykumarmaity055@gmail.com)     delete(logo)
+
+[sanjoykumarmaity055@gmail.com](mailto:sanjoykumarmaity055@gmail.com)      delete(logo)
+
+Add Email
+Input field right side have a button “Add”
+
+update email button(after click this button whatever email show in preview or not show it will show  or update data to 
+
+Section 2 of Lead Details
+email section
+
+### **Emails**
+
+[sanjoykumarmaity05@gmail.com](mailto:sanjoykumarmaity05@gmail.com)
+
+[sanjumaity2804@gmail.com](mailto:sanjumaity2804@gmail.com)
+
+[sanjoykumarmaity009@gmail.com](mailto:sanjoykumarmaity009@gmail.com)
+
+then store “**Next Followup: 6th February 2026”
+store last row of section 2(inside lead details)**
+
+# Edit Button functionality
+
+After click edit button show a form of edit.
+
+This Edit Lead form have these input.
+
+Name(Customer name)
+
+Phone(Phone number)
+
+Company Name(Company name)
+
+Service(Show all services drop down menu)
+
+Source(Show all social media service)
+
+Type (Dropdown menu like  Hot ,Cold)
+
+Priority(Dropdown menu like High,Medium,Low ,None)
+
+Response(Dropdown menu like Interested,Medium,Not Intested,None)
+
+Address(Textarea) 
+
+State(Show Dropdown menu of state in india)
+
+Update Lead (Button)
+
+second row has data column wise
+**Test test** 
+
+CUSTOMER(tablet)
+
+CALL(tablet)
+
+HOT(Tablet)
+
+HIGH(tablet)
+
+Interested(tablet)
+
+Agent: Ritu Kaur
+
+There have three button
+1)Change Assign
+
+2)Send Template
+
+3)Send Whatsapp Template
+
+====================================
+
+# Change Assign Button Functionality
+
+When click this button 
+
+Show pop up a small form.
+Add/Changes Agent
+Show dropdown menu of agent names.
+
+Update Agent(Button)
+
+After this agent changes show agent name to Leads Details Section 2nd section.
+
+=========================================
+
+# Send Template button all functionality
+
+After click this button show a form popup at middle section.
+In form haa some input fields.
+
+Send Email Template(Title)
+
+Select Email Template(show dropdown input menu of all send email template)
+
+Like blew all dropdown menu
+
+1) Compliance Update
+
+2)Annual Compliance Service Jagjyot Singh
+
+3)Annual Compliance Service - Ritu Kaur
+
+4)Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+5)Annual Compliance - Onboarding
+
+6)Startup India Registration
+
+7)Startup India Promotion
+
+8)Website
+
+9)Professional Tax
+
+10)GST Filing
+
+11)Service List
+
+12)Next Quarter Payment
+
+13)INC 20A Reminder
+
+14)ROC plus GST plus ES
+
+15)plus TDS
+
+16)Package plus payment details
+
+17)Annual Compliance plus Bookkeeping
+
+18)Director Registration
+
+2nd input fields is Subject(Select automatic subject according to Select Email Template) 
+1)Compliance Update - {{complianceName}} for {{companyName}}
+
+2)Annual Compliance Service by Startup Station
+
+3)Annual Compliance Package for {{companyName}}
+
+4)Annual Compliance Package for {{companyName}}
+
+5)Welcome to Startup Station – Your Annual Compliance Access
+
+6)Startup India Registration - Next Steps & Document Submission
+
+7)Get Your Startup India Registration (DPIIT Certificate) at Just ₹2,999 with Startup Station! 🚀
+
+8)Your Website at just Rs 5000!
+
+9)Get Professional Tax Registration immediately!
+
+10)Urgent: Submit Your GST Invoices by 6th for Timely Filing!
+
+11)Discover Our Key Services to Boost Your Business – Startup Station
+
+12)Reminder: Upcoming Quarter's Payment – Complete Within 5 Days
+
+13)Urgent: INC-20A Filing Pending – Avoid Late Penalties!
+
+14)Annual Compliance Package by Startup Station
+
+15)Annual Compliance Package by Startup Station
+
+16)Annual Compliance Package by Startup Station plus Bookkeeping Services
+
+17)Startup Station - Director Resignation Services
+
+then show next row 
+{{name}}     {{companyName}}      {{address}}
+
+attach with a text editior  template like small microsoft word.
+in this small microsoft word space show email format to send email(this microsoft word space show email template according to change Select Email Template from dropdown menu Similarly show subject according to Select Email Template) 
+
+(whatever two or three email already set by email button and show 2nd section of “Lead details” 
+email:-
+
+at last has a “Send Email” Button
+
+When click “Send Email”
+send email those email these tempate with proper email format.
+like blow
+
+Lets one example of email template
+Subject:- Annual Compliance Package for Cleryn
+
+Startup Station Logo
+Dear Sir,
+
+We are excited to serve you in the upcoming year and ensure smooth compliance for your company.
+
+Please find below our Annual Compliance Package, which covers all necessary Annual ROC Compliances and Income Tax Return filing services for your company.
+
+📌 Package Details:
+Preparation & Filing of Form ADT-01 (Auditor Appointment)
+Application of Dormant Status under ESI Act
+Preparation & Filing of Form INC-20A
+Issuance of Share Certificates
+Preparation of Board Resolutions
+Preparation of AGM Resolutions
+Preparation & Filing of AOC-04
+Preparation & Filing of MGT-07
+Statutory Registers
+MPB-01
+DIR-08
+Preparation & Filing of Financial Statements
+Preparation & Filing of Audit
+Preparation & Filing of Directors’ Reports
+Preparation & Filing of Income Tax Returns
+DPT-3,
+MGT-14
+DIR-3 E-KYC
+Free consultation for legal and compliance matters
+💰 Pricing:
+Annual ROC Compliances: Rs. 7,999 + govt. fees (approx. Rs. 1500) to be paid quarterly i.e. Rs. 2000 per quarter.
+
+GST Filings: Rs. 300 for NIL return, Rs. 500 for normal filings per month.
+
+📄 Required Documents:
+MOA and AOA
+Certificate of Incorporation
+PAN of any 1 director
+We accept UPI, Card, and Bank Transfers for payment.
+
+The compliance calendar is on Page 3 of the package. Attached is our Invoice for Quarter 1.
+
+We confirm: In case of any negligence on our part resulting in penalties, we shall bear the penalty cost.
+
+For queries or clarifications, feel free to Visit our Website!.
+
+Looking forward to working with you!
+
+Thanks & Regards,
+
+Startup Station
+Your trusted partner in compliance and legal services.
+
+Below Attatch a pdf realted to “Annual Compliance Package”
+
+This blowe is for Email Template  “Professional Tax”
+
+“Subject”
+Get Professional Tax Registration immediately!
+
+[Untitled](https://www.notion.so/2fcfe67c48aa80e29daecc2b674dd326?pvs=21)
+
+===============================================
+
+# Send Whatsapp Template
+
+After Click this button “Send WhatsApp Template”
+
+Show pop at middle of the website page rest background will be black blur. 
+
+Form popup has
+
+Send Whatsapp Template(Title)
+
+Select Whatsapp Template(Dropdown menu when click one template in this input right side have cross button .When cilck this cross button whatsapp template preview automatically remove.)
+These are whatsapp template 
+
+retargeting_v4
+
+ac2500 v6
+
+serviceautomation v3
+
+ac2500 v5
+
+2nd_quarter_payment_v6idfc_v2
+
+2nd_quarter_payment_v6idfc
+
+1st_quarter_payment_v2idfc
+ac2500 v4
+
+ac2500 v2
+
+ac2500
+
+utility_annualcom_v6
+
+utility_annualcom_v5
+
+annualcompliance_v11
+annualcompliance_v10
+
+itrfiling
+
+annualcompliance_v9
+
+annualcompiance_V7
+
+holi2
+
+holi
+section8package_v3
+
+serviceautomation_v2
+
+serviceautomation
+
+1st_quarter_payment_va
+
+video
+
+utility_annualcom_v3
+
+2nd quarter payment v5
+2nd quarter_payment_v5
+
+2nd_quarter_payment_v4
+
+ubility annualcom v2
+
+durgapuja
+
+companycompliances v3
+
+utility_annualcom
+
+interested
+followup_v2
+
+2nd_quarter_payment_v3
+
+agent assing broadcast
+
+1st_quarter_payment_v2
+
+1st_quarter_payment
+
+companycompliances_v2
+companyregistrationuttarpradesh
+
+companyregistrationkarnataka v2
+
+companyregistrationkarnataka
+
+companyregistrationkerala
+
+companyregistrationjharkhand
+
+companyregistrationsikkim
+ companyregistrationtelangana
+
+companyregistrationtamilnadu_v3
+
+companyregistrationassam1_v3
+
+companyregistrationdelhi
+
+companyregistrationmadhyapradesh_v2
+
+companyregistrationbihar
+companyregistrationpunjabv2_v3
+
+companycompliances
+
+companyregistrationmaharashta_v2
+
+companyregistrationassam1 v2
+
+companyregistrationgujratv2_v2
+
+companyregistrationpunjabv2
+companyregistrationwb_v3
+
+companyregistrationtimachal v2
+
+agent assing
+
+companyregistrationgujratv2
+
+companyregistrationassam
+
+companyregistrationmaharashta
+companyregistrationwb
+
+retargeting_v3
+
+Let’s See one Whatsapp Template.
+
+when user select one whatsapp template from drowpdown menu 
+This time blow show preview to check this whatsapp temple .
+
+there have a two section of a whatsapp template.
+left side and right side 
+
+left side have some input fields and send button
+
+Header Variables(Document)(Title)
+
+ input fields(Media URL)
+
+input fields(FIle name)
+
+Body Variables(Title)
+input fields(Name)
+
+Send button
+
+(Send Template via whatsapp)
+
+right side have a green template and white color text for this whatsapp send message to clients.
+
+This is template for (retargeting_v4)
+
+file.pdf
+
+Avoid Penalties in {{Name}}
+
+🚨 Hurry up! Only 21 days left to avoid penalties. We noticed you still haven't appointed an auditor.
+
+🎉 Avail our Annual Compliance Package at a special discounted price of ₹7,999/year (payable quarterly) instead of ₹19,999.
+
+📦 Our package includes:
+
+Form ADT-1, AOC-4, MGT-7, Income Tax Return, and more.
+
+📋 Other Services:
+✅ GST Return filing: ₹299/month.
+✅ Startup India Registration: ₹2,999.
+✅ Trademark Filing: ₹999.
+
+Don't wait! Contact us today to secure your compliance.
+
+You can Opt out by replying 'Stop' to us!
+
+Visit our Website(Website link)
+
+Call Us Now!(link with mobile caller app)
+
+Interested!(automated message from whatsapp)
+
+Blow is another template of whatsapp 
+durgapuja
+Left has “Send Template via Whatsapp”
+
+right has
+”
+
+Dear Sir/Madam,
+
+We would like to inform you that our office will remain closed from 10th October 2024 to 13th October 2024 in observance of the Durga Puja Festival, a significant celebration here in West Bengal.
+
+Regular operations will resume on 14th October 2024.
+
+Wishing you and your family a joyous and prosperous Durga Puja!
+
+Warm regards,
+
+Startup Station.
+
+“
+
+Section 2
+Customer details :-
+
+Left Side
+
+### **Customer Name: Pushdaddy software pvt Ltd**
+
+### **Customer Phone: 7292861446**
+
+### **Company Name: Pushdaddy software pvt Ltd**
+
+### **Service: Startup India Registration**
+
+**Source:
+Others**
+
+### **Created: 2nd February 2026 2:51 pm**
+
+### **Last Followup: 2nd February 2026 3:01 pm**
+
+### **Emails**
+
+rstbiet@gmail.com
+
+**Address**
+
+Right side
+
+**Emails**
+
+**Address**
+
+### **State: WEST BENGAL**
+
+Section 3
+
+(left side) Lead History   (right side)Add interaction Button
+
+Add interaction(Button) functionality
+(After click that button show pop up form.
+Form functionality
+
+### Add Interaction form input fields
+
+Add Interaction(Title)
+
+Interaction Details *(input fields)
+
+Phone call made?(Toggle button)
+if show (Called) green oval shape 
+Then button (with logo Add Intercation)
+
+after click button above button show toaster (**Interaction Added) bottom right corner.
+
+leads history section(Step by step show all leads activity row wise according to latest )
+(This is the function of “Add Interaction” buttton)**
+
+All these work store (Leads History)(Blow all these button functionality work store in Lead History)
+( 1)Change Assign
+
+ 2)Send Template
+
+ 3)Send Whatsapp Template
+)
+
+**Lead History:-**
+
+**2nd February 2026 4:00 pm**
+
+Jagjyot Singh
+
+Assigned to Ritu Kaur
+
+**2nd February 2026 4:00 pm**
+
+Ritu Kaur
+
+Assigned to Jagjyot Singh
+
+**2nd February 2026 3:39 pm**
+
+Ritu Kaur
+
+Whatsapp Template: retargeting_v4
+
+**2nd February 2026 3:31 pm**
+
+Ritu Kaur
+
+Email Template sent - Startup India Registration view(Button)
+This view button click show email template preview pop up at middle of screen. 
+
+Subject :- 
+Startup India Registration - Next Steps & Document Submission
+
+- Accordion summary...
+    
+    Accordion body...
+    
+
+[Untitled](https://www.notion.so/2fbfe67c48aa802baf51cc58c2f75407?pvs=21)
+
+**2nd February 2026 3:27 pm**
+
+Ritu Kaur
+
+Email Template sent - Startup India Registration
+
+**2nd February 2026 3:07 pm**
+
+CALLED
+
+Ritu Kaur
+
+fvscgvdc
+
+**2nd February 2026 1:23 pm**
+
+CALLED
+
+Ritu Kaur
+
+He is very interested do this work.
+
+ 
+
+================================================
+
+# Customers page All Functionality
+
+https://crm.startupstation.in/customers
+
+# Customers
+
+Section:- 1
+
+Left side Customers(Total count of customer)   right side (New Cuatomer button and Export Button)
+
+# New Customer (Button) Functionality
+
+Add New Customer
+
+Name:-
+
+Phone:-
+
+Company name:-
+
+Address:-
+
+State:-(Show dropdown menu of all state)
+
+GST:-
+
+Type:-(Show dropdown menu of this type)
+Private Limited Company
+
+Proprietorship
+
+Partnership
+
+Public Limited Company 
+
+Section 8
+
+FPC
+LLP
+
+Trust
+
+Others
+
+Incorporation Date
+Show current date with  calender input format
+
+Newly Incorporated? (Toggle button)
+
+Onboarding Date
+Show current date with  calender input format
+
+Sale By
+
+Username
+
+Button(logo Add new customer)
+
+# Export (Button) Functionality
+
+after click this (Export buttom) download all customer details excel sheet.
+
+ section:- 2
+
+# Filter Section
+
+one row multiple column
+name/phone/company :- (input)
+
+Data Type(Dropdown menu a)Onboarding Date b)Incorporation Date)
+
+Select Date Range(Selcct)
+
+(Select Date Range Functionality)
+(MMM dd, yyyy - MMM dd, yyyy)
+
+When click calender logo
+Show two months
+(left side current months and right side have next months) But right months those days not go yet .
+It will middle cut mark those days.
+
+One date click show (date range same both start and end)
+
+two dated click show(date range diffrent first click starting range and second click show send range)
+
+to calender down have three button
+(Today,Yesterday,Last 7 Days)
+When click above any three button this time automatically select date range.
+
+but when user want set custom date 
+this user show okay button otherswise not.
+
+Types (Input)(Show Dropdown menu of types)
+
+Those are 
+Private Limited Company 
+
+Proprietorship
+
+Partnership
+Public Limited Company
+
+Section 8
+
+FPC
+LLP
+
+Trust
+Others
+
+Active(Dropdown menu)
+
+Annual Compliance
+
+GST Filling
+
+Section 8 Company
+
+Startup India Registration
+Import Export Code
+FSSAI Central
+GST Registration
+
+FSSAI State Registration
+
+CA Certification
+
+Director Resignation
+
+MSME
+Trademark
+
+MOA Change
+
+Auditor Resignation
+
+TDS RETURN
+
+Board Meeting & Statutory Documentation Services
+
+Professional Tax Registration Services
+
+PRIVATE LIMITED COMPANY
+
+right side has (search icon and cross icon)
+
+ Customer details show row wise and latest
+
+blow one customer data show column wise
+
+logo(PS) 
+
+**Pushdaddy software pvt Ltd
++91 7292861446**
+
+**Pushdaddy software pvt Ltd**
+
+Private Limited Company
+
+Incorporation: 7th Feb 2023
+
+Onboarding: 3rd Feb 2026
+
+Annual Compliance
+
+Startup India Registration
+
+Details(Button)
+
+============================================
+
+# After click (Details button)
+
+# Show details page of a specific clients acccording to click client details. 
+
+ https://crm.startupstation.in/customer/69830d8a7ee9313f5f0428a4
+
+Section 1
+
+row 1
+
+Left Side show (Customer Details)
+
+right side show(Couple of Button)
+(Director Report,Board Resolution,Emails,Add Account job,Edit,Send Template)
+
+row 2
+
+Left side show
+
+(**VIRALITY360 PRIVATE LIMITED)  (New Incorportation)**
+
+right side show 
+
+(Consent letter,Auditor’s report ,send Whatsapp Template,Add Director,Add Services)
+
+Section 2(Customer all details )
+
+first cloumn
+
+**Customer Name: VIRALITY360 PRIVATE LIMITED
+Customer Phone: 7891858821
+Company Name: VIRALITY360 PRIVATE LIMITED
+Type: Private Limited Company
+Onboarding Date: 4th February 2026
+Incorporation Date: 29th December 2025
+Sales Person: Ritu Kaur**
+
+second column
+
+### **Emails**
+
+imeenasanju@gmail.com
+
+### **Address**
+
+C/O GAURAV MISHRA, NEW PATHAKPURA, Orai, Orai, Jalaun- 285001, Uttar Pradesh
+
+### **State: UTTAR PRADESH**
+
+### **Username: VIRALITY0000**
+
+### **Password: w6ss645g**
+
+Section 2
+
+### **Directors**
+
+     **RAJ MISHRA**
+
+      7891858821
+
+Lets write a all button functionality of this section.
+
+Director Report(Button) functionality
+After click this button show 
+
+Show popup form to generate PDF of this DIrector Report middle of website.
+
+Title (Direct Report)
+
+blow all part have two input at right side
+
+| **Particulars** |  |  |
+| --- | --- | --- |
+| Profit Before interest, Depreciation & Tax |  |  |
+| Less: Depreciation & Amortization Expense |  |  |
+| Profit before Tax |  |  |
+| Provision for Tax |  |  |
+| Deferred Tax |  |  |
+| Profit after Tax |  |  |
+| Balance carried to Balance Sheet |  |  |
+| Gross Revenue |  |  |
+|  |  |  |
+
+(Left side) Directors         (Right side)(Add Director)(Button)
+
+After Click “Add Director” button
+Show a row with clumn wise of some input fields
+Name, Designation,Appointment Date,Resignation Date, right side have a delete icon for remove this Add direction four column.
+
+AGM Date(Input):-
+
+CIN(Input):-
+
+No of Boards Meetings(Input):-
+
+Report place (Input ):-
+
+Report Date(type = Date)
+
+(Left side)Signing Directors      (RIght side)(Add Signing Director)(Button)
+
+After click “Add Signing Director”
+
+open a row of 3 column .
+
+Name(Input fields)
+
+DIN(Input fields)
+
+Delete (Logo)(for delete or hide this section)
+
+finally have a button(Generate PDF)
+
+”After click this Generate PDF”
+
+i see this url(
+[https://crm.startupstation.in/api/v1/customers/director-report/6982ebaf65b9911c9c0b0d10?place=kolkata&date=4th February 2026&cin=mnbvsdfgbcxbv7bvsx&noOfBoardMeetings=5&agmDate=02/02/2026&profitTable={"header1":"p1","header2":"p2","profit1":"pbf","profit2":"DT","depreciation1":"Less Depre","depreciation2":"Amortization","profitTax1":"pb","profitTax2":"t","provision1":"Pro for ","provision2":"Tax","deferred1":"Defe","deferred2":"T","profitAfterTax1":"Pro","profitAfterTax2":"Tax","balance1":"Balance Carried ","balance2":"Balance Sheet","grossProfit1":"Gross","grossProfit2":"Revenue"}&directors=[{"id":1770202695895,"name":"test","designation":"ddddd","appointment":"02/02/2026","resignation":"03/02/2026"}]&signingDirectors=[{"id":1770202248388,"name":"fasdfvsd","din":"vsdfgsdf"}]](https://crm.startupstation.in/api/v1/customers/director-report/6982ebaf65b9911c9c0b0d10?place=kolkata&date=4th%20February%202026&cin=mnbvsdfgbcxbv7bvsx&noOfBoardMeetings=5&agmDate=02/02/2026&profitTable=%7B%22header1%22:%22p1%22,%22header2%22:%22p2%22,%22profit1%22:%22pbf%22,%22profit2%22:%22DT%22,%22depreciation1%22:%22Less%20Depre%22,%22depreciation2%22:%22Amortization%22,%22profitTax1%22:%22pb%22,%22profitTax2%22:%22t%22,%22provision1%22:%22Pro%20for%20%22,%22provision2%22:%22Tax%22,%22deferred1%22:%22Defe%22,%22deferred2%22:%22T%22,%22profitAfterTax1%22:%22Pro%22,%22profitAfterTax2%22:%22Tax%22,%22balance1%22:%22Balance%20Carried%20%22,%22balance2%22:%22Balance%20Sheet%22,%22grossProfit1%22:%22Gross%22,%22grossProfit2%22:%22Revenue%22%7D&directors=%5B%7B%22id%22:1770202695895,%22name%22:%22test%22,%22designation%22:%22ddddd%22,%22appointment%22:%2202/02/2026%22,%22resignation%22:%2203/02/2026%22%7D%5D&signingDirectors=%5B%7B%22id%22:1770202248388,%22name%22:%22fasdfvsd%22,%22din%22:%22vsdfgsdf%22%7D%5D))
+
+make 6 page pdf for this report
+
+Board Resolution(Button) functionality
+
+After click this button show popup middle of website.
+
+Select Board Resolution Date
+
+(Board Resolution Date)
+
+(Input fields type date for Calender )  
+
+(When click calender button show calender)
+
+In calender only previos all day will active for select date
+
+Generate pdf (Button)
+
+[https://crm.startupstation.in/api/v1/customers/boardresolution/6981dcd47ee9313f5f041ffb?date1=04/02/2026&date2=4th February 2026](https://crm.startupstation.in/api/v1/customers/boardresolution/6981dcd47ee9313f5f041ffb?date1=04/02/2026&date2=4th%20February%202026)
+
+like blow
+
+PUSHDADDY SOFTWARE PVT LTD
+C/O UMESH CH. TIWARY, G.M. ROAD, BHAGALPUR, BHAGALPUR, JAGDISHPUR,
+BIHAR, INDIA, 812001
+CERTIFIED TRUE COPY OF THE RESOLUTION PASSED AT THE MEETING OF THE
+BOARD OF DIRECTORS OF PUSHDADDY SOFTWARE PVT LTD HELD AT C/O UMESH
+CH. TIWARY, G.M. ROAD, BHAGALPUR, BHAGALPUR, JAGDISHPUR, BIHAR, INDIA,
+812001.
+Board Resolution for appointment of first auditor of PUSHDADDY SOFTWARE PVT
+LTD.
+Date: 04/02/2026
+At the meeting of the Board of Directors of PUSHDADDY SOFTWARE PVT LTD,
+held on 4th February 2026, it was:
+RESOLVED THAT Pursuant to the provisions of section 139 and 142 of the
+companies Act, 2013 read with Rule 3 of the companies (Audit and Auditors)
+Rules, 2014 and other applicable provisions of the companies Act, 2013 read
+with rules made thereunder (including any statutory modification(s) or reenactment there of for the time being in force) , consent of the Board be and is
+hereby accorded to appoint Mr. Jagjyot Singh, Firm M/s. JAGJYOT SINGH AND
+ASSOCIATES (Firm Registration No- 333567E) as First Auditors of the company
+to hold office till the conclusion of the First Annual General Meeting of the
+company, to examine and audit the accounts of the company , on such
+remuneration as may be mutually agreed upon between RAVI SHANKAR
+TIWARI, Directors of the company and the Auditors.
+RESOLVED FURTHER THAT RAVI SHANKAR TIWARI - Directors of the company be
+and is hereby authorized to do all such acts, deeds and things and execute
+such other documents as may be necessary for the purpose of giving effect to
+this resolution.
+RAVI SHANKAR TIWARI
+Director
+
+If some user not add this “Board Resolution”
+
+“Show this type of error  message”
+
+{
+"status"
+:
+false,
+"message"
+:
+"No Directors added to this customer"
+}
+
+# Email button all functionality
+
+After Click Emails button 
+Show a form popup of Edit email form at middle portion page.
+In this emails edit form there have 
+
+### **Edit Emails(There we can add multiple email after click add button one by one)**
+
+[sanjoykumarmaity05@gmail.com](mailto:sanjoykumarmaity05@gmail.com)       delete(logo)
+
+[sanjoykumarmaity055@gmail.com](mailto:sanjoykumarmaity055@gmail.com)     delete(logo)
+
+[sanjoykumarmaity055@gmail.com](mailto:sanjoykumarmaity055@gmail.com)      delete(logo)
+
+Add Email
+Input field right side have a button “Add”
+
+update email button(after click this button whatever email show in preview or not show it will show  or update data to 
+
+Section 2 of Lead Details
+email section
+
+### **Emails**
+
+[sanjoykumarmaity05@gmail.com](mailto:sanjoykumarmaity05@gmail.com)
+
+[sanjumaity2804@gmail.com](mailto:sanjumaity2804@gmail.com)
+
+[sanjoykumarmaity009@gmail.com](mailto:sanjoykumarmaity009@gmail.com)
+
+Add Accountant Job page (Button) Functonality
+After click this button
+
+Show form pop up for this .
+
+in form has
+
+Add  New Job (Title)
+
+Job Title (Input fields)
+
+Status(Dropdown menu)
+
+To Be Done
+
+Done
+
+Ongoing
+
+Accountant input(Dropdown menu)
+
+name of acountant employee
+
+Samrat
+
+Tapas
+
+Jagiyot
+
+There have a Toggle button of
+Has Expiry Date
+
+finally has a ‘Add new job” button
+
+After fill these input fields when click this 
+
+button show a toaster bottom right corner
+
+Edit button functionality
+
+(After click Edit button)
+
+Show form pop up in middle of website.
+(Show 
+
+In form these has couple of input fields
+(All input field have fill by already fill data of particular user all details according to input fields)
+
+ Edit Customer(Title)
+ Name(Input)
+
+Phone(Input)
+
+Company Name(Input)
+
+Address(Kolkata)
+State(Show all dropdown menu of state )
+
+GST(Number )
+Type (Show dropdown menu of  )
+
+Private Limited Company
+
+Propprietorship
+
+Partnership
+
+Public Limited Company
+
+Section 8
+
+FPC
+
+LLP
+
+Trust
+
+Others
+
+Incorporation Date
+
+(Calender Date of incorporation date)
+
+Newly Incorporated?(Toggle button)
+
+Onboarding Date
+(Calender Date of incorporation date)
+
+Username(Input)
+
+Update Customer(Button)
+
+After Click this button .
+Change all data show in customer Details section 2 where customer Details show.
+
+===============================
+
+# Send Template button all functionality
+
+After click this button show a form popup at middle section.
+In form haa some input fields.
+
+Send Email Template(Title)
+
+Select Email Template(show dropdown input menu of all send email template)
+
+Like blew all dropdown menu
+
+1) Compliance Update
+
+2)Annual Compliance Service Jagjyot Singh
+
+3)Annual Compliance Service - Ritu Kaur
+
+4)Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+5)Annual Compliance - Onboarding
+
+6)Startup India Registration
+
+7)Startup India Promotion
+
+8)Website
+
+9)Professional Tax
+
+10)GST Filing
+
+11)Service List
+
+12)Next Quarter Payment
+
+13)INC 20A Reminder
+
+14)ROC plus GST plus ES
+
+15)plus TDS
+
+16)Package plus payment details
+
+17)Annual Compliance plus Bookkeeping
+
+18)Director Registration
+
+2nd input fields is Subject(Select automatic subject according to Select Email Template) 
+1)Compliance Update - {{complianceName}} for {{companyName}}
+
+2)Annual Compliance Service by Startup Station
+
+3)Annual Compliance Package for {{companyName}}
+
+4)Annual Compliance Package for {{companyName}}
+
+5)Welcome to Startup Station – Your Annual Compliance Access
+
+6)Startup India Registration - Next Steps & Document Submission
+
+7)Get Your Startup India Registration (DPIIT Certificate) at Just ₹2,999 with Startup Station! 🚀
+
+8)Your Website at just Rs 5000!
+
+9)Get Professional Tax Registration immediately!
+
+10)Urgent: Submit Your GST Invoices by 6th for Timely Filing!
+
+11)Discover Our Key Services to Boost Your Business – Startup Station
+
+12)Reminder: Upcoming Quarter's Payment – Complete Within 5 Days
+
+13)Urgent: INC-20A Filing Pending – Avoid Late Penalties!
+
+14)Annual Compliance Package by Startup Station
+
+15)Annual Compliance Package by Startup Station
+
+16)Annual Compliance Package by Startup Station plus Bookkeeping Services
+
+17)Startup Station - Director Resignation Services
+
+then show next row 
+{{name}}     {{companyName}}      {{address}}
+
+attach with a text editior  template like small microsoft word.
+in this small microsoft word space show email format to send email(this microsoft word space show email template according to change Select Email Template from dropdown menu Similarly show subject according to Select Email Template) 
+
+(whatever two or three email already set by email button and show 2nd section of “Lead details” 
+email:-
+
+at last has a “Send Email” Button
+
+When click “Send Email”
+send email those email these tempate with proper email format.
+like blow
+
+Lets one example of email template
+Subject:- Annual Compliance Package for Cleryn
+
+Startup Station Logo
+Dear Sir,
+
+We are excited to serve you in the upcoming year and ensure smooth compliance for your company.
+
+Please find below our Annual Compliance Package, which covers all necessary Annual ROC Compliances and Income Tax Return filing services for your company.
+
+📌 Package Details:
+Preparation & Filing of Form ADT-01 (Auditor Appointment)
+Application of Dormant Status under ESI Act
+Preparation & Filing of Form INC-20A
+Issuance of Share Certificates
+Preparation of Board Resolutions
+Preparation of AGM Resolutions
+Preparation & Filing of AOC-04
+Preparation & Filing of MGT-07
+Statutory Registers
+MPB-01
+DIR-08
+Preparation & Filing of Financial Statements
+Preparation & Filing of Audit
+Preparation & Filing of Directors’ Reports
+Preparation & Filing of Income Tax Returns
+DPT-3,
+MGT-14
+DIR-3 E-KYC
+Free consultation for legal and compliance matters
+💰 Pricing:
+Annual ROC Compliances: Rs. 7,999 + govt. fees (approx. Rs. 1500) to be paid quarterly i.e. Rs. 2000 per quarter.
+
+GST Filings: Rs. 300 for NIL return, Rs. 500 for normal filings per month.
+
+📄 Required Documents:
+MOA and AOA
+Certificate of Incorporation
+PAN of any 1 director
+We accept UPI, Card, and Bank Transfers for payment.
+
+The compliance calendar is on Page 3 of the package. Attached is our Invoice for Quarter 1.
+
+We confirm: In case of any negligence on our part resulting in penalties, we shall bear the penalty cost.
+
+For queries or clarifications, feel free to Visit our Website!.
+
+Looking forward to working with you!
+
+Thanks & Regards,
+
+Startup Station
+Your trusted partner in compliance and legal services.
+
+Blow Attatch a pdf realted to “Annual Compliance Package”
+
+This blow is for Email Template  “Professional Tax”
+
+“Subject”
+Get Professional Tax Registration immediately!
+
+[Untitled](https://www.notion.so/2fefe67c48aa8093bc24d6f19893766f?pvs=21)
+
+# Next Section
+
+left side have (Customer name) right side have (New Incorporation)tabular button and couple of button(
+
+1)Consent Letter
+
+2)Auditor’s Report
+
+3)Send Whasapp Template
+
+4)Add Director 
+
+5)Add Service )
+
+After click “Consent Letter” button show popup of a form of this.
+
+form title(Select Consent Letter Date)
+Date Input fields(calender show )
+finall have a “Generate PDF”
+
+[https://crm.startupstation.in/api/v1/customers/consent-letter/6981dcd47ee9313f5f041ffb?date=5th February, 2026](https://crm.startupstation.in/api/v1/customers/consent-letter/6981dcd47ee9313f5f041ffb?date=5th%20February,%202026) 
+
+make this pdf
+
+TO,
+THE BOARD OF DIRECTORS
+PUSHDADDY SOFTWARE PVT LTD
+C/o Umesh Ch. Tiwary, G.m. Road, Bhagalpur, Bhagalpur, Jagdishpur, Bihar, India, 812001
+Date: 5th February, 2026
+Subject: Consent to act as First Auditor and Certificate under Section 139(6) of the
+Companies Act, 2013.
+Dear Sir/Madam,
+We, M/s. JAGJYOT SINGH AND ASSOCIATES, Chartered Accountants, hereby give our consent
+to be appointed as the First Auditor PUSHDADDY SOFTWARE PVT LTD under Section 139(6)
+of the Companies Act, 2013, for the financial year commencing from 7th February, 2023
+(Date of Incorporation) to 31st March 2026
+Further, pursuant to the provisions of Section 139(6) and Rule 4 of the Companies (Audit
+and Auditors) Rules, 2014, we hereby certify that:
+
+1. We satisfy the eligibility criteria as specified under Section 141 of the Companies Act,
+2013;
+2. We are not disqualified from being appointed as Auditor under the provisions of the
+Companies Act, 2013, the Chartered Accountants Act, 1949, and the rules or
+regulations made thereunder;
+3. The proposed appointment is in accordance with the provisions of the Companies
+Act, 2013;
+4. The proposed appointment is within the limits laid down under the Act;
+5. There are no pending proceedings relating to professional misconduct against the
+firm or any of its partners under the Chartered Accountants Act, 1949.
+We request you to kindly take the above on record and do the needful.
+Thanking You,
+Yours faithfully,
+For M/s. JAGJYOT SINGH AND ASSOCIATES
+Chartered Accountants
+FRN: 333567E
+CA Jagjyot Singh
+Proprietor
+Membership No.: 319799
+Place: Kolkata
+M/s. JAGJYOT SINGH AND ASSOCIATES.
+Firm Registration No. - 333567E
+PLOT 51, BLOCK BB – 102, SHANTIPALLY, SARAT PARK,
+KOLKATA – 700107
+
+Auditor’s Report button
+input fields(CIN)
+
+input fields(UDIN)
+
+Auditor’s Report Date
+
+(Generate PDF)(Button)
+
+after click the “Generate PDF button “
+
+generate pdf like that 
+
+INDEPENDENT AUDITOR’S REPORT
+To the Members of
+Pushdaddy software pvt Ltd
+CIN: vbdfvbcv
+Report on the Audit of the Financial Statements
+Opinion
+We have audited the accompanying financial statements of Pushdaddy
+software pvt Ltd (“the Company”), which comprise the Balance Sheet as at 31st
+March 2025, the Statement of Profit and Loss, the Statement of Changes in Equity,
+and the Cash Flow Statement for the year then ended, and a summary of the
+significant accounting policies and other explanatory information (collectively
+referred to as "the financial statements").
+In our opinion and to the best of our information and according to the
+explanations given to us, the aforesaid financial statements give the information
+required by the Companies Act, 2013 (“the Act”) in the manner so required and
+give a true and fair view in conformity with the accounting principles generally
+accepted in India, of the state of affairs of the Company as at 31st March 2025, its
+profit, changes in equity, and its cash flows for the year then ended.
+Basis for Opinion
+We conducted our audit in accordance with the Standards on Auditing (SAs)
+specified under Section 143(10) of the Act. We are independent of the Company in
+accordance with the Code of Ethics issued by the Institute of Chartered
+Accountants of India (ICAI), and we have fulfilled our other ethical responsibilities
+in accordance with these requirements and the ICAI’s Code of Ethics.
+We believe that the audit evidence we have obtained is sufficient and
+appropriate to provide a basis for our audit opinion.
+Information Other than the Financial Statements and Auditor’s Report Thereon
+The Company’s management and Board of Directors are responsible for the
+preparation of other information. The other information comprises the Board’s
+Report and its annexures, but does not include the financial statements and our
+auditor’s report thereon.
+JAGJYOT SINGH & ASSOCIATES.
+Firm Registration No. - 333567E
+PLOT 51, BLOCK BB – 102, SHANTIPALLY, SARAT PARK,
+KOLKATA – 700107
+Our opinion does not cover the other information and we do not express any form
+of assurance conclusion thereon. In connection with our audit of the financial
+statements, our responsibility is to read the other information and, in doing so,
+consider whether such information is materially inconsistent with the financial
+statements or our knowledge obtained in the audit. Based on the work performed,
+nothing has come to our attention that causes us to believe that there is a
+material misstatement of this other information.
+Management’s Responsibility for the Financial Statements
+The Company’s Board of Directors is responsible for the matters stated in Section
+134(5) of the Act with respect to the preparation of these financial statements
+that give a true and fair view of the financial position, financial performance,
+changes in equity, and cash flows of the Company in accordance with the
+accounting principles generally accepted in India, including the Accounting
+Standards specified under Section 133 of the Act.
+This responsibility includes the maintenance of adequate accounting records in
+accordance with the provisions of the Act for safeguarding the assets of the
+Company and for preventing and detecting frauds and other irregularities; the
+selection and application of appropriate accounting policies; making judgments
+and estimates that are reasonable and prudent; and the design, implementation,
+and maintenance of adequate internal financial controls that were operating
+effectively for ensuring the accuracy and completeness of the accounting
+records relevant to the preparation and presentation of the financial statements.
+In preparing the financial statements, management is responsible for assessing
+the Company’s ability to continue as a going concern, disclosing, as applicable,
+matters related to going concern and using the going concern basis of
+accounting unless management either intends to liquidate the Company or to
+cease operations, or has no realistic alternative but to do so.
+The Board of Directors is also responsible for overseeing the Company’s financial
+reporting process.
+Auditor’s Responsibilities for the Audit of the Financial Statements
+Our objectives are to obtain reasonable assurance about whether the financial
+statements as a whole are free from material misstatement, whether due to
+fraud or error, and to issue an auditor’s report that includes our opinion.
+Reasonable assurance is a high level of assurance but is not a guarantee that an
+JAGJYOT SINGH & ASSOCIATES.
+Firm Registration No. - 333567E
+PLOT 51, BLOCK BB – 102, SHANTIPALLY, SARAT PARK,
+KOLKATA – 700107
+audit conducted in accordance with SAs will always detect a material
+misstatement when it exists.
+As part of an audit in accordance with SAs, we:
+Identify and assess the risks of material misstatement, whether due to fraud
+or error;
+Obtain an understanding of internal controls and assess their effectiveness;
+Evaluate the appropriateness of accounting policies used and the
+reasonableness of accounting estimates;
+Conclude on the appropriateness of the going concern assumption;
+Evaluate the overall presentation of the financial statements.
+We communicate with those charged with governance regarding, among other
+matters, the planned scope and timing of the audit and significant audit findings,
+including any significant deficiencies in internal control that we identify during our
+audit.
+Emphasis of Matter
+We draw attention to the fact that no matters have been observed during the
+course of the audit that require emphasis. Hence, no Emphasis of Matter is
+reported.
+Key Audit Matters
+In our professional judgment, no Key Audit Matters need to be communicated in
+this report as per SA 701, “Communicating Key Audit Matters in the Independent
+Auditor’s Report”.
+Reporting on Internal Financial Controls
+We have audited the internal financial controls over financial reporting of the
+Company as of 31st March 2025 in conjunction with our audit of the financial
+statements.
+In our opinion, the Company has, in all material respects, an adequate internal
+financial control system over financial reporting and such internal financial
+controls were operating effectively as at 31st March 2025, based on the internal
+control criteria established by the Company considering the essential
+JAGJYOT SINGH & ASSOCIATES.
+Firm Registration No. - 333567E
+PLOT 51, BLOCK BB – 102, SHANTIPALLY, SARAT PARK,
+KOLKATA – 700107
+components of internal control stated in the Guidance Note on Audit of Internal
+Financial Controls Over Financial Reporting issued by the ICAI.
+Other Legal and Regulatory Requirements
+
+1. As required by the Companies (Auditor’s Report) Order, 2020 (“the Order”),
+issued by the Central Government of India in terms of Section 143(11) of the
+Act, we give in “Annexure A” a statement on the matters specified in
+paragraphs 3 and 4 of the Order, to the extent applicable.
+2. As required by Section 143(3) of the Act, we report that:
+A. We have obtained all the information and explanations which to the
+best of our knowledge and belief were necessary for the purposes of our
+audit;
+B. In our opinion, proper books of account as required by law have been
+kept by the Company so far as it appears from our examination of those
+books;
+C. The Balance Sheet, the Statement of Profit and Loss, the Statement of
+Changes in Equity, and the Cash Flow Statement dealt with by this report
+are in agreement with the books of account;
+D. In our opinion, the aforesaid financial statements comply with the
+Accounting Standards specified under Section 133 of the Act, read with Rule
+7 of the Companies (Accounts) Rules, 2014;
+E. On the basis of written representations received from the directors as
+on 31st March 2025, none of the directors is disqualified as on that date from
+being appointed as a director in terms of Section 164(2) of the Act.
+Other Matters as per Rule 11 of Companies (Audit and Auditors) Rules, 2014
+Pursuant to Rule 11 of the Companies (Audit and Auditors) Rules, 2014, we report that:
+3. The Company does not have any pending litigations which would impact
+its financial position.
+4. The Company did not have any long-term contracts including derivative
+contracts for which there were any material foreseeable losses.
+5. There were no amounts that were required to be transferred to the
+Investor Education and Protection Fund during the year.
+6. A.. The Management has represented that, to the best of its knowledge
+JAGJYOT SINGH & ASSOCIATES.
+Firm Registration No. - 333567E
+PLOT 51, BLOCK BB – 102, SHANTIPALLY, SARAT PARK,
+KOLKATA – 700107
+and belief, no funds have been advanced or loaned or invested (either
+from borrowed funds, share premium or any other sources or kind of funds)
+by the Company to or in any other person(s) or entity(ies), including foreign
+entities (“Intermediaries”), with the understanding that the Intermediary
+shall:
+A. directly or indirectly lend or invest in other persons or entities
+identified by or on behalf of the Company (Ultimate Beneficiaries); or
+B. provide any guarantee, security, or the like on behalf of the
+Ultimate Beneficiaries.
+B. The Management has represented that, to the best of its knowledge
+and belief, no funds have been received by the Company from any
+person(s) or entity(ies), including foreign entities (“Funding Parties”), with
+the understanding that the Company shall:
+A. directly or indirectly lend or invest in other persons or entities
+identified by or on behalf of the Funding Party (Ultimate Beneficiaries);
+or
+B. provide any guarantee, security, or the like on behalf of the
+Ultimate Beneficiaries.
+C. Based on the audit procedures performed, nothing has come to our
+notice that has caused us to believe that the representations under subclauses (a) and (b) contain any material misstatement.
+For JAGJYOT SINGH & ASSOCIATES
+Chartered Accountants
+Firm Registration No.: 333567E
+JAGJYOT SINGH
+Proprietor
+Membership No.: 319799
+UDIN: bcdn vbn
+Place: Kolkata
+Date: 5th February 2026
+JAGJYOT SINGH & ASSOCIATES.
+Firm Registration No. - 333567E
+PLOT 51, BLOCK BB – 102, SHANTIPALLY, SARAT PARK,
+KOLKATA – 700107
+
+Send Whatsapp Template
+
+# Send Whatsapp Template
+
+After Click this button “Send WhatsApp Template”
+
+Show pop at middle of the website page rest background will be black blur. 
+
+Form popup has
+
+Send Whatsapp Template(Title)
+
+Select Whatsapp Template(Dropdown menu when click one template in this input right side have cross button .When cilck this cross button whatsapp template preview automatically remove.)
+These are whatsapp template 
+
+whatsapp templates
+1)retargeting_v4
+
+Avoid Penalties in {{Name}}
+
+🚨 Hurry up! Only 21 days left to avoid penalties. We noticed you still haven't appointed an auditor.
+
+🎉 Avail our Annual Compliance Package at a special discounted price of ₹7,999/year (payable quarterly) instead of ₹19,999.
+
+📦 Our package includes:
+
+Form ADT-1, AOC-4, MGT-7, Income Tax Return, and more.
+
+📋 Other Services:
+✅ GST Return filing: ₹299/month.
+✅ Startup India Registration: ₹2,999.
+✅ Trademark Filing: ₹999.
+
+Don't wait! Contact us today to secure your compliance.
+
+You can Opt out by replying 'Stop' to us!
+
+
+2)ac2500_v6
+*Avoid Penalties in {{Name}}*
+
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹1,999 per quarter!
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+3)serviceautomation_v3
+Hello {{CustomerName}},
+
+Thank you for choosing Startup Station for {{service name}}. The total cost for the service is Rs. {{Price}}. We kindly request you to transfer the amount at your earliest convenience and share a screenshot of the payment confirmation.
+
+To complete your payment, you can:
+
+Scan the QR code above, or
+Transfer the amount to our UPI ID: startupstation@idfcbank, or
+Directly transfer the amount to our bank account:
+Banking Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Bank Name: IDFC Bank
+Account Number: 89674560601
+IFSC Code: IDFB0060119.
+Your dedicated Relationship Manager, Ritu Kaur, will be in touch with you shortly to assist further.
+
+Best regards,
+Startup Station
+
+Ignore if the payment is made!
+
+
+4)ac2500_v5
+*Avoid Penalties in {{Name}}*
+
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹1,999 per quarter!
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+5)2nd_quarter_payment_v6idfc_v2
+Hello {{Name}},
+
+This is a friendly reminder regarding the payment for the SECOND QUARTER of your Annual Compliances with Startup Station. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.
+
+Payment Options:
+
+1. UPI Transfer:
+UPI ID: startupstation@idfcbank
+
+2. Bank Transfer:
+Banking Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Bank Name: IDFC Bank
+Account Number: 89674560601
+IFSC Code: IDFB0060119
+
+If you prefer, you can also scan the QR code below to complete the payment via UPI.
+
+Invoice for the 2nd quarter will be shared upon receiving the payment confirmation. Please share screenshot once the payment is made.
+
+Thank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.
+
+Ignore if the payment is already made.
+
+
+6)2nd_quarter_payment_v6idfc
+Hello {{Name}},
+
+This is a friendly reminder regarding the payment for the SECOND QUARTER of your Annual Compliances with Startup Station. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.
+
+Payment Options:
+
+1. UPI Transfer:
+UPI ID: startupstation.axl
+
+2. Bank Transfer:
+Banking Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Bank Name: IDFC Bank
+Account Number: 89774560601
+IFSC Code: IDFB0060119
+
+If you prefer, you can also scan the QR code below to complete the payment via UPI.
+
+Invoice for the 2nd quarter will be shared upon receiving the payment confirmation. Please share screenshot once the payment is made.
+
+Thank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.
+
+Ignore if the payment is already made
+
+
+7)1st_quarter_payment_v2idfc
+Hello {{Name}},
+
+We are thrilled to assist you with your Annual Compliances. Please make the payment for the first quarter at your earliest convenience.
+
+You can complete your payment by either scanning the QR code above or transferring the amount to our UPI ID: startupstation@idfcbank.
+
+Alternatively, you can transfer the amount directly to our bank account:
+
+Banking Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Bank Name: IDFC Bank
+Account Number: 89674560601
+IFSC Code: IDFB0060119.
+
+Ignore if the payment is already made.
+
+8)ac2500_v4
+
+*Avoid Penalties in {{Name}}*
+
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹1,999 per quarter!
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+
+9)ac2500_v2
+*Avoid Penalties in {{Name}}*
+
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹2,499 per quarter!
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+
+10)ac2500
+*Avoid Penalties in {{Name}}*
+
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹1,999 per quarter!
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+
+
+11)utility_annualcom_v6
+Ensure Compliance for {{Name}}!
+
+Here are the essential ROC (Registrar of Companies), Income Tax and GST compliances you must meet:
+
+✅ Form ADT-1: Auditor Appointment (within 30 days of incorporation)
+✅ Form INC-20A: Certificate of Business Commencement
+✅ Form AOC-4: Filing of FS
+✅ Form MGT-7: Annual Return Filing
+✅ MBP-1 and DIR-8: Director Disclosures
+✅ Board’s Report: Preparation and Filing
+✅ DIR-3 KYC: Director KYC Verification
+✅ Income Tax Return Filing
+✅ Audit by a Chartered Accountant
+✅ GST Filings
+
+Non-compliance can result in significant penalties. Stay informed and avoid unnecessary penalties by ensuring these compliances are met on time.
+
+Type 'Stop' to stop receiving our informative messages.
+
+12)utility_annualcom_v5
+ Ensure Compliance for {{Name}}!
+
+Did you know that certain key compliances are crucial for your company's legal standing and financial health? Missing deadlines can lead to significant penalties.
+
+Here are the essential ROC (Registrar of Companies) compliances you must meet:
+
+✅ Form ADT-1: Auditor Appointment (within 30 days of incorporation)
+✅ Form INC-20A: Certificate of Business Commencement
+✅ Form AOC-4: Filing of Financial Statements
+✅ Form MGT-7: Annual Return Filing
+✅ MBP-1 and DIR-8: Director Disclosures
+✅ Board’s Report: Preparation and Filing
+✅ DIR-3 KYC: Director KYC Verification
+✅ Income Tax Return Filing
+✅ Audit by a Chartered Accountant
+✅ GST Filings
+
+Non-compliance can result in penalties of up to ₹2 lakhs per year. Stay informed and avoid unnecessary penalties by ensuring these compliances are met on time.
+
+Type 'Stop' to stop receiving our informative messages.
+
+
+13)annualcompliance_v11
+*Avoid Penalties in {{Name}}*
+
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹1,999 per quarter!
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+14)annualcompliance_v10
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹1,999 per quarter!
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+15)itrfiling
+Hi,
+
+Since we're already preparing the financials for your Private Limited Company, it’s ideal that we also handle the Income Tax Returns (ITR) for you and your family.
+
+✅ Ensures your personal ITR is fully in sync with your company’s financials
+✅ Expert handling by the same team that knows your company inside-out
+✅ Flat fee of just ₹1000 per individual ITR
+✅ Hassle-free & prompt filing
+
+Let us know if you'd like us to take this forward for you or your family members.
+
+16)annualcompliance_v9
+Avoid Penalties in {{Name}}
+
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹1,999 per quarter!
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+
+17)annualcompliance_v7
+
+Avoid Penalties in {{Name}}
+
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹2,999 per quarter.
+
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+18)holi2
+🎨🌈 Wishing you a vibrant and joyous Holi from all of us at Startup Station! 🌸 May this festival of colors fill your life with happiness, success, and endless opportunities. Let's celebrate the spirit of innovation and creativity together. Have a colorful and prosperous Holi!
+
+Warm regards,
+Startup Station Team
+
+19)holi
+🎨🌈 Wishing you a vibrant and joyous Holi from all of us at Startup Station! 🌸 May this festival of colors fill your life with happiness, success, and endless opportunities. Let's celebrate the spirit of innovation and creativity together. Have a colorful and prosperous Holi!
+
+Regards,
+Startup Station Team
+
+20)section8package_v3
+
+🌟 Registering a Section 8 Company is just the first step! 🌟
+
+To operate effectively and maximize benefits, your NGO must have these essential registrations:
+
+📜 Section 12A Registration – Grants tax exemption
+💰 Section 80G Registration – Provides tax benefits to donors
+🏛️ Darpan Registration – Enables eligibility for government grants
+🌐 NITI Aayog Registration – Essential for participating in government schemes
+
+💼 Pricing Options:
+✅ 12A & 80G Registration – ₹2,999
+✅ Complete Package (All Registrations) – ₹5,999
+
+📞 Contact us today to ensure your NGO is fully compliant and ready to create an impact! 🚀
+
+Please type STOP to stop receiving our amazing offers
+
+21)serviceautomation_v2
+
+Hello {{CustomerName}},
+
+Thank you for choosing Startup Station for {{service name}}. The total cost for the service is Rs. {{Price}}. We kindly request you to transfer the amount at your earliest convenience and share a screenshot of the payment confirmation.
+
+To complete your payment, you can:
+
+Scan the QR code above, or
+Transfer the amount to our UPI ID: startupstation@axl, or
+Directly transfer the amount to our bank account:
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385
+Your dedicated Relationship Manager, Ritu Kaur, will be in touch with you shortly to assist further.
+
+Best regards,
+Startup Station
+
+Ignore if the payment is made!
+
+22)serviceautomation
+Hello {{CustomerName}},
+
+Thank you for choosing Startup Station for {{service name}}. The total cost for the service is Rs. {{Price}}. We kindly request you to transfer the amount at your earliest convenience and share a screenshot of the payment confirmation.
+
+To complete your payment, you can:
+
+Scan the QR code above, or
+Transfer the amount to our UPI ID: startupstation@axl, or
+Directly transfer the amount to our bank account:
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385
+Your dedicated Relationship Manager, Ritu Kaur, will be in touch with you shortly to assist further.
+
+Best regards,
+Startup Station
+
+Ignore if the payment is made!
+
+23)1st_quarter_payment_v3
+Hello {{Name}},
+
+We are thrilled to assist you with your Annual Compliances. Please make the payment for the second quarter at your earliest convenience.
+
+You can complete your payment by either scanning the QR code above or transferring the amount to our UPI ID: startupstation@axl. Alternatively, you can transfer the amount directly to our bank account:
+
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385.
+
+Ignore if the payment is already made.
+
+24)video
+Avoid Penalties in your Company!
+
+🎉 Avail our Annual Compliance Package at a special discounted price of ₹7,999/year (payable quarterly) instead of ₹19,999.
+
+📦 Our package includes:
+
+Form ADT-1, AOC-4, MGT-7, Income Tax Return, and more.
+
+📋 Other Services:
+✅ GST Return filing: ₹299/month.
+✅ Startup India Registration: ₹2,999.
+✅ Trademark Filing: ₹999.
+
+Don't wait! Contact us today to secure your compliance.
+
+You can Opt out by replying 'Stop' to us!
+
+25)utility_annualcom_v3
+🚀 Avoid Penalties for {{Name}}!
+
+Did you know that appointing an auditor is mandatory within 30 days of incorporation? Failing to comply can lead to penalties up to 4 times the normal fees!
+
+Key ROC Compliances You Must Meet:
+
+✅ Form ADT-1: Auditor Appointment (within 30 days of incorporation) ✅ Form INC-20A: Certificate of Business Commencement✅ Form AOC-4: Filing of Financial Statements✅ Form MGT-7: Annual Return Filing ✅ MBP-1 and DIR-8: Director Disclosures✅ Board’s Report: Preparation and Filing✅ DIR-3 KYC: Director KYC Verification✅ Income Tax Return Filing✅ Audit by a Chartered Accountant✅ GST Filings
+
+Non-compliance can even result in penalties of up to ₹2 lakhs per year.
+
+
+Type 'Stop' to stop receiving our informative messages.
+
+26)2nd_quarter_payment_v5
+Hello {{Name}},
+
+This is a friendly reminder regarding the payment for the SECOND QUARTER of your Annual Compliances with Startup Station. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.
+
+Payment Options:
+
+1. UPI Transfer:
+UPI ID: startupstation.axl
+
+2. Bank Transfer:
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385
+
+If you prefer, you can also scan the QR code below to complete the payment via UPI.
+
+Invoice for the 2nd quarter will be shared upon receiving the payment confirmation. Please share screenshot once the payment is made.
+
+Thank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.
+
+Ignore if the payment is already made.
+
+27)2nd_quarter_payment_v4
+Hello {{Name}},
+
+This is a friendly reminder regarding the payment for the second quarter of your Annual Compliances with Startup Station. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.
+
+Payment Options:
+
+1. UPI Transfer:
+UPI ID: startupstation.axl
+
+2. Bank Transfer:
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385
+
+If you prefer, you can also scan the QR code below to complete the payment via UPI.
+
+Invoice for the 2nd quarter will be shared upon receiving the payment confirmation. Please share screenshot once the payment is made.
+
+Thank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.
+
+Ignore if the payment is already made.
+
+28)utility_annualcom_v2
+🚀 Avoid Penalties for {{Name}}!
+
+Did you know that appointing an auditor is mandatory within 30 days of incorporation? Failing to comply can lead to penalties up to 4 times the normal fees!
+
+Key ROC Compliances You Must Meet:
+
+✅ Form ADT-1: Auditor Appointment (within 30 days of incorporation) ✅ Form INC-20A: Certificate of Business Commencement✅ Form AOC-4: Filing of Financial Statements✅ Form MGT-7: Annual Return Filing ✅ MBP-1 and DIR-8: Director Disclosures✅ Board’s Report: Preparation and Filing✅ DIR-3 KYC: Director KYC Verification✅ Income Tax Return Filing✅ Audit by a Chartered Accountant✅ GST Filings
+
+Non-compliance can even result in penalties of up to ₹2 lakhs per year.
+
+
+Type 'Stop' to stop receiving our informative messages.
+
+29)durgapuja
+Dear Sir/Madam,
+
+We would like to inform you that our office will remain closed from 10th October 2024 to 13th October 2024 in observance of the Durga Puja Festival, a significant celebration here in West Bengal.
+
+Regular operations will resume on 14th October 2024.
+
+Wishing you and your family a joyous and prosperous Durga Puja!
+
+Warm regards,
+Startup Station.
+
+30)companycompliances_v3
+Avoid Penalties in your Company!
+
+🎉 Avail our Annual Compliance Package at a special discounted price of ₹7,999/year (payable quarterly) instead of ₹19,999.
+
+📦 Our package includes:
+
+Form ADT-1, AOC-4, MGT-7, Income Tax Return, and more.
+
+📋 Other Services:
+✅ GST Return filing: ₹299/month.
+✅ Startup India Registration: ₹2,999.
+✅ Trademark Filing: ₹999.
+
+Don't wait! Contact us today to secure your compliance.
+
+You can Opt out by replying 'Stop' to us!
+
+31)utility_annualcom
+Hi {{Name}},
+
+This is to follow up on our special offer! Our Annual Compliance Package is now ₹7,999/year (payable quarterly), covering Form ADT-1, AOC-4, MGT-7, ITR, and more.
+
+Let us take care of your compliance needs. Reply for more info!
+
+Type stop to stop receiving our amazing offers.
+
+34)2nd_quarter_payment_v3
+Hello {{Name}},
+
+This is a friendly reminder regarding the payment for the second quarter of your Annual Compliances with Startup Station. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.
+
+Payment Options:
+
+1. UPI Transfer:
+UPI ID: startupstation.axl
+
+2. Bank Transfer:
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385
+
+If you prefer, you can also scan the QR code below to complete the payment via UPI.
+
+Thank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.
+
+Ignore if the payment is already made.
+
+35)agent_assing_broadcast
+Thank you for your interest in our service. Your Relationship Manager will get in touch with you shortly.
+
+Type stop to stop receiving messages from us!
+
+36)1st_quarter_payment_v2
+Hello {{Name}},
+
+We are thrilled to assist you with your Annual Compliances. Please make the payment for the second quarter at your earliest convenience.
+
+You can complete your payment by either scanning the QR code above or transferring the amount to our UPI ID: startupstation.axl. Alternatively, you can transfer the amount directly to our bank account:
+
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385.
+
+Ignore if the payment is already made.
+
+
+37)1st_quarter_payment
+Hello {{Name}},
+
+We are thrilled to assist you with your Annual Compliances. Please make the payment for the first quarter at your earliest convenience.
+
+You can complete your payment by either scanning the QR code above or transferring the amount to our UPI ID: startupstation.axl. Alternatively, you can transfer the amount directly to our bank account:
+
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385.
+
+Ignore if the payment is already made.
+
+38)companycompliances_v2
+Avoid Penalties in your Company!
+
+🎉 Avail our Annual Compliance Package at a special discounted price of ₹11,999/year (payable quarterly) instead of ₹19,999.
+
+📦 Our package includes:
+
+Form ADT-1, AOC-4, MGT-7, Income Tax Return, and more.
+
+📋 Other Services:
+✅ GST Return filing: ₹299/month.
+✅ Startup India Registration: ₹2,999.
+✅ Trademark Filing: ₹999.
+
+Don't wait! Contact us today to secure your compliance.
+
+You can Opt out by replying 'Stop' to us!
+
+39)companyregistrationuttarpradesh
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Uttar Pradesh and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3000
+3. Government Fees: ₹ 2150
+Total Fees: ₹ 7,150
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+
+40)companyregistrationkarnataka_v2
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Karnataka and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3000
+3. Government Fees: ₹ 2,170
+Total Fees: ₹ 7,170
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+
+41)companyregistrationkarnataka
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Uttar Pradesh and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹2,150
+3. Government Fees: ₹ 4,200
+Total Fees: ₹ 7,150
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+
+42)companyregistrationkerala
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Kerala and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 4,200
+Total Fees: ₹ 9,200
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+43)companyregistrationjharkhand
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Jharkhand and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1,220
+Total Fees: ₹ 6,220
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+44)companyregistrationsikkim
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Sikkim and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1,150
+Total Fees: ₹ 6,150
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+45)companyregistrationtelangana
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Telangana and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 2,700
+Total Fees: ₹ 7,700
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned
+46)companyregistrationtamilnadu_v3
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Tamil Nadu and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1860
+Total Fees: ₹ 6,860
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+
+47)companyregistrationassam1_v3
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Assam and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1700
+Total Fees: ₹ 5,700
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+companyregistrationdelhi
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Delhi and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1500
+Total Fees: ₹ 6,500
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+
+48)companyregistrationmadhyapradesh_v2
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Madhya Pradesh and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3000
+3. Government Fees: ₹ 7,700
+Total Fees: ₹ 12,700
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+49)companyregistrationbihar
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Bihar and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3000
+3. Government Fees: ₹ 1,780
+Total Fees: ₹ 6,780
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+50)companyregistrationpunjabv2_v3
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Punjab and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3000
+3. Government Fees: ₹ 11,100
+Total Fees: ₹ 16,100
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+51)companycompliances
+Avoid Penalties in your Company!
+
+🎉 Avail our Annual Compliance Package at a special discounted price of ₹7,999/year (payable quarterly) instead of ₹19,999.
+
+📦 Our package includes:
+
+Form ADT-1, AOC-4, MGT-7, Income Tax Return, and more.
+
+📋 Other Services:
+✅ GST Return filing: ₹299/month.
+✅ Startup India Registration: ₹2,999.
+✅ Trademark Filing: ₹999.
+
+Don't wait! Contact us today to secure your compliance.
+
+You can Opt out by replying 'Stop' to us!
+52)companyregistrationmaharashta_v2
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Maharashtra and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 2450
+Total Fees: ₹ 7,450
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+
+53)companyregistrationassam1_v2
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Assam and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1700
+Total Fees: ₹ 5,700
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+
+54)companyregistrationgujratv2_v2
+file.pdf
+
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Gujrat and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1800
+Total Fees: ₹ 6,800
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+55)companyregistrationpunjabv2
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Punjab and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹11.100
+3. Government Fees: ₹ 1800
+Total Fees: ₹ 16,100
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+56)companyregistrationwb_v3
+Here’s the quotation for setting up your Private Limited Company with 2 director in state West Bengal and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government fees: ₹ 1500
+Total Fees: ₹ 6500
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+57)companyregistrationhimachal_v2
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Himachal Pradesh and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government fees: ₹ 1300
+Total Fees: ₹ 6300
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+58)agent_assing
+Your Relationship Manager (RM) is Mrs. Ritu Kaur. She will get in touch with you shortly.
+
+59)companyregistrationgujratv2
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Gujrat and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1800
+Total Fees: ₹ 6,800
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+60)companyregistrationassam
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Aassam and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1700
+Total Fees: ₹ 5,700
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+61)companyregistrationmaharashta
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Maharashtra and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 2450
+Total Fees: ₹ 7,450
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+62)companyregistrationwb
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Maharashtra and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Name Application Fees (Govt.): ₹1,000
+4. Stamp Duty Fees (Govt.): ₹370
+Total Fees: ₹ 6370
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned
+63)retargeting_v3
+Avoid Penalties in {{Name}}
+
+🚨 Hurry up! Only 21 days left to avoid penalties. We noticed you still haven't appointed an auditor.
+
+🎉 Avail our Annual Compliance Package at a special discounted price of ₹7,999/year (payable quarterly) instead of ₹19,999.
+
+📦 Our package includes:
+
+Form ADT-1, AOC-4, MGT-7, Income Tax Return, and more.
+
+📋 Other Services:
+✅ GST Return filing: ₹299/month.
+✅ Startup India Registration: ₹2,999.
+✅ Trademark Filing: ₹999.
+
+Don't wait! Contact us today to secure your compliance.
+
+You can Opt out by replying 'Stop' to us!
+“
+
+Add Director (Button )
+
+Input (Name)
+INput(Phone)
+
+Add Ditector(Button)
+
+After click this button 
+
+Add details   in “Directors” section in customer details page.
+
+Name   Delete(Logo)
+
+Mobile 
+
+**Add Service button functinality**
+
+After click this button.
+
+Show popup form of “Add Service”
+
+Select Service(See all Dropdown menu of service)
+like 
+
+Annual Compliance
+
+GST Filing
+
+Section 8 Company
+
+Startup India Registration
+
+Import Export Code
+
+FSSAI Central
+
+GST Registration
+
+FSSAI State Registration
+
+CA Certification
+
+Director Resignation
+
+MSME
+
+Trademark
+
+MOA Change
+
+Auditor Resignation
+
+TDS RETURN
+
+al Board Meeting & Statutory Documentation Services
+
+Professional Tax Registration Services
+
+PRIVATE LIMITED COMPANY
+
+Service Start Date (Date input for calender date)
+
+Professional Fees(   input)
+
+Govermment fees( input)
+
+GST( value %)
+
+Toggle button of “Recurring Invoice?”
+if acctive show (More three input )
+
+Interval (1) 
+
+Interval Type(Day,month)
+
+Invoice End Date input
+
+(Input calender date)
+
+“Add Service button” 
+
+# Annual Compliance Section
+
+(Inside customer)
+
+Left side has Annual Compliance
+
+middle have a 
+
+“Select Financial Year(Input)”(Dropdown menu of financial year)
+like
+
+(2025-2026)
+
+(View)
+
+Right side have 
+
+“Add Financial Year”(Button)
+
+After click this “Add Financial Year”
+i see a popup of a form of Add Financial Year
+In this form has 
+Title(Add Financial Year)
+
+Select Finanacial Year(Dropdown menu)
+
+2025-2026
+
+2024-2025
+
+When select previous year “Add financial year”
+like 2024-2025
+
+Blow show all activity of this specific customer in table format of that financial year.
+
+Like
+
+Columnwise
+
+Compliance Name
+
+Expiry Date
+Status
+
+Completed On
+Accountant Modify
+
+Preparation of 07 Required Statutory Registers(**Compliance Name)**
+
+empty (Expiry Date)
+
+To Be Done(**Status)**
+
+empty(**Completed On)**
+
+Modify button(**Accountant Modify)**
+
+Preparation & Filing of Form DPT - 03(**Compliance Name)**
+
+empty (Expiry Date)
+
+To Be Done(**Status)**
+
+empty(**Completed On)**
+
+Modify button(**Accountant Modify)**
+
+Preparation & Filing of Form ADT-01 (Auditor Appointment(**Compliance Name)**
+
+9th Mar 2023(**Expiry Date)**
+
+To Be Done(**Status)(Here need automation for automatically convert “To be done” to “Done”) This is client need.**
+
+empty(**Completed On)**
+
+Modify button(**Accountant Modify)**
+
+Preparation & Filing of Form INC - 20A(**Compliance Name)**
+
+6th Aug 2023(**Expiry Date)**
+
+To Be Done(**Status)(Here need automation for automatically convert “To be done” to “Done”) This is client need.**
+
+empty(**Completed On)**
+
+Modify button(**Accountant Modify)**
+
+Modified “Button functionality”
+
+After click modified button show popup of 
+
+“Preparation of 07 Required Statutory Registers”(Title)
+
+This form title will according to compliance name.
+
+Comliance Status(Dropdown menu input fields of status)
+Done 
+
+Ongoing
+
+To Be Done
+
+Assigned Accountant(Dropdown menu input fields of assigned person)
+
+None
+
+Samrat
+
+Tapas
+
+Jagjyot
+
+Update Compliance(Button)
+
+Annual Compliance
+(Table of annual compliance)
+
+columnwise
+(**Compliance Name)**
+
+(Expiry Date)
+
+(Status)
+
+(Complteted On)
+
+(Acountant Modify)(Button)
+
+# Services section table
+
+Service Name 
+
+Start Date
+
+End Date
+
+Status
+
+Add Invoice
+
+End Services
+
+Services
+
+Service Name(Annual Compliance)
+
+Start Date( 6th Feb 2026)
+End Date
+
+Status(Active)
+
+Add Invoice(Button)
+
+End Service(Button)
+
+Add Invoice(Button) functionality in services section in customer show form  popup of middle of the page
+
+### Add Invoice
+
+### **Annual Compliance(According to services)**
+
+Invoice Date
+
+Mar 04, 2026
+
+Professional Fees *
+
+₹2000
+
+Government Fees *
+
+₹2000
+
+GST *
+
+18
+
+Recurring Invoice?
+
+Add Invoice(Button)(Create invoice template)
+
+Add Invoices section in customer page 
+
+End Service(Button) functionality
+
+when click this button
+show popup in middle page of this page
+
+## **End Service?**
+
+Service: Annual Compliance
+
+cancel(Button)  confirm(Button)
+
+when click confirm button of this services section.
+show or add that day of **End Date(Column)** in services section 
+
+**Invoices section in customer**
+
+Data show columnwise
+1st row title and 2nd row data.
+
+**Invoice Date**
+
+**Invoice No**
+
+**Linked Service**
+
+**Price**
+
+**GST**
+
+**Total**
+
+**Due**
+
+**View** 
+
+2nd Mar 2026
+
+INV-24-2510796
+
+Annual Compliance
+
+₹ 3250
+
+₹ 0
+
+₹ 3250
+
+₹ 0
+
+for view below have button(View)
+
+This Invoices section in customer section view buttton
+show new page
+(Invoice Details  section)
+
+this section 
+
+(Section 1)
+
+left side have title (Invoice details)
+right side have couple of button(Email Invoice,Delete Invoice,view,Download)
+
+(Email Invoice button) all functionality
+after click this button show blow  popup with smal edit tool for send email to cutomer whatever mention email in customer details section.
+
+(Section 2)
+
+### Send Email
+
+Subject
+
+{{name}}
+
+{{companyName}}
+
+{{address}}
+
+{{invoiceNo}}
+
+{{invoiceDate}}
+
+{{invoiceAmount}}
+
+Web edit tool for modification
+
+---
+
+## Hello {{companyName}},
+
+---
+
+We are pleased to inform you that **{{complianceName}}** for your company has been successfully filed on {{complianceDoneDate}}
+
+You can track the status of your Annual Compliance by clicking the button below:
+
+---
+
+[📌 Track Compliance](https://demo1.synxweb.co/)
+
+---
+
+[⭐ Rate Us on Google](https://g.page/r/CcT54IQgtRJaEAE/review)
+
+---
+
+Best regards,
+
+**Startup Station Team**
+
+---
+
+Press Alt+0 for help
+
+left side 
+
+Send Email(Button)(Send email customer)
+
+Delete Invoice(Button functionality)
+
+after click show popup at middle of this page
+
+## **Delete this Invoice Permanently?**
+
+This will also delete all invoice items and invoice payments. This cannot be undone
+
+Cancel(Button)  confirm(Button)
+
+View Button(Functionality) after click this button
+redirect
+chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://crm.startupstation.in/api/v1/invoice/view/69a543007ee9313f5f047332
+
+show invoice pdf like blow(With logo and proprer table with colorfull)
+
+Tax Invoice Startup Station Financial Services Private Limited Phone no.: 9804492472, Email: [contact@startupstation.in](mailto:contact@startupstation.in) Plot 51, Block BB - 102, Shantipally, Sarat Park, Kolkata State: 19-WEST BENGAL India. Pincode - 700107 Bank A/C No: 50200094441194, IFSC: HDFC0005385, Bank: HDFC Bank Bill To Transportation Details Invoice Details Indbuy Global Private Limited C/O-SHAILENDRA SINGH, BARAMAR, Nibi, Allahabad, Allahabad- 211008, Uttar Pradesh Contact No: 9452638347 Invoice No: INV-24-2510796 Date: Mar 02, 2026 Place of Supply: 9-UTTAR PRADESH E-way Bill number: #HSN/SAC Item Name Price Amount 1 998399 Annual Compliance ₹ 3250.00 ₹ 3250.00 Total ₹ 3250.00 ₹ 3250.00 Tax Type Taxable amount Rate Tax amount Amounts Sub Total ₹ 3250.00 Total ₹ 3250.00 Received ₹ 3250.00 Balance ₹ 0.00 Invoice Amount In Words Description THREE THOUSAND, TWO HUNDRED FIFTY ONLY Terms and Conditions Thanks for buying For Startup Station Financial Services Private Limited Authorized Signatory
+
+Download button functionality
+when click automatically download pdf
+
+PDF NAME (INV-24-2510796.PDF)
+
+Invoice No
+
+**INV-24-2510796**
+
+Invoice Date
+
+**2nd Mar 2026**
+
+Place of Supply
+
+**9 - UTTAR PRADESH**
+
+Company Name
+
+**Indbuy Global Private Limited** 
+
+right side
+
+Customer Name
+
+[**Indbuy Global Private Limited**](https://crm.startupstation.in/customer/69a53f157ee9313f5f04730a)
+
+Customer Phone
+
+**+91 9452638347**
+
+Emails
+
+**Singh.shailendra9460@gmail.com**
+
+**indiabuyglobal@gmail.com**
+
+Customer Address
+
+**C/O-SHAILENDRA SINGH, BARAMAR, Nibi, Allahabad, Allahabad- 211008, Uttar Pradesh**
+
+(Invoice Items section)
+
+DATA SHOW ROW AND COLUMN FORMAT
+
+**No**
+
+**HSN/ SAC**
+
+**Product**
+
+**Price**
+
+**Amount**
+
+1
+
+998399
+
+Annual Compliance
+
+₹ 3250.00
+
+₹ 3250.00
+
+**TOTAL**
+
+₹ 3250.00
+
+₹ 3250.00
+
+(Payments section)
+
+**Payments**
+
+**No**
+
+**Date**
+
+**Amount**
+
+**Type**
+
+**Note**
+
+**Delete**
+
+1
+
+2nd Mar 2026
+
+₹ 3250.00
+
+UPI
+
+**Delete(Button)**
+
+(Totals section)
+ 
+
+**Totals**
+
+| **Sub Total** | **₹ 3250.00** |
+| --- | --- |
+| **GST** | **₹ 0.00** |
+| **Total** | **₹ 3250.00** |
+| **Paid** | **₹ 3250.00** |
+| **Due** | **₹ 0.00** |
+
+**Recurring Invoices(This is the spefific customer inside section)**
+
+**Start Date**
+
+**End Date**
+
+**Linked Service**
+
+**Interval**
+
+**Next Date**
+
+**Status**
+
+**View**
+
+2nd Mar 2026
+
+2nd Mar 2027
+
+Annual Compliance
+
+3 Months
+
+2nd Jun 2026
+
+Active
+
+view(Button)
+
+SECTION 1 OF **Recurring Invoice**
+
+after click view(Button)
+(**Recurring Invoice Details)**
+
+left side title (**Recurring Invoice Details)**
+
+right side (button)(Disable Recurring INVOICE)
+(Show popup of middle of the page)
+
+PART 2 SECTION OF **Recurring Invoice**
+
+(Left side)
+
+Invoice Start Date
+
+**2nd Mar 2026**
+
+Invoice End Date
+
+**2nd Mar 2027**
+
+Next Invoice Date
+
+**2nd Jun 2026**
+
+Interval
+
+**3 Months**
+
+Status
+
+Active
+
+Created
+
+**2nd Mar 2026 1:27 pm**
+
+(Right side)
+
+Customer Name
+
+[**Indbuy Global Private Limited**](https://crm.startupstation.in/customer/69a53f157ee9313f5f04730a)
+
+Customer Phone
+
+**+91 9452638347**
+
+Company Name
+
+**Indbuy Global Private Limited**
+
+Customer Address
+
+**C/O-SHAILENDRA SINGH, BARAMAR, Nibi, Allahabad, Allahabad- 211008, Uttar Pradesh**
+
+Place of Supply
+
+**9 - UTTAR PRADESH**
+
+(Invoice Items section inside recurringinvoice)
+
+Show data first row title and 2nd row data.
+
+**No**
+
+**HSN/ SAC**
+
+**Product**
+
+**Price**
+
+**GST**
+
+**Amount**
+
+1
+
+998399
+
+Annual Compliance
+
+₹ 3250.00
+
+₹ 0.00
+
+@ 0%
+
+₹ 3250.00
+
+**Invoices(total number of invoices)**
+
+filtering secrion fields:
+
+name/phone/company name
+
+select invoice date range(similer start and end date strucrure)
+
+funcrion(≥, =, ≤)
+
+value(integer)
+
+search icon and cross icon
+
+Invoice Date(6th Feb 2026)
+
+Invoice No(INV-24-2510577)
+
+Linked Service (Annual Compliance)
+
+Price(₹ 2000)
+
+GST( ₹ 0)
+Total(₹ 2000)
+
+Due(₹ 2000)
+
+View (Button)(Details)
+
+eye icon
+
+download icon
+
+**Recurring Invoices(total number here)**
+
+filtering secrion fields:
+
+name/phone/company name
+
+created(dropdown value: created, start, end, next date)
+
+select date range(similer start and end date strucrure)
+
+status(active or inactive)
+
+search icon and cross icon
+
+created at(format: 16th Feb 2026 1:33 pm)
+
+Start Date(3rd Feb 2026)
+
+End  Date( 3rd Feb 2027)
+
+customer name and company
+
+Linked Service(Annual Compliance)
+
+Interval(3 Months)
+
+Next Date(3rd May 2026)
+
+Status( Active)
+View(Button)(Details)
+
+Email Template History**(This is the spefific customer inside section)**
+
+Date 
+
+name 
+
+view(Button)
+
+details containt:
+
+**Recurring Invoice Details**
+
+Invoice Start Date
+
+**14th Feb 2026**
+
+Invoice End Date
+
+**14th Feb 2027**
+
+Next Invoice Date
+
+**14th May 2026**
+
+Interval
+
+**3 Months**
+
+Status
+
+Active
+
+Created
+
+**14th Feb 2026 1:36 pm**
+
+Customer Name
+
+[**VALLEYMILES PRIVATE LIMITED**](https://crm.startupstation.in/customer/69902ca77ee9313f5f044845)
+
+Customer Phone
+
+**+91 7780832694**
+
+Company Name
+
+**VALLEYMILES PRIVATE LIMITED**
+
+Customer Address
+
+**SPA-0194/DTR-194-, KABOO MOHALLA, Sopore, Sorore, Baramulla- 193201, Jammu & Kashmir**
+
+Place of Supply
+
+**1 - JAMMU & KASHMIR**
+
+**Invoice Items**
+
+**No**
+
+**HSN/ SAC**
+
+**Product**
+
+**Price**
+
+**GST**
+
+**Amount**
+
+1
+
+998399
+
+Annual Compliance
+
+₹ 2000.00
+
+₹ 0.00
+
+@ 0%
+
+₹ 2000.00
+
+**Invoices**
+
+**Invoice Date**
+
+**Invoice No**
+
+**Price**
+
+**GST**
+
+**Total**
+
+**Due**
+
+**View**
+
+14th Feb 2026
+
+INV-24-2510647
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+**Payments(counts of all payments)**
+
+filter section at the top, containt
+
+name/phone/company name
+
+select payment date range
+
+one row multiple column
+name/phone/company :- (input)
+
+Data Type(Dropdown menu a)Onboarding Date b)Incorporation Date)
+
+Select Date Range(Selcct)
+
+(Select Date Range Functionality)
+(MMM dd, yyyy - MMM dd, yyyy)
+
+When click calender logo
+Show two months
+(left side current months and right side have next months) But right months those days not go yet .
+It will middle cut mark those days.
+
+One date click show (date range same both start and end)
+
+two dated click show(date range diffrent first click starting range and second click show send range)
+
+to calender down have three button
+(Today,Yesterday,Last 7 Days)
+When click above any three button this time automatically select date range.
+
+but when user want set custom date 
+this user show okay button otherswise not.
+
+type(payments type): cash, card, upi, net banking
+
+search icon 
+
+cross icon
+
+list section card entry
+
+6 column
+
+pay Date(format:12th Feb 2026 2:54 pm)
+
+customer name (**ARAJ MEDIA PRIVATE LIMITED)(hyper linked to the costomer details page)******
+
+customer company(ARAJ MEDIA PRIVATE LIMITED)(hyper linked to company detail page)******
+
+invoice no(**INV-24-2510624**)(hyper link to invoice details page)******
+
+payment type (value: cash, card, upi, net banking)
+
+amount(integers)
+
+**Templates** 
+
+heading: email templates and button named new email template
+
+input field named name/subject and search icon and cross icon
+
+card structure
+
+6 column 
+
+created(formata: 20th June 2025 2:13 pm)
+
+name(format: Director Resignation)
+
+subject(Startup Station - Director Resignation Services)
+
+status(Active in green color)
+
+attachments(manage button)
+
+### **Email Attachments**
+
+**Template Name:** Director Resignation
+
+add new file
+
+modify(Edit button)
+
+### **Edit Email Template**
+
+Name
+
+Subject
+
+Status *
+
+{{name}}
+
+{{companyName}}
+
+{{address}}
+
+Annual Compliance Service Only:
+
+{{username}}
+
+{{password}}
+
+Invoice Only:
+
+{{invoiceNo}}
+
+{{invoiceDate}}
+
+{{invoiceAmount}}
+
+Annual Compliance Only:
+
+{{complianceName}}
+
+{{complianceDoneDate}}
+
+{{complianceExpiryDate}}
+
+**Accountant jobs**
+
+header: Accountant jobs and button: NEW JOB
+
+input or searching div: 
+6 column
+name / phone / company
+
+date type(value: created, Expiry date, completed on)
+
+select date range(same date format start + end date, today yester day and last 7 days)
+
+status(done, ongoing, to be done)
+
+accountants(name of the person who is the owner of the account)
+search icon
+
+cross icon
+
+all card section 8 column:
+
+created (format: 6th Feb 2026 1:05 pm)
+
+job name (format: Preparation & Filing of Form DPT - 03) 
+
+customer (format:Test
+
+             +91 111 XSZCV )
+
+expiry (format: 1st Jan 1970 )
+
+status (format: To Be Done)
+
+completed (format: 6th Feb 2026 1:05 pm)
+
+accountant (format: Jagjyot)
+
+modify(edit and delete icon)
+
+edit:
+
+### **Edit Job**
+
+Job Title *
+
+Select Customer
+
+Status *
+
+accountant
+
+has expiry date?
+
+UPDATE JOB
+
+delete
+
+## **Delete this Job Permanently?**
+
+Job: fvasdfvsd for Jagjyot
+cancel button
+confirm button
+
+Users
+
+**Users (7)                            new user button(fields are similar to edit user)**
+
+**Created(format:5th January 2025 4:49 pm)**
+
+**Name(format: Amit Samanta )**
+
+**Phone(format: +91 8100521654 )**
+
+**Type(format: Admin/Accountant)**
+
+**Status(format: Active/Passive)**
+
+**Sessions(manage button)(not functional)**
+
+**Modify(edit button)**
+
+### **Edit User**
+
+User Name *
+
++91
+
+Phone *
+
+Password
+
+*Keep blank if not changed*
+
+Type *(agent/admin/accountant)
+
+status(active/inactive)
+
+update user(button)
+
+**compliance settings**
+
+there is two div:
+1.
+**Financial Year Settings**
+
+**Add Financial Year(button)(feature: small window place for inserting year)**
+
+bellow containt the list of all financial year list which we can modify using modify button
+
+2.
+
+**Annual Compliances Settings**
+
+input section for the financial year and a load button
+
+**Compliance Name (format: Preparation & Filing of Form ADT-01 (Auditor Appointment))**
+
+**Expiry Date (format: 23rd Mar 2024 )**
+
+**New (format: yes/no)**
+
+**Expiry after (format:** 30 days**)**
+
+**Expiry Template (format: )**
+
+**Complete Template (format: Compliance Update)**
+
+**Modify(button)**
+
+### **Edit Compliance**
+
+Compliance Name *
+
+Has Expiry?(slider button)
+
+Inc20? *(yes/no)
+
+Days of Expiry after INC Date *(integer)
+
+Expiry Template *
+
+complete template
+
+update compliance(button for submit)
+
+**settings:**
+
+div 1:
+
+**Settings**
+
+Invoice Prefix *
+
+Invoice Number *
+
+Email From Name *
+
+From Email *
+
+Invoice Template
+
+Recurring Invoice Template
+
+GST Template (2nd of every month)
+
+Service List Template (after 2 days)
+
+PTax Template (after 7 days of compliance start)
+
+Website Template (after 10 days)
+
+Startup India Template (after 15 days of compliance start)
+
+ISO Template (after 20 days of compliance start)
+
+INC20 Template (after 120 and 150 days of incorporation)
+
+update settings (button)
+
+div 2:
+
+### Email Count
+
+### **Total Emails: 0**
+
+**Date**
+
+**Count**
+
+input box for searching(can select a range of date)
+
+go(button)(after selecting the date range use the button for searching)
+
+*****Customer Name and Company: through out the app where ever you find this fild make sure to hyper link it to the customer details page. every customer should have one page mentioning there details.**
+
+*****Invoice No : every invoice should have a page mentioning there details. this hyper link is only in the payment page but can add in other page if possible.**
+
+*page layout for customer and company specific page :
+
+**Customer Details**
+
+### Customer Details
+
+### **ARAJ MEDIA PRIVATE LIMITED**
+
+New Incorportation
+
+**Customer Name: ARAJ MEDIA PRIVATE LIMITED
+Customer Phone: 8668844789
+Company Name: ARAJ MEDIA PRIVATE LIMITED
+Type: Private Limited Company
+Onboarding Date: 12th February 2026
+Incorporation Date: 20th January 2026
+Sales Person: Ritu Kaur**
+
+### **Emails**
+
+vishalbhoyar51@gmail.com
+
+### **Address**
+
+FLAT-B/307,PLOT-140, SEC-1S,Millenium Hilton, Panvel City, Panvel, Raigarh(MH)- 410206, Maharashtra
+
+### **State: MAHARASHTRA**
+
+### **Username: ARAJ0555**
+
+### **Password: ey53l5od**
+
+### **Directors**
+
+**ARAJ MEDIA PRIVATE LIMITED**8668844789
+
+**Services**
+
+**Service Name**
+
+**Start Date**
+
+**End Date**
+
+**Status**
+
+**Add Invoice**
+
+**End Service**
+
+Startup India Registration
+
+12th Feb 2026
+
+Active
+
+Annual Compliance
+
+12th Feb 2026
+
+12th Feb 2026
+
+Inactive
+
+**Invoices**
+
+**Invoice Date**
+
+**Invoice No**
+
+**Linked Service**
+
+**Price**
+
+**GST**
+
+**Total**
+
+**Due**
+
+**View**
+
+12th Feb 2026
+
+INV-24-2510624
+
+Startup India Registration
+
+₹ 3000
+
+₹ 0
+
+₹ 3000
+
+₹ 1500
+
+**Recurring Invoices**
+
+**Start Date**
+
+**End Date**
+
+**Linked Service**
+
+**Interval**
+
+**Next Date**
+
+**Status**
+
+**View**
+
+12th Feb 2026
+
+12th Feb 2027
+
+Annual Compliance
+
+3 Months
+
+12th May 2026
+
+Inactive
+
+**Email Template History**
+
+**Date**
+
+**Name**
+
+**View**
+
+14th Feb 2026 10:00 am
+
+Service List
+
+12th Feb 2026 2:36 pm
+
+Startup India Registration
+
+12th Feb 2026 2:35
+
+*page layout for **Invoice Details :**
+
+**Invoice Details**
+
+**Invoice Details**
+
+Invoice No
+
+**INV-24-2510624**
+
+Invoice Date
+
+**12th Feb 2026**
+
+Place of Supply
+
+**27 - MAHARASHTRA**
+
+Company Name
+
+**ARAJ MEDIA PRIVATE LIMITED**
+
+Customer Name
+
+[**ARAJ MEDIA PRIVATE LIMITED**](https://crm.startupstation.in/customer/698d975d7ee9313f5f04421a)
+
+Customer Phone
+
+**+91 8668844789**
+
+Emails
+
+**vishalbhoyar51@gmail.com**
+
+Customer Address
+
+**FLAT-B/307,PLOT-140, SEC-1S,Millenium Hilton, Panvel City, Panvel, Raigarh(MH)- 410206, Maharashtra**
+
+**Invoice Items**
+
+**No**
+
+**HSN/ SAC**
+
+**Product**
+
+**Price**
+
+**Amount**
+
+1
+
+998399
+
+Startup India Registration
+
+₹ 3000.00
+
+₹ 3000.00
+
+**TOTAL**
+
+₹ 3000.00
+
+₹ 3000.00
+
+**Payments**
+
+**No**
+
+**Date**
+
+**Amount**
+
+**Type**
+
+**Note**
+
+**Delete**
+
+1
+
+12th Feb 2026
+
+₹ 1500.00
+
+UPI
+
+**Totals**
+
+| **Sub Total** | **₹ 3000.00** |
+| --- | --- |
+| **GST** | **₹ 0.00** |
+| **Total** | **₹ 3000.00** |
+| **Paid** | **₹ 1500.00** |
+| **Due** | **₹ 1500.00** |
+
+https://crm.startupstation.in/services 
+
+Services
+
+Section:- 1 (Header) 
+
+Services(Count of services)(Left side)
+
+New Service(Button)
+
+(When i click this show form popup at middle of screen)
+
+ form
+
+Add new Services(Form title)
+
+input (name )
+
+Status(Input) (Dropdown  menu)
+active 
+
+inactive 
+
+Services Start Email Template
+
+1. data: [{name: "Compliance Update",…}, {name: "Annual Compliance Service - Jagjyot Singh",…},…]
+    1. 0: {name: "Compliance Update",…}
+    2. 1: {name: "Annual Compliance Service - Jagjyot Singh",…}
+    3. 2: {name: "Annual Compliance Service - Ritu Kaur",…}
+    4. 3: {name: "Annual Compliance Service plus GST plus ESI - Ritu Kaur",…}
+    5. 4: {name: "Annual Compliance - Onboarding",…}
+    6. 5: {name: "Startup India Registration",…}
+    7. 6: {name: "Startup India Promotion",…}
+    8. 7: {name: "Website",…}
+    9. 8: {name: "Professional Tax",…}
+    10. 9: {name: "GST Filing",…}
+    11. 10: {name: "Service List",…}
+    12. 11: {name: "Next Quarter Payment",…}
+    13. 12: {name: "INC 20A Reminder",…}
+    14. 13: {name: "ROC plus GST plus ESI plus TDS",…}
+    15. 14: {name: "Package plus payment details",…}
+    16. 15: {name: "Annual Compliance plus Bookkeeping",…}
+    17. 16: {name: "Director Resignation",…}
+
+Profesional Fees (Value)(Input)
+
+0
+
+Government Fees(Value)(Input)
+
+0
+
+HSN Code(Input)
+
+Add new service(Button)
+(When click add new Services to table section)
+
+Section 2
+
+table section(Blow are table title)
+
+Name 
+
+Email Template 
+
+HSN Code
+
+Professional Fees
+
+Govt Fees
+
+Status
+
+Edit
+
+===
+
+Table data  
+
+**Annual Compliance**
+
+Annual Compliance - Onboarding
+
+998399
+
+₹ 2000
+
+₹ 0
+
+Active
+
+Edit(Button)
+
+When click Edit button
+Show edit form popup at middle of screen 
+
+New Service(Button)
+
+(When i click this show form popup at middle of screen)
+
+ form
+
+Add new Services(Form title)
+
+input (name )
+
+Annual Compliance 
+
+Status(Input) (Dropdown  menu)
+active 
+
+Services Start Email Template
+
+{name: "Annual Compliance - Onboarding",…}
+
+Profesional Fees (Value)(Input)
+
+2000
+
+Government Fees(Value)(Input)
+
+0
+
+HSN Code(Input)
+
+998399
+
+Update service(Button)
+(When click Update Services update data to table section particular data)
+
+  
+
+https://crm.startupstation.in/compliances 
+
+Compliances
+
+Section: 1
+**Compliances (compliances count baseon financial year)(Leaft side)**
+
+Select Financial Year(Dropdown menu)View(Button)(When i click this time fetch data of all compliances show section 3(Table section)
+
+2023-2024
+
+2024-2025
+
+2025-2026
+
+Section: 2 (Filter Section)
+
+There have filter column left to right all input
+
+Name/phone/company (Input)
+
+Select Completed Date Range(Date picker)
+
+Company Name(All dropdown menu when new customer add this time automatically )
+
+Status(Dropdown menu)
+
+Done 
+
+Ongoing
+
+To Be Done
+
+Accountant(Dropdown menu)
+
+Samrat
+
+Tapas
+
+Jagjyot
+
+Filter Button(Filter work when this button)
+
+Cross button(if anyone click cross button this filter will be remove 
+
+by default )
+
+Section: 3
+
+Table section 
+
+all table title (Column wise) 
+
+Customer Name
+
+Customer Company 
+
+Compliance Name
+
+Expiry
+
+Status
+
+Completed
+
+Accountant
+
+(All data from backend)
+
+Data according table
+===
+
+[**NBCA SKILL (OPC) PRIVATE LIMITED**](https://crm.startupstation.in/customer/6984429865b9911c9c0b14e6)
+
++91 9863861745
+
+NBCA SKILL (OPC) PRIVATE LIMITED
+
+Preparation & Filing of Form MGT-07 (Management Related Annual Return)
+
+29th Nov 2024
+
+To Be Done
+
+**Completed(Empty Data)**
+
+**Accountant(Empty Data)**
+
+====
+
+[**NBCA SKILL (OPC) PRIVATE LIMITED**](https://crm.startupstation.in/customer/6984429865b9911c9c0b14e6)
+
++91 9863861745
+
+NBCA SKILL (OPC) PRIVATE LIMITED
+
+Filing of Income Tax Returns
+
+30th Oct 2024
+
+To Be Done
+
+[**NBCA SKILL (OPC) PRIVATE LIMITED**](https://crm.startupstation.in/customer/6984429865b9911c9c0b14e6)
+
++91 9863861745
+
+NBCA SKILL (OPC) PRIVATE LIMITED
+
+Filing of Income Tax Returns
+
+30th Oct 2024
+
+To Be Done
+
+**Completed(Empty data)**
+
+**Accountant(Empty Data)**
+
+====
+Similarly all data come from backend
+
+https://crm.startupstation.in/addinvoice
+
+Add Invoice
+
+Section: 1
+
+Create Invoice(Title top left )
+
+Section: 2
+
+Invoice details(Tile top left)
+
+Left side title(Select Customer) 
+
+Right side dropdown input fields of all customer company name(Like name-companyName) and along with filter functinality for select.
+
+"data": [
+{
+"name": "7DAYS TRAVENTURE (OPC) PRIVATE LIMITED",
+"companyName": "7DAYS TRAVENTURE (OPC) PRIVATE LIMITED",
+"id": "694e39889f8d941a6c84ab50"
+},
+{
+"name": "A & A FAUCETS PRIVATE LIMITED",
+"companyName": "A & A FAUCETS PRIVATE LIMITED",
+"id": "68480520a08bd204e8471782"
+},
+{
+"name": "AAJ CODERS HUB PRIVATE LIMITED",
+"companyName": "AAJ CODERS HUB PRIVATE LIMITED",
+"id": "683ee911a91fd129ec698cdb"
+},
+{
+"name": "AARND SERVICES PRIVATE LIMITED",
+"companyName": "AARND SERVICES PRIVATE LIMITED",
+"id": "6969d588aa355b4052c01eaa"
+},
+{
+"name": "AARVION SERVICES INDIA PRIVATE LIMITED",
+"companyName": "AARVION SERVICES INDIA PRIVATE LIMITED",
+"id": "69843e6365b9911c9c0b146e"
+},
+{
+"name": "AATIKSH INTERACTIVE SOLUTIONS (OPC) PRIVATE LIMITED",
+"companyName": "AATIKSH INTERACTIVE SOLUTIONS (OPC) PRIVATE LIMITED",
+"id": "6805e6b551ff1c98882c3dcd"
+},
+{
+"name": "ABHAYA EXPERT CYBERSECURITY SOLUTIONS & SERVICES (OPC) PRIVATE LIMITED",
+"companyName": "ABHAYA EXPERT CYBERSECURITY SOLUTIONS & SERVICES (OPC) PRIVATE LIMITED",
+"id": "699d466b7ee9313f5f046074"
+},
+{
+"name": "ABHIRAM DELICACY PRIVATE LIMITED",
+"companyName": "ABHIRAM DELICACY PRIVATE LIMITED",
+"id": "69aad42965b9911c9c0b70d1"
+},
+{
+"name": "ABI'SXPRESS PLUS PRIVATE LIMITED",
+"companyName": "ABI'SXPRESS PLUS PRIVATE LIMITED",
+"id": "67d948cd03d6eddf9510269d"
+},
+{
+"name": "ACCORDSCENTS (OPC) PRIVATE LIMITED",
+"companyName": "ACCORDSCENTS (OPC) PRIVATE LIMITED",
+"id": "6912f5f5bb58fdcfd995eb7a"
+},
+{
+"name": "ACESO INDIA PRIVATE LIMITED",
+"companyName": "ACESO INDIA PRIVATE LIMITED",
+"id": "68ee34c183bcdcfffa4714bd"
+},
+{
+"name": "ACME MEGACORP PRIVATE LIMITED",
+"companyName": "ACME MEGACORP PRIVATE LIMITED",
+"id": "6933d5809f8d941a6c847b49"
+},
+{
+"name": "ACTIVATORBLUE PRIVATE LIMITED",
+"companyName": "ACTIVATORBLUE PRIVATE LIMITED",
+"id": "681074e051ff1c98882c5df2"
+},
+{
+"name": "ADALIUS PLATFORM SERVICES PRIVATE LIMITED",
+"companyName": "ADALIUS PLATFORM SERVICES PRIVATE LIMITED",
+"id": "692a9726aa355b4052bfa4fa"
+},
+{
+"name": "ADHIVERSE TECHNOCRAFT PRIVATE LIMITED",
+"companyName": "ADHIVERSE TECHNOCRAFT PRIVATE LIMITED",
+"id": "6996f4aa7ee9313f5f04577f"
+},
+{
+"name": "ADIKSH OVERSEAS PRIVATE LIMITED",
+"companyName": "ADIKSH OVERSEAS PRIVATE LIMITED",
+"id": "695f85eeaa355b4052c00a5e"
+},
+{
+"name": "ADML AGROTECH PRIVATE LIMITED",
+"companyName": "ADML AGROTECH PRIVATE LIMITED",
+"id": "67f6372e03d6eddf951080b5"
+},
+{
+"name": "ADOMZOHAR VENTURES (OPC) PRIVATE LI",
+"companyName": "ADOMZOHAR VENTURES (OPC) PRIVATE LI",
+"id": "67e2713703d6eddf951049db"
+},
+{
+"name": "ADUMYRA SOLUTIONS (OPC) PRIVATE LIMITED",
+"companyName": "ADUMYRA SOLUTIONS (OPC) PRIVATE LIMITED",
+"id": "67d798f851ff1c98882bb7dc"
+},
+{
+"name": "ADVIN SOFTWARES PRIVATE LIMITED",
+"companyName": "ADVIN SOFTWARES PRIVATE LIMITED",
+"id": "6800cc4851ff1c98882c359d"
+},
+{
+"name": "ADYANSH PINNACLE WELLNESS PRIVATE LIMITED",
+"companyName": "ADYANSH PINNACLE WELLNESS PRIVATE LIMITED",
+"id": "680cd58251ff1c98882c58b1"
+},
+{
+"name": "ADYATH TECHWORKS PRIVATE LIMITED",
+"companyName": "ADYATH TECHWORKS PRIVATE LIMITED",
+"id": "6875f3657317587ed21eeb16"
+},
+{
+"name": "AETHERIA LABS PRIVATE LIMITED",
+"companyName": "AETHERIA LABS PRIVATE LIMITED",
+"id": "694a4c0c9f8d941a6c84a7af"
+},
+{
+"name": "AETHERIC ANIMATIONS (OPC) PRIVATE LIMITED",
+"companyName": "AETHERIC ANIMATIONS (OPC) PRIVATE LIMITED",
+"id": "67b71903dc4e76e38f51bf21"
+},
+{
+"name": "AEXOVATE BUSINESS SERVICES PRIVATE LIMITED",
+"companyName": "AEXOVATE BUSINESS SERVICES PRIVATE LIMITED",
+"id": "698ec47665b9911c9c0b2c2d"
+},
+
+Invoice Date (Title) (When Recurring Invoice toggle not active)
+
+Right side calender by defalut take current date. 
+
+Recurring Invoice?(Toggle button)
+(When  this toggle active show blow input fields otherwise hide )
+
+left side title (Interval) 
+
+Right side have input of interval value(by default 0)
+
+Left side title (Interval Type)
+
+Right side have input of Interval Type 
+(Dropdown menu)(Day,Month)
+
+Left side title (Invoice End Date)
+
+Right End Date(Calender show by defalut take current day date)
+
+Section: 3
+
+- Add Invoice Section(Modification)
+
+Invoice Items section
+
+its look like table section
+
+table section title all column and blow have value
+
+No         Name                                                                                                           Price            GST                                                           (Middle section show)
+
+1          FSSAI State Registration          Professional Fees   ₹ 2500.00                        2500.00          %(1% == 25) means 10%(type number)  Government Fees    ₹ 0
+
+₹ 0.00
+
+Amount
+
+2500.00 
+
+Similary for others products
+
+(When user incease gst percentage this time automatically increase total section gst and total amount
+
+**TOTAL      ₹ 5000.00     ₹ 95.00    ₹ 5095.00**
+
+(Delete logo)
+
+===========
+
+(second row all data all column )
+
+Total (left side)
+
+Right side have value 
+
+price **₹**0.00
+
+GST **₹**0.00(1%)Type Number
+
+**₹30.00** 
+
+Amount **₹303**0.00
+
+Select Product(Left input title)
+
+middle position input fields(Dropdown menu)
+
+ Blow have data you show dropdown menu show like (Defauly none otherwise
+
+name- **₹professional**
+
+)
+
+"data": [
+{
+"name": "Annual Compliance",
+"status": true,
+"created": 1735373855633,
+"template": "67acbbf9e074351df18a8316",
+"govt": 0,
+"professional": 2000,
+"hsn": "998399",
+"id": "676fb41f6591cff83b2efdb6"
+},
+{
+"name": "GST Filing",
+"status": true,
+"template": "678fe0a51b59325fcdf73718",
+"created": 1735384546997,
+"govt": 1000,
+"professional": 6000,
+"hsn": "4984",
+"id": "676fdde22d4920b03d441720"
+},
+{
+"name": "Section 8 Company",
+"status": true,
+"template": "678fe0a51b59325fcdf73718",
+"professional": 1000,
+"govt": 0,
+"hsn": "9999",
+"created": 1739339657743,
+"id": "67ac3789d1c2a9c3fe3cff38"
+},
+{
+"name": "Startup India Registration",
+"status": true,
+"template": "67acd14be074351df18a84cc",
+"professional": 3000,
+"govt": 0,
+"hsn": "998399",
+"created": 1739379053149,
+"id": "67acd16de074351df18a84da"
+},
+{
+"name": "Import Export Code",
+"status": true,
+"template": "678fe0a51b59325fcdf73718",
+"professional": 1000,
+"govt": 0,
+"hsn": "998399",
+"created": 1742201130257,
+"id": "67d7e12a51ff1c98882bba8b"
+},
+{
+"name": "FSSAI Central",
+"status": true,
+"template": "678fe0a51b59325fcdf73718",
+"professional": 3000,
+"govt": 0,
+"hsn": "998399",
+"created": 1742201156946,
+"id": "67d7e14451ff1c98882bba90"
+},
+{
+"name": "GST Registration",
+"status": true,
+"template": "678fe0a51b59325fcdf73718",
+"professional": 1000,
+"govt": 0,
+"hsn": "998399",
+"created": 1742634743825,
+"id": "67de7ef703d6eddf95104172"
+},
+{
+"name": "FSSAI State Registration",
+"status": true,
+"template": "678fe0a51b59325fcdf73718",
+"professional": 2500,
+"govt": 0,
+"hsn": "998399",
+"created": 1742634764658,
+"id": "67de7f0c03d6eddf95104177"
+},
+{
+"name": "CA Certification",
+"status": true,
+"template": "678fe0a51b59325fcdf73718",
+"professional": 1000,
+"govt": 0,
+"hsn": "998399",
+"created": 1748518591512,
+"id": "683846bffc5e7cd76000e464"
+},
+{
+"name": "Director Resignation",
+"status": true,
+"template": "68551f48a08bd204e8473603",
+"professional": 2000,
+"govt": 0,
+"hsn": "998399",
+"created": 1750408823736,
+"id": "68551e77a08bd204e84735d9"
+},
+{
+"name": "MSME",
+"status": true,
+"template": "67b40605beba40105360c811",
+"professional": 1000,
+"govt": 0,
+"hsn": "998399",
+"created": 1751366360019,
+"id": "6863bad88660e5f4fc29ae5a"
+},
+{
+"name": "Trademark",
+"status": true,
+"template": "678fe0a51b59325fcdf73718",
+"professional": 1000,
+"govt": 0,
+"hsn": "998399",
+"created": 1753772864592,
+"id": "6888734007d16a595fa273e2"
+},
+{
+"name": "MOA Change",
+"status": true,
+"template": "678fe0a51b59325fcdf73718",
+"professional": 3000,
+"govt": 0,
+"hsn": "998399",
+"created": 1753872488148,
+"id": "6889f86807d16a595fa27733"
+},
+{
+"name": "Auditor Resignation",
+"status": true,
+"template": "679072031b59325fcdf73a94",
+"professional": 2000,
+"govt": 0,
+"hsn": "998399",
+"created": 1758181918623,
+"id": "68cbba1ebb58fdcfd995820c"
+},
+{
+"name": "TDS RETURN",
+"status": true,
+"template": "678fe0a51b59325fcdf73718",
+"professional": 2000,
+"govt": 0,
+"hsn": "998399",
+"created": 1760078641481,
+"id": "68e8ab31bb58fdcfd995b599"
+},
+{
+"name": "Board Meeting & Statutory Documentation Services",
+"status": true,
+"template": "678fe0a51b59325fcdf73718",
+"professional": 3000,
+"govt": 0,
+"hsn": "998399",
+"created": 1768479532944,
+"id": "6968db2caa355b4052c01c73"
+},
+{
+"name": "Professional Tax Registration Services",
+"status": true,
+"template": "678fe0a51b59325fcdf73718",
+"professional": 1500,
+"govt": 0,
+"hsn": "998399",
+"created": 1768479643037,
+"id": "6968db9b9f8d941a6c84d9a5"
+},
+{
+"name": "PRIVATE LIMITED COMPANY",
+"status": true,
+"template": "678fe0a51b59325fcdf73718",
+"professional": 8000,
+"govt": 0,
+"hsn": "998599",
+"created": 1770039182455,
+"id": "6980a78e7ee9313f5f041c04"
+}
+]
+
+right side have a button (Add Product)
+
+section : 4
+
+Full width button(CREATE INVOICE)
+
+when click this add invoice to customer to invoce and create invoice add data predefine pdf template for invoice. 
+
+ 
+
+https://crm.startupstation.in/invoices
+
+Invoices 
+
+Section:1
+
+Invoices(2295)(Left)
+================
+Section:2
+
+(Filtering section)(Left to right column itms for filtering)
+
+Input(Name,phone,company name)
+
+Input(Select Invoice Date Range)(Date Picker)
+
+Type(Dropdown menu)
+Price
+
+GST
+
+Total 
+
+Due
+
+Function(Dropdown menu)
+
+≥
+
+=
+
+≤
+
+Value(Type number)
+
+Filter (Button)
+
+Cross(Button)
+
+================
+
+Section:- 3
+
+(Table title left to right)
+
+**Invoice No**
+
+**Invoice Date**
+
+**Customer Name and Company**
+
+**Linked Service**
+
+**Price**
+
+**GST**
+
+**Total**
+
+**Due**
+
+**Details**
+
+**PDF**
+
+(Table Data)
+
+INV-24-2510904
+
+13th Mar 2026
+
+[**RECEPTA HEALTHCARE PRIVATE LIMITED**](https://crm.startupstation.in/customer/69b3b40d7ee9313f5f049dac)
+
+RECEPTA HEALTHCARE PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+Details(Button click redirect that customer particular page https://crm.startupstation.in/invoice/69b3b47e7ee9313f5f049dd3)
+
+eyes icon(When user click show invoice preview pdf)
+
+(https://crm.startupstation.in/api/v1/invoice/view/69b3b47e7ee9313f5f049dd3)
+
+Download(Logo button when click this button automatically)
+
+======
+
+Blow have some clients dummy data 
+
+INV-24-2510903
+
+13th Mar 2026
+
+[**MITTIMART COMMERCE PRIVATE LIMITED**](https://crm.startupstation.in/customer/693d234c9f8d941a6c848da0)
+
+MITTIMART COMMERCE PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510902
+
+13th Mar 2026
+
+[**Cosmoloop Private Limited**](https://crm.startupstation.in/customer/684c270f8660e5f4fc297d97)
+
+Cosmoloop Private Limited
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510901
+
+13th Mar 2026
+
+[**HINDVEDGE HOSPITALITY SERVICES PRIVATE LIMITED**](https://crm.startupstation.in/customer/684bf3f0a08bd204e84723d6)
+
+HINDVEDGE HOSPITALITY SERVICES PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510900
+
+13th Mar 2026
+
+[**NEXSPEED DIGITAL PRIVATE LIMITED**](https://crm.startupstation.in/customer/684be7eaa08bd204e847230b)
+
+NEXSPEED DIGITAL PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510899
+
+13th Mar 2026
+
+[**AKXA CONSTRUCTION & BUILDERS PRIVATE LIMITED**](https://crm.startupstation.in/customer/684bbec7a08bd204e847226a)
+
+AKXA CONSTRUCTION & BUILDERS PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510898
+
+13th Mar 2026
+
+[**CROSSMEET SOFTWARE PRIVATE LIMITED**](https://crm.startupstation.in/customer/67d2e5a703d6eddf9510163e)
+
+CROSSMEET SOFTWARE PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510897
+
+13th Mar 2026
+
+[**PRIMEVA BIOSCIENCE PRIVATE LIMITED**](https://crm.startupstation.in/customer/67d2af4303d6eddf95101541)
+
+PRIMEVA BIOSCIENCE PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510896
+
+13th Mar 2026
+
+[**REVENTNEU PRIVATE LIMITED**](https://crm.startupstation.in/customer/67d2a27903d6eddf9510147b)
+
+REVENTNEU PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510895
+
+13th Mar 2026
+
+[**Bizamigo Consulting Private Limited**](https://crm.startupstation.in/customer/67d2977551ff1c98882bb291)
+
+BIZAMIGO CONSULTING PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510894
+
+13th Mar 2026
+
+[**AMORERP PRIVATE LIMITED**](https://crm.startupstation.in/customer/67d285c903d6eddf95101384)
+
+AMORERP PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510893
+
+13th Mar 2026
+
+[**SILVER BRIDGEMARK CONSULTING PRIVATE LIMITED**](https://crm.startupstation.in/customer/67d2743551ff1c98882bb149)
+
+SILVER BRIDGEMARK CONSULTING PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510892
+
+13th Mar 2026
+
+[**PALIPRAYAS FOUNDATION**](https://crm.startupstation.in/customer/67d266fe51ff1c98882bb0da)
+
+PALIPRAYAS FOUNDATION
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510891
+
+12th Mar 2026
+
+[**PRACTOVATE SOLUTIONS PRIVATE LIMITED**](https://crm.startupstation.in/customer/67c7ee9151ff1c98882b988b)
+
+PRACTOVATE SOLUTIONS PRIVATE LIMITED
+
+MSME
+
+₹ 6000
+
+₹ 0
+
+₹ 6000
+
+₹ 6000
+
+INV-24-2510890
+
+12th Mar 2026
+
+[**MATATRON'S PROTOCOL PRIVATE LIMITED**](https://crm.startupstation.in/customer/69b2a8157ee9313f5f049b56)
+
+MATATRON'S PROTOCOL PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510889
+
+12th Mar 2026
+
+[**TRUHIRE TECHNOLOGIES (OPC) PRIVATE LIMITED**](https://crm.startupstation.in/customer/68eb5c6e83bcdcfffa471035)
+
+TRUHIRE TECHNOLOGIES (OPC) PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510888
+
+12th Mar 2026
+
+[**Edubrilliance Indian Foundation**](https://crm.startupstation.in/customer/68c3c0aabb58fdcfd9956f8a)
+
+Edubrilliance Indian Foundation
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510887
+
+12th Mar 2026
+
+[**PRUVE TECHNOLOGIES PRIVATE LIMITED**](https://crm.startupstation.in/customer/684adf44a08bd204e84721c6)
+
+PRUVE TECHNOLOGIES PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510886
+
+12th Mar 2026
+
+[**Nomio Foodtech Private Limited**](https://crm.startupstation.in/customer/684a6f1fa08bd204e8471ef4)
+
+Nomio Foodtech Private Limited
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510885
+
+12th Mar 2026
+
+[**SOLIDCLOUD (OPC) PRIVATE LIMITED**](https://crm.startupstation.in/customer/67d195a203d6eddf951010db)
+
+SOLIDCLOUD (OPC) PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510884
+
+12th Mar 2026
+
+[**RLSS ENTERPRISES (OPC) PRIVATE LIMITED**](https://crm.startupstation.in/customer/67d1769e51ff1c98882bae67)
+
+RLSS ENTERPRISES (OPC) PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510883
+
+12th Mar 2026
+
+[**MONKMAGIC DESSERTS PRIVATE LIMITED**](https://crm.startupstation.in/customer/67d1425703d6eddf95100f3a)
+
+MONKMAGIC DESSERTS PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510882
+
+12th Mar 2026
+
+[**CHETTY EXPORTS PRIVATE LIMITED**](https://crm.startupstation.in/customer/67d11c8903d6eddf95100dbe)
+
+CHETTY EXPORTS PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510881
+
+11th Mar 2026
+
+[**TIARATECH WEARABLE PRIVATE LIMITED**](https://crm.startupstation.in/customer/69b1580d65b9911c9c0b7a5a)
+
+TIARATECH WEARABLE PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510880
+
+11th Mar 2026
+
+[**KARYOSETU TECHNOLOGIES PRIVATE LIMITED**](https://crm.startupstation.in/customer/69b1326a65b9911c9c0b79a5)
+
+KARYOSETU TECHNOLOGIES PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510879
+
+11th Mar 2026
+
+[**ANANTBHUMI CREATION PRIVATE LIMITED**](https://crm.startupstation.in/customer/693a810a9f8d941a6c848978)
+
+ANANTBHUMI CREATION PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510878
+
+11th Mar 2026
+
+[**HUMANVISTA CONSULTANCY PRIVATE LIMITED**](https://crm.startupstation.in/customer/693a61829f8d941a6c848900)
+
+HUMANVISTA CONSULTANCY PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510877
+
+11th Mar 2026
+
+[**SRIKARMAKAR UDYOG (OPC) PRIVATE LIMITED**](https://crm.startupstation.in/customer/693a5750aa355b4052bfc38c)
+
+SRIKARMAKAR UDYOG (OPC) PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510876
+
+11th Mar 2026
+
+[**QUBACE MARKETS PRIVATE LIMITED**](https://crm.startupstation.in/customer/693a536baa355b4052bfc354)
+
+QUBACE MARKETS PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510875
+
+11th Mar 2026
+
+[**XPETO TECHNOLOGIES PRIVATE LIMITED**](https://crm.startupstation.in/customer/693a4d009f8d941a6c84877b)
+
+XPETO TECHNOLOGIES PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510874
+
+11th Mar 2026
+
+[**ETOILES SOLUTION PRIVATE LIMITED**](https://crm.startupstation.in/customer/68c2dbf0bb58fdcfd9956e0b)
+
+ETOILES SOLUTION PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510873
+
+11th Mar 2026
+
+[**CREISHAN REALTY PRIVATE LIMITED**](https://crm.startupstation.in/customer/68c278eebb58fdcfd9956d82)
+
+CREISHAN REALTY PRIVATE LIMITED
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510872
+
+11th Mar 2026
+
+[**Butterslate Private Limited**](https://crm.startupstation.in/customer/68495fa3a08bd204e8471bed)
+
+Butterslate Private Limited
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+INV-24-2510871
+
+11th Mar 2026
+
+[**Nexaforge Ventures Private Limited**](https://crm.startupstation.in/customer/68493e938660e5f4fc297498)
+
+Nexaforge Ventures Private Limited
+
+Annual Compliance
+
+₹ 2000
+
+₹ 0
+
+₹ 2000
+
+₹ 2000
+
+=====
+
+In this Invoice Section 
+
+Details (Button spefic client invoice )
+
+https://crm.startupstation.in/invoice/69b0c5b67ee9313f5f04966b
+
+Section:- 1
+
+======
+
+Invoice Details(Left)
+there have couples of button right side
+
+ (Email Invoice)(Green)
+
+(Add Payment)(Orange)
+
+(Delete Invoice)(Red)
+
+(View)(Green)
+
+(Download)(Yellow)
+
+==============
+
+Section: 2
+
+(Left side rowwise type color for vertical align)
+
+Invoice No
+
+INV-24-2510874
+
+Invoice Date
+
+**11th Mar 2026**
+
+Place of Supply
+
+**6 - HARYANA**
+
+Company Name
+
+**ETOILES SOLUTION PRIVATE LIMITED**
+
+(Right side rowwise type color for vertical align)
+
+Customer Name
+
+[**ETOILES SOLUTION PRIVATE LIMITED**](https://crm.startupstation.in/customer/68c2dbf0bb58fdcfd9956e0b)
+
+Customer Phone
+
+**+91 8447645902**
+
+Emails
+
+**davidmboyo1@outlook.com**
+
+Customer Address
+
+**HNO-859 1ST FLOOR, SEC-31, Gurgaon, Sadar Bazar, Gurgaon- 122001, Haryana**
+
+Section:-3(Table)
+
+Invoice Items(Title )
+
+(Horizontal line )
+
+(left side table title)
+
+No 
+
+HSN/ SAC
+
+Product
+
+(left side table data)
+
+1
+
+998399
+
+Annual Compliance
+
+(Right side table title)
+
+Price
+
+Amount 
+
+(right side table data)
+
+₹ 2000.00
+
+₹ 2000.00
+
+(Horizontal line )
+
+(left)
+
+Total 
+
+Section :- 4
+
+Totals(Left side title)
+
+(Horizontal line)
+
+(Right side)
+
+rowwise and two column data
+
+| **Sub Total** | **₹ 2000.00** |
+| --- | --- |
+| **GST** | **₹ 0.00** |
+| **Total** | **₹ 2000.00** |
+| **Paid** | **₹ 0.00** |
+| **Due** | **₹ 2000.00** |
+
+Email Invoice(Button)
+
+(Show send email popup same  
+
+### Send Email
+
+Subject:- Compliance Update - {{complianceName}} for {{companyName}}
+
+{{name}}
+
+{{companyName}}
+
+{{address}}
+
+{{invoiceNo}}
+
+{{invoiceDate}}
+
+{{invoiceAmount}}
+
+Add Payment(Button)
+
+When click this show a form popup
+
+Add Payment(Title)
+
+(Input)Pay Amount
+
+₹2000
+
+(input)Note
+
+(Input)Payment Mode(Dropdown menu)
+
+cash 
+
+card
+
+upi
+
+net Banking
+
+Payment Date(input Calender by defalut select current)
+
+Add Payment(Button)
+
+=========
+
+Delete Button (Functionality )
+(When i cick this show popup at middle )
+
+## **Delete this Invoice Permanently?**
+
+This will also delete all invoice items and invoice payments. This cannot be undone
+
+right side have two button 
+
+Cancel(Button)
+
+Confirm(Button)
+
+=======
+
+View button(Functionality )
+
+https://crm.startupstation.in/api/v1/invoice/view/69b3b47e7ee9313f5f049dd3(Show pdf preview)
+
+======
+
+Download(Button download invoice pdf)
+
+  
+
+https://crm.startupstation.in/recurringinvoices 
+
+**Recurring Invoices (This is the seperate section of Recurring Invoice for all specific customer. this recurring invoice details section have spefic report in customer section)**
+
+Section: 1
+
+**Recurring Invoices (Counts) (Left)**
+
+Export(Download CSV file for this al Invoices)(Right Button)
+
+Section: 2(Filtering)
+
+(Left to right all input)
+
+Input(Name/Phone/Company Name)
+
+Data Type(Dropdown menu)
+
+Created
+
+Start Date
+
+End Date
+
+Next Date 
+
+Select Date Range (DateRangePicker)
+
+Input(Status)(Dropdown menu)
+Active 
+
+Inactive
+
+Filter(Button)
+
+Cross (Button)
+
+============
+
+Section: 3(Table format data show)
+
+(Title row of table) 
+
+Created 
+
+Customer Name and Company
+
+Linked Services
+
+Invoice Start Date 
+
+Invoice End Date 
+
+Interval
+
+Next Invoice Date 
+
+Status
+
+Details
+
+=========
+
+12th Mar 2026 5:19 pm
+
+[**MATATRON'S PROTOCOL PRIVATE LIMITED**](https://crm.startupstation.in/customer/69b2a8157ee9313f5f049b56)
+
+MATATRON'S PROTOCOL PRIVATE LIMITED
+
+Annual Compliance
+
+12th Mar 2026
+
+12th Mar 2027
+
+3 Months
+
+12th Jun 2026
+
+Active
+
+Details(Button)(Redirection to that customer)
+
+==========
+
+11th Mar 2026 5:27 pm
+
+[**TIARATECH WEARABLE PRIVATE LIMITED**](https://crm.startupstation.in/customer/69b1580d65b9911c9c0b7a5a)
+
+TIARATECH WEARABLE PRIVATE LIMITED
+
+Annual Compliance
+
+11th Mar 2026
+
+11th Mar 2027
+
+3 Months
+
+11th Jun 2026
+
+Active
+
+Details(Button)(Redirection to that customer)
+
+======
+
+11th Mar 2026 2:49 pm
+
+[**KARYOSETU TECHNOLOGIES PRIVATE LIMITED**](https://crm.startupstation.in/customer/69b1326a65b9911c9c0b79a5)
+
+KARYOSETU TECHNOLOGIES PRIVATE LIMITED
+
+Annual Compliance
+
+11th Mar 2026
+
+11th Mar 2027
+
+3 Months
+
+11th Jun 2026
+
+Active
+
+10th Mar 2026 10:52 am
+
+[**UMAMI MILK PRIVATE LIMITED**](https://crm.startupstation.in/customer/69afaa257ee9313f5f049541)
+
+UMAMI MILK PRIVATE LIMITED
+
+Annual Compliance
+
+10th Mar 2026
+
+10th Mar 2027
+
+3 Months
+
+10th Jun 2026
+
+Active
+
+9th Mar 2026 1:28 pm
+
+[**PROSPERKEY REALTY PRIVATE LIMITED**](https://crm.startupstation.in/customer/69ae7d657ee9313f5f04913f)
+
+PROSPERKEY REALTY PRIVATE LIMITED
+
+Annual Compliance
+
+9th Mar 2026
+
+9th Mar 2027
+
+3 Months
+
+9th Jun 2026
+
+Active
+
+7th Mar 2026 12:03 pm
+
+[**RKS GLOBAL AI CONSULTING PRIVATE LIMITED**](https://crm.startupstation.in/customer/69abc6a87ee9313f5f048ec6)
+
+RKS GLOBAL AI CONSULTING PRIVATE LIMITED
+
+Annual Compliance
+
+7th Mar 2026
+
+7th Mar 2027
+
+3 Months
+
+7th Jun 2026
+
+Active
+
+6th Mar 2026 6:54 pm
+
+[**ABHIRAM DELICACY PRIVATE LIMITED**](https://crm.startupstation.in/customer/69aad42965b9911c9c0b70d1)
+
+ABHIRAM DELICACY PRIVATE LIMITED
+
+Annual Compliance
+
+6th Mar 2026
+
+6th Mar 2027
+
+3 Months
+
+6th Jun 2026
+
+Active
+
+6th Mar 2026 10:55 am
+
+[**KONGE'S ENTERTAINMENT PRIVATE LIMITED**](https://crm.startupstation.in/customer/69aa64b47ee9313f5f048a0b)
+
+KONGE'S ENTERTAINMENT PRIVATE LIMITED
+
+Annual Compliance
+
+6th Mar 2026
+
+6th Mar 2027
+
+3 Months
+
+6th Jun 2026
+
+Active
+
+5th Mar 2026 12:51 pm
+
+[**PAPER SKY PRIVATE LIMITED**](https://crm.startupstation.in/customer/69a92e477ee9313f5f04860f)
+
+PAPER SKY PRIVATE LIMITED
+
+Annual Compliance
+
+5th Mar 2026
+
+5th Mar 2027
+
+3 Months
+
+5th Jun 2026
+
+Active
+
+2nd Mar 2026 1:27 pm
+
+[**Indbuy Global Private Limited**](https://crm.startupstation.in/customer/69a53f157ee9313f5f04730a)
+
+Indbuy Global Private Limited
+
+Annual Compliance
+
+2nd Mar 2026
+
+2nd Mar 2027
+
+3 Months
+
+2nd Jun 2026
+
+Active
+
+28th Feb 2026 6:24 pm
+
+[**CRAVENEST FOODS PRIVATE LIMITED**](https://crm.startupstation.in/customer/69a2b1cb65b9911c9c0b52fd)
+
+CRAVENEST FOODS PRIVATE LIMITED
+
+Annual Compliance
+
+28th Feb 2026
+
+28th Feb 2027
+
+3 Months
+
+28th May 2026
+
+Active
+
+28th Feb 2026 6:18 pm
+
+[**CRAVENEST FOODS PRIVATE LIMITED**](https://crm.startupstation.in/customer/69a2b1cb65b9911c9c0b52fd)
+
+CRAVENEST FOODS PRIVATE LIMITED
+
+Annual Compliance
+
+28th Feb 2026
+
+28th Feb 2027
+
+3 Months
+
+28th May 2026
+
+Inactive
+
+28th Feb 2026 4:21 pm
+
+[**INFINITYXGRO PRIVATE LIMITED**](https://crm.startupstation.in/customer/69a2c85765b9911c9c0b5503)
+
+INFINITYXGRO PRIVATE LIMITED
+
+Annual Compliance
+
+28th Feb 2026
+
+28th Feb 2027
+
+3 Months
+
+28th May 2026
+
+Active
+
+28th Feb 2026 3:02 pm
+
+[**CRAVENEST FOODS PRIVATE LIMITED**](https://crm.startupstation.in/customer/69a2b1cb65b9911c9c0b52fd)
+
+CRAVENEST FOODS PRIVATE LIMITED
+
+Annual Compliance
+
+28th Feb 2026
+
+28th Feb 2027
+
+3 Months
+
+28th May 2026
+
+Inactive
+
+27th Feb 2026 6:45 pm
+
+[**COWMAN AGRO INDUSTRIES PRIVATE LIMITED**](https://crm.startupstation.in/customer/69a198ba7ee9313f5f0469c1)
+
+COWMAN AGRO INDUSTRIES PRIVATE LIMITED
+
+Annual Compliance
+
+27th Feb 2026
+
+27th Feb 2027
+
+3 Months
+
+27th May 2026
+
+Active
+
+=======
+
+https://crm.startupstation.in/payments 
+
+Payments
+
+Section:- 1
+
+Payments(counts)(Left)               
+
+Section:- 2(Filtering section)(there have items left to right columnwise)
+
+Name/Phone/Company Name/Invoice No(Input)
+
+Input(Select Payment Date Range)
+
+Type(Dropup down menu)
+Cash
+Card
+UPI
+Net Banking 
+
+Filter button
+
+cross button
+
+Section :-3
+
+(Left to right table format title)
+
+Pay Date 
+
+Cuatomer Name 
+
+Customer Company 
+
+Invoice No
+
+Payment Type
+
+Amount
+
+=======
+
+2nd Mar 2026 2:30 pm
+
+[**Indbuy Global Private Limited**](https://crm.startupstation.in/customer/69a53f157ee9313f5f04730a)
+
+Indbuy Global Private Limited
+
+[**INV-24-2510796**](https://crm.startupstation.in/invoice/69a543007ee9313f5f047332)
+
+UPI
+
+₹ 3250
+
+==========
+
+17th Feb 2026 4:36 pm
+
+[**SETH SANVARIYA PRIVATE LIMITED**](https://crm.startupstation.in/customer/6985e7db65b9911c9c0b1efd)
+
+SETH SANVARIYA PRIVATE LIMITED
+
+[**INV-24-2510583**](https://crm.startupstation.in/invoice/6985e82d65b9911c9c0b1f25)
+
+UPI
+
+₹ 2000
+
+================
+
+12th Feb 2026 2:54 pm
+
+[**ARAJ MEDIA PRIVATE LIMITED**](https://crm.startupstation.in/customer/698d975d7ee9313f5f04421a)
+
+ARAJ MEDIA PRIVATE LIMITED
+
+[**INV-24-2510624**](https://crm.startupstation.in/invoice/698d97fc7ee9313f5f04428c)
+
+UPI
+
+₹ 1500
+
+======
+
+add dummy data 20
+
+each row link with customer details that same is customer section.(The customer section modified later)
+
+ 
+
+https://crm.startupstation.in/templates
+
+Template
+
+there have two section
+
+section :-1
+
+Email Templates(counts)(left side)
+
+NEW EMAIL TEMPLATE(Button)(Right side)
+
+Show form popup at middle of screen
+
+### **Add New Email Template**
+
+Name
+
+Subject
+
+Status *(Dropdrop down menu)
+Active 
+
+Inactive
+
+{{name}}
+
+{{companyName}}
+
+{{address}}
+
+Annual Compliance Service Only:
+
+{{username}}
+
+{{password}}
+
+Invoice Only:
+
+{{invoiceNo}}
+
+{{invoiceDate}}
+
+{{invoiceAmount}}
+
+Annual Compliance Only:
+
+{{complianceName}}
+
+{{complianceDoneDate}}
+
+{{complianceExpiryDate}}
+
+blow have a some ms word.
+
+ADD NEW TEMPLATE(Button)
+
+manage(Button functionality)
+
+### **Email Attachments**
+
+**Template Name:** Startup India Registration
+
+Add new file(Button)(access file from system)
+
+Edit(Button functionality)
+Show form popup add middle
+
+Name(Input)
+
+Startup India Registration
+
+Subject(Input)
+Startup India Registration - Next Steps & Document Submission
+
+Status(Dropdown menu)
+Active
+
+Inactive
+
+{{name}} {{companyName}} {{address}}
+
+Annual Compliance Service Only: {{username}} {{address}}
+
+Invoice Only: {{invoiceNo}} {{invoiceDate}}
+
+{{invoiceAmount}}
+
+Annual Compliance Only:
+
+{{complianceName}} 
+
+{{complianceDoneDate}}
+
+{{complianceExpiryDate}}
+
+blow have a some ms word.
+
+that helps make email template
+
+file edit view insert format tool table help
+
+blow is the template
+
+[Untitled](https://www.notion.so/320fe67c48aa8089a1b9f66d69bc79ec?pvs=21)
+
+Update template(Button)
+
+section:-2(Filtering row bar)
+
+input(name/Subject)
+
+search bar (Logo)
+cross bar(Logo)
+
+Section:- 3
+
+**Created**
+
+**Name**
+
+**Subject**
+
+**Status**
+
+**Attachments**
+
+**Modify**
+
+  
+
+20th June 2025 2:13 pm
+
+Director Resignation
+
+Startup Station - Director Resignation Services
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+=========
+
+1st March 2025 6:21 pm
+
+Annual Compliance plus Bookkeeping
+
+Annual Compliance Package by Startup Station plus Bookkeeping Services
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+========
+
+26th February 2025 3:19 pm
+
+Package plus payment details
+
+Annual Compliance Package by Startup Station
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+========
+
+26th February 2025 11:59 am
+
+ROC plus GST plus ESI plus TDS
+
+Annual Compliance Package by Startup Station
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+========
+
+22nd February 2025 8:05 am
+
+INC 20A Reminder
+
+Urgent: INC-20A Filing Pending – Avoid Late Penalties!
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+==========
+
+18th February 2025 9:45 am
+
+Next Quarter Payment
+
+Reminder: Upcoming Quarter's Payment – Complete Within 5 Days
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+========
+
+18th February 2025 9:31 am
+
+Service List
+
+Discover Our Key Services to Boost Your Business – Startup Station
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+======
+
+17th February 2025 2:24 pm
+
+GST Filing
+
+Urgent: Submit Your GST Invoices by 6th for Timely Filing!
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+========
+
+17th February 2025 2:17 pm
+
+Professional Tax
+
+Get Professional Tax Registration immediately!
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+=========
+
+17th February 2025 2:07 pm
+
+Website
+
+Your Website at just Rs 5000!
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+========
+
+17th February 2025 1:56 pm
+
+Startup India Promotion
+
+Get Your Startup India Registration (DPIIT Certificate) at Just ₹2,999 with Startup Station! 🚀
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+=========
+
+12th February 2025 10:20 pm
+
+Startup India Registration
+
+Startup India Registration - Next Steps & Document Submission
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+=======
+
+12th February 2025 8:49 pm
+
+Annual Compliance - Onboarding
+
+Welcome to Startup Station – Your Annual Compliance Access
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+==========
+
+24th January 2025 12:00 pm
+
+Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+Annual Compliance Package for {{companyName}}
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+===========
+
+22nd January 2025 9:50 am
+
+Annual Compliance Service - Ritu Kaur
+
+Annual Compliance Package for {{companyName}}
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+=========
+
+21st January 2025 11:30 pm
+
+Compliance Update
+
+Compliance Update - {{complianceName}} for {{companyName}}
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+=======
+
+8th January 2025 8:41 am
+
+Annual Compliance Service - Jagjyot Singh
+
+Annual Compliance Service by Startup Station
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+=========
+
+https://crm.startupstation.in/accountantjobs 
+
+**Accountant Jobs section**
+
+Section:- 1
+
+**Accountant Jobs(Count of account)(Left)** 
+
+   **new job(Button)(Right)**
+
+new job button functionality.
+When i click this button show form popup
+
+at middle section
+
+This middle form functionality
+form:-
+
+Add New Job(form title)
+
+input(Job Title)
+
+input(select Customer)(Dropdown menu)
+
+(This dropdown height fixed show scroll bar for show blow all others company name.) 
+
+blow show all customer comopany name those are already running work customer for accountant. Like
+(
+
+7DAYS TRAVENTURE (OPC) PRIVATE LIMITED - 7DAYS TRAVENTURE (OPC) PRIVATE LIMITED
+
+A & A FAUCETS PRIVATE LIMITED-A & A FAUCETS PRIVATE LIMITED
+
+o Be
+
+AAJ CODERS HUB PRIVATE LIMITED - AAJ CODERS HUB PRIVATE LIMITED
+
+o Be Do
+
+AARND SERVICES PRIVATE LIMITED - AARND SERVICES PRIVATE LIMITED
+
+AARVION SERVICES INDIA PRIVATE LIMITED -AARVION SERVICES INDIA PRIVATE LIMITED
+
+AATIKSH INTERACTIVE SOLUTIONS (OPC) PRIVATE LIMITED
+
+)
+
+input(status)(Dropdrown menu)
+
+1)To be done
+
+2)On going 
+
+3)Done
+
+Accountant(Dropdown menu)
+
+1)Samrat
+
+2)Tapas
+
+3)Jagjyot
+
+toggle button for(Has Expiry Date?)
+
+(By defauīt not active)
+
+When user active this time
+
+add new input field at new input at end
+
+Expiry Date(Calender)
+
+when i toggle active by default take current date .Otherwise calender helps to select date.
+
+Button(ADD NEW JOB)
+(When i click this button add new row  proper data acording columnwise at top of section:-3)
+
+Section:-2
+
+(Filter section)
+There have columnwise input fields for filtering.
+(left to right side)
+(Input)(Name/phone/company name)
+
+(Input)Data Type(Dropdown)
+
+Created**(Default)**
+
+Expiry Date
+
+Completed On
+
+(Input)Select Date Range
+
+(Take DateRangePicker)
+
+(Input)(Status)(Dropdown menu)
+Done
+
+Ongoing
+
+To Be Done
+
+(Input)(Accountants)(Dropdown menu)
+
+Samrat
+
+Tapas
+
+Jagjyot
+
+Filter icons(icons)(When click this filter icon or button this filter accroding select data.
+
+Cross icons(All filter data show will remove and show default data table according current date.
+
+section 3(Table title colmunwise)
+
+**Created**
+
+**Job Name**
+
+**Customer**
+
+**Expiry**
+
+**Status**
+
+**Completed**
+
+**Accountant**
+
+**Modify
+
+(Section 1,section 2, section 3(table all first column all title are fixed)**
+
+**(Blow all spefic customer data show rowwise data along with column title show scrollbar)**
+
+================================
+
+6th Feb 2026 11:06 am(add on that day date and accurate time)
+
+fvasdfvsd
+
+[Test](https://crm.startupstation.in/customer/6982ebaf65b9911c9c0b0d10)
+
++91 111
+
+XSZCV
+
+1st Jan 1970
+
+To Be Done
+
+Jagjyot
+
+Edit(Button) Delete(Button)
+
+==========================
+
+Edit(Button) functionality
+
+when i click this button show form popup at middle.
+
+form of edit job
+
+Edit Job (Title)
+
+Job Title(INC 20A)
+
+Select Customer (Dropdown menu)
+(Show all company dropdown menu)
+
+7DAYS TRAVENTURE (OPC) PRIVATE LIMITED - 7DAYS TRAVENTURE (OPC) PRIVATE LIMITED
+
+A & A FAUCETS PRIVATE LIMITED-A & A FAUCETS PRIVATE LIMITED
+
+o Be
+
+AAJ CODERS HUB PRIVATE LIMITED - AAJ CODERS HUB PRIVATE LIMITED
+
+o Be Do
+
+AARND SERVICES PRIVATE LIMITED - AARND SERVICES PRIVATE LIMITED
+
+AARVION SERVICES INDIA PRIVATE LIMITED -AARVION SERVICES INDIA PRIVATE LIMITED
+
+AATIKSH INTERACTIVE SOLUTIONS (OPC) PRIVATE
+
+Status (Dropdown menu)
+
+Done
+
+Onging
+
+To Be Done
+
+Accountant (Dropdown menu)
+
+Samrat
+
+Tapas
+
+Jagjyot
+
+toggle button for(Has Expiry Date?)
+
+Expiry Date(Calender)
+
+when i toggle active by default take current date .Otherwise calender helps to select date.
+
+(Update Job)(Button)
+
+(Update button fuctionality update 
+
+all data according to row data)
+
+Delete(Button) functionality
+
+when click delete button this time show 
+at middle screen popup.
+
+## **Delete this Job Permanently?**
+
+Job: fvasdfvsd for Jagjyot
+
+buttton(cancel) button(confirm)(delete)
+
+https://crm.startupstation.in/users
+
+Users(Section)
+
+(Section - 1)
+
+Users(Count)(left)     new User(Button)
+
+New User(Button) functionality
+When i click this button show form popup at middle section of page.
+
+Add User(Title)
+
+User Name(Input)
+
+Phone (Input)
+
+Password(input)
+
+Type(Dropdown menu)
+Agent(Default)
+Accountant
+admin
+
+Status(Dropdown menu)
+
+Active
+
+Inactive
+
+ADD USER(Button)
+
+(When i click this add user button)
+
+add new row according to input data
+
+section 2
+
+(Blow have Columnwise table format)
+
+Created  Name  Phone  Type  Status Sessions  Modify
+
+ 
+
+**Created**
+
+**Name**
+
+**Phone**
+
+**Type**
+
+**Status**
+
+**Sessions**
+
+**Modify**
+
+5th January 2025 4:49 pm
+
+Amit Samanta
+
++91 8100521654
+
+Admin
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+==========
+
+8th January 2025 12:06 am
+
+Ritu Kaur
+
++91 5496665
+
+Agent
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+==============
+
+8th January 2025 12:10 am
+
+Jagjyot Singh
+
++91 588548
+
+Agent
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+==========
+
+19th January 2025 2:03 pm
+
+Samrat
+
++91 9674560601
+
+Accountant
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+===============
+
+20th January 2025 12:58 pm
+
+TAPAS
+
++91 9583723661
+
+Accountant
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+================
+
+12th February 2025 12:25 pm
+
+Jagjyot Singh
+
++91 9674560602
+
+Admin
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+==========
+
+14th May 2025 4:25 pm
+
+Jagjyot
+
++91 9804492472
+
+Accountant
+
+Active
+
+Manage(Button)
+
+Edit(Button)
+
+Edit(Button)fuctionality
+
+### **Edit User**
+
+User Name *
+
++91
+
+Phone *
+
+Password
+
+*Keep blank if not changed*
+
+Type(Admin not that not possible modified that’s why blur one time setup)
+
+Status(Drop down menu)
+Active
+
+Inactive
+
+Update user(Button)
+When i click this time update to that particular row.
+
+compliance-settings:-(Section)
+
+Two section of compliance-settings
+
+(Section 1)
+
+**Financial Year Settings**
+
+**Financial Year Settings**(Left side title)         ADD FINANCIAL YEAR(button)(Functionality)
+
+ADD FINANCIAL YEAR(Button) when click 
+Show popup small form 
+
+### Add Financial Year
+
+Financial Year *
+(Input)
+
+ ADD FINANCIAL YEAR(Button)
+according to add financial(After submit  then show blow financila year)
+
+blow show rowwise data
+**Financial Year                          Modify(row title)**
+
+2023-2024                                modify(Button)   (When Click this modify button show popup   form section like
+ **Edit Financial Year(Title)
+Input title(Financial Year)
+show (2023-2024)
+(Update Financial Year)**
+
+2024-2025                               modify(Button)     
+
+2025-2026                               modify(Button)     
+
+(Section 2)
+
+**Annual Compliances Settings**
+
+rowwise data show
+
+**Annual Compliances Settings   (Left)**
+
+**Financial year dropdown menu(input field) Load(Button))those add financial year add above section automatically add to this input field menu)(Middle)beside have Load(Button)**
+
+When click this Load(Button) Fetch data from backend according to finanacial year.
+
+Add **Compliance**(Button)(Right side)
+
+when click show form popup at middle section
+
+### **Add Compliance(form title)**
+
+Compliance Name *(Title)
+input of this
+
+Has Expiry?(toggle button)
+
+Expiry date(Title)
+
+(calender input)
+
+Inc20?(Title)
+
+input dropdown menu(yes,no)
+
+Expiry Template(title)
+
+**(Dropdown menu if invoice template)
+Blow are all dropdown**
+
+None(by default)
+
+Compliance Update
+
+Annual Compliance Service - Jagjyot Singh
+
+Annual Compliance Service - Ritu Kaur
+
+Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+Annual Compliance - Onboarding
+
+Startup India Registration
+
+Startup India Promotion
+
+Website
+
+Professional Tax
+
+GST Filing(Default seclect)
+
+Service List
+
+Next Quarter Payment
+
+INC 20A Reminder
+
+ROC plus GST plus ESI plus TDS
+
+Package plus payment details
+
+Annual Compliance plus Bookkeeping
+
+Director Resignation
+
+Complete Template(title)
+
+**(Dropdown menu if invoice template)
+Blow are all dropdown**
+
+None(by default)
+
+Compliance Update
+
+Annual Compliance Service - Jagjyot Singh
+
+Annual Compliance Service - Ritu Kaur
+
+Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+Annual Compliance - Onboarding
+
+Startup India Registration
+
+Startup India Promotion
+
+Website
+
+Professional Tax
+
+GST Filing(Default seclect)
+
+Service List
+
+Next Quarter Payment
+
+INC 20A Reminder
+
+ROC plus GST plus ESI plus TDS
+
+Package plus payment details
+
+Annual Compliance plus Bookkeeping
+
+Director Resignation
+
+Add Compliances(Button)
+
+(mergin horizontally)
+
+Table format blow section.
+row title for table
+
+**Compliance Name**
+
+**Expiry Date**
+
+**New**
+
+**Expiry after**
+
+**Expiry Template**
+
+**Complete Template**
+
+**Modify(Button)**
+
+(Fetch data from backend according to financial year after click load button)now i want setup dummp data.
+
+Preparation & Filing of Form ADT-01 (Auditor Appointment)
+
+Yes
+
+30 days
+
+Compliance Update
+
+**Modify(Button)**
+
+===================================
+
+Preparation & Filing of Form INC - 20A
+
+Yes
+
+180 days
+
+Compliance Update
+
+**Modify(Button)**
+
+======================================
+(some **Annual Compliances Settings there have no Expiry Date,** 
+
+**Expiry Template)**
+
+Preparation of 07 Required Statutory Registers
+
+No
+
+Preparation & Filing of Form DPT - 03
+
+No
+
+Issuance of Share Certificates (for all Shareholders)
+
+Yes
+
+30 days
+
+Compliance Update
+
+==============================
+
+Preparation of MPB-01 (Disclosure of Interest by Directors)
+
+30th Apr 2026(expiry)
+
+No
+
+Preparation of DIR-08 (Disclosure of Non-Disqualification by Directors)
+
+30th Apr 2026
+
+No
+
+**Modify(Button)**
+
+Preparation & Filing of Balance Sheet and P&L Accounts
+
+30th Sep 2026
+
+No
+
+Compliance Update
+
+**Modify(Button)**
+
+Preparation & Filing of Audit Report, Director's Report & Extract of Annual Returns
+
+30th Sep 2026
+
+No
+
+Compliance Update
+
+**Modify(Button)(when i click this button show form popup at middle section)**
+
+### **Edit Compliance(Form title)**
+
+Compliance Name *(input title)
+(input)
+
+Has Expiry?(Toggle button)
+When i active this add new input at end of that form 
+Complete Template(Input)
+
+**(Dropdown menu if invoice template)
+Blow are all dropdown**
+
+Compliance Update(Default seclect)
+
+Annual Compliance Service - Jagjyot Singh
+
+Annual Compliance Service - Ritu Kaur
+
+Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+Annual Compliance - Onboarding
+
+Startup India Registration
+
+Startup India Promotion
+
+Website
+
+Professional Tax
+
+GST Filing
+
+Service List
+
+Next Quarter Payment
+
+INC 20A Reminder
+
+ROC plus GST plus ESI plus TDS
+
+Package plus payment details
+
+Annual Compliance plus Bookkeeping
+
+Director Resignation
+
+Compliance Name *(Title)
+input of this
+
+Has Expiry?(toggle button)
+
+Expiry date(Title)
+
+(calender input)
+
+Inc20?(Title)
+
+input dropdown menu(yes,no)
+
+Days of Expiry after INC Data(Title)
+
+30
+
+Expiry Template(title)
+
+**(Dropdown menu if invoice template)
+Blow are all dropdown**
+
+None(Default seclect)
+
+Compliance Update
+
+Annual Compliance Service - Jagjyot Singh
+
+Annual Compliance Service - Ritu Kaur
+
+Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+Annual Compliance - Onboarding
+
+Startup India Registration
+
+Startup India Promotion
+
+Website
+
+Professional Tax
+
+GST Filing
+
+Service List
+
+Next Quarter Payment
+
+INC 20A Reminder
+
+ROC plus GST plus ESI plus TDS
+
+Package plus payment details
+
+Annual Compliance plus Bookkeeping
+
+Director Resignation
+
+Update Compliance(Button)
+When click data and modified data that section row.
+
+Settings:-(Section)
+
+https://crm.startupstation.in/settings
+
+There have two section 
+**Settings(Section 1)**
+
+**Settings(Title)**
+
+**blow left side have input fields**
+
+**Invoice Prefix(Input field title)
+INV-24-25(already fill)**
+
+Email Form Name**(Input field title)**
+
+**Startup Station(already fill)**
+
+**Invoice Template(Input fields title)**
+
+**(Dropdown menu if invoice template)
+Blow are all dropdown**
+
+Compliance Update(Default seclect)
+
+Annual Compliance Service - Jagjyot Singh
+
+Annual Compliance Service - Ritu Kaur
+
+Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+Annual Compliance - Onboarding
+
+Startup India Registration
+
+Startup India Promotion
+
+Website
+
+Professional Tax
+
+GST Filing
+
+Service List
+
+Next Quarter Payment
+
+INC 20A Reminder
+
+ROC plus GST plus ESI plus TDS
+
+Package plus payment details
+
+Annual Compliance plus Bookkeeping
+
+Director Resignation
+
+GST template(2nd for every month)(Title)
+
+**(Dropdown menu if invoice template)
+Blow are all dropdown**
+
+Compliance Update
+
+Annual Compliance Service - Jagjyot Singh
+
+Annual Compliance Service - Ritu Kaur
+
+Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+Annual Compliance - Onboarding
+
+Startup India Registration
+
+Startup India Promotion
+
+Website
+
+Professional Tax
+
+GST Filing(Default seclect)
+
+Service List
+
+Next Quarter Payment
+
+INC 20A Reminder
+
+ROC plus GST plus ESI plus TDS
+
+Package plus payment details
+
+Annual Compliance plus Bookkeeping
+
+Director Resignation
+
+PTax Template (after 7 days compliance start)(Title)
+
+**(Dropdown menu if invoice template)
+Blow are all dropdown**
+
+Compliance Update
+
+Annual Compliance Service - Jagjyot Singh
+
+Annual Compliance Service - Ritu Kaur
+
+Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+Annual Compliance - Onboarding
+
+Startup India Registration
+
+Startup India Promotion
+
+Website
+
+Professional Tax(Default seclect)
+
+GST Filing
+
+Service List
+
+Next Quarter Payment
+
+INC 20A Reminder
+
+ROC plus GST plus ESI plus TDS
+
+Package plus payment details
+
+Annual Compliance plus Bookkeeping
+
+Director Resignation
+
+StartupIndia Template (after 15 days of comliances start)
+
+**(Dropdown menu if invoice template)
+Blow are all dropdown**
+
+Compliance Update
+
+Annual Compliance Service - Jagjyot Singh
+
+Annual Compliance Service - Ritu Kaur
+
+Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+Annual Compliance - Onboarding
+
+Startup India Registration
+
+Startup India Promotion(Default seclect)
+
+Website
+
+Professional Tax
+
+GST Filing
+
+Service List
+
+Next Quarter Payment
+
+INC 20A Reminder
+
+ROC plus GST plus ESI plus TDS
+
+Package plus payment details
+
+Annual Compliance plus Bookkeeping
+
+Director Resignation
+
+INC20 Template (after 120 and 150 days of incorporation)(Take full width do not have right side input)
+
+**(Dropdown menu if invoice template)
+Blow are all dropdown**
+
+Compliance Update
+
+Annual Compliance Service - Jagjyot Singh
+
+Annual Compliance Service - Ritu Kaur
+
+Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+Annual Compliance - Onboarding
+
+Startup India Registration
+
+Startup India Promotion
+
+Website
+
+Professional Tax
+
+GST Filing
+
+Service List
+
+Next Quarter Payment
+
+INC 20A Reminder(Default seclect)
+
+ROC plus GST plus ESI plus TDS
+
+Package plus payment details
+
+Annual Compliance plus Bookkeeping
+
+Director Resignation
+
+next line have button full width
+(Update Settings)
+(When click this button save these data)
+(Show tosted bottom-right corner green color )
+
+Right side input fields along with above left side input fields
+
+Invoie Number(Title)
+10835(Input Data)
+
+From Email(Title)
+
+[bizdev@startupstation.in](mailto:bizdev@startupstation.in)(Input Data)
+
+Recurring Invoice Template(Title)
+
+**(Dropdown menu if invoice template)
+Blow are all dropdown**
+
+Compliance Update
+
+Annual Compliance Service - Jagjyot Singh
+
+Annual Compliance Service - Ritu Kaur
+
+Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+Annual Compliance - Onboarding
+
+Startup India Registration
+
+Startup India Promotion
+
+Website
+
+Professional Tax
+
+GST Filing
+
+Service List
+
+Next Quarter Payment(Default seclect)
+
+INC 20A Reminder
+
+ROC plus GST plus ESI plus TDS
+
+Package plus payment details
+
+Annual Compliance plus Bookkeeping
+
+Director Resignation
+
+Service List Template(After 2 days)(Title)
+
+**(Dropdown menu if invoice template)
+Blow are all dropdown**
+
+Compliance Update
+
+Annual Compliance Service - Jagjyot Singh
+
+Annual Compliance Service - Ritu Kaur
+
+Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+Annual Compliance - Onboarding
+
+Startup India Registration(Default seclect)
+
+Startup India Promotion
+
+Website
+
+Professional Tax
+
+GST Filing
+
+Service List
+
+Next Quarter Payment
+
+INC 20A Reminder
+
+ROC plus GST plus ESI plus TDS
+
+Package plus payment details
+
+Annual Compliance plus Bookkeeping
+
+Director Resignation
+
+Website Template(After 10 days)(Title)
+
+**(Dropdown menu if invoice template)
+Blow are all dropdown**
+
+Compliance Update
+
+Annual Compliance Service - Jagjyot Singh
+
+Annual Compliance Service - Ritu Kaur
+
+Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+Annual Compliance - Onboarding
+
+Startup India Registration
+
+Startup India Promotion
+
+Website(Default seclect)
+
+Professional Tax
+
+GST Filing
+
+Service List
+
+Next Quarter Payment
+
+INC 20A Reminder
+
+ROC plus GST plus ESI plus TDS
+
+Package plus payment details
+
+Annual Compliance plus Bookkeeping
+
+Director Resignation
+
+ISO Template(after 20 days of compliance start)(Title)
+
+**(Dropdown menu if invoice template)
+Blow are all dropdown**
+
+Compliance Update
+
+Annual Compliance Service - Jagjyot Singh
+
+Annual Compliance Service - Ritu Kaur
+
+Annual Compliance Service plus GST plus ESI - Ritu Kaur
+
+Annual Compliance - Onboarding
+
+Startup India Registration
+
+Startup India Promotion
+
+Website
+
+Professional Tax
+
+GST Filing
+
+Service List(Default seclect)
+
+INC 20A Reminder
+
+ROC plus GST plus ESI plus TDS
+
+Package plus payment details
+
+Annual Compliance plus Bookkeeping
+
+Director Resignation
+
+**Email Count(Section 2)
+first row blow details**
+
+**Email Count     DateRangePicker(Like header) go(Button)      Total Emails: 0**
+
+**Date**
+
+**Count**
+
+Next Quarter Payment
+
+Logout:-(Section)
+
+when click logout button to left menu bar
+
+This time show popup of middle section of this page like
+
+## **Logout?**
+
+Are you sure you want to Logout?
+
+Cancel(Button) Confirm(Button)(This will backend work)
+
+---
+
+---
+
+---
+
+                                                     End of Planning   
+
+---
+
+---
+
+---
