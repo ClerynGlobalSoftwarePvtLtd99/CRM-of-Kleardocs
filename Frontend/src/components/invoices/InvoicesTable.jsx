@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 import { Eye, Download } from 'lucide-react'
+import CompanyLogo from '../common/CompanyLogo'
 
 const InvoicesTable = ({ invoices }) => {
   return (
@@ -9,6 +10,9 @@ const InvoicesTable = ({ invoices }) => {
         <table className="w-full text-left relative" style={{ borderSpacing: '0 10px', borderCollapse: 'separate' }}>
           <thead>
             <tr className="text-text-secondary text-sm uppercase tracking-wider">
+              <th className="sticky top-0 z-20 bg-bg-secondary px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
+                Logo
+              </th>
               <th className="sticky top-0 z-20 bg-bg-secondary px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
                 Invoice No
               </th>
@@ -44,7 +48,10 @@ const InvoicesTable = ({ invoices }) => {
           <tbody>
             {invoices.map((inv) => (
               <tr key={inv.id} className="bg-[var(--color-bg-primary)] hover:bg-[var(--color-bg-tertiary)] transition-colors group rounded-md shadow-sm">
-                <td className="px-4 py-3 text-sm rounded-l-lg text-[var(--color-text-primary)] font-medium">
+                <td className="px-4 py-3 text-sm rounded-l-lg">
+                  <CompanyLogo name={inv.customerCompany || inv.customerName} size="w-10 h-10" />
+                </td>
+                <td className="px-4 py-3 text-sm text-[var(--color-text-primary)] font-medium">
                   <Link to={`/invoice/${inv.invoiceId}`} className="hover:text-[var(--color-accent)] transition-colors underline decoration-[var(--color-bg-tertiary)] underline-offset-4 hover:decoration-[var(--color-accent)] break-words">
                     {inv.invoiceNo}
                   </Link>

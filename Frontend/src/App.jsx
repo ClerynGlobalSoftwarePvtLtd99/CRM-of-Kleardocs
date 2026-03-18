@@ -19,6 +19,7 @@ import Services from './pages/Services'
 import Leads from './pages/Leads'
 import LeadDetailsPage from './pages/LeadDetailsPage'
 import CustomerDetailsPage from './pages/CustomerDetailsPage'
+import Customers from './pages/Customers'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -65,6 +66,7 @@ function App() {
             <Route path='/compliances' element={<Compliances/>}/>
             <Route path='/services' element={<Services/>}/>
             <Route path='/leads' element={<Leads/>}/>
+            <Route path='/customers' element={<Customers/>}/>
             <Route path="/lead/:id" element={<LeadDetailsPage />} />
             <Route path="/customer/:id" element={<CustomerDetailsPage />} />
           </Routes>
