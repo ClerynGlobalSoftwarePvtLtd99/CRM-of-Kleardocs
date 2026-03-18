@@ -1,11 +1,12 @@
 import jwt from "jsonwebtoken";
+import { ApiError } from "../utils/response.js";
 
 export const auth = (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
+    const token = req.cookies?.token || req.headers.authorization?.split(" ")[1];
 
     if (!token) {
-      return res.status(401).json({ message: "No token" });
+      throw new ApiError(401, "Not authorized to access this route, please log in");
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -14,6 +15,6 @@ export const auth = (req, res, next) => {
 
     next();
   } catch (err) {
-    res.status(401).json({ message: "Invalid token" });
+    next(err); // Pass error to global error handler
   }
 };
