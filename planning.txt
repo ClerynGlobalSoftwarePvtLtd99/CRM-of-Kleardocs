@@ -1847,154 +1847,8 @@ Send Whatsapp Template(Title)
 Select Whatsapp Template(Dropdown menu when click one template in this input right side have cross button .When cilck this cross button whatsapp template preview automatically remove.)
 These are whatsapp template 
 
+whatsapp templates
 1)retargeting_v4
-
-2)ac2500 v6
-
-3)serviceautomation v3
-
-4)ac2500 v5
-
-5)2nd_quarter_payment_v6idfc_v2
-
-6)2nd_quarter_payment_v6idfc
-
-7)1st_quarter_payment_v2idfc
-8)ac2500 v4
-
-9)ac2500 v2
-
-10)ac2500
-
-11)utility_annualcom_v6
-
-12)utility_annualcom_v5
-
-13)annualcompliance_v11
-14)annualcompliance_v10
-
-15)itrfiling
-
-16)annualcompliance_v9
-
-17)annualcompiance_V7
-
-18)holi2
-
-19)holi
-20)section8package_v3
-
-21)serviceautomation_v2
-
-22)serviceautomation
-
-23)1st_quarter_payment_va
-
-24)video
-
-25)utility_annualcom_v3
-
-26)2nd quarter payment v5
-27)2nd quarter_payment_v5
-
-28)2nd_quarter_payment_v4
-
-29)ubility annualcom v2
-
-30)durgapuja
-
-31)companycompliances v3
-
-32)utility_annualcom
-
-34)interested
-35)followup_v2
-
-36)2nd_quarter_payment_v3
-
-37)agent assing broadcast
-
-38)1st_quarter_payment_v2
-
-39)1st_quarter_payment
-
-40)companycompliances_v2
-41)companyregistrationuttarpradesh
-
-42)companyregistrationkarnataka v2
-
-43)companyregistrationkarnataka
-
-44)companyregistrationkerala
-
-45)companyregistrationjharkhand
-
-46)companyregistrationsikkim
- 47)companyregistrationtelangana
-
-48)companyregistrationtamilnadu_v3
-
-49)companyregistrationassam1_v3
-
-50)companyregistrationdelhi
-
-51)companyregistrationmadhyapradesh_v2
-
-52)companyregistrationbihar
-53)companyregistrationpunjabv2_v3
-
-54)companycompliances
-
-55)companyregistrationmaharashta_v2
-
-56)companyregistrationassam1 v2
-
-57)companyregistrationgujratv2_v2
-
-58)companyregistrationpunjabv2
-59)companyregistrationwb_v3
-
-60)companyregistrationtimachal v2
-
-61)agent assing
-
-62)companyregistrationgujratv2
-
-63)companyregistrationassam
-
-64)companyregistrationmaharashta
-65)companyregistrationwb
-
-66)retargeting_v3
-
-Let’s See one Whatsapp Template.
-
-when user select one whatsapp template from drowpdown menu 
-This time blow show preview to check this whatsapp temple .
-
-there have a two section of a whatsapp template.
-left side and right side 
-
-left side have some input fields and send button
-
-Header Variables(Document)(Title)
-
- input fields(Media URL)
-
-input fields(FIle name)
-
-Body Variables(Title)
-input fields(Name)
-
-Send button
-
-(Send Template via whatsapp)
-
-right side have a green template and white color text for this whatsapp send message to clients.
-
-This is template for (retargeting_v4)
-
-file.pdf
 
 Avoid Penalties in {{Name}}
 
@@ -2015,19 +1869,496 @@ Don't wait! Contact us today to secure your compliance.
 
 You can Opt out by replying 'Stop' to us!
 
-Visit our Website(Website link)
 
-Call Us Now!(link with mobile caller app)
+2)ac2500_v6
+*Avoid Penalties in {{Name}}*
 
-Interested!(automated message from whatsapp)
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹1,999 per quarter!
+📅Our package includes:
 
-Blow is another template of whatsapp 
-durgapuja
-Left has “Send Template via Whatsapp”
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
 
-right has
-”
+📋Other Services:
 
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+3)serviceautomation_v3
+Hello {{CustomerName}},
+
+Thank you for choosing Startup Station for {{service name}}. The total cost for the service is Rs. {{Price}}. We kindly request you to transfer the amount at your earliest convenience and share a screenshot of the payment confirmation.
+
+To complete your payment, you can:
+
+Scan the QR code above, or
+Transfer the amount to our UPI ID: startupstation@idfcbank, or
+Directly transfer the amount to our bank account:
+Banking Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Bank Name: IDFC Bank
+Account Number: 89674560601
+IFSC Code: IDFB0060119.
+Your dedicated Relationship Manager, Ritu Kaur, will be in touch with you shortly to assist further.
+
+Best regards,
+Startup Station
+
+Ignore if the payment is made!
+
+
+4)ac2500_v5
+*Avoid Penalties in {{Name}}*
+
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹1,999 per quarter!
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+5)2nd_quarter_payment_v6idfc_v2
+Hello {{Name}},
+
+This is a friendly reminder regarding the payment for the SECOND QUARTER of your Annual Compliances with Startup Station. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.
+
+Payment Options:
+
+1. UPI Transfer:
+UPI ID: startupstation@idfcbank
+
+2. Bank Transfer:
+Banking Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Bank Name: IDFC Bank
+Account Number: 89674560601
+IFSC Code: IDFB0060119
+
+If you prefer, you can also scan the QR code below to complete the payment via UPI.
+
+Invoice for the 2nd quarter will be shared upon receiving the payment confirmation. Please share screenshot once the payment is made.
+
+Thank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.
+
+Ignore if the payment is already made.
+
+
+6)2nd_quarter_payment_v6idfc
+Hello {{Name}},
+
+This is a friendly reminder regarding the payment for the SECOND QUARTER of your Annual Compliances with Startup Station. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.
+
+Payment Options:
+
+1. UPI Transfer:
+UPI ID: startupstation.axl
+
+2. Bank Transfer:
+Banking Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Bank Name: IDFC Bank
+Account Number: 89774560601
+IFSC Code: IDFB0060119
+
+If you prefer, you can also scan the QR code below to complete the payment via UPI.
+
+Invoice for the 2nd quarter will be shared upon receiving the payment confirmation. Please share screenshot once the payment is made.
+
+Thank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.
+
+Ignore if the payment is already made
+
+
+7)1st_quarter_payment_v2idfc
+Hello {{Name}},
+
+We are thrilled to assist you with your Annual Compliances. Please make the payment for the first quarter at your earliest convenience.
+
+You can complete your payment by either scanning the QR code above or transferring the amount to our UPI ID: startupstation@idfcbank.
+
+Alternatively, you can transfer the amount directly to our bank account:
+
+Banking Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Bank Name: IDFC Bank
+Account Number: 89674560601
+IFSC Code: IDFB0060119.
+
+Ignore if the payment is already made.
+
+8)ac2500_v4
+
+*Avoid Penalties in {{Name}}*
+
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹1,999 per quarter!
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+
+9)ac2500_v2
+*Avoid Penalties in {{Name}}*
+
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹2,499 per quarter!
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+
+10)ac2500
+*Avoid Penalties in {{Name}}*
+
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹1,999 per quarter!
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+
+
+11)utility_annualcom_v6
+Ensure Compliance for {{Name}}!
+
+Here are the essential ROC (Registrar of Companies), Income Tax and GST compliances you must meet:
+
+✅ Form ADT-1: Auditor Appointment (within 30 days of incorporation)
+✅ Form INC-20A: Certificate of Business Commencement
+✅ Form AOC-4: Filing of FS
+✅ Form MGT-7: Annual Return Filing
+✅ MBP-1 and DIR-8: Director Disclosures
+✅ Board’s Report: Preparation and Filing
+✅ DIR-3 KYC: Director KYC Verification
+✅ Income Tax Return Filing
+✅ Audit by a Chartered Accountant
+✅ GST Filings
+
+Non-compliance can result in significant penalties. Stay informed and avoid unnecessary penalties by ensuring these compliances are met on time.
+
+Type 'Stop' to stop receiving our informative messages.
+
+12)utility_annualcom_v5
+ Ensure Compliance for {{Name}}!
+
+Did you know that certain key compliances are crucial for your company's legal standing and financial health? Missing deadlines can lead to significant penalties.
+
+Here are the essential ROC (Registrar of Companies) compliances you must meet:
+
+✅ Form ADT-1: Auditor Appointment (within 30 days of incorporation)
+✅ Form INC-20A: Certificate of Business Commencement
+✅ Form AOC-4: Filing of Financial Statements
+✅ Form MGT-7: Annual Return Filing
+✅ MBP-1 and DIR-8: Director Disclosures
+✅ Board’s Report: Preparation and Filing
+✅ DIR-3 KYC: Director KYC Verification
+✅ Income Tax Return Filing
+✅ Audit by a Chartered Accountant
+✅ GST Filings
+
+Non-compliance can result in penalties of up to ₹2 lakhs per year. Stay informed and avoid unnecessary penalties by ensuring these compliances are met on time.
+
+Type 'Stop' to stop receiving our informative messages.
+
+
+13)annualcompliance_v11
+*Avoid Penalties in {{Name}}*
+
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹1,999 per quarter!
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+14)annualcompliance_v10
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹1,999 per quarter!
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+15)itrfiling
+Hi,
+
+Since we're already preparing the financials for your Private Limited Company, it’s ideal that we also handle the Income Tax Returns (ITR) for you and your family.
+
+✅ Ensures your personal ITR is fully in sync with your company’s financials
+✅ Expert handling by the same team that knows your company inside-out
+✅ Flat fee of just ₹1000 per individual ITR
+✅ Hassle-free & prompt filing
+
+Let us know if you'd like us to take this forward for you or your family members.
+
+16)annualcompliance_v9
+Avoid Penalties in {{Name}}
+
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹1,999 per quarter!
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+
+17)annualcompliance_v7
+
+Avoid Penalties in {{Name}}
+
+🚀 Did you know Auditor Appointment is mandatory within 30 days of incorporation? Avoid penalties with our Annual ROC Compliance Package for Private Limited Companies at just ₹2,999 per quarter.
+
+📅Our package includes:
+
+1. Form ADT-1: Auditor Appointment 2. Form INC-20A 3. Form AOC-4: Financial Statements 4. Form MGT-7: Annual Return 5. MBP-1 and DIR-8 6. Board’s Report 7. DIR-3 KYC 8. Income Tax Return 9. Audit by a CA
+
+📋Other Services:
+
+✅ Plus, get GST Return filing for just ₹299/month.
+
+✅ Startup India Registration at ₹ 2999.
+
+✅ Trademark Filing at ₹ 999.
+
+You can Opt out by replying 'Stop' to us!
+
+18)holi2
+🎨🌈 Wishing you a vibrant and joyous Holi from all of us at Startup Station! 🌸 May this festival of colors fill your life with happiness, success, and endless opportunities. Let's celebrate the spirit of innovation and creativity together. Have a colorful and prosperous Holi!
+
+Warm regards,
+Startup Station Team
+
+19)holi
+🎨🌈 Wishing you a vibrant and joyous Holi from all of us at Startup Station! 🌸 May this festival of colors fill your life with happiness, success, and endless opportunities. Let's celebrate the spirit of innovation and creativity together. Have a colorful and prosperous Holi!
+
+Regards,
+Startup Station Team
+
+20)section8package_v3
+
+🌟 Registering a Section 8 Company is just the first step! 🌟
+
+To operate effectively and maximize benefits, your NGO must have these essential registrations:
+
+📜 Section 12A Registration – Grants tax exemption
+💰 Section 80G Registration – Provides tax benefits to donors
+🏛️ Darpan Registration – Enables eligibility for government grants
+🌐 NITI Aayog Registration – Essential for participating in government schemes
+
+💼 Pricing Options:
+✅ 12A & 80G Registration – ₹2,999
+✅ Complete Package (All Registrations) – ₹5,999
+
+📞 Contact us today to ensure your NGO is fully compliant and ready to create an impact! 🚀
+
+Please type STOP to stop receiving our amazing offers
+
+21)serviceautomation_v2
+
+Hello {{CustomerName}},
+
+Thank you for choosing Startup Station for {{service name}}. The total cost for the service is Rs. {{Price}}. We kindly request you to transfer the amount at your earliest convenience and share a screenshot of the payment confirmation.
+
+To complete your payment, you can:
+
+Scan the QR code above, or
+Transfer the amount to our UPI ID: startupstation@axl, or
+Directly transfer the amount to our bank account:
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385
+Your dedicated Relationship Manager, Ritu Kaur, will be in touch with you shortly to assist further.
+
+Best regards,
+Startup Station
+
+Ignore if the payment is made!
+
+22)serviceautomation
+Hello {{CustomerName}},
+
+Thank you for choosing Startup Station for {{service name}}. The total cost for the service is Rs. {{Price}}. We kindly request you to transfer the amount at your earliest convenience and share a screenshot of the payment confirmation.
+
+To complete your payment, you can:
+
+Scan the QR code above, or
+Transfer the amount to our UPI ID: startupstation@axl, or
+Directly transfer the amount to our bank account:
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385
+Your dedicated Relationship Manager, Ritu Kaur, will be in touch with you shortly to assist further.
+
+Best regards,
+Startup Station
+
+Ignore if the payment is made!
+
+23)1st_quarter_payment_v3
+Hello {{Name}},
+
+We are thrilled to assist you with your Annual Compliances. Please make the payment for the second quarter at your earliest convenience.
+
+You can complete your payment by either scanning the QR code above or transferring the amount to our UPI ID: startupstation@axl. Alternatively, you can transfer the amount directly to our bank account:
+
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385.
+
+Ignore if the payment is already made.
+
+24)video
+Avoid Penalties in your Company!
+
+🎉 Avail our Annual Compliance Package at a special discounted price of ₹7,999/year (payable quarterly) instead of ₹19,999.
+
+📦 Our package includes:
+
+Form ADT-1, AOC-4, MGT-7, Income Tax Return, and more.
+
+📋 Other Services:
+✅ GST Return filing: ₹299/month.
+✅ Startup India Registration: ₹2,999.
+✅ Trademark Filing: ₹999.
+
+Don't wait! Contact us today to secure your compliance.
+
+You can Opt out by replying 'Stop' to us!
+
+25)utility_annualcom_v3
+🚀 Avoid Penalties for {{Name}}!
+
+Did you know that appointing an auditor is mandatory within 30 days of incorporation? Failing to comply can lead to penalties up to 4 times the normal fees!
+
+Key ROC Compliances You Must Meet:
+
+✅ Form ADT-1: Auditor Appointment (within 30 days of incorporation) ✅ Form INC-20A: Certificate of Business Commencement✅ Form AOC-4: Filing of Financial Statements✅ Form MGT-7: Annual Return Filing ✅ MBP-1 and DIR-8: Director Disclosures✅ Board’s Report: Preparation and Filing✅ DIR-3 KYC: Director KYC Verification✅ Income Tax Return Filing✅ Audit by a Chartered Accountant✅ GST Filings
+
+Non-compliance can even result in penalties of up to ₹2 lakhs per year.
+
+
+Type 'Stop' to stop receiving our informative messages.
+
+26)2nd_quarter_payment_v5
+Hello {{Name}},
+
+This is a friendly reminder regarding the payment for the SECOND QUARTER of your Annual Compliances with Startup Station. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.
+
+Payment Options:
+
+1. UPI Transfer:
+UPI ID: startupstation.axl
+
+2. Bank Transfer:
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385
+
+If you prefer, you can also scan the QR code below to complete the payment via UPI.
+
+Invoice for the 2nd quarter will be shared upon receiving the payment confirmation. Please share screenshot once the payment is made.
+
+Thank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.
+
+Ignore if the payment is already made.
+
+27)2nd_quarter_payment_v4
+Hello {{Name}},
+
+This is a friendly reminder regarding the payment for the second quarter of your Annual Compliances with Startup Station. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.
+
+Payment Options:
+
+1. UPI Transfer:
+UPI ID: startupstation.axl
+
+2. Bank Transfer:
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385
+
+If you prefer, you can also scan the QR code below to complete the payment via UPI.
+
+Invoice for the 2nd quarter will be shared upon receiving the payment confirmation. Please share screenshot once the payment is made.
+
+Thank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.
+
+Ignore if the payment is already made.
+
+28)utility_annualcom_v2
+🚀 Avoid Penalties for {{Name}}!
+
+Did you know that appointing an auditor is mandatory within 30 days of incorporation? Failing to comply can lead to penalties up to 4 times the normal fees!
+
+Key ROC Compliances You Must Meet:
+
+✅ Form ADT-1: Auditor Appointment (within 30 days of incorporation) ✅ Form INC-20A: Certificate of Business Commencement✅ Form AOC-4: Filing of Financial Statements✅ Form MGT-7: Annual Return Filing ✅ MBP-1 and DIR-8: Director Disclosures✅ Board’s Report: Preparation and Filing✅ DIR-3 KYC: Director KYC Verification✅ Income Tax Return Filing✅ Audit by a Chartered Accountant✅ GST Filings
+
+Non-compliance can even result in penalties of up to ₹2 lakhs per year.
+
+
+Type 'Stop' to stop receiving our informative messages.
+
+29)durgapuja
 Dear Sir/Madam,
 
 We would like to inform you that our office will remain closed from 10th October 2024 to 13th October 2024 in observance of the Durga Puja Festival, a significant celebration here in West Bengal.
@@ -2037,9 +2368,684 @@ Regular operations will resume on 14th October 2024.
 Wishing you and your family a joyous and prosperous Durga Puja!
 
 Warm regards,
-
 Startup Station.
 
+30)companycompliances_v3
+Avoid Penalties in your Company!
+
+🎉 Avail our Annual Compliance Package at a special discounted price of ₹7,999/year (payable quarterly) instead of ₹19,999.
+
+📦 Our package includes:
+
+Form ADT-1, AOC-4, MGT-7, Income Tax Return, and more.
+
+📋 Other Services:
+✅ GST Return filing: ₹299/month.
+✅ Startup India Registration: ₹2,999.
+✅ Trademark Filing: ₹999.
+
+Don't wait! Contact us today to secure your compliance.
+
+You can Opt out by replying 'Stop' to us!
+
+31)utility_annualcom
+Hi {{Name}},
+
+This is to follow up on our special offer! Our Annual Compliance Package is now ₹7,999/year (payable quarterly), covering Form ADT-1, AOC-4, MGT-7, ITR, and more.
+
+Let us take care of your compliance needs. Reply for more info!
+
+Type stop to stop receiving our amazing offers.
+
+34)2nd_quarter_payment_v3
+Hello {{Name}},
+
+This is a friendly reminder regarding the payment for the second quarter of your Annual Compliances with Startup Station. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.
+
+Payment Options:
+
+1. UPI Transfer:
+UPI ID: startupstation.axl
+
+2. Bank Transfer:
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385
+
+If you prefer, you can also scan the QR code below to complete the payment via UPI.
+
+Thank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.
+
+Ignore if the payment is already made.
+
+35)agent_assing_broadcast
+Thank you for your interest in our service. Your Relationship Manager will get in touch with you shortly.
+
+Type stop to stop receiving messages from us!
+
+36)1st_quarter_payment_v2
+Hello {{Name}},
+
+We are thrilled to assist you with your Annual Compliances. Please make the payment for the second quarter at your earliest convenience.
+
+You can complete your payment by either scanning the QR code above or transferring the amount to our UPI ID: startupstation.axl. Alternatively, you can transfer the amount directly to our bank account:
+
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385.
+
+Ignore if the payment is already made.
+
+
+37)1st_quarter_payment
+Hello {{Name}},
+
+We are thrilled to assist you with your Annual Compliances. Please make the payment for the first quarter at your earliest convenience.
+
+You can complete your payment by either scanning the QR code above or transferring the amount to our UPI ID: startupstation.axl. Alternatively, you can transfer the amount directly to our bank account:
+
+Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED
+Account Number: 50200094441194
+IFSC Code: HDFC0005385.
+
+Ignore if the payment is already made.
+
+38)companycompliances_v2
+Avoid Penalties in your Company!
+
+🎉 Avail our Annual Compliance Package at a special discounted price of ₹11,999/year (payable quarterly) instead of ₹19,999.
+
+📦 Our package includes:
+
+Form ADT-1, AOC-4, MGT-7, Income Tax Return, and more.
+
+📋 Other Services:
+✅ GST Return filing: ₹299/month.
+✅ Startup India Registration: ₹2,999.
+✅ Trademark Filing: ₹999.
+
+Don't wait! Contact us today to secure your compliance.
+
+You can Opt out by replying 'Stop' to us!
+
+39)companyregistrationuttarpradesh
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Uttar Pradesh and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3000
+3. Government Fees: ₹ 2150
+Total Fees: ₹ 7,150
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+
+40)companyregistrationkarnataka_v2
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Karnataka and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3000
+3. Government Fees: ₹ 2,170
+Total Fees: ₹ 7,170
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+
+41)companyregistrationkarnataka
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Uttar Pradesh and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹2,150
+3. Government Fees: ₹ 4,200
+Total Fees: ₹ 7,150
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+
+42)companyregistrationkerala
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Kerala and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 4,200
+Total Fees: ₹ 9,200
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+43)companyregistrationjharkhand
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Jharkhand and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1,220
+Total Fees: ₹ 6,220
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+44)companyregistrationsikkim
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Sikkim and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1,150
+Total Fees: ₹ 6,150
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+45)companyregistrationtelangana
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Telangana and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 2,700
+Total Fees: ₹ 7,700
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned
+46)companyregistrationtamilnadu_v3
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Tamil Nadu and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1860
+Total Fees: ₹ 6,860
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+
+47)companyregistrationassam1_v3
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Assam and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1700
+Total Fees: ₹ 5,700
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+companyregistrationdelhi
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Delhi and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1500
+Total Fees: ₹ 6,500
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+
+48)companyregistrationmadhyapradesh_v2
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Madhya Pradesh and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3000
+3. Government Fees: ₹ 7,700
+Total Fees: ₹ 12,700
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+49)companyregistrationbihar
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Bihar and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3000
+3. Government Fees: ₹ 1,780
+Total Fees: ₹ 6,780
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+50)companyregistrationpunjabv2_v3
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Punjab and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3000
+3. Government Fees: ₹ 11,100
+Total Fees: ₹ 16,100
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+51)companycompliances
+Avoid Penalties in your Company!
+
+🎉 Avail our Annual Compliance Package at a special discounted price of ₹7,999/year (payable quarterly) instead of ₹19,999.
+
+📦 Our package includes:
+
+Form ADT-1, AOC-4, MGT-7, Income Tax Return, and more.
+
+📋 Other Services:
+✅ GST Return filing: ₹299/month.
+✅ Startup India Registration: ₹2,999.
+✅ Trademark Filing: ₹999.
+
+Don't wait! Contact us today to secure your compliance.
+
+You can Opt out by replying 'Stop' to us!
+52)companyregistrationmaharashta_v2
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Maharashtra and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 2450
+Total Fees: ₹ 7,450
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+
+53)companyregistrationassam1_v2
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Assam and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1700
+Total Fees: ₹ 5,700
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+
+54)companyregistrationgujratv2_v2
+file.pdf
+
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Gujrat and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1800
+Total Fees: ₹ 6,800
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+55)companyregistrationpunjabv2
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Punjab and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹11.100
+3. Government Fees: ₹ 1800
+Total Fees: ₹ 16,100
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+56)companyregistrationwb_v3
+Here’s the quotation for setting up your Private Limited Company with 2 director in state West Bengal and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government fees: ₹ 1500
+Total Fees: ₹ 6500
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+57)companyregistrationhimachal_v2
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Himachal Pradesh and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government fees: ₹ 1300
+Total Fees: ₹ 6300
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+58)agent_assing
+Your Relationship Manager (RM) is Mrs. Ritu Kaur. She will get in touch with you shortly.
+
+59)companyregistrationgujratv2
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Gujrat and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1800
+Total Fees: ₹ 6,800
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+60)companyregistrationassam
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Aassam and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 1700
+Total Fees: ₹ 5,700
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+61)companyregistrationmaharashta
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Maharashtra and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Government Fees: ₹ 2450
+Total Fees: ₹ 7,450
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned.
+62)companyregistrationwb
+Here’s the quotation for setting up your Private Limited Company with 2 director in state Maharashtra and ₹1 lakh Authorized Share Capital:
+
+1. Professional Fees: ₹2000
+2. Digital Signatures for 2 Directors: ₹3,000
+3. Name Application Fees (Govt.): ₹1,000
+4. Stamp Duty Fees (Govt.): ₹370
+Total Fees: ₹ 6370
+
+Timeline: 12-15 days
+
+To get started, please provide:
+
+1. PAN and Aadhaar of the directors
+2. Phone numbers and email addresses of the directors
+3. Proof of registered office address
+4. Details of authorized and subscribed share capital
+5. Latest Bank Statement
+6. Electricity bill for the registered address
+7. . Industry in which the company will operate
+
+Feel free to reach out if you have any questions or need further information. Looking forward to helping you get started!
+
+Once confirmed, a relationship manager will be assigned
+63)retargeting_v3
+Avoid Penalties in {{Name}}
+
+🚨 Hurry up! Only 21 days left to avoid penalties. We noticed you still haven't appointed an auditor.
+
+🎉 Avail our Annual Compliance Package at a special discounted price of ₹7,999/year (payable quarterly) instead of ₹19,999.
+
+📦 Our package includes:
+
+Form ADT-1, AOC-4, MGT-7, Income Tax Return, and more.
+
+📋 Other Services:
+✅ GST Return filing: ₹299/month.
+✅ Startup India Registration: ₹2,999.
+✅ Trademark Filing: ₹999.
+
+Don't wait! Contact us today to secure your compliance.
+
+You can Opt out by replying 'Stop' to us!
 “
 
 Add Director (Button )

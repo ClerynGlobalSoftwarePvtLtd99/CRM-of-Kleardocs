@@ -3,7 +3,7 @@ import { Plus } from 'lucide-react'
 
 const TemplatesHeader = ({ count, onAddClick }) => {
   return (
-    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
       <h1 className="text-2xl font-bold">Email Templates ({count})</h1>
       <button
         onClick={onAddClick}
