@@ -7,6 +7,12 @@
   --color-text-primary: #FEFDFD;
   --color-text-secondary: #93949D;
   --color-accent: #D9B24E;
+  
+  /* CRM Specific Colors from Images */
+  --color-crm-blue: #008CBA;
+  --color-crm-orange: #F0AD4E;
+  --color-crm-green: #5CB85C;
+  --color-crm-green-dark: #449D44;
 }
 
 body {
@@ -15,4 +21,92 @@ body {
   margin: 0;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   overflow-x: hidden;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* CRM Raised Button Utility */
+.btn-raised {
+  transition: all 0.1s ease;
+  border-bottom-width: 4px;
+  border-style: solid;
+  font-weight: 700;
+}
+
+.btn-raised:active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+
+.btn-raised-blue {
+  background-color: var(--color-crm-blue);
+  border-color: #007ba1;
+  border-bottom-color: #005a76;
+}
+
+.btn-raised-orange {
+  background-color: var(--color-crm-orange);
+  border-color: #d99a46;
+  border-bottom-color: #a67635;
+}
+
+.btn-raised-green {
+  background-color: var(--color-crm-green);
+  border-color: #4cae4c;
+  border-bottom-color: #398439;
+}
+
+.btn-raised-red {
+  background-color: #d9534f;
+  border-color: #d43f3a;
+  border-bottom-color: #ac2925;
+}
+
+/* Fieldset Label Utility */
+.fieldset-input {
+  position: relative;
+  margin-top: 10px;
+}
+
+.fieldset-label {
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  background-color: var(--color-bg-secondary);
+  padding: 0 4px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--color-text-secondary);
+  z-index: 100;
+}
+
+.fieldset-input input, 
+.fieldset-input select, 
+.fieldset-input textarea {
+  width: 100%;
+  background: transparent !important;
+  border: 1px solid var(--color-bg-tertiary);
+  border-radius: 8px;
+  padding: 12px;
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+.fieldset-input input:focus, 
+.fieldset-input select:focus, 
+.fieldset-input textarea:focus {
+  border-color: var(--color-crm-orange);
+}
+
+/* Dropdown Theme Fix */
+select option {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+}
+
+.row-highlight {
+  border-left: 4px solid var(--color-crm-orange) !important;
+  background-color: rgba(240, 173, 78, 0.05) !important;
 }
