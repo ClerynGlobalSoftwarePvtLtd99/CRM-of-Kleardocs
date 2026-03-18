@@ -263,17 +263,14 @@ const DateRangePicker = () => {
   }
 
   return (
-    <div className="relative z-50" ref={popoverRef}>
+    <div className="relative w-full" ref={popoverRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-[250px] sm:w-auto gap-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-2 rounded-lg text-sm text-[var(--color-text-primary)] hover:border-[var(--color-accent)] transition-colors"
+        className="flex items-center justify-between w-full gap-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-[12px] rounded-lg text-sm text-[var(--color-text-primary)] hover:border-[var(--color-accent)] transition-colors min-h-[46px]"
       >
         <div className="flex items-center gap-2 overflow-hidden">
           <Calendar size={18} className="text-[var(--color-accent)] shrink-0" />
-          <span className="hidden sm:inline-block font-medium truncate">
-            {displayString}
-          </span>
-          <span className="sm:hidden font-medium truncate">
+          <span className="font-medium truncate">
             {displayString}
           </span>
         </div>
@@ -293,73 +290,73 @@ const DateRangePicker = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute top-12 left-0 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-xl shadow-2xl p-4 min-w-[max-content] flex flex-col gap-4">
-          <div className="flex justify-between items-center border border-[var(--color-bg-tertiary)] px-3 bg-[var(--color-bg-secondary)] rounded-lg py-2">
-            <span className="text-sm font-semibold text-[var(--color-text-primary)]">
-              {tempDisplayString}
-            </span>
-            <button
-              onClick={handleClear}
-              className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
-            >
-              <X size={16} strokeWidth={2.5} />
-            </button>
-          </div>
-
-          <div className="flex gap-4 border-b border-[var(--color-bg-tertiary)] pb-4">
-            <DatePickerMonth
-              year={leftMonth.year}
-              month={leftMonth.month}
-              onPrev={() => setLeftMonth(prevMonth(leftMonth))}
-              onNext={null}
-              startDate={tempRange.start}
-              endDate={tempRange.end}
-              onDateClick={handleDateClick}
-            />
-            <div className="w-px bg-[var(--color-bg-tertiary)]"></div>
-            <DatePickerMonth
-              year={rightMonth.year}
-              month={rightMonth.month}
-              onPrev={null}
-              onNext={() => setRightMonth(nextMonth(rightMonth))}
-              startDate={tempRange.start}
-              endDate={tempRange.end}
-              onDateClick={handleDateClick}
-            />
-          </div>
-
-          <div className="flex justify-between items-center px-2">
-            <div className="flex gap-2 text-sm">
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-2xl shadow-2xl p-6 max-w-4xl w-full flex flex-col gap-6 animate-in zoom-in-95 duration-200">
+            <div className="flex justify-between items-center border border-[var(--color-bg-tertiary)] px-4 bg-[var(--color-bg-secondary)] rounded-xl py-3">
+              <span className="text-base font-bold text-[var(--color-text-primary)]">
+                {tempDisplayString}
+              </span>
               <button
-                type="button"
-                onClick={() => handlePreset('Today')}
-                className="px-3 py-1.5 rounded-md hover:bg-[var(--color-bg-secondary)] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
+                onClick={() => setIsOpen(false)}
+                className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors p-1"
               >
-                Today
-              </button>
-              <button
-                type="button"
-                onClick={() => handlePreset('Yesterday')}
-                className="px-3 py-1.5 rounded-md hover:bg-[var(--color-bg-secondary)] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
-              >
-                Yesterday
-              </button>
-              <button
-                type="button"
-                onClick={() => handlePreset('Last 7 Days')}
-                className="px-3 py-1.5 rounded-md hover:bg-[var(--color-bg-secondary)] font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors"
-              >
-                Last 7 Days
+                <X size={20} strokeWidth={2.5} />
               </button>
             </div>
-            <button
-              type="button"
-              onClick={handleConfirm}
-              disabled={!tempRange.start || !tempRange.end}
-              className="bg-[var(--color-accent)] text-[var(--color-bg-primary)] px-6 py-2 rounded-lg font-medium hover:opacity-90 disabled:opacity-50 transition-opacity"
-            >
-              OK
-            </button>
+
+            <div className="flex flex-col lg:flex-row gap-8 border-b border-[var(--color-bg-tertiary)] pb-6 justify-center items-center lg:items-start">
+              <DatePickerMonth
+                year={leftMonth.year}
+                month={leftMonth.month}
+                onPrev={() => setLeftMonth(prevMonth(leftMonth))}
+                onNext={null}
+                startDate={tempRange.start}
+                endDate={tempRange.end}
+                onDateClick={handleDateClick}
+              />
+              <div className="hidden lg:block w-px bg-[var(--color-bg-tertiary)] self-stretch"></div>
+              <DatePickerMonth
+                year={rightMonth.year}
+                month={rightMonth.month}
+                onPrev={null}
+                onNext={() => setRightMonth(nextMonth(rightMonth))}
+                startDate={tempRange.start}
+                endDate={tempRange.end}
+                onDateClick={handleDateClick}
+              />
+            </div>
+
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-2">
+              <div className="flex flex-wrap justify-center gap-2 text-sm">
+                {[ 'Today', 'Yesterday', 'Last 7 Days' ].map(preset => (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => handlePreset(preset)}
+                    className="px-4 py-2 rounded-lg bg-[var(--color-bg-secondary)] font-bold text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] border border-[var(--color-bg-tertiary)] transition-all"
+                  >
+                    {preset}
+                  </button>
+                ))}
+              </div>
+              <div className="flex gap-3 w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  className="flex-1 sm:flex-none px-6 py-2.5 rounded-lg font-bold text-[var(--color-text-primary)] border border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-secondary)] transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleConfirm}
+                  disabled={!tempRange.start || !tempRange.end}
+                  className="flex-1 sm:flex-none bg-[var(--color-accent)] text-[var(--color-bg-primary)] px-10 py-2.5 rounded-lg font-bold hover:opacity-90 disabled:opacity-50 transition-all shadow-lg"
+                >
+                  Apply Range
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

@@ -22,8 +22,6 @@ const AdminLayout = ({ children }) => {
         </main>
       </div>
 
-      {/* Global Toaster for bottom-right notifications */}
-      <Toaster position="bottom-right" />
     </div>
   )
 }
