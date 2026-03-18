@@ -116,12 +116,11 @@ const DatePickerMonth = ({
               key={i}
               onClick={() => onDateClick(d)}
               className={`w-7 h-7 flex items-center justify-center rounded-full transition-colors text-xs
-                ${
-                  isStartOrEnd
-                    ? 'bg-[var(--color-accent)] text-[var(--color-bg-primary)] font-medium'
-                    : inRange
-                      ? 'bg-[var(--color-bg-tertiary)] text-[var(--color-text-primary)] rounded-none'
-                      : 'hover:bg-[var(--color-bg-tertiary)] text-[var(--color-text-primary)] text-sm'
+                ${isStartOrEnd
+                  ? 'bg-[var(--color-accent)] text-[var(--color-bg-primary)] font-medium'
+                  : inRange
+                    ? 'bg-[var(--color-bg-tertiary)] text-[var(--color-text-primary)] rounded-none'
+                    : 'hover:bg-[var(--color-bg-tertiary)] text-[var(--color-text-primary)] text-sm'
                 }
               `}
             >
@@ -328,7 +327,7 @@ const DateRangePicker = () => {
 
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-2">
               <div className="flex flex-wrap justify-center gap-2 text-sm">
-                {[ 'Today', 'Yesterday', 'Last 7 Days' ].map(preset => (
+                {['Today', 'Yesterday', 'Last 7 Days'].map(preset => (
                   <button
                     key={preset}
                     type="button"

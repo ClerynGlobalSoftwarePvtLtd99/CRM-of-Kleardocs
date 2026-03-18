@@ -22,16 +22,16 @@ const Customers = () => {
     bookkeeping: ""
   });
 
-  // Mock Data
-  const initialCustomers = [
+  // State for customers
+  const [customers, setCustomers] = useState([
     {
       id: "69b53f8665b9911c9c0b8336",
       customerName: "NEBULSOFT TECHNOLOGIA PRIVATE LIMITED",
       phone: "9775520007",
       companyName: "NEBULSOFT TECHNOLOGIA PRIVATE LIMITED",
       type: "Private Limited Company",
-      onboardingDate: "14th March 2026",
-      incorporationDate: "6th March 2026",
+      onboardingDate: "14-03-2026",
+      incorporationDate: "06-03-2026",
       logo: null,
     },
     {
@@ -40,8 +40,8 @@ const Customers = () => {
       phone: "9876543210",
       companyName: "KLEARDOCS SOLUTIONS LLP",
       type: "LLP",
-      onboardingDate: "10th March 2026",
-      incorporationDate: "1st March 2026",
+      onboardingDate: "10-03-2026",
+      incorporationDate: "01-03-2026",
       logo: null,
     },
     {
@@ -50,14 +50,18 @@ const Customers = () => {
       phone: "7891858821",
       companyName: "VIRALITY360 PRIVATE LIMITED",
       type: "Private Limited Company",
-      onboardingDate: "4th February 2026",
-      incorporationDate: "29th December 2025",
+      onboardingDate: "04-02-2026",
+      incorporationDate: "29-12-2025",
       logo: null,
     }
-  ];
+  ]);
+
+  const handleAddCustomer = (newCustomer) => {
+    setCustomers(prev => [newCustomer, ...prev]);
+  };
 
   const filteredCustomers = useMemo(() => {
-    return initialCustomers.filter(cust => {
+    return customers.filter(cust => {
       const searchMatch = !filters.search || 
         cust.customerName.toLowerCase().includes(filters.search.toLowerCase()) ||
         cust.phone.includes(filters.search) ||
@@ -67,7 +71,7 @@ const Customers = () => {
       
       return searchMatch && typeMatch;
     });
-  }, [filters]);
+  }, [filters, customers]);
 
   const handleClearFilters = () => {
     setFilters({
@@ -249,7 +253,10 @@ const Customers = () => {
       </div>
 
       {showNewCustomerModal && (
-        <NewCustomerModal onClose={() => setShowNewCustomerModal(false)} />
+        <NewCustomerModal 
+          onClose={() => setShowNewCustomerModal(false)} 
+          onAdd={handleAddCustomer}
+        />
       )}
     </div>
   );
