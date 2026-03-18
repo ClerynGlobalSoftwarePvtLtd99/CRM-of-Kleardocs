@@ -17,6 +17,8 @@ import AddInvoice from './pages/AddInvoice'
 import Compliances from './pages/Compliances'
 import Services from './pages/Services'
 import Leads from './pages/Leads'
+import LeadDetailsPage from './pages/LeadDetailsPage'
+import CustomerDetailsPage from './pages/CustomerDetailsPage'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -63,6 +65,8 @@ function App() {
             <Route path='/compliances' element={<Compliances/>}/>
             <Route path='/services' element={<Services/>}/>
             <Route path='/leads' element={<Leads/>}/>
+            <Route path="/lead/:id" element={<LeadDetailsPage />} />
+            <Route path="/customer/:id" element={<CustomerDetailsPage />} />
           </Routes>
         </AdminLayout>
       </BrowserRouter>

@@ -3,7 +3,7 @@ import { Search, X } from 'lucide-react'
 
 const TemplatesFilters = ({ searchFilter, setSearchFilter }) => {
   return (
-    <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] p-4 rounded-xl mb-6">
+    <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] p-4 rounded-xl mb-4">
       <div className="relative max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]" size={18} />
         <input

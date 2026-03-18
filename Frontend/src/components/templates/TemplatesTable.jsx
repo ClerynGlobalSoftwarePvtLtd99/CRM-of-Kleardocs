@@ -2,7 +2,7 @@ import React from 'react'
 
 const TemplatesTable = ({ templates, onEditClick, onManageClick }) => {
   return (
-    <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl overflow-hidden shadow-sm flex flex-col h-[65vh] min-h-[400px]">
+    <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl overflow-hidden shadow-sm flex flex-col h-[50vh] min-h-[350px]">
       <div className="overflow-auto scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] flex-1 px-4">
         <table className="w-full text-left relative" style={{ borderSpacing: '0 10px', borderCollapse: 'separate' }}>
           <thead>
@@ -33,18 +33,18 @@ const TemplatesTable = ({ templates, onEditClick, onManageClick }) => {
                 <td className="px-4 py-3">
                   <button
                     onClick={() => onManageClick(tmpl)}
-                    className="px-4 py-1.5 bg-[var(--color-bg-tertiary)] hover:bg-[var(--color-accent)] hover:text-white text-[var(--color-text-primary)] rounded-md text-xs font-semibold shadow-sm transition-colors cursor-pointer"
+                    className="px-3 py-1 bg-[var(--color-bg-tertiary)] hover:bg-[var(--color-accent)] hover:text-white text-[var(--color-text-primary)] rounded-md text-xs font-semibold shadow-sm transition-colors cursor-pointer"
                   >
-                    Manage
+                    Send
                   </button>
                 </td>
                 <td className="px-4 py-3 rounded-r-lg">
                   <div className="flex items-center justify-end gap-2">
                     <button
                       onClick={() => onEditClick(tmpl)}
-                      className="px-4 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-xs font-semibold shadow-sm transition-colors cursor-pointer"
+                      className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-xs font-semibold shadow-sm transition-colors cursor-pointer"
                     >
-                      Edit
+                      Preview
                     </button>
                   </div>
                 </td>
