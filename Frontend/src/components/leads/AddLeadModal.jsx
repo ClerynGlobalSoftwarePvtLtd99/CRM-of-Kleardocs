@@ -9,70 +9,30 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-const indianStates = [
-  "Andhra Pradesh",
-  "Arunachal Pradesh",
-  "Assam",
-  "Bihar",
-  "Chhattisgarh",
-  "Goa",
-  "Gujarat",
-  "Haryana",
-  "Himachal Pradesh",
-  "Jharkhand",
-  "Karnataka",
-  "Kerala",
-  "Madhya Pradesh",
-  "Maharashtra",
-  "Manipur",
-  "Meghalaya",
-  "Mizoram",
-  "Nagaland",
-  "Odisha",
-  "Punjab",
-  "Rajasthan",
-  "Sikkim",
-  "Tamil Nadu",
-  "Telangana",
-  "Tripura",
-  "Uttar Pradesh",
-  "Uttarakhand",
-  "West Bengal",
-  "Andaman and Nicobar Islands",
-  "Chandigarh",
-  "Dadra and Nagar Haveli and Daman and Diu",
-  "Delhi",
-  "Jammu and Kashmir",
-  "Ladakh",
-  "Lakshadweep",
-  "Puducherry",
-];
+import { 
+  SERVICES, 
+  SOURCES, 
+  STATES, 
+  AGENTS, 
+  CLIENT_TYPES, 
+  PRIORITIES 
+} from "../../utils/constants";
 
-const serviceOptions = [
-  "Annual Compliance",
-  "GST Filing",
-  "IT Return Filing",
-  "Company Registration",
-  "Trademark Registration",
-  "Accounting Service",
-  "Legal Documentation",
-  "Payroll Service",
-];
+const getSourceIcon = (sourceName) => {
+  switch (sourceName.toLowerCase()) {
+    case "instagram": return Instagram;
+    case "facebook": return Facebook;
+    case "whatsapp": return MessageCircleMore;
+    default: return Globe;
+  }
+};
 
-const agentOptions = [
-  "Ritu Kaur",
-  "John Doe",
-  "Aman Sharma",
-  "Priya Singh",
-  "Rahul Verma",
-];
+const sourceOptions = SOURCES.map(source => ({
+  value: source.toLowerCase(),
+  label: source,
+  icon: getSourceIcon(source)
+}));
 
-const sourceOptions = [
-  { value: "instagram", label: "Instagram", icon: Instagram },
-  { value: "facebook", label: "Facebook", icon: Facebook },
-  { value: "whatsapp", label: "WhatsApp", icon: MessageCircleMore },
-  { value: "others", label: "Others", icon: Globe },
-];
 
 const SourceDropdown = ({ value, onChange }) => {
   const [open, setOpen] = useState(false);
@@ -145,9 +105,9 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
     phone: "",
     companyName: "",
     service: "",
-    source: "others",
-    type: "hot",
-    priority: "none",
+    source: SOURCES[0].toLowerCase(),
+    type: CLIENT_TYPES[0],
+    priority: PRIORITIES[3], // None
     address: "",
     state: "",
     agent: "",
@@ -254,7 +214,7 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
                 className="w-full rounded-md border border-text-primary bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-yellow-500"
               >
                 <option value="">Select service</option>
-                {serviceOptions.map((service) => (
+                {SERVICES.map((service) => (
                   <option key={service} value={service}>
                     {service}
                   </option>
@@ -284,8 +244,9 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
                 onChange={handleChange}
                 className="w-full rounded-md border border-text-primary bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-yellow-500"
               >
-                <option value="hot">Hot</option>
-                <option value="cold">Cold</option>
+                {CLIENT_TYPES.map(type => (
+                  <option key={type} value={type}>{type}</option>
+                ))}
               </select>
             </div>
 
@@ -299,10 +260,9 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
                 onChange={handleChange}
                 className="w-full rounded-md border border-text-primary bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-yellow-500"
               >
-                <option value="none">None</option>
-                <option value="high">High</option>
-                <option value="medium">Medium</option>
-                <option value="low">Low</option>
+                {PRIORITIES.map(p => (
+                  <option key={p} value={p}>{p}</option>
+                ))}
               </select>
             </div>
 
@@ -331,7 +291,7 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
                 className="w-full rounded-md border border-text-primary bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-yellow-500"
               >
                 <option value="">Select state</option>
-                {indianStates.map((state) => (
+                {STATES.map((state) => (
                   <option key={state} value={state}>
                     {state}
                   </option>
@@ -350,7 +310,7 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
                 className="w-full rounded-md border border-text-primary bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-yellow-500"
               >
                 <option value="">Select agent</option>
-                {agentOptions.map((agent) => (
+                {AGENTS.map((agent) => (
                   <option key={agent} value={agent}>
                     {agent}
                   </option>

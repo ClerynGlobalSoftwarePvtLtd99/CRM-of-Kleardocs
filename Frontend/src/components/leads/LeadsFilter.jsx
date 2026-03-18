@@ -1,6 +1,15 @@
-import { useState } from "react";
 import { Search, X } from "lucide-react";
+import { 
+  SERVICES, 
+  SOURCES, 
+  AGENTS, 
+  CLIENT_TYPES, 
+  PRIORITIES, 
+  RESPONSES,
+  STATES
+} from "../../utils/constants";
 import DateRangeFilter from "../compliances/DateRangeFilter";
+import { useState } from "react";
 
 const LeadsFilter = () => {
   const initialFilters = {
@@ -14,6 +23,7 @@ const LeadsFilter = () => {
     type: "",
     priority: "",
     response: "",
+    state: "",
   };
 
   const [filters, setFilters] = useState(initialFilters);
@@ -23,150 +33,171 @@ const LeadsFilter = () => {
   };
 
   return (
-    <div className="bg-bg-secondary border border-bg-tertiary rounded-xl p-4 mb-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-        <input
-          placeholder="Name / Phone / Company"
-          value={filters.search}
-          onChange={(e) =>
-            setFilters((prev) => ({ ...prev, search: e.target.value }))
-          }
-          className="input border border-text-primary rounded-md bg-bg-secondary text-text-primary"
-        />
+    <div className="bg-bg-secondary border border-bg-tertiary rounded-xl p-4 mb-4 space-y-4 shadow-sm">
+      {/* First Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-semibold text-text-secondary ml-1">Search</label>
+          <input
+            placeholder="Name / Phone / Company"
+            value={filters.search}
+            onChange={(e) =>
+              setFilters((prev) => ({ ...prev, search: e.target.value }))
+            }
+            className="w-full px-3 py-2 rounded-md border border-text-primary bg-bg-secondary text-text-primary text-sm focus:border-yellow-500 outline-none"
+          />
+        </div>
 
-        <select
-          value={filters.dateType}
-          onChange={(e) =>
-            setFilters((prev) => ({ ...prev, dateType: e.target.value }))
-          }
-          className="input text-text-primary bg-bg-secondary border border-text-primary rounded-md"
-        >
-          <option>Created</option>
-          <option>Last Followup</option>
-          <option>Next Followup</option>
-        </select>
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-semibold text-text-secondary ml-1">Date Type</label>
+          <select
+            value={filters.dateType}
+            onChange={(e) =>
+              setFilters((prev) => ({ ...prev, dateType: e.target.value }))
+            }
+            className="w-full px-3 py-2 rounded-md border border-text-primary bg-bg-secondary text-text-primary text-sm focus:border-yellow-500 outline-none"
+          >
+            <option>Created</option>
+            <option>Last Followup</option>
+            <option>Next Followup</option>
+          </select>
+        </div>
 
-       <DateRangeFilter
-          value={{
-            startDate: filters.startDate,
-            endDate: filters.endDate,
-          }}
-          onChange={({ startDate, endDate }) =>
-            setFilters((prev) => ({
-              ...prev,
-              startDate,
-              endDate,
-            }))
-          }
-          months={2}
-          className="left-1/2 -translate-x-1/2"
-          inputClassName="w-full border border-text-primary rounded-md bg-bg-secondary text-text-primary"
-        />
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-semibold text-text-secondary ml-1">Date Range</label>
+          <DateRangeFilter
+            value={{
+              startDate: filters.startDate,
+              endDate: filters.endDate,
+            }}
+            onChange={({ startDate, endDate }) =>
+              setFilters((prev) => ({
+                ...prev,
+                startDate,
+                endDate,
+              }))
+            }
+            months={2}
+            className="left-0"
+            inputClassName="w-full px-3 py-2 rounded-md border border-text-primary bg-bg-secondary text-text-primary text-sm focus:border-yellow-500 outline-none"
+          />
+        </div>
 
-        <select
-          value={filters.service}
-          onChange={(e) =>
-            setFilters((prev) => ({ ...prev, service: e.target.value }))
-          }
-          className="input text-text-primary bg-bg-secondary border border-text-primary rounded-md"
-        >
-          <option value="">Services</option>
-          <option>Annual Compliance</option>
-          <option>GST Filing</option>
-          <option>Section 8 Company</option>
-          <option>Startup India Registration</option>
-          <option>Import Export Code</option>
-          <option>FSSAI Central</option>
-          <option>GST Registration</option>
-          <option>FSSAI State Registration</option>
-          <option>CA Certification</option>
-          <option>Director Resignation</option>
-          <option>MSME</option>
-          <option>Trademark</option>
-          <option>MOA Change</option>
-          <option>Auditor Resignation</option>
-          <option>TDS Return</option>
-          <option>Board Meeting & Statutory Documentation Services</option>
-          <option>Professional Tax Registration Services</option>
-          <option>Private Limited Company</option>
-        </select>
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-semibold text-text-secondary ml-1">Service</label>
+          <select
+            value={filters.service}
+            onChange={(e) =>
+              setFilters((prev) => ({ ...prev, service: e.target.value }))
+            }
+            className="w-full px-3 py-2 rounded-md border border-text-primary bg-bg-secondary text-text-primary text-sm focus:border-yellow-500 outline-none"
+          >
+            <option value="">All Services</option>
+            {SERVICES.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </div>
+      </div>
 
-        <select
-          value={filters.agent}
-          onChange={(e) =>
-            setFilters((prev) => ({ ...prev, agent: e.target.value }))
-          }
-          className="input text-text-primary bg-bg-secondary border border-text-primary rounded-md"
-        >
-          <option value="">Agent</option>
-          <option>Ritu Kaur</option>
-          <option>John Doe</option>
-        </select>
+      {/* Second Row */}
+      <div className="flex flex-wrap items-end gap-3">
+        <div className="flex-1 min-w-[150px] flex flex-col gap-1">
+          <label className="text-xs font-semibold text-text-secondary ml-1">Agent</label>
+          <select
+            value={filters.agent}
+            onChange={(e) =>
+              setFilters((prev) => ({ ...prev, agent: e.target.value }))
+            }
+            className="w-full px-3 py-2 rounded-md border border-text-primary bg-bg-secondary text-text-primary text-sm focus:border-yellow-500 outline-none"
+          >
+            <option value="">All Agents</option>
+            {AGENTS.map(a => <option key={a} value={a}>{a}</option>)}
+          </select>
+        </div>
 
-        <select
-          value={filters.source}
-          onChange={(e) =>
-            setFilters((prev) => ({ ...prev, source: e.target.value }))
-          }
-          className="input text-text-primary bg-bg-secondary border border-text-primary rounded-md"
-        >
-          <option value="">Source</option>
-          <option>Instagram</option>
-          <option>Facebook</option>
-          <option>WhatsApp</option>
-          <option>Others</option>
-        </select>
+        <div className="flex-1 min-w-[150px] flex flex-col gap-1">
+          <label className="text-xs font-semibold text-text-secondary ml-1">Source</label>
+          <select
+            value={filters.source}
+            onChange={(e) =>
+              setFilters((prev) => ({ ...prev, source: e.target.value }))
+            }
+            className="w-full px-3 py-2 rounded-md border border-text-primary bg-bg-secondary text-text-primary text-sm focus:border-yellow-500 outline-none"
+          >
+            <option value="">All Sources</option>
+            {SOURCES.map(s => <option key={s} value={s.toLowerCase()}>{s}</option>)}
+          </select>
+        </div>
 
-        <select
-          value={filters.type}
-          onChange={(e) =>
-            setFilters((prev) => ({ ...prev, type: e.target.value }))
-          }
-          className="input text-text-primary bg-bg-secondary border border-text-primary rounded-md"
-        >
-          <option value="">Type</option>
-          <option>Hot</option>
-          <option>Cold</option>
-        </select>
+        <div className="flex-1 min-w-[120px] flex flex-col gap-1">
+          <label className="text-xs font-semibold text-text-secondary ml-1">Type</label>
+          <select
+            value={filters.type}
+            onChange={(e) =>
+              setFilters((prev) => ({ ...prev, type: e.target.value }))
+            }
+            className="w-full px-3 py-2 rounded-md border border-text-primary bg-bg-secondary text-text-primary text-sm focus:border-yellow-500 outline-none"
+          >
+            <option value="">All Types</option>
+            {CLIENT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </div>
 
-        <select
-          value={filters.priority}
-          onChange={(e) =>
-            setFilters((prev) => ({ ...prev, priority: e.target.value }))
-          }
-          className="input text-text-primary bg-bg-secondary border border-text-primary rounded-md"
-        >
-          <option value="">Priority</option>
-          <option>High</option>
-          <option>Medium</option>
-          <option>Low</option>
-        </select>
+        <div className="flex-1 min-w-[120px] flex flex-col gap-1">
+          <label className="text-xs font-semibold text-text-secondary ml-1">Priority</label>
+          <select
+            value={filters.priority}
+            onChange={(e) =>
+              setFilters((prev) => ({ ...prev, priority: e.target.value }))
+            }
+            className="w-full px-3 py-2 rounded-md border border-text-primary bg-bg-secondary text-text-primary text-sm focus:border-yellow-500 outline-none"
+          >
+            <option value="">All Priorities</option>
+            {PRIORITIES.map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
+        </div>
 
-        <select
-          value={filters.response}
-          onChange={(e) =>
-            setFilters((prev) => ({ ...prev, response: e.target.value }))
-          }
-          className="input text-text-primary bg-bg-secondary border border-text-primary rounded-md"
-        >
-          <option value="">Response</option>
-          <option>Interested</option>
-          <option>Medium</option>
-          <option>Not Interested</option>
-        </select>
+        <div className="flex-1 min-w-[150px] flex flex-col gap-1">
+          <label className="text-xs font-semibold text-text-secondary ml-1">Response</label>
+          <select
+            value={filters.response}
+            onChange={(e) =>
+              setFilters((prev) => ({ ...prev, response: e.target.value }))
+            }
+            className="w-full px-3 py-2 rounded-md border border-text-primary bg-bg-secondary text-text-primary text-sm focus:border-yellow-500 outline-none"
+          >
+            <option value="">All Responses</option>
+            {RESPONSES.map(r => <option key={r} value={r}>{r}</option>)}
+          </select>
+        </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex-1 min-w-[150px] flex flex-col gap-1">
+          <label className="text-xs font-semibold text-text-secondary ml-1">State</label>
+          <select
+            value={filters.state}
+            onChange={(e) =>
+              setFilters((prev) => ({ ...prev, state: e.target.value }))
+            }
+            className="w-full px-3 py-2 rounded-md border border-text-primary bg-bg-secondary text-text-primary text-sm focus:border-yellow-500 outline-none"
+          >
+            <option value="">All States</option>
+            {STATES.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </div>
+
+        <div className="flex items-center gap-2 pb-0.5">
           <button
             type="button"
-            className="p-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md"
+            className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md text-sm font-bold shadow-sm transition-all flex items-center gap-2"
           >
-            <Search size={18} />
+            <Search size={16} />
+            Filter
           </button>
 
           <button
             type="button"
             onClick={handleClear}
-            className="p-2 bg-gray-400 hover:bg-gray-500 text-white rounded-md"
+            className="p-2 bg-gray-400 hover:bg-red-500 text-white rounded-md transition-all shadow-sm"
+            title="Clear Filters"
           >
             <X size={18} />
           </button>
@@ -176,4 +207,4 @@ const LeadsFilter = () => {
   );
 };
 
-export default LeadsFilter;
+export default LeadsFilter;
