@@ -1,1 +1,54 @@
 Kleardocs CRM
+https://www.notion.so/2f9fe67c48aa80f3a51fc86a3b4b3112
+
+
+
+
+
+parser
+🧠 WHAT EACH DOES (IMPORTANT)
+🔐 Core Security
+
+helmet → secure headers (XSS, clickjacking protection)
+
+express-rate-limit → prevent brute-force / DDoS
+
+bcrypt → password hashing
+
+jsonwebtoken → authentication
+
+🛡️ Anti-Hacking
+
+express-mongo-sanitize → prevent NoSQL injection
+
+xss-clean → prevent XSS attacks
+
+hpp → prevent parameter pollution
+
+📡 Backend Core
+
+mongoose → DB
+
+cors → control frontend access
+
+dotenv → secure secrets
+
+📂 Files & Email
+
+multer → upload
+
+cloudinary → FREE storage
+
+nodemailer → email
+
+⚙️ Utility
+
+morgan → logging
+
+compression → performance
+
+node-cron → automation
+
+
+
+https://app.eraser.io/workspace/wKBNYit6jrhr6nLcdija?origin=share
