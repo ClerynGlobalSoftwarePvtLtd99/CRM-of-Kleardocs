@@ -1,12 +1,15 @@
 import express from "express";
 import cors from "cors";
-import AuthRoutes from "./routes/auth.routes.js";
+import helmet from "helmet";
+import hpp from "hpp";
+import cookieParser from "cookie-parser";
+import rateLimit from "express-rate-limit";
+import { securityMiddleware } from "./middleware/xss.middleware.js";
+import { errorHandler } from "./middleware/error.middleware.js";
 
-import helmet from "helmet"; //For setting HTTP headers
-import hpp from "hpp"; //For preventing HTTP Parameter Pollution
-import cookieParser from "cookie-parser"; //For parsing cookies
-import rateLimit from "express-rate-limit"; //For rate limiting
-import { securityMiddleware } from "./middleware/xss.middleware.js"; //For XSS and NoSQL injection prevention
+// Routes
+import AuthRoutes from "./routes/auth.routes.js";
+import LeadRoutes from "./routes/lead.routes.js";
 
 const app = express();
 
@@ -22,13 +25,13 @@ const limiter = rateLimit({
 app.use("/api", limiter);
 
 // Middleware
-app.use(express.json({ limit: "50kb" })); // Body parser limit
+app.use(express.json({ limit: "50kb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Anti-Hacking Middlewares
-app.use(hpp()); // Prevent HTTP Parameter Pollution
-app.use(securityMiddleware); // Express 5 In-place XSS and NoSQL injection prevention
+app.use(hpp());
+app.use(securityMiddleware);
 
 // Serve static files to client
 app.use(express.static("public"));
@@ -41,16 +44,14 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
-
-import { errorHandler } from "./middleware/error.middleware.js";
-
-// Routes
+// API Routes
 app.get("/", (req, res) => {
-    res.send("Server is healthy");
+    res.send("Server is healthy ✅");
 });
 app.use("/api/v1/auth", AuthRoutes);
+app.use("/api/v1/leads", LeadRoutes);
 
-// Global Error Handler (must be after routes)
+// Global Error Handler (must be after all routes)
 app.use(errorHandler);
 
-export default app;
+export default app;

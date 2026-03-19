@@ -1,0 +1,22 @@
+{
+  "name": "Add Interaction / Note",
+  "rank": "ay",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347/interaction",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"details\": \"Customer is very interested in Annual Compliance package\",\n  \"phoneCalled\": true\n}\n",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

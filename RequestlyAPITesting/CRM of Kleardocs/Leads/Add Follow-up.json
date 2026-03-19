@@ -1,0 +1,26 @@
+{
+  "name": "Add Follow-up",
+  "rank": "ax",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347/followup ",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"followupDate\": \"2026-04-01\",\n  \"phoneCalled\": true,\n  \"details\": \"Customer asked for callback next week\"\n}\n\n",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3MzkyNTM4NywiZXhwIjoxNzczOTI2Mjg3fQ.93cjvzcq0S2f7BhkOilw_RdP51hfUwXPC7zYsKLBT3Q"
+        }
+      }
+    },
+    "pathVariables": []
+  }
+}

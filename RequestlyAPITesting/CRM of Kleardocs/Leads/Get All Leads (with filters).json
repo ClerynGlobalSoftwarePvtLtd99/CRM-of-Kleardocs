@@ -1,16 +1,26 @@
 {
-  "name": "User login",
+  "name": "Get All Leads (with filters)",
+  "rank": "auntit17739206720211",
   "request": {
     "type": "http",
-    "url": "http://localhost:5000/api/v1/auth/login",
+    "url": "http://localhost:5000/api/v1/leads",
     "scripts": {
       "preRequest": "",
       "postResponse": ""
     },
-    "method": "POST",
-    "queryParams": [],
+    "method": "GET",
+    "queryParams": [
+      {
+        "id": 1773921151485,
+        "key": "search",
+        "value": "John",
+        "isEnabled": true,
+        "description": "",
+        "dataType": "string"
+      }
+    ],
     "headers": [],
-    "body": "{\n  \"email\": \"admin2@kleardocs.com\",\n  \"password\": \"securepassword1234\"\n}",
+    "body": "",
     "contentType": "application/json",
     "auth": {
       "currentAuthType": "BEARER_TOKEN",
@@ -20,6 +30,5 @@
         }
       }
     }
-  },
-  "rank": "auserl17739019758501"
+  }
 }
