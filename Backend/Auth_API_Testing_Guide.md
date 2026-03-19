@@ -71,7 +71,7 @@ This guide provides the exact payloads and configurations needed to test the aut
       "role": "admin",
       "_id": "64bc7d8ef..."
     },
-    "token": "eyJhbGciOiJIUzI1NiIsInR5..."
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5..."
   },
   "message": "User logged in successfully",
   "success": true
@@ -79,12 +79,42 @@ This guide provides the exact payloads and configurations needed to test the aut
 ```
 
 **Important Testing Details:**
-1. Check your Postman/Browser **Cookies** tab after a successful login. You should see a cookie named `token` that has the `HttpOnly` flag marked `true`.
-2. This means you do **not** need to manually copy-paste the token for future API calls in the browser; the browser will auto-attach the cookie for protected routes.
+1. Check your Postman/Browser **Cookies** tab after a successful login. You will see **two** cookies: `accessToken` (expires in 15 mins) and `refreshToken` (expires in 7 days). Both are `HttpOnly`.
+2. The browser will automatically attach `accessToken` to protected routes headers.
 
 ---
 
-## 3. Testing Global Error Handler / Validations
+## 3. Refresh Expired Access Token
+
+Once your 15-minute `accessToken` expires, call this route to automatically generate a brand new set of tokens without requiring the user to type in their password again!
+
+**Endpoint:** `POST /refresh-token`
+**Full URL:** `http://localhost:5000/api/v1/auth/refresh-token`
+**Headers:** 
+- `Content-Type: application/json`
+
+**Body:** *(Optional if you are using browsers/Postman because it automatically sends the `refreshToken` HttpOnly cookie!)*
+```json
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5..."
+}
+```
+
+**Expected Response (200 OK):**
+```json
+{
+  "statusCode": 200,
+  "data": {
+    "accessToken": "eyJhbGciOiJIUzI1..."
+  },
+  "message": "Token refreshed successfully",
+  "success": true
+}
+```
+
+---
+
+## 4. Testing Global Error Handler / Validations
 
 You can intentionally trigger the new error handler using these intentional bad requests:
 

@@ -1,0 +1,21 @@
+{
+  "name": "User register",
+  "rank": "auntit17738972225651",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/auth/register",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"name\": \"Testing Admin2\",\n  \"email\": \"admin2@kleardocs.com\",\n  \"password\": \"securepassword1234\",\n  \"role\": \"admin\" \n}",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

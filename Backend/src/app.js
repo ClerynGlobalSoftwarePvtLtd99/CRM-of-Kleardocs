@@ -2,11 +2,11 @@ import express from "express";
 import cors from "cors";
 import AuthRoutes from "./routes/auth.routes.js";
 
-import helmet from "helmet";
-import hpp from "hpp";
-import cookieParser from "cookie-parser";
-import rateLimit from "express-rate-limit";
-import { securityMiddleware } from "./middleware/xss.middleware.js";
+import helmet from "helmet"; //For setting HTTP headers
+import hpp from "hpp"; //For preventing HTTP Parameter Pollution
+import cookieParser from "cookie-parser"; //For parsing cookies
+import rateLimit from "express-rate-limit"; //For rate limiting
+import { securityMiddleware } from "./middleware/xss.middleware.js"; //For XSS and NoSQL injection prevention
 
 const app = express();
 
@@ -22,7 +22,7 @@ const limiter = rateLimit({
 app.use("/api", limiter);
 
 // Middleware
-app.use(express.json({ limit: "10kb" })); // Body parser limit
+app.use(express.json({ limit: "50kb" })); // Body parser limit
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -30,11 +30,14 @@ app.use(cookieParser());
 app.use(hpp()); // Prevent HTTP Parameter Pollution
 app.use(securityMiddleware); // Express 5 In-place XSS and NoSQL injection prevention
 
+// Serve static files to client
 app.use(express.static("public"));
+
+// CORS Configuration
 app.use(cors({
-    origin: process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',') : ["http://localhost:5173", "http://localhost:5000"],
+    origin: process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',') : ["http://localhost:5173"],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
 

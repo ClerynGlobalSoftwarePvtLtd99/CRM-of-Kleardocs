@@ -54,6 +54,21 @@ node-cron → automation
 https://app.eraser.io/workspace/wKBNYit6jrhr6nLcdija?origin=share
 git pull origin main --no-edit
 git push origin main
+===================
+# 1. Make sure you are on your branch
+git checkout sanjoy-developer
+
+# 2. Add all the new security code and structural files we created
+git add .
+
+# 3. Save (commit) these updates locally
+git commit -m "feat: Implement full Auth module with Express 5 security middlewares"
+
+# 4. Pull any new updates from the main branch into your branch
+git pull origin main --no-edit
+
+# 5. Push all your code up to GitHub
+git push origin sanjoy-developer
 
 
 

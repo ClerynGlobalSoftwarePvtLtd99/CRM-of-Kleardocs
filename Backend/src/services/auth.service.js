@@ -27,14 +27,61 @@ export const loginUser = async (data) => {
   const user = await User.findOne({ email });
   if (!user) throw new ApiError(401, "Invalid email or password");
 
+  if (!user.active) throw new ApiError(403, "Your account is deactivated. Please contact support.");
+  if (user.deletedAt) throw new ApiError(403, "This account no longer exists.");
+
   const match = await bcrypt.compare(password, user.password);
   if (!match) throw new ApiError(401, "Invalid email or password");
 
-  const token = jwt.sign(
+  const accessToken = jwt.sign(
     { id: user._id, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN || "15m" }
   );
 
-  return { user, token };
+  const refreshToken = jwt.sign(
+    { id: user._id },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || "7d" }
+  );
+
+  user.refreshToken = refreshToken;
+  await user.save();
+
+  return { user, accessToken, refreshToken };
+};
+
+export const refreshAccessToken = async (incomingRefreshToken) => {
+  if (!incomingRefreshToken) throw new ApiError(401, "Refresh token is generally required");
+
+  // Verify the refresh token cryptographically
+  const decoded = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+
+  // Find user and verify the token wasn't revoked/replaced in DB
+  const user = await User.findOne({ _id: decoded.id, refreshToken: incomingRefreshToken });
+  if (!user) {
+    throw new ApiError(403, "Invalid or revoked refresh token");
+  }
+
+  // Check if they were fully banned since the refresh token was issued
+  if (!user.active || user.deletedAt) throw new ApiError(403, "This account is inactive or deleted");
+
+  // Generate new tokens
+  const accessToken = jwt.sign(
+    { id: user._id, role: user.role },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN || "15m" }
+  );
+
+  const refreshToken = jwt.sign(
+    { id: user._id },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || "7d" }
+  );
+
+  // Update DB 
+  user.refreshToken = refreshToken;
+  await user.save();
+
+  return { accessToken, refreshToken };
 };

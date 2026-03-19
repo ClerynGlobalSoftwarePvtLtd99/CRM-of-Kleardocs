@@ -1,0 +1,21 @@
+{
+  "name": "User login",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/auth/login",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"email\": \"admin2@kleardocs.com\",\n  \"password\": \"securepassword1234\"\n}",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  },
+  "rank": "auserl17739019758501"
+}
