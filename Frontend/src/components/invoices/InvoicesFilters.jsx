@@ -13,6 +13,10 @@ const InvoicesFilters = ({
   setValue,
   onFilter,
   onClear,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
 }) => {
   return (
     <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] p-4 rounded-xl mb-6">
@@ -31,7 +35,14 @@ const InvoicesFilters = ({
 
         {/* Date Range Picker */}
         <div className="w-full xl:w-auto shrink-0 z-50">
-          <DateRangePicker />
+          <DateRangePicker 
+            startDate={startDate}
+            endDate={endDate}
+            onRangeChange={(start, end) => {
+              setStartDate(start)
+              setEndDate(end)
+            }}
+          />
         </div>
 
         {/* Type Dropdown */}

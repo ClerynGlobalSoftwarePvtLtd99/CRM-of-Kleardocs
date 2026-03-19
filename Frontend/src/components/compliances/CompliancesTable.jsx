@@ -1,71 +1,94 @@
-
+import React from 'react'
 
 const CompliancesTable = ({ data }) => {
   return (
-    <div className="w-full">
+    <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl overflow-hidden shadow-sm flex flex-col h-[65vh] min-h-[400px]">
+      <div className="overflow-auto scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] flex-1 px-4">
+        <table className="w-full text-left relative" style={{ borderSpacing: '0 10px', borderCollapse: 'separate' }}>
+          <thead>
+            <tr className="text-[var(--color-text-secondary)] text-sm uppercase tracking-wider">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Customer Name
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Customer Company
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Compliance Name
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm text-center">
+                Expiry
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm text-center">
+                Status
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm text-center">
+                Completed
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Accountant
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {(data && data.length > 0) ? (
+              data.map((row) => (
+                <tr key={row.id} className="bg-[var(--color-bg-primary)] hover:bg-[var(--color-bg-tertiary)] transition-colors group rounded-md shadow-sm">
+                  {/* Customer Name + Phone */}
+                  <td className="px-1.5 py-3 text-sm rounded-l-lg">
+                    <div className="font-medium text-[var(--color-text-primary)]">
+                      {row.customerName}
+                    </div>
+                    <div className="text-[var(--color-text-secondary)] text-xs">{row.phone}</div>
+                  </td>
 
-      {/* Table Header */}
-      <div className="grid grid-cols-[1.5fr_1.5fr_2fr_1fr_1fr_1fr_1fr] font-semibold text-text-primary mb-3 px-6">
-        <div>Customer Name</div>
-        <div>Customer Company</div>
-        <div>Compliance Name</div>
-        <div>Expiry</div>
-        <div>Status</div>
-        <div>Completed</div>
-        <div>Accountant</div>
+                  {/* Company */}
+                  <td className="px-1.5 py-3 text-sm text-[var(--color-text-secondary)]">
+                    {row.company}
+                  </td>
+
+                  {/* Compliance */}
+                  <td className="px-1.5 py-3 text-sm text-[var(--color-text-secondary)] truncate">
+                    {row.compliance}
+                  </td>
+
+                  {/* Expiry */}
+                  <td className="px-1.5 py-3 text-sm text-center text-green-500 font-medium">
+                    {row.expiry}
+                  </td>
+
+                  {/* Status */}
+                  <td className="px-1.5 py-3 text-sm text-center">
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium 
+                      ${row.status === 'Completed' ? 'bg-green-500/10 text-green-500' : 'bg-orange-500/10 text-orange-500'}
+                    `}>
+                      {row.status}
+                    </span>
+                  </td>
+
+                  {/* Completed */}
+                  <td className="px-1.5 py-3 text-sm text-center text-[var(--color-text-secondary)]">
+                    {row.completed || "-"}
+                  </td>
+
+                  {/* Accountant */}
+                  <td className="px-1.5 py-3 text-sm rounded-r-lg text-[var(--color-text-secondary)]">
+                    {row.accountant}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7" className="px-4 py-10 text-center text-[var(--color-text-secondary)] bg-[var(--color-bg-primary)] rounded-lg">
+                  No data found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
-
-      {/* Table Rows */}
-      <div className="space-y-4">
-        {data && data.length > 0 ? (
-          data.map((row) => (
-            <div
-              key={row.id}
-              className="grid grid-cols-[1.5fr_1.5fr_2fr_1fr_1fr_1fr_1fr] bg-bg-primary rounded-xl px-6 py-4 shadow-sm items-center"
-            >
-              
-              {/* Customer Name + Phone */}
-              <div>
-                <div className="font-semibold text-gray-900">
-                  {row.customerName}
-                </div>
-                <div className="text-bg-tertiary text-sm">{row.phone}</div>
-              </div>
-
-              {/* Company */}
-              <div className="text-bg-tertiary">{row.company}</div>
-
-              {/* Compliance */}
-              <div className="text-bg-tertiary truncate">
-                {row.compliance}
-              </div>
-
-              {/* Expiry */}
-              <div className="text-green-600 font-medium">
-                {row.expiry}
-              </div>
-
-              {/* Status */}
-              <div className="text-bg-tertiary">{row.status}</div>
-
-              {/* Completed */}
-              <div className="text-bg-tertiary">
-                {row.completed ? row.completed : "-"}
-              </div>
-
-              {/* Accountant */}
-              <div className="text-bg-tertiary">{row.accountant}</div>
-            </div>
-          ))
-        ) : (
-          <div className="text-center text-bg-tertiary py-10 bg-bg-secondary rounded-xl shadow-sm">
-            No data found
-          </div>
-        )}
-      </div>
-
     </div>
-  );
-};
+  )
+}
 
-export default CompliancesTable;
+export default CompliancesTable

@@ -10,37 +10,37 @@ const InvoicesTable = ({ invoices }) => {
         <table className="w-full text-left relative" style={{ borderSpacing: '0 10px', borderCollapse: 'separate' }}>
           <thead>
             <tr className="text-text-secondary text-sm uppercase tracking-wider">
-              <th className="sticky top-0 z-20 bg-bg-secondary px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-bg-secondary px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
                 Logo
               </th>
-              <th className="sticky top-0 z-20 bg-bg-secondary px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
-                Invoice No
+              <th className="sticky top-0 z-20 bg-bg-secondary px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Inv. No
               </th>
-              <th className="sticky top-0 z-20 bg-bg-secondary px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
-                Invoice Date
+              <th className="sticky top-0 z-20 bg-bg-secondary px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Date
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
-                Customer Name & Company
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Customer & Company
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
-                Linked Service
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Service
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium text-right shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium text-right shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
                 Price
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium text-right shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium text-right shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
                 GST
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium text-right shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium text-right shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
                 Total
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium text-right shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium text-right shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
                 Due
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
                 Details
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
                 PDF
               </th>
             </tr>
@@ -48,18 +48,18 @@ const InvoicesTable = ({ invoices }) => {
           <tbody>
             {invoices.map((inv) => (
               <tr key={inv.id} className="bg-[var(--color-bg-primary)] hover:bg-[var(--color-bg-tertiary)] transition-colors group rounded-md shadow-sm">
-                <td className="px-4 py-3 text-sm rounded-l-lg">
-                  <CompanyLogo name={inv.customerCompany || inv.customerName} size="w-10 h-10" />
+                <td className="px-1.5 py-3 text-sm rounded-l-lg">
+                  <CompanyLogo name={inv.customerCompany || inv.customerName} size="w-8 h-8" />
                 </td>
-                <td className="px-4 py-3 text-sm text-[var(--color-text-primary)] font-medium">
+                <td className="px-1.5 py-3 text-sm text-[var(--color-text-primary)] font-medium">
                   <Link to={`/invoice/${inv.invoiceId}`} className="hover:text-[var(--color-accent)] transition-colors underline decoration-[var(--color-bg-tertiary)] underline-offset-4 hover:decoration-[var(--color-accent)] break-words">
                     {inv.invoiceNo}
                   </Link>
                 </td>
-                <td className="px-4 py-3 text-sm text-[var(--color-text-secondary)]">
-                  {inv.invoiceDate}
+                <td className="px-1.5 py-3 text-sm text-[var(--color-text-secondary)] whitespace-nowrap">
+                  {inv.invoiceDate.replace(/(\d+)(st|nd|rd|th)/, '$1')}
                 </td>
-                <td className="px-4 py-3 text-sm">
+                <td className="px-1.5 py-3 text-sm">
                   <div className="flex flex-col gap-0.5 w-full">
                     <Link to={`/customer/${inv.customerId}`} className="font-medium text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors underline decoration-[var(--color-bg-tertiary)] underline-offset-4 hover:decoration-[var(--color-accent)] break-words" title={inv.customerName}>
                       {inv.customerName}
@@ -67,23 +67,23 @@ const InvoicesTable = ({ invoices }) => {
                     <span className="text-xs text-[var(--color-text-secondary)] break-words" title={inv.customerCompany}>{inv.customerCompany}</span>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-sm text-[var(--color-text-secondary)]">
+                <td className="px-1.5 py-3 text-sm text-[var(--color-text-secondary)] truncate max-w-[150px]">
                   {inv.linkedService}
                 </td>
-                <td className="px-4 py-3 text-sm text-right font-medium text-[var(--color-text-primary)] whitespace-nowrap">
+                <td className="px-1.5 py-3 text-sm text-right font-medium text-[var(--color-text-primary)] whitespace-nowrap">
                   {inv.price}
                 </td>
-                <td className="px-4 py-3 text-sm text-right font-medium text-[var(--color-text-secondary)] whitespace-nowrap">
+                <td className="px-1.5 py-3 text-sm text-right font-medium text-[var(--color-text-secondary)] whitespace-nowrap">
                   {inv.gst}
                 </td>
-                <td className="px-4 py-3 text-sm text-right font-semibold text-[var(--color-text-primary)] whitespace-nowrap">
+                <td className="px-1.5 py-3 text-sm text-right font-semibold text-[var(--color-text-primary)] whitespace-nowrap">
                   {inv.total}
                 </td>
-                <td className="px-4 py-3 text-sm text-right font-semibold text-red-500 whitespace-nowrap">
+                <td className="px-1.5 py-3 text-sm text-right font-semibold text-red-500 whitespace-nowrap">
                   {inv.due}
                 </td>
-                <td className="px-4 py-3 text-center">
-                  <Link to={`/invoice/${inv.invoiceId}`} className="px-4 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md text-xs font-semibold shadow-sm transition-colors cursor-pointer inline-block">
+                <td className="px-1.5 py-3 text-center">
+                  <Link to={`/invoice/${inv.invoiceId}`} className="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md text-sm font-semibold shadow-sm transition-colors cursor-pointer inline-block">
                     Details
                   </Link>
                 </td>

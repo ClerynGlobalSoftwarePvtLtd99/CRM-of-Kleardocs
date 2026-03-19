@@ -6,9 +6,9 @@ import {
   CLIENT_TYPES, 
   PRIORITIES, 
   RESPONSES,
-  STATES
+  STATES_AND_UTS
 } from "../../utils/constants";
-import DateRangeFilter from "../compliances/DateRangeFilter";
+import DateRangePicker from "../DateRangePicker";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -16,8 +16,8 @@ const LeadsFilter = () => {
   const initialFilters = {
     search: "",
     dateType: "Created",
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: null,
+    endDate: null,
     service: "",
     agent: "",
     source: "",
@@ -70,21 +70,16 @@ const LeadsFilter = () => {
 
         <div className="fieldset-input !mt-0">
           <span className="fieldset-label uppercase">Date Range</span>
-          <DateRangeFilter
-            value={{
-              startDate: filters.startDate,
-              endDate: filters.endDate,
-            }}
-            onChange={({ startDate, endDate }) =>
+          <DateRangePicker
+            startDate={filters.startDate}
+            endDate={filters.endDate}
+            onRangeChange={(startDate, endDate) =>
               setFilters((prev) => ({
                 ...prev,
                 startDate,
                 endDate,
               }))
             }
-            months={2}
-            className="left-0"
-            inputClassName="w-full px-3 py-2 rounded-md border border-text-primary bg-bg-secondary text-text-primary text-sm font-bold focus:border-yellow-500 outline-none"
           />
         </div>
 
@@ -176,7 +171,7 @@ const LeadsFilter = () => {
         </div>
 
         <div className="flex-1 min-w-[180px] fieldset-input !mt-0">
-          <span className="fieldset-label uppercase">State</span>
+          <span className="fieldset-label uppercase">State & UT</span>
           <select
             value={filters.state}
             onChange={(e) =>
@@ -184,8 +179,8 @@ const LeadsFilter = () => {
             }
             className="w-full !font-bold !text-sm"
           >
-            <option value="">All States</option>
-            {STATES.map(s => <option key={s} value={s}>{s}</option>)}
+            <option value="">All States & UTs</option>
+            {STATES_AND_UTS.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
         </div>
 

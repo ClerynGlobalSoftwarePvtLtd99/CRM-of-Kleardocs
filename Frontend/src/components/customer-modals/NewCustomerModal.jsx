@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X, UserPlus, Building2, Phone, MapPin, Calendar, Globe, FileText, Briefcase, Plus } from "lucide-react";
-import { STATES, COMPANY_TYPES, AGENTS } from "../../utils/constants";
+import { STATES_AND_UTS, COMPANY_TYPES, AGENTS } from "../../utils/constants";
 import toast from "react-hot-toast";
 
 const NewCustomerModal = ({ onClose, onAdd }) => {
@@ -112,9 +112,9 @@ const NewCustomerModal = ({ onClose, onAdd }) => {
 
             {/* STATE & GST */}
             <div className="fieldset-input">
-              <span className="fieldset-label">State *</span>
+              <span className="fieldset-label">State & UT *</span>
               <select name="state" value={formData.state} onChange={handleChange} required>
-                {STATES.map((state) => <option key={state} value={state}>{state}</option>)}
+                {STATES_AND_UTS.map((state) => <option key={state} value={state}>{state}</option>)}
               </select>
             </div>
             <div className="fieldset-input">

@@ -488,6 +488,8 @@ const Invoices = () => {
   const [type, setType] = useState('')
   const [func, setFunc] = useState('')
   const [value, setValue] = useState('')
+  const [startDate, setStartDate] = useState(null)
+  const [endDate, setEndDate] = useState(null)
 
   const extractNumber = (str) => {
     return parseFloat(str.replace(/[^0-9.-]+/g, ''))
@@ -524,6 +526,15 @@ const Invoices = () => {
       }
     }
 
+    if (startDate && endDate) {
+      filteredData = filteredData.filter((inv) => {
+        // Simple date parsing for "13th Mar 2026"
+        const dateStr = inv.invoiceDate.replace(/(\d+)(st|nd|rd|th)/, '$1')
+        const invDate = new Date(dateStr)
+        return invDate >= startDate && invDate <= endDate
+      })
+    }
+
     setInvoices(filteredData)
   }
 
@@ -532,11 +543,13 @@ const Invoices = () => {
     setType('')
     setFunc('')
     setValue('')
+    setStartDate(null)
+    setEndDate(null)
     setInvoices(INITIAL_INVOICES)
   }
 
   return (
-    <div className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-[100vw] text-[var(--color-text-primary)]">
+    <div className="flex-1 p-4 md:p-8 w-full text-[var(--color-text-primary)]">
       <InvoicesHeader counts={2295} />
 
       <InvoicesFilters
@@ -550,6 +563,10 @@ const Invoices = () => {
         setValue={setValue}
         onFilter={handleFilter}
         onClear={handleClear}
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
       />
 
       <InvoicesTable invoices={invoices} />

@@ -45,6 +45,8 @@ const AccountantJobs = () => {
   const [dateTypeFilter, setDateTypeFilter] = useState('Created')
   const [statusFilter, setStatusFilter] = useState('')
   const [accountantFilter, setAccountantFilter] = useState('')
+  const [startDate, setStartDate] = useState(null)
+  const [endDate, setEndDate] = useState(null)
 
   // Form states for Add/Edit
   const [formData, setFormData] = useState({
@@ -116,6 +118,9 @@ const AccountantJobs = () => {
     e.preventDefault()
     const updatedJobs = jobs.map(j => {
       if (j.id === selectedJob.id) {
+        const now = new Date();
+        const formattedDate = `${now.getDate()} ${now.toLocaleString('en-US', { month: 'short' })} ${now.getFullYear()} ${now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase()}`;
+        
         return {
           ...j,
           jobName: formData.jobTitle,
@@ -123,6 +128,8 @@ const AccountantJobs = () => {
           companyName: formData.customer,
           expiry: formData.hasExpiryDate ? formData.expiryDate : '-',
           status: formData.status,
+          // Auto-stamp date if status is Done and date was empty
+          completedDate: formData.status === 'Done' ? (j.completedDate === '-' ? formattedDate : j.completedDate) : '-',
           accountant: formData.accountant
         }
       }
@@ -138,7 +145,7 @@ const AccountantJobs = () => {
   }
 
   return (
-    <div className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-[100vw] text-[var(--color-text-primary)]">
+    <div className="flex-1 p-4 md:p-8 w-full text-[var(--color-text-primary)]">
       
       <AccountantJobsHeader 
         jobsCount={jobs.length} 
@@ -154,6 +161,10 @@ const AccountantJobs = () => {
         setStatusFilter={setStatusFilter}
         accountantFilter={accountantFilter}
         setAccountantFilter={setAccountantFilter}
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
         STATUSES={STATUSES}
         ACCOUNTANTS={ACCOUNTANTS}
       />

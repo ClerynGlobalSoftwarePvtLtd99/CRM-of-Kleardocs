@@ -434,7 +434,7 @@ const Templates = () => {
   }
 
   return (
-    <div className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-[100vw] text-[var(--color-text-primary)]">
+    <div className="flex-1 p-4 md:p-8 w-full text-[var(--color-text-primary)]">
       <TemplatesHeader count={templates.length} onAddClick={openAddModal} />
       <TemplatesFilters
         searchFilter={searchFilter}

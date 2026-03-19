@@ -35,6 +35,16 @@ const formatDate = (date) => {
   return `${m} ${d}, ${y}`
 }
 
+const nextMonth = (current) => {
+  if (current.month === 11) return { year: current.year + 1, month: 0 }
+  return { year: current.year, month: current.month + 1 }
+}
+
+const prevMonth = (current) => {
+  if (current.month === 0) return { year: current.year - 1, month: 11 }
+  return { year: current.year, month: current.month - 1 }
+}
+
 const DatePickerMonth = ({
   year,
   month,
@@ -133,24 +143,59 @@ const DatePickerMonth = ({
   )
 }
 
-const DateRangePicker = () => {
+const DateRangePicker = ({
+  startDate,
+  endDate,
+  onRangeChange,
+  placeholder = 'Select Date Range'
+}) => {
   const [isOpen, setIsOpen] = useState(false)
   const popoverRef = useRef(null)
 
-  const defaultStart = new Date(2026, 2, 1)
-  const defaultEnd = new Date(2026, 2, 31)
-
-  const [dateRange, setDateRange] = useState({
-    start: defaultStart,
-    end: defaultEnd,
-  })
   const [tempRange, setTempRange] = useState({
-    start: defaultStart,
-    end: defaultEnd,
+    start: startDate || null,
+    end: endDate || null,
   })
 
-  const [leftMonth, setLeftMonth] = useState({ year: 2026, month: 2 })
-  const [rightMonth, setRightMonth] = useState({ year: 2026, month: 3 })
+  const initialLeft = { 
+    year: (startDate || new Date()).getFullYear(), 
+    month: (startDate || new Date()).getMonth() 
+  }
+  const [leftMonth, setLeftMonth] = useState(initialLeft)
+
+  const getInitialRight = () => {
+    if (endDate) {
+      const endM = endDate.getMonth()
+      const endY = endDate.getFullYear()
+      // Show end date's month if it's after the start date's month
+      if (endY > initialLeft.year || (endY === initialLeft.year && endM > initialLeft.month)) {
+        return { year: endY, month: endM }
+      }
+    }
+    return nextMonth(initialLeft)
+  }
+
+  const [rightMonth, setRightMonth] = useState(getInitialRight())
+
+  // Ensure months are different if dates are available
+  useEffect(() => {
+    if (startDate && endDate) {
+      const startM = startDate.getMonth()
+      const startY = startDate.getFullYear()
+      const endM = endDate.getMonth()
+      const endY = endDate.getFullYear()
+      
+      setLeftMonth({ year: startY, month: startM })
+      
+      // If same month, set right to next month
+      if (startY === endY && startM === endM) {
+        const next = nextMonth({ year: endY, month: endM })
+        setRightMonth(next)
+      } else {
+        setRightMonth({ year: endY, month: endM })
+      }
+    }
+  }, [startDate, endDate])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -164,9 +209,9 @@ const DateRangePicker = () => {
 
   useEffect(() => {
     if (isOpen) {
-      setTempRange(dateRange)
+      setTempRange({ start: startDate, end: endDate })
     }
-  }, [isOpen, dateRange])
+  }, [isOpen, startDate, endDate])
 
   const handleDateClick = (d) => {
     if (!tempRange.start || (tempRange.start && tempRange.end)) {
@@ -184,82 +229,55 @@ const DateRangePicker = () => {
     const actualToday = new Date()
     actualToday.setHours(0, 0, 0, 0)
 
+    let start, end;
     if (preset === 'Today') {
-      setTempRange({ start: actualToday, end: actualToday })
-      setLeftMonth({
-        year: actualToday.getFullYear(),
-        month: actualToday.getMonth(),
-      })
-      let nextM = actualToday.getMonth() + 1
-      let nextY = actualToday.getFullYear()
-      if (nextM > 11) {
-        nextM = 0
-        nextY++
-      }
-      setRightMonth({ year: nextY, month: nextM })
+      start = end = actualToday
     } else if (preset === 'Yesterday') {
-      const y = new Date(actualToday)
-      y.setDate(y.getDate() - 1)
-      setTempRange({ start: y, end: y })
-      setLeftMonth({ year: y.getFullYear(), month: y.getMonth() })
-      let nextM = y.getMonth() + 1
-      let nextY = y.getFullYear()
-      if (nextM > 11) {
-        nextM = 0
-        nextY++
-      }
-      setRightMonth({ year: nextY, month: nextM })
+      start = end = new Date(actualToday)
+      start.setDate(start.getDate() - 1)
     } else if (preset === 'Last 7 Days') {
-      const start = new Date(actualToday)
+      end = actualToday
+      start = new Date(actualToday)
       start.setDate(start.getDate() - 6)
-      setTempRange({ start, end: actualToday })
-      setLeftMonth({ year: start.getFullYear(), month: start.getMonth() })
-      let nextM = start.getMonth() + 1
-      let nextY = start.getFullYear()
-      if (nextM > 11) {
-        nextM = 0
-        nextY++
-      }
-      setRightMonth({ year: nextY, month: nextM })
+    }
+    
+    if (start && end) {
+      setTempRange({ start, end })
+      setLeftMonth({ year: start.getFullYear(), month: start.month })
+      setRightMonth(nextMonth({ year: start.getFullYear(), month: start.month }))
     }
   }
 
   const handleConfirm = () => {
     if (tempRange.start && tempRange.end) {
-      setDateRange(tempRange)
+      if (onRangeChange) {
+        onRangeChange(tempRange.start, tempRange.end)
+      }
       setIsOpen(false)
     }
   }
 
   const handleClear = (e) => {
     e.stopPropagation()
-    setTempRange({ start: null, end: null })
+    if (onRangeChange) {
+      onRangeChange(null, null)
+    }
     if (!isOpen) {
-      setDateRange({ start: null, end: null })
+      setTempRange({ start: null, end: null })
     }
   }
 
   const displayString =
-    dateRange.start && dateRange.end
-      ? `${formatDate(dateRange.start)} - ${formatDate(dateRange.end)}`
-      : 'Select Date Range'
+    startDate && endDate
+      ? `${formatDate(startDate)} - ${formatDate(endDate)}`
+      : placeholder
 
   const tempDisplayString =
     tempRange.start && tempRange.end
       ? `${formatDate(tempRange.start)} - ${formatDate(tempRange.end)}`
       : tempRange.start
         ? `${formatDate(tempRange.start)} - Select Date`
-        : 'Select Date Range'
-
-  const nextMonth = (current) => {
-    if (current.month === 11) return { year: current.year + 1, month: 0 }
-    return { year: current.year, month: current.month + 1 }
-  }
-
-  const prevMonth = (current) => {
-    if (current.month === 0) return { year: current.year - 1, month: 11 }
-    return { year: current.year, month: current.month - 1 }
-  }
+        : placeholder
 
   return (
     <div className="relative w-full" ref={popoverRef}>
@@ -274,10 +292,10 @@ const DateRangePicker = () => {
           </span>
         </div>
 
-        {dateRange.start && dateRange.end ? (
+        {startDate && endDate ? (
           <X
             size={16}
-            className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors ml-1 shrink-0"
+            className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors ml-1 shrink-0 cursor-pointer"
             onClick={handleClear}
           />
         ) : (
@@ -328,7 +346,7 @@ const DateRangePicker = () => {
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-2">
               <div className="flex flex-wrap justify-center gap-2 text-sm">
                 {['Today', 'Yesterday', 'Last 7 Days'].map(preset => (
-                  <button
+                   <button
                     key={preset}
                     type="button"
                     onClick={() => handlePreset(preset)}
