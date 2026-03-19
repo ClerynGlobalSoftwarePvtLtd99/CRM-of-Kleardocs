@@ -3,7 +3,7 @@ import { X, UserPlus, Building2, Phone, MapPin, Calendar, Globe, FileText, Brief
 import { STATES, COMPANY_TYPES, AGENTS } from "../../utils/constants";
 import toast from "react-hot-toast";
 
-const NewCustomerModal = ({ onClose }) => {
+const NewCustomerModal = ({ onClose, onAdd }) => {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -15,7 +15,7 @@ const NewCustomerModal = ({ onClose }) => {
     incorporationDate: new Date().toISOString().split('T')[0],
     onboardingDate: new Date().toISOString().split('T')[0],
     newlyIncorporated: false,
-    salesBy: "Ritu Kaur",
+    salesBy: AGENTS[0],
   });
 
   const handleChange = (e) => {
@@ -28,13 +28,31 @@ const NewCustomerModal = ({ onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("New Customer Data:", formData);
+    
+    const newCustomer = {
+      ...formData,
+      id: Math.random().toString(36).substr(2, 9), // Simple ID generation
+      customerName: formData.name, // Mapping 'name' to 'customerName' as used in Customers.jsx
+      onboardingDate: new Date(formData.onboardingDate).toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      }).replace(/\//g, '-'),
+      incorporationDate: new Date(formData.incorporationDate).toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      }).replace(/\//g, '-'),
+      logo: null,
+    };
+
+    onAdd(newCustomer);
     toast.success("New Customer added successfully!");
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="w-full max-w-2xl rounded-lg border border-bg-tertiary bg-bg-secondary text-text-primary shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between border-b border-bg-tertiary px-8 py-5">
           <h2 className="text-2xl font-normal">Add New Customer</h2>
