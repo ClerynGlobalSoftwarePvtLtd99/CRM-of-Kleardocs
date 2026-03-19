@@ -12,7 +12,7 @@ import {
 import { 
   SERVICES, 
   SOURCES, 
-  STATES, 
+  STATES_AND_UTS, 
   AGENTS, 
   CLIENT_TYPES, 
   PRIORITIES 
@@ -282,7 +282,7 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
 
             <div>
               <label className="mb-1 block text-sm font-medium text-text-primary">
-                State
+                State & UT
               </label>
               <select
                 name="state"
@@ -290,8 +290,8 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
                 onChange={handleChange}
                 className="w-full rounded-md border border-text-primary bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-yellow-500"
               >
-                <option value="">Select state</option>
-                {STATES.map((state) => (
+                <option value="">Select State / UT</option>
+                {STATES_AND_UTS.map((state) => (
                   <option key={state} value={state}>
                     {state}
                   </option>

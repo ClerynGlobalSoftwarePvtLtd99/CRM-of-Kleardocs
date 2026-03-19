@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { X, Check } from "lucide-react";
 import { AGENTS } from "../../utils/constants";
+import { format } from "date-fns";
 
 const ModifyComplianceModal = ({ compliance, onClose, onUpdate }) => {
   const [formData, setFormData] = useState({
@@ -10,7 +11,29 @@ const ModifyComplianceModal = ({ compliance, onClose, onUpdate }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onUpdate({ ...compliance, ...formData });
+    const updatedComp = { ...compliance, ...formData };
+    
+    // Normalize status for comparisons
+    const currentStatus = formData.status;
+    const previousStatus = compliance?.status;
+    
+    const isFinished = currentStatus === 'Completed' || currentStatus === 'Done';
+    const wasFinished = previousStatus === 'Completed' || previousStatus === 'Done';
+
+    // Automatically set completion date if status is changed to a finished state
+    if (isFinished && !wasFinished) {
+      updatedComp.completedOn = format(new Date(), 'do MMM yyyy');
+    } 
+    // If it's already finished but date is missing, fill it in
+    else if (isFinished && (!updatedComp.completedOn || updatedComp.completedOn === '-')) {
+      updatedComp.completedOn = format(new Date(), 'do MMM yyyy');
+    }
+    // If we changed status away from finished, clear the date
+    else if (!isFinished && wasFinished) {
+      updatedComp.completedOn = "-";
+    }
+    
+    onUpdate(updatedComp);
     onClose();
   };
 
@@ -33,6 +56,7 @@ const ModifyComplianceModal = ({ compliance, onClose, onUpdate }) => {
             >
               <option>To Be Done</option>
               <option>Ongoing</option>
+              <option>Completed</option>
               <option>Done</option>
             </select>
           </div>

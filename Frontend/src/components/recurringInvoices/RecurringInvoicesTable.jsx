@@ -9,31 +9,31 @@ const RecurringInvoicesTable = ({ invoices }) => {
         <table className="w-full text-left relative" style={{ borderSpacing: '0 10px', borderCollapse: 'separate' }}>
           <thead>
             <tr className="text-[var(--color-text-secondary)] text-sm uppercase tracking-wider">
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
                 Created
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
-                Customer Name & Company
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Customer & Company
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
-                Linked Services
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Services
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
-                Start Date
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Start
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
-                End Date
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                End
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
                 Interval
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)]">
-                Next Invoice Date
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Next Inv.
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
                 Status
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
                 Details
               </th>
             </tr>
@@ -41,39 +41,39 @@ const RecurringInvoicesTable = ({ invoices }) => {
           <tbody>
             {invoices.map((inv) => (
               <tr key={inv.id} className="bg-[var(--color-bg-primary)] hover:bg-[var(--color-bg-tertiary)] transition-colors group rounded-md shadow-sm">
-                <td className="px-4 py-3 text-sm rounded-l-lg text-[var(--color-text-secondary)] min-w-[100px]">
-                  {inv.created}
+                <td className="px-1.5 py-3 text-sm rounded-l-lg text-[var(--color-text-secondary)] whitespace-nowrap">
+                  {inv.created.replace(/(\d+)(st|nd|rd|th)/, '$1')}
                 </td>
-                <td className="px-4 py-3 text-sm">
-                  <div className="flex flex-col gap-0.5 w-full min-w-[150px]">
+                <td className="px-1.5 py-3 text-sm">
+                  <div className="flex flex-col gap-0.5 w-full">
                     <Link to={`/customer/${inv.customerId}`} className="font-medium text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors underline decoration-[var(--color-bg-tertiary)] underline-offset-4 hover:decoration-[var(--color-accent)] break-words" title={inv.customerName}>
                       {inv.customerName}
                     </Link>
                     <span className="text-xs text-[var(--color-text-secondary)] break-words" title={inv.customerCompany}>{inv.customerCompany}</span>
                   </div>
                 </td>
-                <td className="px-4 py-3 text-sm text-[var(--color-text-secondary)] min-w-[100px]">
+                <td className="px-1.5 py-3 text-sm text-[var(--color-text-secondary)]">
                   {inv.linkedServices}
                 </td>
-                <td className="px-4 py-3 text-sm text-[var(--color-text-secondary)] min-w-[90px]">
-                  {inv.startDate}
+                <td className="px-1.5 py-3 text-sm text-[var(--color-text-secondary)] whitespace-nowrap">
+                  {inv.startDate.replace(/(\d+)(st|nd|rd|th)/, '$1')}
                 </td>
-                <td className="px-4 py-3 text-sm text-[var(--color-text-secondary)] min-w-[90px]">
-                  {inv.endDate}
+                <td className="px-1.5 py-3 text-sm text-[var(--color-text-secondary)] whitespace-nowrap">
+                  {inv.endDate.replace(/(\d+)(st|nd|rd|th)/, '$1')}
                 </td>
-                <td className="px-4 py-3 text-sm text-[var(--color-text-secondary)] min-w-[80px]">
+                <td className="px-1.5 py-3 text-sm text-[var(--color-text-secondary)]">
                   {inv.interval}
                 </td>
-                <td className="px-4 py-3 text-sm text-[var(--color-text-secondary)] min-w-[100px]">
-                  {inv.nextInvoiceDate}
+                <td className="px-1.5 py-3 text-sm text-[var(--color-text-secondary)] whitespace-nowrap">
+                  {inv.nextInvoiceDate.replace(/(\d+)(st|nd|rd|th)/, '$1')}
                 </td>
                 <td className="px-4 py-3 text-sm text-center">
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${inv.status.toLowerCase() === 'active' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
                     {inv.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 rounded-r-lg font-semibold text-center">
-                  <Link to={`/customer/${inv.customerId}`} className="px-4 py-1.5 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md text-xs font-semibold shadow-sm transition-colors cursor-pointer text-white">
+                <td className="px-1.5 py-3 rounded-r-lg font-semibold text-center">
+                  <Link to={`/customer/${inv.customerId}`} className="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md text-sm font-semibold shadow-sm transition-colors cursor-pointer text-white">
                     Details
                   </Link>
                 </td>

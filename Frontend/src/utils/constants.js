@@ -25,7 +25,7 @@ export const SOURCES = [
   "Others",
 ];
 
-export const STATES = [
+export const STATES_AND_UTS = [
   "Andaman and Nicobar Islands",
   "Andhra Pradesh",
   "Arunachal Pradesh",

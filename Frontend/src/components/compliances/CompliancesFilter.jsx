@@ -1,5 +1,5 @@
 import { Search, X } from "lucide-react";
-import DateRangeFilter from "./DateRangeFilter";
+import DateRangePicker from "../DateRangePicker";
 
 const CompliancesFilter = ({ filters, setFilters, onView }) => {
 
@@ -32,7 +32,13 @@ const CompliancesFilter = ({ filters, setFilters, onView }) => {
         className="border rounded-lg px-4 py-2 w-60 text-bg-tertiary"
       />
 
-      <DateRangeFilter setFilters={setFilters} />
+      <DateRangePicker 
+        startDate={filters.startDate}
+        endDate={filters.endDate}
+        onRangeChange={(startDate, endDate) => 
+          setFilters(prev => ({ ...prev, startDate, endDate }))
+        }
+      />
 
       <select
         onChange={(e) => update("compliance", e.target.value)}
