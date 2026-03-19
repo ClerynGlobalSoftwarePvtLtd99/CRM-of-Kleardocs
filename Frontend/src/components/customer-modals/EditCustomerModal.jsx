@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X, Save } from "lucide-react";
-import { STATES, COMPANY_TYPES, AGENTS } from "../../utils/constants";
+import { STATES_AND_UTS, COMPANY_TYPES, AGENTS } from "../../utils/constants";
 import toast from "react-hot-toast";
 
 const EditCustomerModal = ({ customer, onClose, onUpdate }) => {
@@ -50,9 +50,9 @@ const EditCustomerModal = ({ customer, onClose, onUpdate }) => {
               <textarea name="address" value={formData.address} onChange={handleChange} rows="3" required />
             </div>
             <div className="fieldset-input">
-              <span className="fieldset-label">State *</span>
+              <span className="fieldset-label">State & UT *</span>
               <select name="state" value={formData.state} onChange={handleChange} required>
-                {STATES.map((s) => (
+                {STATES_AND_UTS.map((s) => (
                   <option key={s} value={s}>{s}</option>
                 ))}
               </select>

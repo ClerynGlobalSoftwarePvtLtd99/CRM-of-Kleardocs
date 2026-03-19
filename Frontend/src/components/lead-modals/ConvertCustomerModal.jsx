@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X, UserCheck } from "lucide-react";
-import { COMPANY_TYPES, STATES } from "../../utils/constants";
+import { COMPANY_TYPES, STATES_AND_UTS } from "../../utils/constants";
 
 const ConvertCustomerModal = ({ lead, onClose, onConvert }) => {
   const [formData, setFormData] = useState({
@@ -44,15 +44,15 @@ const ConvertCustomerModal = ({ lead, onClose, onConvert }) => {
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-bold text-text-secondary uppercase">State *</label>
+            <label className="mb-1 block text-xs font-bold text-text-secondary uppercase">State & UT *</label>
             <select
               required
               value={formData.state}
               onChange={(e) => setFormData({ ...formData, state: e.target.value })}
               className="w-full px-4 py-2.5 bg-bg-tertiary/10 border border-bg-tertiary rounded-xl outline-none focus:border-yellow-500 text-sm"
             >
-              <option value="">Select State</option>
-              {STATES.map(s => <option key={s} value={s}>{s}</option>)}
+              <option value="">Select State / UT</option>
+              {STATES_AND_UTS.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
 

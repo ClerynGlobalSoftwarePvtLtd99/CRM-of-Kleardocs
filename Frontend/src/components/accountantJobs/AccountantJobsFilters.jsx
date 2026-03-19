@@ -13,6 +13,10 @@ const AccountantJobsFilters = ({
   setAccountantFilter,
   STATUSES,
   ACCOUNTANTS,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
 }) => {
   return (
     <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] p-4 rounded-xl mb-6">
@@ -41,7 +45,14 @@ const AccountantJobsFilters = ({
           <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" size={16} />
         </div>
 
-        <DateRangePicker />
+        <DateRangePicker 
+          startDate={startDate}
+          endDate={endDate}
+          onRangeChange={(start, end) => {
+            setStartDate(start)
+            setEndDate(end)
+          }}
+        />
 
         <div className="relative">
           <select

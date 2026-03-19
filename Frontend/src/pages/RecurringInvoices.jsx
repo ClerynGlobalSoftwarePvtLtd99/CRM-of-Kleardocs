@@ -206,6 +206,8 @@ const RecurringInvoices = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [dateType, setDateType] = useState('')
   const [status, setStatus] = useState('')
+  const [startDate, setStartDate] = useState(null)
+  const [endDate, setEndDate] = useState(null)
 
   const handleFilter = () => {
     let filteredData = INITIAL_INVOICES
@@ -230,11 +232,13 @@ const RecurringInvoices = () => {
     setSearchTerm('')
     setDateType('')
     setStatus('')
+    setStartDate(null)
+    setEndDate(null)
     setInvoices(INITIAL_INVOICES)
   }
 
   return (
-    <div className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-[100vw] text-[var(--color-text-primary)]">
+    <div className="flex-1 p-4 md:p-8 w-full text-[var(--color-text-primary)]">
       <RecurringInvoicesHeader counts={invoices.length} />
 
       <RecurringInvoicesFilters
@@ -246,6 +250,10 @@ const RecurringInvoices = () => {
         setStatus={setStatus}
         onFilter={handleFilter}
         onClear={handleClear}
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
       />
 
       <RecurringInvoicesTable invoices={invoices} />
