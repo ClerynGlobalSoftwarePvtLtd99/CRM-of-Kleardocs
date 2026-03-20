@@ -1,0 +1,21 @@
+{
+  "name": "Create a Lead",
+  "rank": "av",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/leads",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"name\": \"John Doe\",\n  \"phone\": \"9999999999\",\n  \"companyName\": \"Acme Ltd\",\n  \"source\": \"Facebook\",\n  \"type\": \"Hot\",\n  \"priority\": \"High\",\n  \"response\": \"Interested\",\n  \"address\": \"Mumbai\",\n  \"state\": \"MAHARASHTRA\"\n}\n",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

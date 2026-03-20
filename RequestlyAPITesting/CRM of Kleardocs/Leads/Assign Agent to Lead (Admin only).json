@@ -1,0 +1,22 @@
+{
+  "name": "Assign Agent to Lead (Admin only)",
+  "rank": "b00",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347/assign",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"agentId\": \"69bbe6385a20acbae504d347\"\n}\n",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

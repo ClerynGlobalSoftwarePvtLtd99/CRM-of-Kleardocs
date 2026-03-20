@@ -1,0 +1,22 @@
+{
+  "name": "Add financial-year",
+  "rank": "ay",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/financial-year",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{ \"financialYear\": \"2025-2026\" }",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

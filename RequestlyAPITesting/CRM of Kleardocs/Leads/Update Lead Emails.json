@@ -1,0 +1,22 @@
+{
+  "name": "Update Lead Emails",
+  "rank": "az",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347/emails",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"emails\": [\"john@acme.com\", \"contact@acme.com\"]\n}\n",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Get Single Lead (with full history)",
+  "rank": "aw",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3MzkyMjUxMywiZXhwIjoxNzczOTIzNDEzfQ.74rjSU5KH6tF3HeMZ-TdjrJTk6zlJe57P267pTT-XGY"
+        }
+      }
+    },
+    "pathVariables": []
+  }
+}

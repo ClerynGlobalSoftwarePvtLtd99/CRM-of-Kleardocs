@@ -1,0 +1,25 @@
+{
+  "name": "Add directors",
+  "rank": "aw",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/directors",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{ \"name\": \"Priya Sharma\", \"phone\": \"8800112233\" }",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3Mzk5MTkyMywiZXhwIjoxNzczOTkyODIzfQ.R7-hXB6KVkO56BAnsxfP8MaT6d6F_vSCUz2ruV23y78"
+        }
+      }
+    }
+  }
+}

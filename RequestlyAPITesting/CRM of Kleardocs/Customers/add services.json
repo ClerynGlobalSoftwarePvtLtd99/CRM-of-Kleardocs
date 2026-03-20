@@ -1,0 +1,22 @@
+{
+  "name": "add services",
+  "rank": "ax",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/services",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"serviceId\": \"676fb41f6591cff83b2efdb6\",\n  \"startDate\": \"2026-03-20\",\n  \"professionalFees\": 2000,\n  \"govtFees\": 0,\n  \"gst\": 18,\n  \"recurring\": true,\n  \"interval\": 3,\n  \"intervalType\": \"Month\",\n  \"endDate\": \"2027-03-20\"\n}",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

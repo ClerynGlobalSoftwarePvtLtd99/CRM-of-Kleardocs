@@ -1,9 +1,11 @@
+ClerynGlobalSoftwarePvtLtd99
+clerynglobalsoftwareprivatelim@gmail.com
+
+git config --global user.email "clerynglobalsoftwareprivatelim@gmail.com"
+git config --global user.name "ClerynGlobalSoftwarePvtLtd99"
+
 Kleardocs CRM
 https://www.notion.so/2f9fe67c48aa80f3a51fc86a3b4b3112
-
-
-
-
 
 parser
 🧠 WHAT EACH DOES (IMPORTANT)
@@ -49,6 +51,125 @@ compression → performance
 
 node-cron → automation
 
-
-
 https://app.eraser.io/workspace/wKBNYit6jrhr6nLcdija?origin=share
+git pull origin main --no-edit
+git push origin main
+===================
+# 1. Make sure you are on your branch
+git checkout sanjoy-developer
+
+# 2. Add all the new security code and structural files we created
+git add .
+
+# 3. Save (commit) these updates locally
+git commit -m "feat: Implement full Auth module with Express 5 security middlewares"
+
+# 4. Pull any new updates from the main branch into your branch
+git pull origin main --no-edit
+
+# 5. Push all your code up to GitHub
+git push origin sanjoy-developer
+
+=========================
+
+git pull origin main --no-edit
+after code changes then 
+git add .
+git commit -m "feat: implement comprehensive lead management module including models, API endpoints, and testing."
+git push origin sanjoy-developer
+then git merge to main branch by manually
+
+
+
+
+
+3. FULL FEATURE PLAN (NO SKIP — 5 DAYS)
+🚀 DAY 1 (12–14 HOURS)
+🔐 AUTH + USER + BASE
+
+JWT login/register
+
+Role system (admin/agent/accountant/customer)
+
+Middleware (auth, role)
+
+Zod validation setup
+
+DB connection
+
+Project structure
+
+🚀 DAY 2 (12–14 HOURS)
+📂 LEADS (FULL)
+
+Lead CRUD
+
+Filters
+
+Assign agent
+
+Notes system
+
+Convert to customer (transaction)
+
+🚀 DAY 3 (14–16 HOURS)
+👥 CUSTOMERS + COMPLIANCE
+
+Customer CRUD
+
+Directors
+
+Services
+
+Compliance CRUD
+
+Financial year logic
+
+Auto-create compliance
+
+🚀 DAY 4 (16 HOURS HARD)
+💰 BILLING + AUTOMATION
+
+Invoice CRUD
+
+Invoice Items
+
+Payment system
+
+Auto update due
+
+Recurring invoice (simple cron)
+
+Email sending (template)
+
+🚀 DAY 5 (16 HOURS HARD)
+📊 DASHBOARD + DEPLOY
+
+Dashboard aggregation
+
+Graph basic
+
+Email logs
+
+Customer portal login
+
+Deployment (VPS + PM2 + Nginx)
+
+
+
+
+===============================
+
+Safety Measures
+
+I have added all 7 layers of protection you requested to your backend. Your API is now extremely secure! 🚀
+
+Here is exactly what I implemented across your files:
+
+1. SQL / NoSQL Injection (mongo-sanitize): Added express-mongo-sanitize globally inside app.js to strip any $, ., or malicious query operators from incoming requests.
+2. XSS (xss + helmet): Added helmet() to set standard HTTP security headers. I also built a custom xss.middleware.js using the xss package that recursively scrubs all incoming req.body, req.query, and req.params to render malicious scripts completely harmless.
+3. CSRF (cookies + sameSite): When creating the cookie in auth.controller.js, I enforced sameSite: "strict" to prevent Cross-Site Request Forgery attacks.
+4. Brute Force & DDoS (rate-limit): Created an express-rate-limit rule limiting any single IP to 100 requests every 15 minutes across all /api routes. I also restricted JSON payload sizes to 10kb to stop massive payload attacks.
+5. Password Leak (bcrypt): Checked and confirmed that bcrypt.hash() with a robust salt factor of 10 is correctly placed in your auth.service.js.
+6. Token Theft (httpOnly cookie): Modified login in auth.controller.js to attach your JWT to an httpOnly, secure cookie that JavaScript can never access or scrape. I updated auth.middleware.js to automatically read from this highly-secure cookie and fallback to the generic Authorization header.
+7. Data Leak (hide errors): Your error.middleware.js is already configured to automatically strip stack traces from responses when NODE_ENV=production is active!

@@ -1,11 +1,44 @@
 import * as authService from "../services/auth.service.js";
+import { ApiResponse } from "../utils/response.js";
+
+const cookieOptions = {
+  expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days (Refresh Token max)
+  httpOnly: true, // Prevents XSS attacks
+  secure: process.env.NODE_ENV === "production", // HTTPS only in prod
+  sameSite: "strict" // Prevents CSRF attacks
+};
 
 export const register = async (req, res) => {
   const user = await authService.registerUser(req.body);
-  res.json({ status: true, data: user });
+  res.status(201).json(new ApiResponse(201, user, "User registered successfully"));
 };
 
 export const login = async (req, res) => {
   const result = await authService.loginUser(req.body);
-  res.json({ status: true, ...result });
+  
+  res.status(200)
+     .cookie("refreshToken", result.refreshToken, cookieOptions) // Restrict refresh token entirely to Server via HttpOnly
+     .cookie("accessToken", result.accessToken, { ...cookieOptions, expires: new Date(Date.now() + 15 * 60 * 1000) }) // 15 mins for access token cookie option
+     .json(new ApiResponse(200, {
+        user: result.user,
+        accessToken: result.accessToken // Give frontend API access to use Bearer manually if they prefer
+     }, "User logged in successfully"));
+};
+
+export const refresh = async (req, res) => {
+  // Try taking the refresh token from httpOnly cookie OR body
+  const rawRefreshToken = req.cookies?.refreshToken || req.body.refreshToken;
+  
+  if (!rawRefreshToken) {
+     return res.status(401).json({ success: false, message: "Refresh token is required" });
+  }
+
+  const result = await authService.refreshAccessToken(rawRefreshToken);
+
+  res.status(200)
+     .cookie("refreshToken", result.refreshToken, cookieOptions)
+     .cookie("accessToken", result.accessToken, { ...cookieOptions, expires: new Date(Date.now() + 15 * 60 * 1000) })
+     .json(new ApiResponse(200, {
+        accessToken: result.accessToken
+     }, "Token refreshed successfully"));
 };

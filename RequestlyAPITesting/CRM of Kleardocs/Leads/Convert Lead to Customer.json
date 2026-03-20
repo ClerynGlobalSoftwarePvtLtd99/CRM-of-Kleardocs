@@ -1,0 +1,26 @@
+{
+  "name": "Convert Lead to Customer",
+  "rank": "b01",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347/convert",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"companyName\": \"Acme Pvt Ltd\",\n  \"address\": \"Mumbai, Maharashtra\",\n  \"state\": \"MAHARASHTRA\",\n  \"gst\": \"27AABCU9603R1ZX\",\n  \"type\": \"Private Limited Company\",\n  \"incorporationDate\": \"2020-01-01\",\n  \"newlyIncorporated\": false,\n  \"username\": \"ACME0001\"\n}",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3MzkyNjUwNCwiZXhwIjoxNzczOTI3NDA0fQ.vzdByLxazYLwzyx-5fOwyH8wci2tfs02OSvCdQPrBVE"
+        }
+      }
+    },
+    "pathVariables": []
+  }
+}

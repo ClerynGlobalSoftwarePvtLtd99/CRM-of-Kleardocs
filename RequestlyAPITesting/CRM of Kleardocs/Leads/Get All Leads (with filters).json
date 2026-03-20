@@ -1,0 +1,34 @@
+{
+  "name": "Get All Leads (with filters)",
+  "rank": "auntit17739206720211",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/leads",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [
+      {
+        "id": 1773921151485,
+        "key": "search",
+        "value": "John",
+        "isEnabled": true,
+        "description": "",
+        "dataType": "string"
+      }
+    ],
+    "headers": [],
+    "body": "",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3MzkyMDk5NiwiZXhwIjoxNzczOTIxODk2fQ.D6c2gRvO9P_Xl9fROMX9du2M3HtpHi3tXEtKcpI34xs"
+        }
+      }
+    }
+  }
+}
