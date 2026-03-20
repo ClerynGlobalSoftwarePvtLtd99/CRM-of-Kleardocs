@@ -1,0 +1,25 @@
+{
+  "name": "add compliance-settings",
+  "rank": "b01",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/compliance-settings",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"name\": \"Preparation & Filing of Form ADT-01 (Auditor Appointment)\",\n  \"year\": \"2025-2026\",\n  \"hasExpiry\": true,\n  \"expiryDate\": \"2025-03-31\",\n  \"inc20\": false,\n  \"daysOfExpiry\": 30\n}\n",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3Mzk5Njk4NiwiZXhwIjoxNzczOTk3ODg2fQ.v6g5bZYIgppo3TkOUvBxkzQDxMX4K4now5NEd5XcGyg"
+        }
+      }
+    }
+  }
+}

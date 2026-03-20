@@ -70,6 +70,14 @@ git pull origin main --no-edit
 # 5. Push all your code up to GitHub
 git push origin sanjoy-developer
 
+=========================
+
+git pull origin main --no-edit
+after code changes then 
+git add .
+git commit -m "feat: implement comprehensive lead management module including models, API endpoints, and testing."
+git push origin sanjoy-developer
+then git merge to main branch by manually
 
 
 

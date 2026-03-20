@@ -1,0 +1,22 @@
+{
+  "name": "Get Customer Full Details",
+  "rank": "b03",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

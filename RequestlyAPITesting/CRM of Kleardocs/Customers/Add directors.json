@@ -1,8 +1,9 @@
 {
-  "name": "User login",
+  "name": "Add directors",
+  "rank": "aw",
   "request": {
     "type": "http",
-    "url": "http://localhost:5000/api/v1/auth/login",
+    "url": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/directors",
     "scripts": {
       "preRequest": "",
       "postResponse": ""
@@ -10,7 +11,7 @@
     "method": "POST",
     "queryParams": [],
     "headers": [],
-    "body": "{\n  \"email\": \"admin2@kleardocs.com\",\n  \"password\": \"securepassword1234\"\n}",
+    "body": "{ \"name\": \"Priya Sharma\", \"phone\": \"8800112233\" }",
     "contentType": "application/json",
     "auth": {
       "currentAuthType": "BEARER_TOKEN",
@@ -20,6 +21,5 @@
         }
       }
     }
-  },
-  "rank": "auserl17739019758501"
+  }
 }

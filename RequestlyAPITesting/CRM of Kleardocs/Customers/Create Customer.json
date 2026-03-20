@@ -1,0 +1,25 @@
+{
+  "name": "Create Customer",
+  "rank": "auntit17739907188291",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/customers ",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"name\": \"Raj Mishra\",\n  \"phone\": \"9999988888\",\n  \"companyName\": \"Raj Innovations Pvt Ltd\",\n  \"address\": \"Kolkata, WB\",\n  \"state\": \"WEST BENGAL\",\n  \"gst\": \"19AABCU9603R1ZX\",\n  \"type\": \"Private Limited Company\",\n  \"incorporationDate\": \"2024-01-15\",\n  \"newlyIncorporated\": true,\n  \"onboardingDate\": \"2026-03-20\",\n  \"username\": \"RAJINNOV001\"\n}",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3Mzk5MDc2NywiZXhwIjoxNzczOTkxNjY3fQ.IahTqJRZXOYsbw44h9SBs8YqMrgwg3QGuVrwMf68guE"
+        }
+      }
+    }
+  }
+}

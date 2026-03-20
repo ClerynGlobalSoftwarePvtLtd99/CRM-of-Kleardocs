@@ -1,0 +1,50 @@
+{
+  "name": "Searching Customer",
+  "rank": "av",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/customers",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [
+      {
+        "id": 0.41431784105280056,
+        "key": "search",
+        "value": "raj",
+        "isEnabled": true
+      },
+      {
+        "id": 0.7648096062262708,
+        "key": "type",
+        "value": "Private Limited Company",
+        "isEnabled": true
+      },
+      {
+        "id": 0.18360257455563334,
+        "key": "page",
+        "value": "1",
+        "isEnabled": true
+      },
+      {
+        "id": 0.4324274670688948,
+        "key": "limit",
+        "value": "10",
+        "isEnabled": true
+      }
+    ],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3Mzk5MDc2NywiZXhwIjoxNzczOTkxNjY3fQ.IahTqJRZXOYsbw44h9SBs8YqMrgwg3QGuVrwMf68guE"
+        }
+      }
+    }
+  }
+}

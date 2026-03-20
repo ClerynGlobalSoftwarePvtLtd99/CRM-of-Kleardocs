@@ -1,0 +1,26 @@
+{
+  "name": "compliances status change by admin or agent",
+  "rank": "b02",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/compliances/69bd0f12b474a2c8a7320714",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [],
+    "body": "{ \"status\": \"Done\", \"accountant\": \"Samrat\", \"completedOn\": \"2026-03-20\" }",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3Mzk5OTE2NiwiZXhwIjoxNzc0MDAwMDY2fQ.G1DvL3mbnfpA2VCNkIRDhx4X_qGHCpSsQvW34Akanvk"
+        }
+      }
+    },
+    "pathVariables": []
+  }
+}

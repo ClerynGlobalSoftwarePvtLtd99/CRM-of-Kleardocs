@@ -10,6 +10,11 @@ import { errorHandler } from "./middleware/error.middleware.js";
 // Routes
 import AuthRoutes from "./routes/auth.routes.js";
 import LeadRoutes from "./routes/lead.routes.js";
+import CustomerRoutes from "./routes/customer.routes.js";
+import ComplianceSettingRoutes, { financialYearRouter } from "./routes/complianceSetting.routes.js";
+
+// Pre-register models needed for populate (even if their routes aren't built yet)
+import "./models/Service.model.js";
 
 const app = express();
 
@@ -50,6 +55,9 @@ app.get("/", (req, res) => {
 });
 app.use("/api/v1/auth", AuthRoutes);
 app.use("/api/v1/leads", LeadRoutes);
+app.use("/api/v1/customers", CustomerRoutes);
+app.use("/api/v1/compliance-settings", ComplianceSettingRoutes);
+app.use("/api/v1/financial-years", financialYearRouter);
 
 // Global Error Handler (must be after all routes)
 app.use(errorHandler);
