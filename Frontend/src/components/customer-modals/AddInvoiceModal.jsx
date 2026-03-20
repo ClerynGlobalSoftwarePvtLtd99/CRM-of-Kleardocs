@@ -1,14 +1,94 @@
-import React, { useState } from "react";
-import { X, FileText, Calendar as CalendarIcon } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { X, FileText, Calendar as CalendarIcon, ChevronDown } from "lucide-react";
 
 const AddInvoiceModal = ({ service, onClose, onAdd }) => {
   const [formData, setFormData] = useState({
-    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+    date: new Date().toLocaleDateString('en-GB'),
     price: 2000,
     gst: 18,
     governmentFees: 0,
     isRecurring: false,
+    interval: 1,
+    intervalType: 'Month',
+    endDate: new Date().toLocaleDateString('en-GB'),
   });
+  
+  const [showCalendar, setShowCalendar] = useState(false);
+  const calendarRef = useRef(null);
+
+  const formatDateToGB = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    return date.toLocaleDateString('en-GB');
+  };
+
+  const formatDateToISO = (dateString) => {
+    if (!dateString) return '';
+    const parts = dateString.split('/');
+    if (parts.length !== 3) return dateString;
+    const [day, month, year] = parts;
+    const isoDate = new Date(`${year}-${month}-${day}`);
+    return isoDate.toISOString().split('T')[0];
+  };
+
+  const handleEndDateChange = (e) => {
+    const value = e.target.value;
+    setFormData({...formData, endDate: value});
+  };
+
+  const handleEndDateCalendar = () => {
+    setShowCalendar(!showCalendar);
+  };
+
+  const handleDateSelect = (date) => {
+    setFormData(prev => ({...prev, endDate: formatDateToGB(date)}));
+    setShowCalendar(false);
+  };
+
+  const getDaysInMonth = (date) => {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (date) => {
+    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  };
+
+  const generateCalendarDays = () => {
+    const today = new Date();
+    const current = new Date(today.getFullYear(), today.getMonth(), 1);
+    const daysInMonth = getDaysInMonth(current);
+    const firstDay = getFirstDayOfMonth(current);
+    const days = [];
+
+    // Add empty cells for days before month starts
+    for (let i = 0; i < firstDay; i++) {
+      days.push(null);
+    }
+
+    // Add days of the month
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(i);
+    }
+
+    return days;
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+        setShowCalendar(false);
+      }
+    };
+
+    if (showCalendar) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCalendar]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,8 +98,8 @@ const AddInvoiceModal = ({ service, onClose, onAdd }) => {
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-text-primary">
-      <div className="w-full max-w-md bg-bg-secondary border border-bg-tertiary rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-200">
-        <div className="flex flex-col p-6 border-b border-bg-tertiary space-y-1">
+      <div className="w-full max-w-md bg-bg-secondary border border-bg-tertiary rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-200 max-h-[90vh] flex flex-col">
+        <div className="flex flex-col p-6 border-b border-bg-tertiary space-y-1 flex-shrink-0">
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-bold tracking-tight">Add Invoice</h3>
             <button onClick={onClose} className="p-2 rounded-lg hover:bg-bg-tertiary transition-colors">
@@ -29,7 +109,7 @@ const AddInvoiceModal = ({ service, onClose, onAdd }) => {
           <p className="text-sm font-bold text-text-secondary">{service?.name}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-8 space-y-6">
+        <form onSubmit={handleSubmit} className="p-8 space-y-6 flex-1 overflow-y-auto">
           <div className="fieldset-input">
             <span className="fieldset-label uppercase">Invoice Date</span>
             <div className="relative">
@@ -37,9 +117,9 @@ const AddInvoiceModal = ({ service, onClose, onAdd }) => {
                 type="text" 
                 value={formData.date}
                 readOnly
-                className="pr-10"
+                className="w-full px-4 py-2.5 bg-bg-primary border border-bg-tertiary rounded-lg text-sm focus:outline-none focus:border-accent transition-colors cursor-pointer text-text-primary pr-10"
               />
-              <CalendarIcon size={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary" />
+              <CalendarIcon size={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
             </div>
           </div>
 
@@ -95,9 +175,89 @@ const AddInvoiceModal = ({ service, onClose, onAdd }) => {
             <span className="text-sm font-bold text-text-primary">Recurring Invoice?</span>
           </div>
 
+          {formData.isRecurring && (
+            <>
+              <div className="fieldset-input">
+                <span className="fieldset-label uppercase">Interval</span>
+                <input 
+                  type="number" 
+                  min="1"
+                  value={formData.interval}
+                  onChange={(e) => setFormData({...formData, interval: e.target.value})}
+                />
+              </div>
+
+              <div className="fieldset-input">
+                <span className="fieldset-label uppercase">Interval Type</span>
+                <div className="relative">
+                  <select
+                    value={formData.intervalType}
+                    onChange={(e) => setFormData({...formData, intervalType: e.target.value})}
+                    className="w-full appearance-none px-4 py-2.5 bg-bg-primary border border-bg-tertiary rounded-lg text-sm focus:outline-none focus:border-accent transition-colors cursor-pointer text-text-primary pr-10"
+                  >
+                    <option value="Day">Day</option>
+                    <option value="Month">Month</option>
+                  </select>
+                  <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
+                </div>
+              </div>
+
+              <div className="fieldset-input">
+                <span className="fieldset-label uppercase">Invoice End Date</span>
+                <div className="relative">
+                  <input 
+                    type="text" 
+                    value={formData.endDate}
+                    onChange={handleEndDateChange}
+                    className="w-full px-4 py-2.5 bg-bg-primary border border-bg-tertiary rounded-lg text-sm focus:outline-none focus:border-accent transition-colors cursor-pointer text-text-primary pr-10"
+                    placeholder="dd/mm/yyyy"
+                  />
+                  <button 
+                    type="button"
+                    onClick={handleEndDateCalendar}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-primary transition-colors"
+                  >
+                    <CalendarIcon size={18} />
+                  </button>
+                  
+                  {showCalendar && (
+                    <div 
+                      ref={calendarRef}
+                      className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-bg-secondary border border-bg-tertiary rounded-lg shadow-lg p-4 z-50 w-64"
+                    >
+                      <div className="text-center font-semibold mb-3 text-text-primary">
+                        {new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
+                      </div>
+                      <div className="grid grid-cols-7 gap-1 text-xs">
+                        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
+                          <div key={i} className="text-center font-semibold text-text-secondary py-1">
+                            {day}
+                          </div>
+                        ))}
+                        {generateCalendarDays().map((day, i) => (
+                          <div key={i} className="text-center py-1">
+                            {day && (
+                              <button
+                                type="button"
+                                onClick={() => handleDateSelect(new Date(new Date().getFullYear(), new Date().getMonth(), day))}
+                                className="w-8 h-8 rounded hover:bg-accent hover:text-white transition-colors text-sm"
+                              >
+                                {day}
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+
           <button
             type="submit"
-            className="w-full btn-raised btn-raised-orange text-white py-4 rounded-xl font-bold uppercase tracking-widest flex items-center justify-center gap-2"
+            className="w-full btn-raised btn-raised-orange text-white py-4 rounded-xl font-bold uppercase tracking-widest flex items-center justify-center gap-2 flex-shrink-0"
           >
             <FileText size={18} /> Add Invoice
           </button>

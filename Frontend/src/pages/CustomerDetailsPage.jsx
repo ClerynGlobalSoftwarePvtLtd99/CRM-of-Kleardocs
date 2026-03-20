@@ -25,6 +25,8 @@ import ModifyComplianceModal from "../components/customer-modals/ModifyComplianc
 import AddInvoiceModal from "../components/customer-modals/AddInvoiceModal";
 import EndServiceModal from "../components/customer-modals/EndServiceModal";
 import { generateInvoicePdf } from "../utils/invoicePdfGenerator";
+import RecurringInvoiceDetailsModal from "../components/customer-modals/RecurringInvoiceDetailsModal";
+import EmailTemplateDetailsModal from "../components/customer-modals/EmailTemplateDetailsModal";
 
 const CustomerDetailsPage = () => {
   const { id } = useParams();
@@ -85,6 +87,8 @@ const CustomerDetailsPage = () => {
     modifyComp: false,
     addInvoice: false,
     endService: false,
+    recurringInvoiceDetails: false,
+    emailTemplateDetails: false,
   });
 
   const [selectedItem, setSelectedItem] = useState(null);
@@ -109,10 +113,24 @@ const CustomerDetailsPage = () => {
     toast.success("Director added!");
   };
 
+  const handleDeleteDirector = (index) => {
+    setCustomer(prev => ({
+      ...prev,
+      directors: prev.directors.filter((_, i) => i !== index)
+    }));
+    toast.success("Director deleted!");
+  };
+
   const handleAddService = (newService) => {
     setCustomer(prev => ({ 
       ...prev, 
-      services: [...prev.services, { id: Date.now(), ...newService, status: "Active" }] 
+      services: [...prev.services, { 
+        id: Date.now(), 
+        name: newService.serviceName, 
+        startDate: new Date(newService.startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }), 
+        endDate: "-", 
+        status: "Active" 
+      }] 
     }));
     toast.success("Service added!");
   };
@@ -128,9 +146,9 @@ const CustomerDetailsPage = () => {
   const handleEndService = (serviceId) => {
     setCustomer(prev => ({
       ...prev,
-      services: prev.services.map(s => s.id === serviceId ? { ...s, status: "Terminated", endDate: new Date().toLocaleDateString() } : s)
+      services: prev.services.filter(s => s.id !== serviceId)
     }));
-    toast.success("Service ended successfully");
+    toast.success("Service ended and removed!");
   };
 
   return (
@@ -274,7 +292,10 @@ const CustomerDetailsPage = () => {
                     )}
                   </div>
                 </div>
-                <button className="absolute bottom-4 right-4 p-2 text-red-500 transition-all hover:bg-red-500/10 rounded-lg">
+                <button 
+                  onClick={() => handleDeleteDirector(idx)}
+                  className="absolute bottom-4 right-4 p-2 text-red-500 transition-all hover:bg-red-500/10 rounded-lg"
+                >
                     <Trash2 size={16} />
                 </button>
               </div>
@@ -463,7 +484,7 @@ const CustomerDetailsPage = () => {
                     <td className="px-6 py-4 text-sm text-crm-green font-bold">{inv.status}</td>
                     <td className="px-6 py-4">
                       <button 
-                        onClick={() => toast.success("Opening recurring invoice details...")}
+                        onClick={() => navigate(`/recurring-invoice-details/${inv.id}`)}
                         className="btn-raised btn-raised-blue px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all"
                       >
                         View
@@ -497,7 +518,7 @@ const CustomerDetailsPage = () => {
                     <td className="px-6 py-4 text-sm font-medium">{hist.name}</td>
                     <td className="px-6 py-4">
                       <button 
-                        onClick={() => toast.success("Opening email history details...")}
+                        onClick={() => toggleModal("emailTemplateDetails", true, hist)}
                         className="btn-raised btn-raised-blue px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all"
                       >
                         View
@@ -549,12 +570,42 @@ const CustomerDetailsPage = () => {
           service={selectedItem}
           onClose={() => toggleModal("addInvoice", false)} 
           onAdd={(data) => {
-            const newInvoice = { id: Date.now(), ...data, number: `INV-24-${Math.floor(Math.random()*10000000)}`, service: selectedItem.name, total: parseFloat(data.price) + parseFloat(data.governmentFees || 0) };
+            const newInvoice = { 
+              id: Date.now(), 
+              ...data, 
+              number: `INV-24-${Math.floor(Math.random()*10000000)}`, 
+              service: selectedItem.name, 
+              total: parseFloat(data.price) + parseFloat(data.governmentFees || 0) 
+            };
+            
             setCustomer(prev => ({
               ...prev,
               invoices: [newInvoice, ...prev.invoices]
             }));
-            toast.success("Invoice added!");
+            
+            // If it's a recurring invoice, also add to recurring invoices
+            if (data.isRecurring) {
+              const recurringInvoice = {
+                id: Date.now(),
+                customer: customer.customerName,
+                service: selectedItem.name,
+                interval: data.interval,
+                intervalType: data.intervalType,
+                startDate: data.date,
+                endDate: data.endDate,
+                amount: parseFloat(data.price) + parseFloat(data.governmentFees || 0),
+                gst: data.gst,
+                status: 'active',
+                nextInvoiceDate: data.date
+              };
+              
+              setCustomer(prev => ({
+                ...prev,
+                recurringInvoices: [...(prev.recurringInvoices || []), recurringInvoice]
+              }));
+            }
+            
+            toast.success(data.isRecurring ? "Recurring invoice added!" : "Invoice added!");
             generateInvoicePdf(newInvoice, customer);
           }} 
         />
@@ -576,6 +627,20 @@ const CustomerDetailsPage = () => {
             toast.success("WhatsApp message sent!");
             toggleModal("whatsapp", false);
           }}
+        />
+      )}
+
+      {showModals.recurringInvoiceDetails && (
+        <RecurringInvoiceDetailsModal 
+          invoice={selectedItem}
+          onClose={() => toggleModal("recurringInvoiceDetails", false)} 
+        />
+      )}
+
+      {showModals.emailTemplateDetails && (
+        <EmailTemplateDetailsModal 
+          emailHistory={selectedItem}
+          onClose={() => toggleModal("emailTemplateDetails", false)} 
         />
       )}
 
