@@ -15,6 +15,13 @@ import ComplianceSettingRoutes, { financialYearRouter } from "./routes/complianc
 
 // Pre-register models needed for populate (even if their routes aren't built yet)
 import "./models/Service.model.js";
+import "./models/Invoice.model.js";
+import "./models/RecurringInvoice.model.js";
+
+// Billing routes
+import InvoiceRoutes from "./routes/invoice.routes.js";
+import PaymentRoutes from "./routes/payment.routes.js";
+import RecurringInvoiceRoutes from "./routes/recurringInvoice.routes.js";
 
 const app = express();
 
@@ -58,6 +65,9 @@ app.use("/api/v1/leads", LeadRoutes);
 app.use("/api/v1/customers", CustomerRoutes);
 app.use("/api/v1/compliance-settings", ComplianceSettingRoutes);
 app.use("/api/v1/financial-years", financialYearRouter);
+app.use("/api/v1/invoices", InvoiceRoutes);
+app.use("/api/v1/payments", PaymentRoutes);
+app.use("/api/v1/recurringinvoices", RecurringInvoiceRoutes);
 
 // Global Error Handler (must be after all routes)
 app.use(errorHandler);

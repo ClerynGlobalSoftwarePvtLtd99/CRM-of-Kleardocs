@@ -1,0 +1,44 @@
+{
+  "name": "Get invoice record by search",
+  "rank": "az",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/invoices",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [
+      {
+        "id": 0.0435320392174241,
+        "key": "search",
+        "value": "Raj",
+        "isEnabled": true
+      },
+      {
+        "id": 0.9242382771422732,
+        "key": "page",
+        "value": "1",
+        "isEnabled": true
+      },
+      {
+        "id": 0.044546952866009626,
+        "key": "limit",
+        "value": "10",
+        "isEnabled": true
+      }
+    ],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDAxMTYxNywiZXhwIjoxNzc0MDEyNTE3fQ.xmG0mEgOllofSY7nJ44eNKPUaEqee-QmPdyMdBGEEko"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Get Invoice",
+  "rank": "ay",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/invoices",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDAxMTYxNywiZXhwIjoxNzc0MDEyNTE3fQ.xmG0mEgOllofSY7nJ44eNKPUaEqee-QmPdyMdBGEEko"
+        }
+      }
+    }
+  }
+}
