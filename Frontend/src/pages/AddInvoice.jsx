@@ -3,6 +3,7 @@ import AddInvoiceHeader from '../components/addInvoice/AddInvoiceHeader'
 import InvoiceDetailsSection from '../components/addInvoice/InvoiceDetailsSection'
 import InvoiceItemsSection from '../components/addInvoice/InvoiceItemsSection'
 import CreateInvoiceButton from '../components/addInvoice/CreateInvoiceButton'
+import { generateInvoicePdf } from '../utils/invoicePdfGenerator'
 
 const today = new Date().toISOString().split('T')[0]
 
@@ -45,7 +46,13 @@ const AddInvoice = () => {
 
     console.log('Invoice Payload:', invoicePayload)
     // TODO: POST to API
-    alert(`Invoice created for ${selectedCustomer.name} with ${items.length} item(s)!`)
+    // Provide a mocked invoice number for the generator
+    const pdfInvoiceData = {
+      ...invoicePayload,
+      number: `INV-24-${Math.floor(Math.random() * 10000000)}`,
+      date: invoiceDate
+    };
+    generateInvoicePdf(pdfInvoiceData, selectedCustomer);
   }
 
   return (

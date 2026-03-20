@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useParams, Link } from 'react-router'
 import { Download, Eye, Send, CreditCard, Trash2, X } from 'lucide-react'
 import RichTextEditor from '../components/RichTextEditor'
+import { generateInvoicePdf } from '../utils/invoicePdfGenerator'
 
 // Dummy Data
 const INVOICE_DATA = {
@@ -40,6 +41,30 @@ const InvoiceDetails = () => {
   const [paymentNote, setPaymentNote] = useState('')
   const [paymentDate, setPaymentDate] = useState(new Date().toISOString().split('T')[0])
 
+  const handleGeneratePdf = (action) => {
+    const invoicePayload = {
+      number: INVOICE_DATA.invoiceNo,
+      date: INVOICE_DATA.invoiceDate,
+      items: INVOICE_DATA.items.map(i => ({
+         product: { name: i.product },
+         price: parseFloat(i.price.replace(/[^0-9.]/g, '')),
+         amount: parseFloat(i.amount.replace(/[^0-9.]/g, '')),
+      })),
+      totals: {
+         total: parseFloat(INVOICE_DATA.totals.total.replace(/[^0-9.]/g, '')),
+         gst: parseFloat(INVOICE_DATA.totals.gst.replace(/[^0-9.]/g, ''))
+      }
+    };
+    const customerPayload = {
+      companyName: INVOICE_DATA.companyName,
+      customerName: INVOICE_DATA.customerName,
+      phone: INVOICE_DATA.customerPhone,
+      address: INVOICE_DATA.customerAddress,
+      state: INVOICE_DATA.placeOfSupply
+    };
+    generateInvoicePdf(invoicePayload, customerPayload, action);
+  };
+
   return (
     <div className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-[100vw] text-[var(--color-text-primary)] relative">
       <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-6 gap-4">
@@ -54,10 +79,10 @@ const InvoiceDetails = () => {
           <button onClick={() => setShowDeleteModal(true)} className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors flex items-center gap-2 font-medium shadow-sm text-sm cursor-pointer">
             <Trash2 size={16} /> Delete Invoice
           </button>
-          <a href={`https://crm.startupstation.in/api/v1/invoice/view/${id}`} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors flex items-center gap-2 font-medium shadow-sm text-sm cursor-pointer">
+          <button onClick={() => handleGeneratePdf('view')} className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors flex items-center gap-2 font-medium shadow-sm text-sm cursor-pointer">
             <Eye size={16} /> View
-          </a>
-          <button className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors flex items-center gap-2 font-medium shadow-sm text-sm cursor-pointer">
+          </button>
+          <button onClick={() => handleGeneratePdf('download')} className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors flex items-center gap-2 font-medium shadow-sm text-sm cursor-pointer">
             <Download size={16} /> Download
           </button>
         </div>
