@@ -14,6 +14,7 @@ import RecurringInvoices from './pages/RecurringInvoices'
 import Invoices from './pages/Invoices'
 import InvoiceDetails from './pages/InvoiceDetails'
 import AddInvoice from './pages/AddInvoice'
+import RecurringInvoiceDetails from './pages/RecurringInvoiceDetails'
 import Compliances from './pages/Compliances'
 import Services from './pages/Services'
 import Leads from './pages/Leads'
@@ -60,6 +61,7 @@ function App() {
             <Route path="/users" element={<Users />} />
             <Route path="/payments" element={<Payments />} />
             <Route path="/recurringinvoices" element={<RecurringInvoices />} />
+            <Route path="/recurring-invoice-details/:id" element={<RecurringInvoiceDetails />} />
             <Route path="/invoices" element={<Invoices />} />
             <Route path="/invoice/:id" element={<InvoiceDetails />} />
             <Route path="/addinvoice" element={<AddInvoice />} />
