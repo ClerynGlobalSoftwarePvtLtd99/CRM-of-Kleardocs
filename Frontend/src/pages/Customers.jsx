@@ -173,13 +173,14 @@ const Customers = () => {
       </div>
 
       {/* LIST TABLE HEADER (Hidden on mobile) */}
-      <div className="hidden lg:grid grid-cols-[1fr_2fr_1.5fr_1.5fr_1.5fr_1.5fr] gap-4 px-8 py-4 bg-bg-tertiary/30 rounded-t-lg border-x border-t border-bg-tertiary text-xs font-bold text-text-secondary uppercase tracking-[0.2em]">
+      <div className="hidden lg:grid grid-cols-[1fr_2fr_1.5fr_1.5fr_1.5fr_1.5fr_1fr] gap-4 px-8 py-4 bg-bg-tertiary/30 rounded-t-lg border-x border-t border-bg-tertiary text-xs font-bold text-text-secondary uppercase tracking-[0.2em]">
         <span>Logo</span>
         <span>Name</span>
         <span>Phone</span>
         <span>Type</span>
         <span>Onboarding Date</span>
         <span>Incorporation Date</span>
+        <span className="text-right">Action</span>
       </div>
 
       {/* LIST SECTION */}
@@ -200,7 +201,7 @@ const Customers = () => {
               <div
                 key={cust.id}
                 onClick={() => navigate(`/customer/${cust.id}`)}
-                className={`bg-bg-secondary border border-bg-tertiary lg:rounded-none rounded-lg p-6 lg:p-4 lg:grid lg:grid-cols-[1fr_2fr_1.5fr_1.5fr_1.5fr_1.5fr] items-center gap-4 hover:border-crm-orange/50 transition-all cursor-pointer group shadow-sm last:rounded-b-lg first:rounded-t-lg ${isMatch ? 'row-highlight' : ''}`}
+                className={`bg-bg-secondary border border-bg-tertiary lg:rounded-none rounded-lg p-6 lg:p-4 lg:grid lg:grid-cols-[1fr_2fr_1.5fr_1.5fr_1.5fr_1.5fr_1fr] items-center gap-4 hover:border-crm-orange/50 transition-all cursor-pointer group shadow-sm last:rounded-b-lg first:rounded-t-lg ${isMatch ? 'row-highlight' : ''}`}
               >
                 {/* Logo */}
                 <div className="flex items-center justify-start lg:justify-center mb-4 lg:mb-0">
@@ -245,6 +246,16 @@ const Customers = () => {
                     <Calendar size={14} />
                     <span className="text-sm">{cust.incorporationDate}</span>
                   </div>
+                </div>
+
+                {/* Details Button */}
+                <div className="mt-4 lg:mt-0 flex justify-end">
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); navigate(`/customer/${cust.id}`); }}
+                    className="btn-raised btn-raised-blue px-6 py-2 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all"
+                  >
+                    Details
+                  </button>
                 </div>
               </div>
             );

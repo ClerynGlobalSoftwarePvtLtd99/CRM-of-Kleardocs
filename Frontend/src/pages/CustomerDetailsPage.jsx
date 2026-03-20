@@ -24,6 +24,7 @@ import WhatsappTemplateModal from "../components/lead-modals/WhatsappTemplateMod
 import ModifyComplianceModal from "../components/customer-modals/ModifyComplianceModal";
 import AddInvoiceModal from "../components/customer-modals/AddInvoiceModal";
 import EndServiceModal from "../components/customer-modals/EndServiceModal";
+import { generateInvoicePdf } from "../utils/invoicePdfGenerator";
 
 const CustomerDetailsPage = () => {
   const { id } = useParams();
@@ -257,7 +258,6 @@ const CustomerDetailsPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {customer.directors.map((director, idx) => (
               <div key={idx} className="bg-bg-tertiary/20 border border-bg-tertiary rounded-2xl p-6 relative group overflow-hidden">
-                <div className="absolute top-0 right-0 w-16 h-16 bg-yellow-500/5 rounded-bl-full border-b border-l border-yellow-500/10 group-hover:bg-yellow-500/10 transition-all"></div>
                 <div className="relative space-y-3">
                   <div className="flex flex-col">
                     <h4 className="text-base font-black uppercase tracking-tight italic text-yellow-500 leading-tight">{director.name}</h4>
@@ -274,7 +274,7 @@ const CustomerDetailsPage = () => {
                     )}
                   </div>
                 </div>
-                <button className="absolute bottom-4 right-4 p-2 text-red-500 opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500/10 rounded-lg">
+                <button className="absolute bottom-4 right-4 p-2 text-red-500 transition-all hover:bg-red-500/10 rounded-lg">
                     <Trash2 size={16} />
                 </button>
               </div>
@@ -422,7 +422,7 @@ const CustomerDetailsPage = () => {
                     <td className="px-6 py-4">
                       <button 
                         onClick={() => navigate(`/invoice/${inv.id}`)}
-                        className="btn-raised btn-raised-orange-light px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all bg-[#F8C67E] text-black shadow-[0_4px_0_#D9A05B]"
+                        className="btn-raised btn-raised-blue px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all"
                       >
                         View
                       </button>
@@ -464,7 +464,7 @@ const CustomerDetailsPage = () => {
                     <td className="px-6 py-4">
                       <button 
                         onClick={() => toast.success("Opening recurring invoice details...")}
-                        className="btn-raised btn-raised-orange-light px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all bg-[#F8C67E] text-black shadow-[0_4px_0_#D9A05B] active:translate-y-1 active:shadow-none"
+                        className="btn-raised btn-raised-blue px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all"
                       >
                         View
                       </button>
@@ -549,11 +549,13 @@ const CustomerDetailsPage = () => {
           service={selectedItem}
           onClose={() => toggleModal("addInvoice", false)} 
           onAdd={(data) => {
+            const newInvoice = { id: Date.now(), ...data, number: `INV-24-${Math.floor(Math.random()*10000000)}`, service: selectedItem.name, total: parseFloat(data.price) + parseFloat(data.governmentFees || 0) };
             setCustomer(prev => ({
               ...prev,
-              invoices: [{ id: Date.now(), ...data, number: `INV-24-${Math.floor(Math.random()*10000000)}`, service: selectedItem.name, total: parseFloat(data.price) + parseFloat(data.governmentFees || 0) }, ...prev.invoices]
+              invoices: [newInvoice, ...prev.invoices]
             }));
             toast.success("Invoice added!");
+            generateInvoicePdf(newInvoice, customer);
           }} 
         />
       )}

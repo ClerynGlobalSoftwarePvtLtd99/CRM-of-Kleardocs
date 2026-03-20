@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, FilePlus, Calendar as CalendarIcon } from "lucide-react";
+import { X, FileText, Calendar as CalendarIcon } from "lucide-react";
 
 const AddInvoiceModal = ({ service, onClose, onAdd }) => {
   const [formData, setFormData] = useState({
