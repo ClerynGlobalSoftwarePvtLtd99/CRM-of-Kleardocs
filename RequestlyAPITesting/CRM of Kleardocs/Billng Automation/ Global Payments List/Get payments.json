@@ -1,9 +1,9 @@
 {
-  "name": "List invoices (filter + paginate)",
-  "rank": "auntit17740081628481",
+  "name": "Get payments",
+  "rank": "auntit17740728603641",
   "request": {
     "type": "http",
-    "url": "http://localhost:5000/api/v1/invoices",
+    "url": "http://localhost:5000/api/v1/payments",
     "scripts": {
       "preRequest": "",
       "postResponse": ""
@@ -17,7 +17,7 @@
       "currentAuthType": "BEARER_TOKEN",
       "authConfigStore": {
         "BEARER_TOKEN": {
-          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDAwODI0NywiZXhwIjoxNzc0MDA5MTQ3fQ.LRqkzjW2LTZVKNUVZDEtYz7nrWQOl__lB-o_piHENCc"
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDA3MjkxMCwiZXhwIjoxNzc0MDczODEwfQ.Gr-oW-E7-FcjoAFOlxyG7KJruDN8JyhhgtwD-Z4HAig"
         }
       }
     }

@@ -1,0 +1,28 @@
+{
+  "name": "Get payments by filtering",
+  "rank": "av",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/payments?type=UPI",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [
+      {
+        "id": 0.7250639770672718,
+        "key": "type",
+        "value": "UPI",
+        "isEnabled": true
+      }
+    ],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

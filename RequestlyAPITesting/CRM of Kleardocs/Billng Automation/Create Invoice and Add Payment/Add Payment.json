@@ -3,7 +3,7 @@
   "rank": "ax",
   "request": {
     "type": "http",
-    "url": "http://localhost:5000/api/v1/invoices/69bd460058e392e8f1b1ec48/payments",
+    "url": "http://localhost:5000/api/v1/invoices/69be31ac09c8437245840ce6/payments",
     "scripts": {
       "preRequest": "",
       "postResponse": ""
@@ -17,7 +17,7 @@
       "currentAuthType": "BEARER_TOKEN",
       "authConfigStore": {
         "BEARER_TOKEN": {
-          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDAxMDU4NCwiZXhwIjoxNzc0MDExNDg0fQ.mXjTHpznUOgxmp6HDHpd9jkkj9DE6ZVWuqskmpWKi9s"
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDA3MTg4OCwiZXhwIjoxNzc0MDcyNzg4fQ.-askJlu_0rnWYfdaZzS-6AdPv6TghyUPBIvRxYkB2c4"
         }
       }
     },

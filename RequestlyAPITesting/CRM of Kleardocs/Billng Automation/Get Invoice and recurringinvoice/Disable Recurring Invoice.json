@@ -1,0 +1,22 @@
+{
+  "name": "Disable Recurring Invoice",
+  "rank": "b05",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/recurringinvoices/69bd39f2bb8f2114a1e7a6e6/disable",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

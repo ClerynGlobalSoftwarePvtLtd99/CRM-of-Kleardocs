@@ -1,4 +1,5 @@
 import User from "../models/User.model.js";
+import Customer from "../models/Customer.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { ApiError } from "../utils/response.js";
@@ -84,4 +85,35 @@ export const refreshAccessToken = async (incomingRefreshToken) => {
   await user.save();
 
   return { accessToken, refreshToken };
+};
+
+export const loginCustomerAccount = async (data) => {
+  const { username, password } = data;
+
+  if (!username || !password) {
+    throw new ApiError(400, "Username and password are required");
+  }
+
+  const customer = await Customer.findOne({ username });
+  if (!customer) throw new ApiError(401, "Invalid credentials");
+
+  if (!customer.active) throw new ApiError(403, "Your account is deactivated. Please contact support.");
+
+  // Password for customer portal is a plain generated string according to the schema
+  if (customer.password !== password) throw new ApiError(401, "Invalid credentials");
+
+  const accessToken = jwt.sign(
+    { id: customer._id, role: "Customer" },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN || "15m" }
+  );
+
+  const refreshToken = jwt.sign(
+    { id: customer._id },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || "7d" }
+  );
+
+  // Return generated tokens back to controller
+  return { customer: { id: customer._id, name: customer.name, companyName: customer.companyName, username: customer.username }, accessToken, refreshToken };
 };

@@ -16,7 +16,7 @@
       "currentAuthType": "BEARER_TOKEN",
       "authConfigStore": {
         "BEARER_TOKEN": {
-          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDAxMjgwNywiZXhwIjoxNzc0MDEzNzA3fQ.PsmiJJZiV-VzI6H5LcU6FxeYKecAciaPav9sISBDJUo"
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDA2OTgzOCwiZXhwIjoxNzc0MDcwNzM4fQ.Fc2w2D7kLhAgReiNG9m8VUv5mDlwibtnkBRUKvmjisI"
         }
       }
     }

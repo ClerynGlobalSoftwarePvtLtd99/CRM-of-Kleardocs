@@ -98,6 +98,7 @@ Zod validation setup
 DB connection
 
 Project structure
+=======================================
 
 🚀 DAY 2 (12–14 HOURS)
 📂 LEADS (FULL)
@@ -111,6 +112,7 @@ Assign agent
 Notes system
 
 Convert to customer (transaction)
+========================================
 
 🚀 DAY 3 (14–16 HOURS)
 👥 CUSTOMERS + COMPLIANCE
@@ -126,6 +128,7 @@ Compliance CRUD
 Financial year logic
 
 Auto-create compliance
+========================================
 
 🚀 DAY 4 (16 HOURS HARD)
 💰 BILLING + AUTOMATION
@@ -141,6 +144,7 @@ Auto update due
 Recurring invoice (simple cron)
 
 Email sending (template)
+========================================    
 
 🚀 DAY 5 (16 HOURS HARD)
 📊 DASHBOARD + DEPLOY

@@ -25,6 +25,18 @@ export const login = async (req, res) => {
      }, "User logged in successfully"));
 };
 
+export const customerLogin = async (req, res) => {
+  const result = await authService.loginCustomerAccount(req.body);
+  
+  res.status(200)
+     .cookie("refreshToken", result.refreshToken, cookieOptions)
+     .cookie("accessToken", result.accessToken, { ...cookieOptions, expires: new Date(Date.now() + 15 * 60 * 1000) })
+     .json(new ApiResponse(200, {
+        customer: result.customer,
+        accessToken: result.accessToken
+     }, "Customer logged in successfully"));
+};
+
 export const refresh = async (req, res) => {
   // Try taking the refresh token from httpOnly cookie OR body
   const rawRefreshToken = req.cookies?.refreshToken || req.body.refreshToken;
