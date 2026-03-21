@@ -1,0 +1,21 @@
+{
+  "name": "Retrieve General Settings",
+  "rank": "auntit17740829563991",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/settings/general",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

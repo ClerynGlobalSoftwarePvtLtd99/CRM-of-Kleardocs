@@ -1,0 +1,21 @@
+{
+  "name": "Update General Settings",
+  "rank": "av",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/settings/general",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"invoicePrefix\": \"INV-24-25\",\n  \"invoiceStartingNumber\": 10835,\n  \"emailFromName\": \"Kleardocs\",\n  \"fromEmail\": \"kleardocssolutions@gmail.com\",\n  \"invoiceTemplate\": \"Annual Compliance Service - Ritu Kaur\",\n  \"gstTemplate\": \"GST Filing\",\n  \"ptaxTemplate\": \"Professional Tax\",\n  \"startupIndiaTemplate\": \"Startup India Promotion\",\n  \"inc20Template\": \"INC 20A Reminder\",\n  \"recurringInvoiceTemplate\": \"Next Quarter Payment\",\n  \"serviceListTemplate\": \"Startup India Registration\",\n  \"websiteTemplate\": \"Website\",\n  \"isoTemplate\": \"Service List\"\n}",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

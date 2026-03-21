@@ -54,3 +54,15 @@ export const refresh = async (req, res) => {
         accessToken: result.accessToken
      }, "Token refreshed successfully"));
 };
+
+export const logout = async (req, res) => {
+  // req.user is guaranteed to exist by the auth middleware
+  await authService.logoutUser(req.user.id, req.user.role || "customer");
+
+  const clearOptions = { ...cookieOptions, expires: new Date(0) }; // Expire immediately
+  
+  res.status(200)
+     .cookie("accessToken", "", clearOptions)
+     .cookie("refreshToken", "", clearOptions)
+     .json(new ApiResponse(200, null, "Logged out successfully"));
+};

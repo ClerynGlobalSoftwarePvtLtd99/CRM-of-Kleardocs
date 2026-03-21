@@ -117,3 +117,12 @@ export const loginCustomerAccount = async (data) => {
   // Return generated tokens back to controller
   return { customer: { id: customer._id, name: customer.name, companyName: customer.companyName, username: customer.username }, accessToken, refreshToken };
 };
+
+export const logoutUser = async (userId, role) => {
+  // If the user is an admin/agent/accountant, remove the refresh token from the DB
+  if (role !== "customer" && role !== "Customer") {
+    await User.findByIdAndUpdate(userId, { $unset: { refreshToken: 1 } });
+  }
+  // For customers, tokens are purely stateless here
+  return true;
+};

@@ -1,4 +1,5 @@
 import EmailLog from "../models/EmailLog.model.js";
+import SystemSetting from "../models/SystemSetting.model.js";
 
 const getDateMatch = (startDate, endDate) => {
   const match = {};
@@ -26,4 +27,33 @@ export const getEmailCountStats = async (startDate, endDate) => {
     total,
     data: dailyAgg
   };
+};
+
+export const getSystemSettings = async () => {
+  let settings = await SystemSetting.findOne();
+  if (!settings) {
+    settings = await SystemSetting.create({});
+  }
+  return settings;
+};
+
+export const updateSystemSettings = async (data) => {
+  let settings = await SystemSetting.findOne();
+  if (!settings) {
+    settings = new SystemSetting({});
+  }
+  
+  const fields = [
+    "invoicePrefix", "invoiceStartingNumber", "emailFromName", "fromEmail",
+    "invoiceTemplate", "gstTemplate", "ptaxTemplate", "startupIndiaTemplate",
+    "inc20Template", "recurringInvoiceTemplate", "serviceListTemplate",
+    "websiteTemplate", "isoTemplate"
+  ];
+
+  for (const f of fields) {
+      if (data[f] !== undefined) settings[f] = data[f];
+  }
+
+  await settings.save();
+  return settings;
 };

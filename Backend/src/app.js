@@ -14,6 +14,11 @@ import CustomerRoutes from "./routes/customer.routes.js";
 import ComplianceSettingRoutes, { financialYearRouter } from "./routes/complianceSetting.routes.js";
 import DashboardRoutes from "./routes/dashboard.routes.js";
 import SettingsRoutes from "./routes/settings.routes.js";
+import ServiceRoutes from "./routes/service.routes.js";
+import ComplianceRoutes from "./routes/compliance.routes.js";
+import TemplateRoutes from "./routes/template.routes.js";
+import JobRoutes from "./routes/job.routes.js";
+import UserRoutes from "./routes/user.routes.js";
 
 // Pre-register models needed for populate (even if their routes aren't built yet)
 import "./models/Service.model.js";
@@ -72,6 +77,11 @@ app.use("/api/v1/payments", PaymentRoutes);
 app.use("/api/v1/recurringinvoices", RecurringInvoiceRoutes);
 app.use("/api/v1/dashboard", DashboardRoutes);
 app.use("/api/v1/settings", SettingsRoutes);
+app.use("/api/v1/services", ServiceRoutes);
+app.use("/api/v1/compliances", ComplianceRoutes);
+app.use("/api/v1/templates", TemplateRoutes);
+app.use("/api/v1/jobs", JobRoutes);
+app.use("/api/v1/users", UserRoutes);
 
 // Global Error Handler (must be after all routes) 
 app.use(errorHandler);
