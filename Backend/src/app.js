@@ -73,7 +73,7 @@ app.use("/api/v1/recurringinvoices", RecurringInvoiceRoutes);
 app.use("/api/v1/dashboard", DashboardRoutes);
 app.use("/api/v1/settings", SettingsRoutes);
 
-// Global Error Handler (must be after all routes)
+// Global Error Handler (must be after all routes) 
 app.use(errorHandler);
 
-export default app;
+export default app;

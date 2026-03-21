@@ -43,7 +43,7 @@ export const loginUser = async (data) => {
   const refreshToken = jwt.sign(
     { id: user._id },
     process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || "7d" }
+    { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || "30d" }
   );
 
   user.refreshToken = refreshToken;
@@ -77,7 +77,7 @@ export const refreshAccessToken = async (incomingRefreshToken) => {
   const refreshToken = jwt.sign(
     { id: user._id },
     process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || "7d" }
+    { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || "30d" }
   );
 
   // Update DB 
@@ -111,7 +111,7 @@ export const loginCustomerAccount = async (data) => {
   const refreshToken = jwt.sign(
     { id: customer._id },
     process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || "7d" }
+    { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || "30d" }
   );
 
   // Return generated tokens back to controller
