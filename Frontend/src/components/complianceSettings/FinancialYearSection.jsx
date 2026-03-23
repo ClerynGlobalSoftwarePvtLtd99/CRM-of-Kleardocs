@@ -1,85 +1,57 @@
-import React, { useState } from 'react'
-import toast from 'react-hot-toast'
-import AddFinancialYearModal from './AddFinancialYearModal'
-import EditFinancialYearModal from './EditFinancialYearModal'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
+import { fetchFinancialYears, addFinancialYear, updateFinancialYear } from '../../redux/slices/complianceSlice'
 
-const FinancialYearSection = ({ financialYears, setFinancialYears }) => {
+const FinancialYearSection = () => {
+  const dispatch = useAppDispatch()
+  const { financialYears, loading } = useAppSelector((state) => state.compliance)
+  
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [newYearValue, setNewYearValue] = useState('')
   const [editYearValue, setEditYearValue] = useState('')
   const [editingYearId, setEditingYearId] = useState(null)
 
-  const handleAddYear = () => {
+  useEffect(() => {
+    dispatch(fetchFinancialYears())
+  }, [dispatch])
+
+  const handleAddYear = async () => {
     if (!newYearValue.trim()) {
       toast.error('Please enter a financial year')
       return
     }
 
-    // Check if exists
-    if (financialYears.some((fy) => fy.year === newYearValue.trim())) {
-      toast.error('Financial year already exists')
-      return
+    try {
+      await dispatch(addFinancialYear(newYearValue.trim())).unwrap()
+      setNewYearValue('')
+      setIsAddModalOpen(false)
+      toast.success('Financial year added successfully')
+    } catch (err) {
+      toast.error(err || 'Failed to add financial year')
     }
-
-    const newYear = {
-      id: Date.now().toString(),
-      year: newYearValue.trim(),
-    }
-
-    setFinancialYears([...financialYears, newYear])
-    setNewYearValue('')
-    setIsAddModalOpen(false)
-    toast.success('Financial year added successfully', {
-      style: {
-        background: 'var(--color-bg-secondary)',
-        color: 'var(--color-text-primary)',
-        border: '1px solid var(--color-bg-tertiary)',
-      },
-      iconTheme: { primary: '#10b981', secondary: '#fff' },
-    })
   }
 
   const handleEditClick = (fy) => {
-    setEditingYearId(fy.id)
+    setEditingYearId(fy._id)
     setEditYearValue(fy.year)
     setIsEditModalOpen(true)
   }
 
-  const handleUpdateYear = () => {
+  const handleUpdateYear = async () => {
     if (!editYearValue.trim()) {
       toast.error('Please enter a financial year')
       return
     }
 
-    // Check if exists (and isn't the one we're currently editing)
-    if (
-      financialYears.some(
-        (fy) => fy.year === editYearValue.trim() && fy.id !== editingYearId
-      )
-    ) {
-      toast.error('Financial year already exists')
-      return
+    try {
+      await dispatch(updateFinancialYear({ yearId: editingYearId, year: editYearValue.trim() })).unwrap()
+      setEditYearValue('')
+      setEditingYearId(null)
+      setIsEditModalOpen(false)
+      toast.success('Financial year updated successfully')
+    } catch (err) {
+      toast.error(err || 'Failed to update financial year')
     }
-
-    setFinancialYears(
-      financialYears.map((fy) =>
-        fy.id === editingYearId ? { ...fy, year: editYearValue.trim() } : fy
-      )
-    )
-
-    setEditYearValue('')
-    setEditingYearId(null)
-    setIsEditModalOpen(false)
-
-    toast.success('Financial year updated successfully', {
-      style: {
-        background: 'var(--color-bg-secondary)',
-        color: 'var(--color-text-primary)',
-        border: '1px solid var(--color-bg-tertiary)',
-      },
-      iconTheme: { primary: '#10b981', secondary: '#fff' },
-    })
   }
 
   return (
@@ -109,7 +81,9 @@ const FinancialYearSection = ({ financialYears, setFinancialYears }) => {
             </tr>
           </thead>
           <tbody>
-            {financialYears.length === 0 ? (
+            {loading ? (
+              <tr><td colSpan="2" className="py-6 text-center text-sm text-[var(--color-text-secondary)]">Loading...</td></tr>
+            ) : financialYears.length === 0 ? (
               <tr className="hover:bg-[var(--color-bg-primary)] transition-colors">
                 <td
                   colSpan="2"
@@ -121,7 +95,7 @@ const FinancialYearSection = ({ financialYears, setFinancialYears }) => {
             ) : (
               financialYears.map((fy) => (
                 <tr
-                  key={fy.id}
+                  key={fy._id}
                   className="border-b border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-primary)] transition-colors last:border-0"
                 >
                   <td className="py-3 px-4 text-sm font-medium text-[var(--color-text-primary)]">

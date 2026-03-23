@@ -1,6 +1,21 @@
 import axios from 'axios';
 
-const baseURL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? 'https://crm-of-kleardocs-backend.onrender.com/api/v1' : 'http://localhost:5000/api/v1');
+// Helper to determine the backend base URL (Local vs Render)
+const getBaseURL = () => {
+    // Priority 1: User-specified manual override in local storage
+    const manualBase = localStorage.getItem('API_URL_OVERRIDE');
+    if (manualBase) return manualBase;
+
+    // Priority 2: VITE_API_BASE_URL (used in both Local Dev and Build Env)
+    if (import.meta.env.VITE_API_BASE_URL) return import.meta.env.VITE_API_BASE_URL;
+
+    // Priority 3: Automatic fallback based on build mode
+    return import.meta.env.PROD 
+        ? 'https://crm-of-kleardocs-backend.onrender.com/api/v1' 
+        : 'http://localhost:5000/api/v1';
+};
+
+const baseURL = getBaseURL();
 
 const axiosInstance = axios.create({
   baseURL,

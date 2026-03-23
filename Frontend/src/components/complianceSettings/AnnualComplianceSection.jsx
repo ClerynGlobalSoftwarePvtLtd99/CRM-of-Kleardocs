@@ -1,71 +1,64 @@
-import React, { useState } from 'react'
-import FinancialYearDropdown from './FinancialYearDropdown'
-import ComplianceTable from './ComplianceTable'
-import AddComplianceModal from './AddComplianceModal'
-import EditComplianceModal from './EditComplianceModal'
-import { DUMMY_COMPLIANCES } from './constants'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
+import { fetchComplianceSettings, addComplianceSetting, updateComplianceSetting, deleteComplianceSetting } from '../../redux/slices/complianceSlice'
 import toast from 'react-hot-toast'
 
-const AnnualComplianceSection = ({ financialYears }) => {
+const AnnualComplianceSection = () => {
+  const dispatch = useAppDispatch()
+  const { financialYears, compliances, loading } = useAppSelector((state) => state.compliance)
+
   const [selectedYear, setSelectedYear] = useState('')
-  const [compliances, setCompliances] = useState([])
   const [isDataLoaded, setIsDataLoaded] = useState(false)
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [editingCompliance, setEditingCompliance] = useState(null)
 
-  const handleLoad = () => {
+  const handleLoad = async () => {
     if (!selectedYear) {
       toast.error('Please select a financial year')
       return
     }
-    // Simulate API fetch with mock data
-    setCompliances(DUMMY_COMPLIANCES)
-    setIsDataLoaded(true)
-    toast.success('Data loaded successfully!', {
-      style: {
-        background: 'var(--color-bg-secondary)',
-        color: 'var(--color-text-primary)',
-        border: '1px solid var(--color-bg-tertiary)',
-      },
-      iconTheme: { primary: '#10b981', secondary: '#fff' },
-    })
-  }
-
-  const handleAddCompliance = (newCompliance) => {
-    const newEntry = {
-      ...newCompliance,
-      id: Date.now().toString(),
-      expiryAfter: newCompliance.hasExpiry ? '30 days' : null, // Mock derived state
+    
+    try {
+      await dispatch(fetchComplianceSettings(selectedYear)).unwrap()
+      setIsDataLoaded(true)
+      toast.success('Data loaded successfully!')
+    } catch (err) {
+      toast.error(err || 'Failed to load data')
     }
-    setCompliances([...compliances, newEntry])
-    setIsAddModalOpen(false)
-    toast.success('Compliance added successfully', {
-      style: {
-        background: 'var(--color-bg-secondary)',
-        color: 'var(--color-text-primary)',
-        border: '1px solid var(--color-bg-tertiary)',
-      },
-      iconTheme: { primary: '#10b981', secondary: '#fff' },
-    })
   }
 
-  const handleEditCompliance = (updatedCompliance) => {
-    setCompliances(
-      compliances.map((c) =>
-        c.id === updatedCompliance.id ? updatedCompliance : c
-      )
-    )
-    setIsEditModalOpen(false)
-    setEditingCompliance(null)
-    toast.success('Compliance updated successfully', {
-      style: {
-        background: 'var(--color-bg-secondary)',
-        color: 'var(--color-text-primary)',
-        border: '1px solid var(--color-bg-tertiary)',
-      },
-      iconTheme: { primary: '#10b981', secondary: '#fff' },
-    })
+  const handleAddCompliance = async (newCompliance) => {
+    try {
+      await dispatch(addComplianceSetting({ ...newCompliance, year: selectedYear })).unwrap()
+      setIsAddModalOpen(false)
+      toast.success('Compliance added successfully')
+    } catch (err) {
+      toast.error(err || 'Failed to add compliance')
+    }
+  }
+
+  const handleEditCompliance = async (updatedCompliance) => {
+    try {
+      await dispatch(updateComplianceSetting({ 
+        complianceId: updatedCompliance._id, 
+        data: updatedCompliance 
+      })).unwrap()
+      setIsEditModalOpen(false)
+      setEditingCompliance(null)
+      toast.success('Compliance updated successfully')
+    } catch (err) {
+      toast.error(err || 'Failed to update compliance')
+    }
+  }
+
+  const handleDeleteCompliance = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this compliance setting?')) return
+    try {
+      await dispatch(deleteComplianceSetting(id)).unwrap()
+      toast.success('Compliance deleted successfully')
+    } catch (err) {
+      toast.error(err || 'Failed to delete compliance')
+    }
   }
 
   const openEditModal = (compliance) => {
@@ -98,7 +91,7 @@ const AnnualComplianceSection = ({ financialYears }) => {
         />
       </div>
 
-      <ComplianceTable compliances={compliances} onEdit={openEditModal} />
+      <ComplianceTable compliances={compliances} onEdit={openEditModal} onDelete={handleDeleteCompliance} />
 
       <AddComplianceModal
         isOpen={isAddModalOpen}
