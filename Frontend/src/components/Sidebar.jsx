@@ -19,8 +19,11 @@ import {
   X,
 } from 'lucide-react'
 import { NavLink, useLocation } from 'react-router'
+import { useAppDispatch } from '../redux/hooks'
+import { logout } from '../redux/slices/authSlice'
 
 const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
+  const dispatch = useAppDispatch()
   const [isOpen, setIsOpen] = useState(false)
   const [showLogoutPopup, setShowLogoutPopup] = useState(false)
   const location = useLocation()
@@ -185,8 +188,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
               </button>
               <button
                 onClick={() => {
-                  // Backend work here
-                  console.log('Logging out...')
+                  dispatch(logout())
                   setShowLogoutPopup(false)
                 }}
                 className="flex-1 px-4 py-2.5 bg-red-500 hover:bg-red-800 text-white cursor-pointer rounded-lg font-semibold transition-colors focus:ring-2 focus:ring-red-600 focus:outline-none"
