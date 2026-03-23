@@ -10,7 +10,7 @@ const startServer = async () => {
         await connectDB();
         startRecurringInvoiceCron(); // ← daily 6AM cron for recurring invoices
         app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
+            console.log(`Server is running on port http://localhost:${PORT}`);
         });
     } catch (error) {
         console.error("Error starting server:", error);
@@ -18,4 +18,4 @@ const startServer = async () => {
     }
 };
 
-startServer();
+startServer();
