@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Toaster, toast } from 'react-hot-toast'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { useAppDispatch, useAppSelector } from './redux/hooks'
-import { loginUser, clearAuth, setAuthenticated } from './redux/slices/authSlice'
+import { loginUser, clearAuth, setAuthenticated, fetchCurrentUser } from './redux/slices/authSlice'
 import AdminLayout from './components/AdminLayout'
 import Dashboard from './pages/Dashboard'
 import Settings from './pages/Settings'
@@ -31,19 +31,12 @@ const App = () => {
   const [initialLoading, setInitialLoading] = useState(true)
 
   useEffect(() => {
-    // 1. If we have a token but no user, verify the session
-    if (token && !user) {
-      dispatch(getMe())
-    }
-
-    // 2. Simulate initial loading for 1 second to show the loader as requested
-    // But also wait for auth loading if it's happening
-    const timer = setTimeout(() => {
-      setInitialLoading(false)
-    }, 1000)
-
-    return () => clearTimeout(timer)
-  }, [dispatch, token, user])
+    // Authenticate natively using the HttpOnly backend cookie endpoint
+    dispatch(fetchCurrentUser())
+      .finally(() => {
+        setInitialLoading(false)
+      })
+  }, [dispatch])
 
   const handleLogin = (credentials) => {
     dispatch(loginUser(credentials))

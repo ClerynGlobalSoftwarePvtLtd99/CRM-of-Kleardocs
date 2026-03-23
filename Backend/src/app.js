@@ -4,6 +4,7 @@ import helmet from "helmet";
 import hpp from "hpp";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
+import mongoSanitize from "express-mongo-sanitize";
 import { securityMiddleware } from "./middleware/xss.middleware.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 
@@ -69,12 +70,13 @@ app.use("/api", limiter);
 
 // Middleware
 app.use(express.json({ limit: "50kb" }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: "50kb" }));
 app.use(cookieParser());
 
 // Anti-Hacking Middlewares
-app.use(hpp());
-app.use(securityMiddleware);
+app.use(mongoSanitize()); // Prevent NoSQL Injections
+app.use(hpp()); // Prevent HTTP Parameter Pollution
+app.use(securityMiddleware); // Custom XSS Payload Scrubber
 
 // Serve static files to client
 app.use(express.static("public"));
