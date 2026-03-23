@@ -2,10 +2,9 @@ import * as authService from "../services/auth.service.js";
 import { ApiResponse } from "../utils/response.js";
 
 const cookieOptions = {
-  expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days (Refresh Token max)
   httpOnly: true, // Prevents XSS attacks
-  secure: process.env.NODE_ENV === "production", // HTTPS only in prod
-  sameSite: "strict" // Prevents CSRF attacks
+  secure: true, // HTTPS required for cross-domain
+  sameSite: "none" // Allows Vercel Frontend to talk to Render Backend
 };
 
 export const register = async (req, res) => {
@@ -17,8 +16,8 @@ export const login = async (req, res) => {
   const result = await authService.loginUser(req.body);
   
   res.status(200)
-     .cookie("refreshToken", result.refreshToken, cookieOptions) // Restrict refresh token entirely to Server via HttpOnly
-     .cookie("accessToken", result.accessToken, { ...cookieOptions, expires: new Date(Date.now() + 15 * 60 * 1000) }) // 15 mins for access token cookie option
+     .cookie("refreshToken", result.refreshToken, { ...cookieOptions, expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) }) 
+     .cookie("accessToken", result.accessToken, { ...cookieOptions, expires: new Date(Date.now() + 15 * 60 * 1000) }) 
      .json(new ApiResponse(200, {
         user: result.user,
         accessToken: result.accessToken // Give frontend API access to use Bearer manually if they prefer
@@ -29,7 +28,7 @@ export const customerLogin = async (req, res) => {
   const result = await authService.loginCustomerAccount(req.body);
   
   res.status(200)
-     .cookie("refreshToken", result.refreshToken, cookieOptions)
+     .cookie("refreshToken", result.refreshToken, { ...cookieOptions, expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) })
      .cookie("accessToken", result.accessToken, { ...cookieOptions, expires: new Date(Date.now() + 15 * 60 * 1000) })
      .json(new ApiResponse(200, {
         customer: result.customer,
@@ -48,7 +47,7 @@ export const refresh = async (req, res) => {
   const result = await authService.refreshAccessToken(rawRefreshToken);
 
   res.status(200)
-     .cookie("refreshToken", result.refreshToken, cookieOptions)
+     .cookie("refreshToken", result.refreshToken, { ...cookieOptions, expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) })
      .cookie("accessToken", result.accessToken, { ...cookieOptions, expires: new Date(Date.now() + 15 * 60 * 1000) })
      .json(new ApiResponse(200, {
         accessToken: result.accessToken
@@ -56,14 +55,11 @@ export const refresh = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  // req.user is guaranteed to exist by the auth middleware
   await authService.logoutUser(req.user.id, req.user.role || "customer");
 
-  const clearOptions = { ...cookieOptions, expires: new Date(0) }; // Expire immediately
-  
   res.status(200)
-     .cookie("accessToken", "", clearOptions)
-     .cookie("refreshToken", "", clearOptions)
+     .clearCookie("accessToken", cookieOptions)
+     .clearCookie("refreshToken", cookieOptions)
      .json(new ApiResponse(200, null, "Logged out successfully"));
 };
 
