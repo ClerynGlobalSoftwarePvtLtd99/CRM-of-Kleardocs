@@ -43,12 +43,23 @@ const corsOptions = {
   origin: (origin, callback) => {
     // Allow requests with no origin (e.g. mobile apps, Postman, server-to-server)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    callback(new Error(`CORS policy: origin '${origin}' is not allowed`));
+
+    const isAllowed = allowedOrigins.some(ao => {
+        const originClean = origin.replace(/\/$/, "");
+        const aoClean = ao.replace(/\/$/, "");
+        return originClean === aoClean || originClean.endsWith(".vercel.app");
+    });
+
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.warn(`CORS blocked for origin: ${origin}`);
+      callback(new Error(`CORS policy: origin '${origin}' is not allowed`));
+    }
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
 };
 
 app.use(cors(corsOptions));

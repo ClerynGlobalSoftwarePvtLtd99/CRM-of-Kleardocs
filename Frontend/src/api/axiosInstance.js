@@ -4,10 +4,25 @@ const baseURL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? 'ht
 
 const axiosInstance = axios.create({
   baseURL,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 });
+
+// Logging for debugging (will show in browser console)
+axiosInstance.interceptors.response.use(
+  (response) => {
+    if (response.config.url.includes('/settings/general')) {
+      console.log('API Response data:', response.data);
+    }
+    return response;
+  },
+  (error) => {
+    console.error('API Error:', error.response || error.message);
+    return Promise.reject(error);
+  }
+);
 
 // Request interceptor to add token
 axiosInstance.interceptors.request.use(
