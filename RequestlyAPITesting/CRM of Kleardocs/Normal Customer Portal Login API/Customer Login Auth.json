@@ -1,0 +1,21 @@
+{
+  "name": "Customer Login Auth",
+  "rank": "auntit17740781561361",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/auth/customer-login",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"username\": \"RAJINNOV001\",\n  \"password\": \"ed67cdeb\"\n}",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

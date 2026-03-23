@@ -1,0 +1,25 @@
+{
+  "name": "Get service",
+  "rank": "auntit17740878968951",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/services",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDA4Nzk0OCwiZXhwIjoxNzc0MDg4ODQ4fQ.lmLJNYC08lfhOUtZaRMb1jLozj0MMIbc4nffLF3bMvQ"
+        }
+      }
+    }
+  }
+}

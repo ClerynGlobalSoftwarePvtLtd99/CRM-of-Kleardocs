@@ -12,9 +12,23 @@ import AuthRoutes from "./routes/auth.routes.js";
 import LeadRoutes from "./routes/lead.routes.js";
 import CustomerRoutes from "./routes/customer.routes.js";
 import ComplianceSettingRoutes, { financialYearRouter } from "./routes/complianceSetting.routes.js";
+import DashboardRoutes from "./routes/dashboard.routes.js";
+import SettingsRoutes from "./routes/settings.routes.js";
+import ServiceRoutes from "./routes/service.routes.js";
+import ComplianceRoutes from "./routes/compliance.routes.js";
+import TemplateRoutes from "./routes/template.routes.js";
+import JobRoutes from "./routes/job.routes.js";
+import UserRoutes from "./routes/user.routes.js";
 
 // Pre-register models needed for populate (even if their routes aren't built yet)
 import "./models/Service.model.js";
+import "./models/Invoice.model.js";
+import "./models/RecurringInvoice.model.js";
+
+// Billing routes
+import InvoiceRoutes from "./routes/invoice.routes.js";
+import PaymentRoutes from "./routes/payment.routes.js";
+import RecurringInvoiceRoutes from "./routes/recurringInvoice.routes.js";
 
 const app = express();
 
@@ -58,8 +72,18 @@ app.use("/api/v1/leads", LeadRoutes);
 app.use("/api/v1/customers", CustomerRoutes);
 app.use("/api/v1/compliance-settings", ComplianceSettingRoutes);
 app.use("/api/v1/financial-years", financialYearRouter);
+app.use("/api/v1/invoices", InvoiceRoutes);
+app.use("/api/v1/payments", PaymentRoutes);
+app.use("/api/v1/recurringinvoices", RecurringInvoiceRoutes);
+app.use("/api/v1/dashboard", DashboardRoutes);
+app.use("/api/v1/settings", SettingsRoutes);
+app.use("/api/v1/services", ServiceRoutes);
+app.use("/api/v1/compliances", ComplianceRoutes);
+app.use("/api/v1/templates", TemplateRoutes);
+app.use("/api/v1/jobs", JobRoutes);
+app.use("/api/v1/users", UserRoutes);
 
-// Global Error Handler (must be after all routes)
+// Global Error Handler (must be after all routes) 
 app.use(errorHandler);
 
-export default app;
+export default app;

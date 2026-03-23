@@ -1,0 +1,25 @@
+{
+  "name": "Get All Jobs",
+  "rank": "auntit17742440234801",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/jobs",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDI0NDExNywiZXhwIjoxNzc0MjQ1MDE3fQ.U2nZKNSGTnn-R6dV9TlvkH2W_v-tcpsMafb9wziRHtg"
+        }
+      }
+    }
+  }
+}

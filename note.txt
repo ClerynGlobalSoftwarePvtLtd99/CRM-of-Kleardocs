@@ -98,6 +98,7 @@ Zod validation setup
 DB connection
 
 Project structure
+=======================================
 
 🚀 DAY 2 (12–14 HOURS)
 📂 LEADS (FULL)
@@ -111,6 +112,7 @@ Assign agent
 Notes system
 
 Convert to customer (transaction)
+========================================
 
 🚀 DAY 3 (14–16 HOURS)
 👥 CUSTOMERS + COMPLIANCE
@@ -126,6 +128,7 @@ Compliance CRUD
 Financial year logic
 
 Auto-create compliance
+========================================
 
 🚀 DAY 4 (16 HOURS HARD)
 💰 BILLING + AUTOMATION
@@ -141,6 +144,7 @@ Auto update due
 Recurring invoice (simple cron)
 
 Email sending (template)
+========================================    
 
 🚀 DAY 5 (16 HOURS HARD)
 📊 DASHBOARD + DEPLOY
@@ -173,3 +177,7 @@ Here is exactly what I implemented across your files:
 5. Password Leak (bcrypt): Checked and confirmed that bcrypt.hash() with a robust salt factor of 10 is correctly placed in your auth.service.js.
 6. Token Theft (httpOnly cookie): Modified login in auth.controller.js to attach your JWT to an httpOnly, secure cookie that JavaScript can never access or scrape. I updated auth.middleware.js to automatically read from this highly-secure cookie and fallback to the generic Authorization header.
 7. Data Leak (hide errors): Your error.middleware.js is already configured to automatically strip stack traces from responses when NODE_ENV=production is active!
+
+
+
+feat: Implement core backend modules for authentication, users, jobs, services, compliance, templates, and settings, along with API testing documentation.

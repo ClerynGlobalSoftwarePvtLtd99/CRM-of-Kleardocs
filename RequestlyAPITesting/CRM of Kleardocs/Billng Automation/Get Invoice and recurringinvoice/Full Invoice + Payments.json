@@ -1,0 +1,22 @@
+{
+  "name": "Full Invoice + Payments",
+  "rank": "b01",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/invoices/69be31ac09c8437245840ce6",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

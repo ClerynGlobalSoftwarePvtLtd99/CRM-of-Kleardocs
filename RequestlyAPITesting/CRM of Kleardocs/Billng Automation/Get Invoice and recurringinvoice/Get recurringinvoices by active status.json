@@ -1,0 +1,34 @@
+{
+  "name": "Get recurringinvoices by active status",
+  "rank": "b03",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/recurringinvoices",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [
+      {
+        "id": 0.11521200734211301,
+        "key": "status",
+        "value": "Active",
+        "isEnabled": true
+      },
+      {
+        "id": 0.16017142919882454,
+        "key": "page",
+        "value": "1",
+        "isEnabled": true
+      }
+    ],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

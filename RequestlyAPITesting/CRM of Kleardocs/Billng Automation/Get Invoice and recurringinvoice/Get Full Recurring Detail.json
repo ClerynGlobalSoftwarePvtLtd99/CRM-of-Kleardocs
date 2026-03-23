@@ -1,0 +1,21 @@
+{
+  "name": "Get Full Recurring Detail",
+  "rank": "b04",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/recurringinvoices/69bd3ae2bb8f2114a1e7a6f2",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

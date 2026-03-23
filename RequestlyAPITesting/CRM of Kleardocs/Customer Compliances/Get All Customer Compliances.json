@@ -1,0 +1,21 @@
+{
+  "name": "Get All Customer Compliances",
+  "rank": "auntit17742433585221",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/compliances",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

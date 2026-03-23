@@ -1,0 +1,25 @@
+{
+  "name": "Recurring Invoice",
+  "rank": "aw",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/invoices",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"customerId\": \"69bcf4fb3b2c2f7ac07dd287\",\n  \"invoiceDate\": \"2026-03-20\",\n  \"items\": [\n    {\n      \"description\": \"Monthly Accounting\",\n      \"professionalFees\": 3000,\n      \"govtFees\": 0,\n      \"gstPercent\": 18\n    }\n  ],\n  \"recurring\": true,\n  \"interval\": 1,\n  \"intervalType\": \"Month\",\n  \"endDate\": \"2027-03-20\"\n}",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDAwODI0NywiZXhwIjoxNzc0MDA5MTQ3fQ.LRqkzjW2LTZVKNUVZDEtYz7nrWQOl__lB-o_piHENCc"
+        }
+      }
+    }
+  }
+}

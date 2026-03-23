@@ -1,0 +1,22 @@
+{
+  "name": "Delete Job",
+  "rank": "ay",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/jobs/69c0d22dd14787a4e3d49d83",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "DELETE",
+    "queryParams": [],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

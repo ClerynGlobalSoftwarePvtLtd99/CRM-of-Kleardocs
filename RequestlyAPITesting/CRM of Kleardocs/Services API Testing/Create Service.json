@@ -1,0 +1,21 @@
+{
+  "name": "Create Service",
+  "rank": "av",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/services",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"name\": \"FSSAI Food License\",\n  \"professionalFees\": 1500,\n  \"govtFees\": 0,\n  \"hsn\": \"998309\"\n}",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

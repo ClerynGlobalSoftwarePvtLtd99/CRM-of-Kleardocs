@@ -1,0 +1,21 @@
+{
+  "name": "Get recurringinvoices",
+  "rank": "b02",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/recurringinvoices",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}
