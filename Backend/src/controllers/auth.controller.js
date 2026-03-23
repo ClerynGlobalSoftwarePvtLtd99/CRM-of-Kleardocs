@@ -68,7 +68,18 @@ export const logout = async (req, res) => {
 };
 
 export const getMe = async (req, res) => {
-  // auth middleware adds user to req
-  const result = await authService.getProfile(req.user.id, req.user.role);
-  res.status(200).json(new ApiResponse(200, result, "Profile retrieved successfully"));
-};
+  // Identify the class of logged in persona securely fetched from DB
+  let currentUser = null;
+  if (req.user.role === "Customer" || req.user.role === "customer") {
+      const Customer = (await import("../models/Customer.model.js")).default;
+      currentUser = await Customer.findById(req.user.id).select("-password -__v");
+  } else {
+      const User = (await import("../models/User.model.js")).default;
+      currentUser = await User.findById(req.user.id).select("-password -__v");
+  }
+
+  if (!currentUser) throw new ApiError(404, "Account identity missing or revoked");
+  if (currentUser.active === false || currentUser.deletedAt) throw new ApiError(403, "Account deactivated");
+
+  res.status(200).json(new ApiResponse(200, currentUser, "Session strictly hydrated"));
+};
