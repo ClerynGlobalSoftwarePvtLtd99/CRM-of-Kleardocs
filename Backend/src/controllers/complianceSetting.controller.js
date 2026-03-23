@@ -9,19 +9,19 @@ export const getFinancialYears = async (req, res) => {
 };
 
 export const createFinancialYear = async (req, res) => {
-  const data = await service.createFinancialYear(req.body.year);
+  const data = await service.createFinancialYear(req.body.financialYear || req.body.year);
   res.status(201).json(new ApiResponse(201, data, "Financial year created"));
 };
 
 export const updateFinancialYear = async (req, res) => {
-  const data = await service.updateFinancialYear(req.params.yearId, req.body.year);
+  const data = await service.updateFinancialYear(req.params.yearId, req.body.financialYear || req.body.year);
   res.status(200).json(new ApiResponse(200, data, "Financial year updated"));
 };
 
 // ─── COMPLIANCE SETTINGS ──────────────────────────────────────────────────────
 
 export const getComplianceSettings = async (req, res) => {
-  const data = await service.getComplianceSettings(req.query.year);
+  const data = await service.getComplianceSettings(req.query.financialYear || req.query.year);
   res.status(200).json(new ApiResponse(200, data, "Compliance settings fetched"));
 };
 

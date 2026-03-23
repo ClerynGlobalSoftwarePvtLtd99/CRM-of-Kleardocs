@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 // ─── Financial Year Schema ────────────────────────────────────────────────────
 const financialYearSchema = new mongoose.Schema(
   {
-    year: { type: String, required: true, unique: true } // "2025-2026"
+    financialYear: { type: String, required: true, unique: true } // "2025-2026"
   },
   { timestamps: true }
 );
@@ -14,7 +14,7 @@ const financialYearSchema = new mongoose.Schema(
 const complianceSettingSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    year: { type: String, required: true },         // "2025-2026"
+    financialYear: { type: String, required: true },         // "2025-2026"
     hasExpiry: { type: Boolean, default: false },
     expiryDate: { type: Date },
     isNew: { type: Boolean, default: false },        // new companies only

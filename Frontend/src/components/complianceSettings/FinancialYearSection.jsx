@@ -1,5 +1,10 @@
+import React, { useState, useEffect } from 'react'
+import { toast } from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { fetchFinancialYears, addFinancialYear, updateFinancialYear } from '../../redux/slices/complianceSlice'
+import AddFinancialYearModal from './AddFinancialYearModal'
+import EditFinancialYearModal from './EditFinancialYearModal'
+import { Plus } from 'lucide-react'
 
 const FinancialYearSection = () => {
   const dispatch = useAppDispatch()
@@ -99,7 +104,7 @@ const FinancialYearSection = () => {
                   className="border-b border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-primary)] transition-colors last:border-0"
                 >
                   <td className="py-3 px-4 text-sm font-medium text-[var(--color-text-primary)]">
-                    {fy.year}
+                    {fy.financialYear}
                   </td>
                   <td className="py-3 px-4 text-sm text-right">
                     <button

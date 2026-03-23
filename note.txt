@@ -1,3 +1,8 @@
+{
+  "email": "admin2@kleardocs.com",
+  "password": "securepassword1234"
+}
+========================================
 Frontend:- https://crm-of-kleardocs.vercel.app
 Backend:- https://crm-of-kleardocs-backend.onrender.com
 =====================================================

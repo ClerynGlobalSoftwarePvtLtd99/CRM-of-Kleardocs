@@ -77,12 +77,12 @@ const ComplianceTable = ({ compliances, onEdit, onDelete }) => {
                   >
                     Modify
                   </button>
-                  <button
+                  {/* <button
                     onClick={() => onDelete(comp._id)}
                     className="text-red-500 hover:text-red-700 font-semibold cursor-pointer transition-colors px-2 py-1 rounded-md hover:bg-red-50/10 active:opacity-70"
                   >
                     Delete
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))

@@ -1,6 +1,11 @@
+import React, { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { fetchComplianceSettings, addComplianceSetting, updateComplianceSetting, deleteComplianceSetting } from '../../redux/slices/complianceSlice'
 import toast from 'react-hot-toast'
+import FinancialYearDropdown from './FinancialYearDropdown'
+import ComplianceTable from './ComplianceTable'
+import AddComplianceModal from './AddComplianceModal'
+import EditComplianceModal from './EditComplianceModal'
 
 const AnnualComplianceSection = () => {
   const dispatch = useAppDispatch()
@@ -29,7 +34,7 @@ const AnnualComplianceSection = () => {
 
   const handleAddCompliance = async (newCompliance) => {
     try {
-      await dispatch(addComplianceSetting({ ...newCompliance, year: selectedYear })).unwrap()
+      await dispatch(addComplianceSetting({ ...newCompliance, financialYear: selectedYear })).unwrap()
       setIsAddModalOpen(false)
       toast.success('Compliance added successfully')
     } catch (err) {

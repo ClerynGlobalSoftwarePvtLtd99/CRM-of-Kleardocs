@@ -5,19 +5,19 @@ import { ApiError } from "../utils/response.js";
 // ─── FINANCIAL YEARS ──────────────────────────────────────────────────────────
 
 export const getFinancialYears = async () => {
-  return FinancialYear.find().sort({ year: -1 }).lean();
+  return FinancialYear.find().sort({ financialYear: -1 }).lean();
 };
 
 export const createFinancialYear = async (year) => {
-  const existing = await FinancialYear.findOne({ year });
+  const existing = await FinancialYear.findOne({ financialYear: year });
   if (existing) throw new ApiError(400, "Financial year already exists");
-  return FinancialYear.create({ year });
+  return FinancialYear.create({ financialYear: year });
 };
 
 export const updateFinancialYear = async (yearId, year) => {
   const fy = await FinancialYear.findById(yearId);
   if (!fy) throw new ApiError(404, "Financial year not found");
-  fy.year = year;
+  fy.financialYear = year;
   await fy.save();
   return fy;
 };
@@ -26,7 +26,7 @@ export const updateFinancialYear = async (yearId, year) => {
 
 export const getComplianceSettings = async (year) => {
   const filter = {};
-  if (year) filter.year = year;
+  if (year) filter.financialYear = year;
   return ComplianceSetting.find(filter)
     .populate("expiryTemplate", "name")
     .populate("completeTemplate", "name")
@@ -37,7 +37,7 @@ export const getComplianceSettings = async (year) => {
 export const createComplianceSetting = async (data) => {
   const setting = await ComplianceSetting.create({
     name: data.name,
-    year: data.year,
+    financialYear: data.financialYear || data.year, // Support both during migration
     hasExpiry: data.hasExpiry ?? false,
     expiryDate: data.expiryDate ? new Date(data.expiryDate) : undefined,
     isNew: data.isNew ?? false,
@@ -54,7 +54,9 @@ export const updateComplianceSetting = async (complianceId, data) => {
   if (!setting) throw new ApiError(404, "Compliance setting not found");
 
   if (data.name !== undefined) setting.name = data.name;
-  if (data.year !== undefined) setting.year = data.year;
+  if (data.financialYear !== undefined || data.year !== undefined) {
+    setting.financialYear = data.financialYear || data.year;
+  }
   if (data.hasExpiry !== undefined) setting.hasExpiry = data.hasExpiry;
   if (data.expiryDate !== undefined) setting.expiryDate = data.expiryDate ? new Date(data.expiryDate) : null;
   if (data.isNew !== undefined) setting.isNew = data.isNew;

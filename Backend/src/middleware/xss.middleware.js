@@ -2,19 +2,20 @@ import xss from "xss";
 import mongoSanitize from "express-mongo-sanitize";
 
 export const securityMiddleware = (req, res, next) => {
-  // MongoDB Sanitize is already applied globally in app.js via app.use(mongoSanitize())
-  // We only need redundant checks here if we want to be paranoid, but in Express 5
-  // mutating req.query/req.params can trigger "Only a getter" errors.
+  // Manual MongoDB Sanitization for Body (Safe in Express 5)
+  if (req.body && typeof req.body === "object") {
+    mongoSanitize.sanitize(req.body);
+  }
 
-  // XSS Sanitize (focus on req.body which is usually where persistent XSS payloads live)
+  // XSS Sanitize for Body (Safe in Express 5 as req.body is not a protected getter)
   if (req.body && typeof req.body === "object") {
     cleanObjInPlace(req.body);
   }
 
-  // Note: For req.query and req.params, Express 5 uses getters. 
-  // If you need to clean them, you must do so at the point of use or 
-  // ensure the cleanup doesn't attempt to reassign protected properties.
-  
+  // NOTE: In Express 5, req.query and req.params are READ-ONLY getters.
+  // Standard hpp() and mongoSanitize() middlewares often crash by trying to reassign them.
+  // We avoid mutating them here to prevent "Cannot set property query" errors.
+
   next();
 };
 
