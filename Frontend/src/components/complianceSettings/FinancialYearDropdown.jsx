@@ -23,7 +23,7 @@ const FinancialYearDropdown = ({
         >
           <option value="">Select Year</option>
           {financialYears.map((fy) => (
-            <option key={fy.id} value={fy.year}>
+            <option key={fy._id} value={fy.year}>
               {fy.year}
             </option>
           ))}

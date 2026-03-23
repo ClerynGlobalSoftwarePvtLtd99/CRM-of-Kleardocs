@@ -1,10 +1,13 @@
 import * as authService from "../services/auth.service.js";
 import { ApiResponse } from "../utils/response.js";
 
-const cookieOptions = {
-  httpOnly: true, // Prevents XSS attacks
-  secure: true, // HTTPS required for cross-domain
-  sameSite: "none" // Allows Vercel Frontend to talk to Render Backend
+const getCookieOptions = (req) => {
+  const isProd = process.env.NODE_ENV === "production";
+  return {
+    httpOnly: true,
+    secure: isProd, // Only true in production (HTTPS)
+    sameSite: isProd ? "none" : "lax" // "none" for cross-site prod, "lax" for local dev
+  };
 };
 
 export const register = async (req, res) => {
@@ -15,9 +18,10 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   const result = await authService.loginUser(req.body);
   
+  const options = getCookieOptions(req);
   res.status(200)
-     .cookie("refreshToken", result.refreshToken, { ...cookieOptions, expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), path: "/" }) 
-     .cookie("accessToken", result.accessToken, { ...cookieOptions, expires: new Date(Date.now() + 15 * 60 * 1000), path: "/" }) 
+     .cookie("refreshToken", result.refreshToken, { ...options, expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), path: "/" }) 
+     .cookie("accessToken", result.accessToken, { ...options, expires: new Date(Date.now() + 15 * 60 * 1000), path: "/" }) 
      .json(new ApiResponse(200, {
         user: result.user || result.customer,
         accessToken: result.accessToken 
@@ -71,8 +75,9 @@ export const logout = async (req, res) => {
 
     // 2. AGGRESSIVE COOKIE CLEARANCE
     // We clear with path: "/" and the same options used for setting
+    const options = getCookieOptions(req);
     const clearOptions = { 
-        ...cookieOptions, 
+        ...options, 
         expires: new Date(0), 
         path: "/" 
     };

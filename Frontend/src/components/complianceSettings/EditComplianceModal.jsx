@@ -20,26 +20,26 @@ const FormFieldWrapper = ({ label, id, children }) => (
 
 const EditComplianceModal = ({ isOpen, onClose, data, onSubmit }) => {
   const [formData, setFormData] = useState({
-    complianceName: '',
+    name: '',
     hasExpiry: false,
     expiryDate: '',
     inc20: 'No',
-    daysOfExpiryAfterIncData: '30',
+    daysOfExpiry: '30',
     expiryTemplate: 'None',
-    completeTemplate: 'Compliance Update', // Edit modal specifically has this default when added
+    completeTemplate: 'Compliance Update',
   })
 
   // Populate data when editing
   useEffect(() => {
     if (data && isOpen) {
       setFormData({
-        complianceName: data.complianceName || '',
+        name: data.name || '',
         hasExpiry: data.hasExpiry || false,
-        expiryDate: data.expiryDate || '',
-        inc20: data.inc20 || 'No',
-        daysOfExpiryAfterIncData: data.daysOfExpiryAfterIncData || '30',
-        expiryTemplate: data.expiryTemplate || 'None',
-        completeTemplate: data.completeTemplate || 'Compliance Update',
+        expiryDate: data.expiryDate ? new Date(data.expiryDate).toISOString().split('T')[0] : '',
+        inc20: data.inc20 ? 'Yes' : 'No',
+        daysOfExpiry: data.daysOfExpiry || '30',
+        expiryTemplate: data.expiryTemplate?.name || 'None',
+        completeTemplate: data.completeTemplate?.name || 'Compliance Update',
       })
     }
   }, [data, isOpen])
@@ -60,7 +60,12 @@ const EditComplianceModal = ({ isOpen, onClose, data, onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSubmit({ ...data, ...formData }) // Merge ID back
+    onSubmit({ 
+      ...data, 
+      ...formData,
+      inc20: formData.inc20 === 'Yes',
+      daysOfExpiry: parseInt(formData.daysOfExpiry)
+    })
   }
 
   return (
@@ -84,11 +89,11 @@ const EditComplianceModal = ({ isOpen, onClose, data, onSubmit }) => {
             onSubmit={handleSubmit}
             className="space-y-6"
           >
-            <FormFieldWrapper label="Compliance Name *" id="complianceName">
+            <FormFieldWrapper label="Compliance Name *" id="name">
               <input
                 type="text"
-                id="complianceName"
-                value={formData.complianceName}
+                id="name"
+                value={formData.name}
                 onChange={handleChange}
                 required
                 className="w-full bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-2.5 rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] transition-colors"
@@ -148,11 +153,11 @@ const EditComplianceModal = ({ isOpen, onClose, data, onSubmit }) => {
 
             {/* Repeat fields as per prompt for Edit mode specifically requesting repeating Compliance Name input */}
             {formData.hasExpiry && (
-              <FormFieldWrapper label="Compliance Name *" id="complianceName">
+              <FormFieldWrapper label="Compliance Name *" id="name">
                 <input
                   type="text"
-                  id="complianceName"
-                  value={formData.complianceName}
+                  id="name"
+                  value={formData.name}
                   onChange={handleChange}
                   required
                   className="w-full bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-2.5 rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] transition-colors opacity-90 cursor-not-allowed"
@@ -197,12 +202,12 @@ const EditComplianceModal = ({ isOpen, onClose, data, onSubmit }) => {
 
             <FormFieldWrapper
               label="Days of Expiry after INC Data"
-              id="daysOfExpiryAfterIncData"
+              id="daysOfExpiry"
             >
               <input
                 type="number"
-                id="daysOfExpiryAfterIncData"
-                value={formData.daysOfExpiryAfterIncData}
+                id="daysOfExpiry"
+                value={formData.daysOfExpiry}
                 onChange={handleChange}
                 placeholder="30"
                 className="w-full bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-2.5 rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] transition-colors"

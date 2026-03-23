@@ -31,12 +31,24 @@ const App = () => {
   const [initialLoading, setInitialLoading] = useState(true)
 
   useEffect(() => {
-    // Authenticate natively using the HttpOnly backend cookie endpoint
-    dispatch(fetchCurrentUser())
-      .finally(() => {
-        setInitialLoading(false)
-      })
-  }, [dispatch])
+    // Check if we have a stored authentication state
+    const storedAuth = localStorage.getItem('isAuthenticated');
+    
+    // If we have a token or stored auth state, try to verify the session
+    if (token || storedAuth === 'true') {
+      dispatch(fetchCurrentUser()).catch(() => {
+        // If fetch fails, clear the invalid auth state
+        dispatch(clearAuth());
+      });
+    }
+
+    // Simulate initial loading for 1 second to show the loader as requested
+    const timer = setTimeout(() => {
+      setInitialLoading(false)
+    }, 1000)
+
+    return () => clearTimeout(timer)
+  }, [dispatch, token])
 
   const handleLogin = (credentials) => {
     dispatch(loginUser(credentials))
