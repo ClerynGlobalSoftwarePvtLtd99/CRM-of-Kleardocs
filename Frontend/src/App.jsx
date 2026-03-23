@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { Toaster } from 'react-hot-toast'
+import { useState, useEffect } from 'react'
+import { Toaster, toast } from 'react-hot-toast'
 import { BrowserRouter, Routes, Route } from 'react-router'
+import { useAppDispatch, useAppSelector } from './redux/hooks'
+import { loginUser, logout, setAuthenticated } from './redux/slices/authSlice'
 import AdminLayout from './components/AdminLayout'
 import Dashboard from './pages/Dashboard'
 import Settings from './pages/Settings'
@@ -21,20 +23,46 @@ import Leads from './pages/Leads'
 import LeadDetailsPage from './pages/LeadDetailsPage'
 import CustomerDetailsPage from './pages/CustomerDetailsPage'
 import Customers from './pages/Customers'
+import Login from './pages/Login'
 
-function App() {
-  const [isLoading, setIsLoading] = useState(true)
+const App = () => {
+  const dispatch = useAppDispatch()
+  const { isAuthenticated, loading } = useAppSelector((state) => state.auth)
+  const [initialLoading, setInitialLoading] = useState(true)
 
   useEffect(() => {
     // Simulate initial loading for 1 second to show the loader as requested
     const timer = setTimeout(() => {
-      setIsLoading(false)
+      setInitialLoading(false)
     }, 1000)
     return () => clearTimeout(timer)
   }, [])
 
-  if (isLoading) {
+  const handleLogin = (credentials) => {
+    dispatch(loginUser(credentials))
+      .unwrap()
+      .then(() => {
+        toast.success('Successfully logged in!', {
+          duration: 3000,
+          icon: '🚀',
+        })
+      })
+      .catch((error) => {
+        toast.error(error || 'Login failed')
+      })
+  }
+
+  if (loading || initialLoading) {
     return <Loader />
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Toaster position="top-right" />
+        <Login onLogin={handleLogin} />
+      </>
+    )
   }
 
   return (
