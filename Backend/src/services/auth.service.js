@@ -126,3 +126,15 @@ export const logoutUser = async (userId, role) => {
   // For customers, tokens are purely stateless here
   return true;
 };
+
+export const getProfile = async (userId, role) => {
+  if (role === "Customer" || role === "customer") {
+    const customer = await Customer.findById(userId).select("-password");
+    if (!customer) throw new ApiError(404, "Customer not found");
+    return { customer };
+  } else {
+    const user = await User.findById(userId).select("-password -refreshToken");
+    if (!user) throw new ApiError(404, "User not found");
+    return { user };
+  }
+};

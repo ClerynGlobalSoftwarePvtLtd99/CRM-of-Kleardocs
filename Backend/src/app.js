@@ -33,6 +33,30 @@ import RecurringInvoiceRoutes from "./routes/recurringInvoice.routes.js";
 
 const app = express();
 
+// ─── CORS — must be FIRST so preflight OPTIONS requests are answered ──────────
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://crm-of-kleardocs.vercel.app",
+  ...(process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',').map(o => o.trim()) : []),
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. mobile apps, Postman, server-to-server)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error(`CORS policy: origin '${origin}' is not allowed`));
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
+// Explicitly handle preflight for every route
+app.options("*", cors(corsOptions));
+
 // Standard Security Headers
 app.use(helmet());
 
@@ -57,17 +81,9 @@ app.use(securityMiddleware); // Custom XSS Payload Scrubber
 // Serve static files to client
 app.use(express.static("public"));
 
-// CORS Configuration
-app.use(cors({
-    origin: process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',') : ["http://localhost:5173"],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-}));
-
 // API Routes
 app.get("/", (req, res) => {
-    res.send("Server is healthy ✅");
+  res.send("Server is healthy ✅");
 });
 app.use("/api/v1/auth", AuthRoutes);
 app.use("/api/v1/leads", LeadRoutes);

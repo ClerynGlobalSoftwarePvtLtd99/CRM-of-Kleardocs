@@ -27,7 +27,7 @@ import Login from './pages/Login'
 
 const App = () => {
   const dispatch = useAppDispatch()
-  const { isAuthenticated, loading } = useAppSelector((state) => state.auth)
+  const { isAuthenticated, loading, token, user } = useAppSelector((state) => state.auth)
   const [initialLoading, setInitialLoading] = useState(true)
 
   useEffect(() => {
