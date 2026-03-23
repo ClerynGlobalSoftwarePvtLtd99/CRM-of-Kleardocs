@@ -10,9 +10,22 @@ import { useLocation } from 'react-router'
 
 import DateRangePicker from './DateRangePicker'
 
+import { useAppSelector } from '../redux/hooks'
+
 const Header = () => {
   const location = useLocation()
   const isDashboard = location.pathname === '/'
+  const { user } = useAppSelector((state) => state.auth)
+
+  const getInitials = (name) => {
+    if (!name) return '?'
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2)
+  }
 
   return (
     <header className="h-20 bg-[var(--color-bg-secondary)] border-b border-[var(--color-bg-tertiary)] flex items-center justify-between px-4 md:px-6 lg:px-8 z-10 w-full mb-1 relative">
@@ -28,11 +41,11 @@ const Header = () => {
             Welcome,
           </span>
           <span className="text-sm font-semibold text-[var(--color-text-primary)]">
-            John Doe
+            {user?.name || 'Guest'}
           </span>
         </div>
         <div className="w-10 h-10 rounded-full bg-[var(--color-accent)] flex items-center justify-center text-[var(--color-bg-primary)] font-bold shadow-lg ring-2 ring-[var(--color-bg-tertiary)] ring-offset-2 ring-offset-[var(--color-bg-secondary)]">
-          JD
+          {getInitials(user?.name)}
         </div>
       </div>
     </header>
