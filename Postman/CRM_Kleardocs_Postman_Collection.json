@@ -29,9 +29,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/jobs",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/jobs",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -48,9 +48,9 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/jobs/69c0d22dd14787a4e3d49d83",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/jobs/69c0d22dd14787a4e3d49d83",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -68,9 +68,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/jobs",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/jobs",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -97,9 +97,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/jobs",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/jobs",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -141,9 +141,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/jobs/69c0d22dd14787a4e3d49d83",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/jobs/69c0d22dd14787a4e3d49d83",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -169,9 +169,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/payments",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/payments",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -188,9 +188,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/payments?type=UPI",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/payments?type=UPI",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -213,9 +213,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/payments",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/payments",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -262,9 +262,9 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/invoices/69be31ac09c8437245840ce6/payments",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/invoices/69be31ac09c8437245840ce6/payments",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -308,9 +308,9 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/invoices",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/invoices",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -342,9 +342,9 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/invoices",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/invoices",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -376,9 +376,9 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/invoices/69bd460058e392e8f1b1ec48",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/invoices/69bd460058e392e8f1b1ec48",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -396,9 +396,9 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/invoices/69bd39f2bb8f2114a1e7a6e3/payments/:paymentId",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/invoices/69bd39f2bb8f2114a1e7a6e3/payments/:paymentId",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -423,9 +423,9 @@
                 "method": "PUT",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/recurringinvoices/69bd39f2bb8f2114a1e7a6e6/disable",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/recurringinvoices/69bd39f2bb8f2114a1e7a6e6/disable",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -444,9 +444,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/invoices/69be31ac09c8437245840ce6",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/invoices/69be31ac09c8437245840ce6",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -464,9 +464,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/recurringinvoices/69bd3ae2bb8f2114a1e7a6f2",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/recurringinvoices/69bd3ae2bb8f2114a1e7a6f2",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -484,9 +484,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/invoices?startDate=2026-01-01&endDate=2026-03-31",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/invoices?startDate=2026-01-01&endDate=2026-03-31",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -523,9 +523,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/invoices",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/invoices",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -552,9 +552,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/invoices",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/invoices",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -581,9 +581,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/recurringinvoices",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/recurringinvoices",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -600,9 +600,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/recurringinvoices",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/recurringinvoices",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -625,9 +625,9 @@
                   }
                 ],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/invoices/69be31ac09c8437245840ce6",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/invoices/69be31ac09c8437245840ce6",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -662,9 +662,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/compliances",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/compliances",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -696,9 +696,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/compliances/69bd0f12b474a2c8a7320714",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/compliances/69bd0f12b474a2c8a7320714",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -736,9 +736,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/directors",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/directors",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -782,9 +782,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/financial-year",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/financial-year",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -818,9 +818,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/customers ",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/customers ",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -847,9 +847,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/customers/69bcf4fb3b2c2f7ac07dd287",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -867,9 +867,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/compliances",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/compliances",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -898,9 +898,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/customers",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/customers",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -942,9 +942,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/compliance-settings",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/compliance-settings",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -986,9 +986,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/services",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/services",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1022,9 +1022,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/compliances/69bd0f12b474a2c8a7320714",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/compliances/69bd0f12b474a2c8a7320714",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1062,9 +1062,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/dashboard/compliance-jobs",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/dashboard/compliance-jobs",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -1087,9 +1087,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/dashboard/customers",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/dashboard/customers",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -1112,9 +1112,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/dashboard/graphs",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/dashboard/graphs",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -1137,9 +1137,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/dashboard/leads",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/dashboard/leads",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -1162,9 +1162,9 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/v1/dashboard/sales",
+                  "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/dashboard/sales",
                   "host": [
-                    "localhost:5000"
+                    "https://crm-of-kleardocs-backend.onrender.com"
                   ],
                   "path": [
                     "api",
@@ -1189,9 +1189,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/settings/email-count",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/settings/email-count",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1214,9 +1214,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/settings/general",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/settings/general",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1249,9 +1249,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/settings/general",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/settings/general",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1289,9 +1289,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347/followup ",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/leads/69bbe6385a20acbae504d347/followup ",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1335,9 +1335,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347/interaction",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/leads/69bbe6385a20acbae504d347/interaction",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1371,9 +1371,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347/assign",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/leads/69bbe6385a20acbae504d347/assign",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1407,9 +1407,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347/convert",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/leads/69bbe6385a20acbae504d347/convert",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1453,9 +1453,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/leads",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/leads",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1478,9 +1478,9 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:5000/api/v1/leads",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/leads",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1507,9 +1507,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/leads/69bbe6385a20acbae504d347",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1552,9 +1552,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347/emails",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/leads/69bbe6385a20acbae504d347/emails",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1593,9 +1593,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/auth/customer-login",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/auth/customer-login",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1633,9 +1633,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/services",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/services",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1652,9 +1652,9 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/services/69be6f6fb5a42dd405735e4c",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/services/69be6f6fb5a42dd405735e4c",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1672,9 +1672,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/services",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/services",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1716,9 +1716,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/services/69c0cb25d14787a4e3d49d67",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/services/69c0cb25d14787a4e3d49d67",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1756,9 +1756,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/templates",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/templates",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1775,9 +1775,9 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/templates/69c0cfcbd14787a4e3d49d75",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/templates/69c0cfcbd14787a4e3d49d75",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1795,9 +1795,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/templates",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/templates",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1829,9 +1829,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/templates/69c0cfcbd14787a4e3d49d75",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/templates/69c0cfcbd14787a4e3d49d75",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1869,9 +1869,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/users",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/users",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1888,9 +1888,9 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/users/69c0d47ad14787a4e3d49d8b",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/users/69c0d47ad14787a4e3d49d8b",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1908,9 +1908,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/users",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/users",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1927,9 +1927,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/users",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/users",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1961,9 +1961,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/users/69c0d47ad14787a4e3d49d8b",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/users/69c0d47ad14787a4e3d49d8b",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -1996,9 +1996,9 @@
             "method": "POST",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/auth/logout",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/auth/logout",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -2041,9 +2041,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/auth/login",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/auth/login",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -2086,9 +2086,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/auth/register",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/auth/register",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -2121,9 +2121,9 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/v1/auth/login",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/auth/login",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
@@ -2141,9 +2141,9 @@
             "method": "POST",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/v1/auth/refresh-token",
+              "raw": "http://https://crm-of-kleardocs-backend.onrender.com/api/v1/auth/refresh-token",
               "host": [
-                "localhost:5000"
+                "https://crm-of-kleardocs-backend.onrender.com"
               ],
               "path": [
                 "api",
