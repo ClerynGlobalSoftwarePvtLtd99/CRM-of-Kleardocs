@@ -4,18 +4,16 @@ const baseURL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? 'ht
 
 const axiosInstance = axios.create({
   baseURL,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor to add token
+// Request interceptor 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    // Relying strictly on HttpOnly cookies sent automatically via withCredentials: true
     return config;
   },
   (error) => {
@@ -28,10 +26,12 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
       localStorage.removeItem('isAuthenticated');
-      // Redirect to login if needed, or handle via Redux
-      window.location.href = '/'; 
+      
+      // Prevent loop if already on login page
+      if (window.location.pathname !== '/') {
+        window.location.href = '/'; 
+      }
     }
     return Promise.reject(error);
   }
