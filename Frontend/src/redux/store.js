@@ -7,6 +7,7 @@ import invoicesReducer from './slices/invoicesSlice';
 import dashboardReducer from './slices/dashboardSlice';
 import settingsReducer from './slices/settingsSlice';
 import complianceReducer from './slices/complianceSlice';
+import usersReducer from './slices/usersSlice';
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     dashboard: dashboardReducer,
     settings: settingsReducer,
     compliance: complianceReducer,
+    users: usersReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

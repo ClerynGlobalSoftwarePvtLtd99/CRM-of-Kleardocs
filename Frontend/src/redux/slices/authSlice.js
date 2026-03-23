@@ -4,7 +4,7 @@ import axiosInstance from '../../api/axiosInstance';
 const initialState = {
   user: null,
   isAuthenticated: false, // Don't trust localStorage blindly
-  loading: true, // Start as loading to allow fetchCurrentUser to run
+  loading: false, // Start as false to avoid infinite loading
   error: null,
 };
 

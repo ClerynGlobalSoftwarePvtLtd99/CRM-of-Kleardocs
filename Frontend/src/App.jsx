@@ -31,19 +31,24 @@ const App = () => {
   const [initialLoading, setInitialLoading] = useState(true)
 
   useEffect(() => {
-    // 1. If we have a token but no user, verify the session
-    if (token && !user) {
-      dispatch(fetchCurrentUser())
+    // Check if we have a stored authentication state
+    const storedAuth = localStorage.getItem('isAuthenticated');
+    
+    // If we have a token or stored auth state, try to verify the session
+    if (token || storedAuth === 'true') {
+      dispatch(fetchCurrentUser()).catch(() => {
+        // If fetch fails, clear the invalid auth state
+        dispatch(clearAuth());
+      });
     }
 
-    // 2. Simulate initial loading for 1 second to show the loader as requested
-    // But also wait for auth loading if it's happening
+    // Simulate initial loading for 1 second to show the loader as requested
     const timer = setTimeout(() => {
       setInitialLoading(false)
     }, 1000)
 
     return () => clearTimeout(timer)
-  }, [dispatch, token, user])
+  }, [dispatch, token])
 
   const handleLogin = (credentials) => {
     dispatch(loginUser(credentials))
