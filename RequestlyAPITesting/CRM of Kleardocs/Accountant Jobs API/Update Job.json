@@ -1,0 +1,22 @@
+{
+  "name": "Update Job",
+  "rank": "ax",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/jobs/69c0d22dd14787a4e3d49d83",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"status\": \"Ongoing\",\n  \"accountant\": \"Tapas\"\n}",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

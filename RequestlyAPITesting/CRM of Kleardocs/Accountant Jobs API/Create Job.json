@@ -1,0 +1,21 @@
+{
+  "name": "Create Job",
+  "rank": "aw",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/jobs",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"jobTitle\": \"Complete Q3 GST Filing\",\n  \"customer\": \"69bcf4fb3b2c2f7ac07dd287\",\n  \"status\": \"To Be Done\",\n  \"hasExpiry\": true,\n  \"expiryDate\": \"2026-03-22T09:24:22.477Z\"\n}",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

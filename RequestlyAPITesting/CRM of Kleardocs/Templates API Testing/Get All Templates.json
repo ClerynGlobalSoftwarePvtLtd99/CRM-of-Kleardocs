@@ -1,0 +1,21 @@
+{
+  "name": " Get All Templates",
+  "rank": "auntit17742436609231",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/templates",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

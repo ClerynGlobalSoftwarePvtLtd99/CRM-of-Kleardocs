@@ -1,0 +1,22 @@
+{
+  "name": " Delete Template",
+  "rank": "ax",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/templates/69c0cfcbd14787a4e3d49d75",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "DELETE",
+    "queryParams": [],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

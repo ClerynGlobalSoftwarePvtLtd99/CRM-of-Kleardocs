@@ -1,0 +1,22 @@
+{
+  "name": "Update Service",
+  "rank": "aw",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/services/69c0cb25d14787a4e3d49d67",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"professionalFees\": 2999\n}",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

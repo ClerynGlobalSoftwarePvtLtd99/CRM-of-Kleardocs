@@ -1,0 +1,25 @@
+{
+  "name": "Logout User / Agent / Customer",
+  "rank": "ax",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/auth/logout",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDI0MzA0NSwiZXhwIjoxNzc0MjQzOTQ1fQ.n_tBApGzHJC1ztlL9oPnp3NSLW-hOI_frctVx6NkESg"
+        }
+      }
+    }
+  }
+}

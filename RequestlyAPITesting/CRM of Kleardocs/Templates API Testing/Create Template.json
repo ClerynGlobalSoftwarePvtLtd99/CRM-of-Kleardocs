@@ -1,0 +1,21 @@
+{
+  "name": "Create Template",
+  "rank": "av",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/templates",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"name\": \"Startup India Registration\",\n  \"subject\": \"Startup India Registration - Next Steps & Document Submission\",\n  \"body\": \"<html><body><p>Here are your next steps...</p></body></html>\",\n  \"type\": \"Email\"\n}\n",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}

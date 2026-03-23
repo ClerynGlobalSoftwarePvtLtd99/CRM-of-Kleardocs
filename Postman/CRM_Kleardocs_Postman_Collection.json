@@ -1,0 +1,2161 @@
+{
+  "info": {
+    "name": "CRM of Kleardocs APIs (Postman)",
+    "description": "Exported from Requestly format. Just import this single file into Postman.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Accountant Jobs API",
+      "item": [
+        {
+          "name": "Create Job",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"jobTitle\": \"Complete Q3 GST Filing\",\n  \"customer\": \"69bcf4fb3b2c2f7ac07dd287\",\n  \"status\": \"To Be Done\",\n  \"hasExpiry\": true,\n  \"expiryDate\": \"2026-03-22T09:24:22.477Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/jobs",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "jobs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Job",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/jobs/69c0d22dd14787a4e3d49d83",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "jobs",
+                "69c0d22dd14787a4e3d49d83"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Jobs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/jobs",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "jobs"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDI0NDExNywiZXhwIjoxNzc0MjQ1MDE3fQ.U2nZKNSGTnn-R6dV9TlvkH2W_v-tcpsMafb9wziRHtg",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Jobs by Query Parameters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/jobs",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "jobs"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDI0NDExNywiZXhwIjoxNzc0MjQ1MDE3fQ.U2nZKNSGTnn-R6dV9TlvkH2W_v-tcpsMafb9wziRHtg",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Job",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Ongoing\",\n  \"accountant\": \"Tapas\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/jobs/69c0d22dd14787a4e3d49d83",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "jobs",
+                "69c0d22dd14787a4e3d49d83"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Billng Automation",
+      "item": [
+        {
+          "name": " Global Payments List",
+          "item": [
+            {
+              "name": "Get payments by filtering with year",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/payments",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "payments"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get payments by filtering",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/payments?type=UPI",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "payments"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "UPI"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get payments",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/payments",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "payments"
+                  ]
+                },
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDA3MjkxMCwiZXhwIjoxNzc0MDczODEwfQ.Gr-oW-E7-FcjoAFOlxyG7KJruDN8JyhhgtwD-Z4HAig",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Create Invoice and Add Payment",
+          "item": [
+            {
+              "name": "Add Payment",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 3000,\n  \"mode\": \"UPI\",\n  \"note\": \"Partial payment via PhonePe\",\n  \"paymentDate\": \"2026-03-20\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/invoices/69be31ac09c8437245840ce6/payments",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "invoices",
+                    "69be31ac09c8437245840ce6",
+                    "payments"
+                  ]
+                },
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDA3MTg4OCwiZXhwIjoxNzc0MDcyNzg4fQ.-askJlu_0rnWYfdaZzS-6AdPv6TghyUPBIvRxYkB2c4",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Invoice",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": \"69bcf4fb3b2c2f7ac07dd287\",\n  \"invoiceDate\": \"2026-03-20\",\n  \"items\": [\n    {\n      \"serviceId\": \"676fb41f6591cff83b2efdb6\",\n      \"description\": \"Annual Compliance – GST Filing\",\n      \"hsn\": \"99838\",\n      \"professionalFees\": 5000,\n      \"govtFees\": 2000,\n      \"gstPercent\": 18\n    },\n    {\n      \"description\": \"GST Filing\",\n      \"professionalFees\": 2000,\n      \"govtFees\": 0,\n      \"gstPercent\": 18\n    }\n  ],\n  \"recurring\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/invoices",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "invoices"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Recurring Invoice",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": \"69bcf4fb3b2c2f7ac07dd287\",\n  \"invoiceDate\": \"2026-03-20\",\n  \"items\": [\n    {\n      \"description\": \"Monthly Accounting\",\n      \"professionalFees\": 3000,\n      \"govtFees\": 0,\n      \"gstPercent\": 18\n    }\n  ],\n  \"recurring\": true,\n  \"interval\": 1,\n  \"intervalType\": \"Month\",\n  \"endDate\": \"2027-03-20\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/invoices",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "invoices"
+                  ]
+                },
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDAwODI0NywiZXhwIjoxNzc0MDA5MTQ3fQ.LRqkzjW2LTZVKNUVZDEtYz7nrWQOl__lB-o_piHENCc",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Delete Invoice and Payment",
+          "item": [
+            {
+              "name": "Delete Invoice",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/invoices/69bd460058e392e8f1b1ec48",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "invoices",
+                    "69bd460058e392e8f1b1ec48"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Payment",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/invoices/69bd39f2bb8f2114a1e7a6e3/payments/:paymentId",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "invoices",
+                    "69bd39f2bb8f2114a1e7a6e3",
+                    "payments",
+                    ":paymentId"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Get Invoice and recurringinvoice",
+          "item": [
+            {
+              "name": "Disable Recurring Invoice",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/recurringinvoices/69bd39f2bb8f2114a1e7a6e6/disable",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "recurringinvoices",
+                    "69bd39f2bb8f2114a1e7a6e6",
+                    "disable"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Full Invoice + Payments",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/invoices/69be31ac09c8437245840ce6",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "invoices",
+                    "69be31ac09c8437245840ce6"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Full Recurring Detail",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/recurringinvoices/69bd3ae2bb8f2114a1e7a6f2",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "recurringinvoices",
+                    "69bd3ae2bb8f2114a1e7a6f2"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Invoice records by year searching",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/invoices?startDate=2026-01-01&endDate=2026-03-31",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "invoices"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDate",
+                      "value": "2026-01-01"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2026-03-31"
+                    }
+                  ]
+                },
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDAxMTYxNywiZXhwIjoxNzc0MDEyNTE3fQ.xmG0mEgOllofSY7nJ44eNKPUaEqee-QmPdyMdBGEEko",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Invoice",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/invoices",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "invoices"
+                  ]
+                },
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDA2OTgzOCwiZXhwIjoxNzc0MDcwNzM4fQ.Fc2w2D7kLhAgReiNG9m8VUv5mDlwibtnkBRUKvmjisI",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get invoice record by search",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/invoices",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "invoices"
+                  ]
+                },
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDAxMTYxNywiZXhwIjoxNzc0MDEyNTE3fQ.xmG0mEgOllofSY7nJ44eNKPUaEqee-QmPdyMdBGEEko",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get recurringinvoices by active status",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/recurringinvoices",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "recurringinvoices"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get recurringinvoices",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/recurringinvoices",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "recurringinvoices"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "List invoices by id (filter + paginate)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/invoices/69be31ac09c8437245840ce6",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "invoices",
+                    "69be31ac09c8437245840ce6"
+                  ]
+                },
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDA3MTg4OCwiZXhwIjoxNzc0MDcyNzg4fQ.-askJlu_0rnWYfdaZzS-6AdPv6TghyUPBIvRxYkB2c4",
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Customer Compliances",
+      "item": [
+        {
+          "name": "Get All Customer Compliances",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/compliances",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "compliances"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Customer Compliance Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Done\",\n  \"accountant\": \"Samrat\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/compliances/69bd0f12b474a2c8a7320714",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "compliances",
+                "69bd0f12b474a2c8a7320714"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "Add directors",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Priya Sharma\", \"phone\": \"8800112233\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/directors",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "customers",
+                "69bcf4fb3b2c2f7ac07dd287",
+                "directors"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3Mzk5MTkyMywiZXhwIjoxNzczOTkyODIzfQ.R7-hXB6KVkO56BAnsxfP8MaT6d6F_vSCUz2ruV23y78",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add financial-year",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"financialYear\": \"2025-2026\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/financial-year",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "customers",
+                "69bcf4fb3b2c2f7ac07dd287",
+                "financial-year"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Raj Mishra\",\n  \"phone\": \"9999988888\",\n  \"companyName\": \"Raj Innovations Pvt Ltd\",\n  \"address\": \"Kolkata, WB\",\n  \"state\": \"WEST BENGAL\",\n  \"gst\": \"19AABCU9603R1ZX\",\n  \"type\": \"Private Limited Company\",\n  \"incorporationDate\": \"2024-01-15\",\n  \"newlyIncorporated\": true,\n  \"onboardingDate\": \"2026-03-20\",\n  \"username\": \"RAJINNOV001\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/customers ",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "customers "
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3Mzk5MDc2NywiZXhwIjoxNzczOTkxNjY3fQ.IahTqJRZXOYsbw44h9SBs8YqMrgwg3QGuVrwMf68guE",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Customer Full Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "customers",
+                "69bcf4fb3b2c2f7ac07dd287"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get compliances by financial year",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/compliances",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "customers",
+                "69bcf4fb3b2c2f7ac07dd287",
+                "compliances"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3Mzk5ODAyMywiZXhwIjoxNzczOTk4OTIzfQ.mWNCrqLffAr19NqYiJsf8aTAMAAIIDPm7jW1PHg6Oi8",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Searching Customer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/customers",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "customers"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3Mzk5MDc2NywiZXhwIjoxNzczOTkxNjY3fQ.IahTqJRZXOYsbw44h9SBs8YqMrgwg3QGuVrwMf68guE",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "add compliance-settings",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Preparation & Filing of Form ADT-01 (Auditor Appointment)\",\n  \"year\": \"2025-2026\",\n  \"hasExpiry\": true,\n  \"expiryDate\": \"2025-03-31\",\n  \"inc20\": false,\n  \"daysOfExpiry\": 30\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/compliance-settings",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "compliance-settings"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3Mzk5Njk4NiwiZXhwIjoxNzczOTk3ODg2fQ.v6g5bZYIgppo3TkOUvBxkzQDxMX4K4now5NEd5XcGyg",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "add services",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serviceId\": \"676fb41f6591cff83b2efdb6\",\n  \"startDate\": \"2026-03-20\",\n  \"professionalFees\": 2000,\n  \"govtFees\": 0,\n  \"gst\": 18,\n  \"recurring\": true,\n  \"interval\": 3,\n  \"intervalType\": \"Month\",\n  \"endDate\": \"2027-03-20\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/services",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "customers",
+                "69bcf4fb3b2c2f7ac07dd287",
+                "services"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "compliances status change by admin or agent",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"status\": \"Done\", \"accountant\": \"Samrat\", \"completedOn\": \"2026-03-20\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/customers/69bcf4fb3b2c2f7ac07dd287/compliances/69bd0f12b474a2c8a7320714",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "customers",
+                "69bcf4fb3b2c2f7ac07dd287",
+                "compliances",
+                "69bd0f12b474a2c8a7320714"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3Mzk5OTE2NiwiZXhwIjoxNzc0MDAwMDY2fQ.G1DvL3mbnfpA2VCNkIRDhx4X_qGHCpSsQvW34Akanvk",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Dashboard section",
+      "item": [
+        {
+          "name": "Compliances and Jobs Summary",
+          "item": [
+            {
+              "name": "Compliances & Jobs Summary",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/dashboard/compliance-jobs",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "dashboard",
+                    "compliance-jobs"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Customers Summary",
+          "item": [
+            {
+              "name": "Untitled request",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/dashboard/customers",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "dashboard",
+                    "customers"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Graph Basic API",
+          "item": [
+            {
+              "name": "Dashboard Graphs",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/dashboard/graphs",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "dashboard",
+                    "graphs"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Leads Summary",
+          "item": [
+            {
+              "name": "Get All Leads Count",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/dashboard/leads",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "dashboard",
+                    "leads"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Sales and Invoices Summary",
+          "item": [
+            {
+              "name": "Get Sales & Invoices Summary",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/v1/dashboard/sales",
+                  "host": [
+                    "localhost:5000"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "dashboard",
+                    "sales"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Email Logs API",
+      "item": [
+        {
+          "name": "Email Count / Logs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/settings/email-count",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "settings",
+                "email-count"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Global Settings APIs",
+      "item": [
+        {
+          "name": "Retrieve General Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/settings/general",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "settings",
+                "general"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update General Settings",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"invoicePrefix\": \"INV-24-25\",\n  \"invoiceStartingNumber\": 10835,\n  \"emailFromName\": \"Kleardocs\",\n  \"fromEmail\": \"kleardocssolutions@gmail.com\",\n  \"invoiceTemplate\": \"Annual Compliance Service - Ritu Kaur\",\n  \"gstTemplate\": \"GST Filing\",\n  \"ptaxTemplate\": \"Professional Tax\",\n  \"startupIndiaTemplate\": \"Startup India Promotion\",\n  \"inc20Template\": \"INC 20A Reminder\",\n  \"recurringInvoiceTemplate\": \"Next Quarter Payment\",\n  \"serviceListTemplate\": \"Startup India Registration\",\n  \"websiteTemplate\": \"Website\",\n  \"isoTemplate\": \"Service List\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/settings/general",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "settings",
+                "general"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Leads",
+      "item": [
+        {
+          "name": "Add Follow-up",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"followupDate\": \"2026-04-01\",\n  \"phoneCalled\": true,\n  \"details\": \"Customer asked for callback next week\"\n}\n\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347/followup ",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "leads",
+                "69bbe6385a20acbae504d347",
+                "followup "
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3MzkyNTM4NywiZXhwIjoxNzczOTI2Mjg3fQ.93cjvzcq0S2f7BhkOilw_RdP51hfUwXPC7zYsKLBT3Q",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Interaction / Note",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"details\": \"Customer is very interested in Annual Compliance package\",\n  \"phoneCalled\": true\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347/interaction",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "leads",
+                "69bbe6385a20acbae504d347",
+                "interaction"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Assign Agent to Lead (Admin only)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"agentId\": \"69bbe6385a20acbae504d347\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347/assign",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "leads",
+                "69bbe6385a20acbae504d347",
+                "assign"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Convert Lead to Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyName\": \"Acme Pvt Ltd\",\n  \"address\": \"Mumbai, Maharashtra\",\n  \"state\": \"MAHARASHTRA\",\n  \"gst\": \"27AABCU9603R1ZX\",\n  \"type\": \"Private Limited Company\",\n  \"incorporationDate\": \"2020-01-01\",\n  \"newlyIncorporated\": false,\n  \"username\": \"ACME0001\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347/convert",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "leads",
+                "69bbe6385a20acbae504d347",
+                "convert"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3MzkyNjUwNCwiZXhwIjoxNzczOTI3NDA0fQ.vzdByLxazYLwzyx-5fOwyH8wci2tfs02OSvCdQPrBVE",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create a Lead",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"phone\": \"9999999999\",\n  \"companyName\": \"Acme Ltd\",\n  \"source\": \"Facebook\",\n  \"type\": \"Hot\",\n  \"priority\": \"High\",\n  \"response\": \"Interested\",\n  \"address\": \"Mumbai\",\n  \"state\": \"MAHARASHTRA\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/leads",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "leads"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Leads (with filters)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/leads",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "leads"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3MzkyMDk5NiwiZXhwIjoxNzczOTIxODk2fQ.D6c2gRvO9P_Xl9fROMX9du2M3HtpHi3tXEtKcpI34xs",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Lead (with full history)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "leads",
+                "69bbe6385a20acbae504d347"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3MzkyMjUxMywiZXhwIjoxNzczOTIzNDEzfQ.74rjSU5KH6tF3HeMZ-TdjrJTk6zlJe57P267pTT-XGY",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Lead Emails",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emails\": [\"john@acme.com\", \"contact@acme.com\"]\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/leads/69bbe6385a20acbae504d347/emails",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "leads",
+                "69bbe6385a20acbae504d347",
+                "emails"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Normal Customer Portal Login API",
+      "item": [
+        {
+          "name": "Customer Login Auth",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"RAJINNOV001\",\n  \"password\": \"ed67cdeb\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/customer-login",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "customer-login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Services API Testing",
+      "item": [
+        {
+          "name": "Create Service",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"FSSAI Food License\",\n  \"professionalFees\": 1500,\n  \"govtFees\": 0,\n  \"hsn\": \"998309\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/services",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "services"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Service",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/services/69be6f6fb5a42dd405735e4c",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "services",
+                "69be6f6fb5a42dd405735e4c"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get service",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/services",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "services"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDA4Nzk0OCwiZXhwIjoxNzc0MDg4ODQ4fQ.lmLJNYC08lfhOUtZaRMb1jLozj0MMIbc4nffLF3bMvQ",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Service",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"professionalFees\": 2999\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/services/69c0cb25d14787a4e3d49d67",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "services",
+                "69c0cb25d14787a4e3d49d67"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Templates API Testing",
+      "item": [
+        {
+          "name": "Create Template",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Startup India Registration\",\n  \"subject\": \"Startup India Registration - Next Steps & Document Submission\",\n  \"body\": \"<html><body><p>Here are your next steps...</p></body></html>\",\n  \"type\": \"Email\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/templates",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "templates"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": " Delete Template",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/templates/69c0cfcbd14787a4e3d49d75",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "templates",
+                "69c0cfcbd14787a4e3d49d75"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": " Get All Templates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/templates",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "templates"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Template",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject\": \"Startup India Request - Document Submission\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/templates/69c0cfcbd14787a4e3d49d75",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "templates",
+                "69c0cfcbd14787a4e3d49d75"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Types of Users API Testing ",
+      "item": [
+        {
+          "name": "Create User (Agent/Accountant)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Agent User\",\n  \"email\": \"agent@startupstation.in\",\n  \"password\": \"securepassword\",\n  \"role\": \"agent\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/users",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User (Soft Delete)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/users/69c0d47ad14787a4e3d49d8b",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "69c0d47ad14787a4e3d49d8b"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users by Query Parameters:",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/users",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": " Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/users",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Status/Role",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"active\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/users/69c0d47ad14787a4e3d49d8b",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "69c0d47ad14787a4e3d49d8b"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDI0NTA5NiwiZXhwIjoxNzc0MjQ1OTk2fQ.ZUutleyHIiHEwFylRoDwijXDWfbBNZB222maGerUbF8",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User authentication",
+      "item": [
+        {
+          "name": "Logout User / Agent / Customer",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/logout",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "logout"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDI0MzA0NSwiZXhwIjoxNzc0MjQzOTQ1fQ.n_tBApGzHJC1ztlL9oPnp3NSLW-hOI_frctVx6NkESg",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin2@kleardocs.com\",\n  \"password\": \"securepassword1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/login",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDA2OTgzOCwiZXhwIjoxNzc0MDcwNzM4fQ.Fc2w2D7kLhAgReiNG9m8VUv5mDlwibtnkBRUKvmjisI",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "User register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Testing Admin2\",\n  \"email\": \"admin2@kleardocs.com\",\n  \"password\": \"securepassword1234\",\n  \"role\": \"admin\" \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/register",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "invalid-email and password testing",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"invalid-email\",\n  \"password\": \"123\" // Too short\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/login",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "refresh-token request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/v1/auth/refresh-token",
+              "host": [
+                "localhost:5000"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
