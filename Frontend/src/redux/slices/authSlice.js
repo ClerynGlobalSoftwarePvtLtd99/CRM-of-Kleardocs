@@ -13,18 +13,23 @@ export const loginUser = createAsyncThunk(
   'auth/login',
   async (credentials, { rejectWithValue }) => {
     try {
-      // For now, mock the login as per previous implementation
-      // const response = await axiosInstance.post('/auth/login', credentials);
-      // return response.data;
-      
-      // Simulating successful mock login
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({ user: { email: credentials.email, name: 'Admin User' }, token: 'mock-jwt-token' });
-        }, 1000);
-      });
+      const response = await axiosInstance.post('/auth/login', credentials);
+      // The backend returns an ApiResponse object where data is nested
+      return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Login failed');
+    }
+  }
+);
+
+export const logoutUser = createAsyncThunk(
+  'auth/logout',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post('/auth/logout');
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Logout failed');
     }
   }
 );
@@ -33,7 +38,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout: (state) => {
+    clearAuth: (state) => {
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
@@ -54,17 +59,24 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.token = action.payload.accessToken;
         state.isAuthenticated = true;
-        localStorage.setItem('token', action.payload.token);
+        localStorage.setItem('token', action.payload.accessToken);
         localStorage.setItem('isAuthenticated', 'true');
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
+        localStorage.removeItem('token');
+        localStorage.removeItem('isAuthenticated');
       });
   },
 });
 
-export const { logout, setAuthenticated } = authSlice.actions;
+export const { clearAuth, setAuthenticated } = authSlice.actions;
 export default authSlice.reducer;
