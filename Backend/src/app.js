@@ -37,8 +37,9 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
+  "http://localhost:3000",
   "https://crm-of-kleardocs.vercel.app",
-  ...(process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',').map(o => o.trim()) : []),
+  ...(process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(",").map(o => o.trim()).filter(o => o) : []),
 ];
 
 const corsOptions = {
@@ -54,8 +55,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-// Explicitly handle preflight for every route
-app.options("*", cors(corsOptions));
+// Explicitly handle preflight for every route if necessary, but app.use(cors()) usually handles it.
+// If you encounter preflight issues, use app.use(cors(corsOptions)) which is already below.
 
 // Standard Security Headers
 app.use(helmet());
@@ -74,8 +75,8 @@ app.use(express.urlencoded({ extended: true, limit: "50kb" }));
 app.use(cookieParser());
 
 // Anti-Hacking Middlewares
-app.use(mongoSanitize()); // Prevent NoSQL Injections
-app.use(hpp()); // Prevent HTTP Parameter Pollution
+// app.use(mongoSanitize()); // Prevent NoSQL Injections - Temporarily disabled for Express 5 debug
+// app.use(hpp()); // Prevent HTTP Parameter Pollution - Temporarily disabled for Express 5 debug
 app.use(securityMiddleware); // Custom XSS Payload Scrubber
 
 // Serve static files to client

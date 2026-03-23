@@ -1,11 +1,13 @@
 import * as authService from "../services/auth.service.js";
 import { ApiResponse } from "../utils/response.js";
 
-const cookieOptions = {
-  expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days (Refresh Token max)
-  httpOnly: true, // Prevents XSS attacks
-  secure: process.env.NODE_ENV === "production", // HTTPS only in prod
-  sameSite: "strict" // Prevents CSRF attacks
+const getCookieOptions = (req) => {
+  const isProd = process.env.NODE_ENV === "production";
+  return {
+    httpOnly: true,
+    secure: isProd, // Only true in production (HTTPS)
+    sameSite: isProd ? "none" : "lax" // "none" for cross-site prod, "lax" for local dev
+  };
 };
 
 export const register = async (req, res) => {
@@ -16,12 +18,13 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   const result = await authService.loginUser(req.body);
   
+  const options = getCookieOptions(req);
   res.status(200)
-     .cookie("refreshToken", result.refreshToken, cookieOptions) // Restrict refresh token entirely to Server via HttpOnly
-     .cookie("accessToken", result.accessToken, { ...cookieOptions, expires: new Date(Date.now() + 15 * 60 * 1000) }) // 15 mins for access token cookie option
+     .cookie("refreshToken", result.refreshToken, { ...options, expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), path: "/" }) 
+     .cookie("accessToken", result.accessToken, { ...options, expires: new Date(Date.now() + 15 * 60 * 1000), path: "/" }) 
      .json(new ApiResponse(200, {
-        user: result.user,
-        accessToken: result.accessToken // Give frontend API access to use Bearer manually if they prefer
+        user: result.user || result.customer,
+        accessToken: result.accessToken 
      }, "User logged in successfully"));
 };
 
@@ -29,8 +32,8 @@ export const customerLogin = async (req, res) => {
   const result = await authService.loginCustomerAccount(req.body);
   
   res.status(200)
-     .cookie("refreshToken", result.refreshToken, cookieOptions)
-     .cookie("accessToken", result.accessToken, { ...cookieOptions, expires: new Date(Date.now() + 15 * 60 * 1000) })
+     .cookie("refreshToken", result.refreshToken, { ...cookieOptions, expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), path: "/" })
+     .cookie("accessToken", result.accessToken, { ...cookieOptions, expires: new Date(Date.now() + 15 * 60 * 1000), path: "/" })
      .json(new ApiResponse(200, {
         customer: result.customer,
         accessToken: result.accessToken
@@ -48,26 +51,50 @@ export const refresh = async (req, res) => {
   const result = await authService.refreshAccessToken(rawRefreshToken);
 
   res.status(200)
-     .cookie("refreshToken", result.refreshToken, cookieOptions)
-     .cookie("accessToken", result.accessToken, { ...cookieOptions, expires: new Date(Date.now() + 15 * 60 * 1000) })
+     .cookie("refreshToken", result.refreshToken, { ...cookieOptions, expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), path: "/" })
+     .cookie("accessToken", result.accessToken, { ...cookieOptions, expires: new Date(Date.now() + 15 * 60 * 1000), path: "/" })
      .json(new ApiResponse(200, {
         accessToken: result.accessToken
      }, "Token refreshed successfully"));
 };
 
 export const logout = async (req, res) => {
-  // req.user is guaranteed to exist by the auth middleware
-  await authService.logoutUser(req.user.id, req.user.role || "customer");
+  try {
+    // 1. Try to clear refresh token from DB if we can resolve the user from cookies
+    const token = req.cookies?.accessToken || req.headers.authorization?.split(" ")[1];
+    if (token) {
+        try {
+            const decoded = (await import("jsonwebtoken")).default.verify(token, process.env.ACCESS_TOKEN_SECRET);
+            if (decoded?.id) {
+                await authService.logoutUser(decoded.id, decoded.role || "customer");
+            }
+        } catch (e) {
+            // Silently ignore decode errors; we still want to clear cookies
+        }
+    }
 
-  const clearOptions = { ...cookieOptions, expires: new Date(0) }; // Expire immediately
-  
-  res.status(200)
-     .cookie("accessToken", "", clearOptions)
-     .cookie("refreshToken", "", clearOptions)
-     .json(new ApiResponse(200, null, "Logged out successfully"));
+    // 2. AGGRESSIVE COOKIE CLEARANCE
+    // We clear with path: "/" and the same options used for setting
+    const options = getCookieOptions(req);
+    const clearOptions = { 
+        ...options, 
+        expires: new Date(0), 
+        path: "/" 
+    };
+
+    res.status(200)
+       .cookie("accessToken", "", clearOptions)
+       .cookie("refreshToken", "", clearOptions)
+       .json(new ApiResponse(200, null, "Logged out successfully"));
+       
+  } catch (error) {
+    // If everything fails, still try to send a 200 to clear frontend state
+    res.status(200).json(new ApiResponse(200, null, "Logged out (with errors)"));
+  }
 };
 
 export const getMe = async (req, res) => {
+  // Identify the class of logged in persona securely fetched from DB
   // Identify the class of logged in persona securely fetched from DB
   let currentUser = null;
   if (req.user.role === "Customer" || req.user.role === "customer") {
