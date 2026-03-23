@@ -45,6 +45,18 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
+export const getMe = createAsyncThunk(
+  'auth/getMe',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get('/auth/me');
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Session expired');
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
