@@ -69,6 +69,7 @@ export const logout = async (req, res) => {
 
 export const getMe = async (req, res) => {
   // Identify the class of logged in persona securely fetched from DB
+  // Identify the class of logged in persona securely fetched from DB
   let currentUser = null;
   if (req.user.role === "Customer" || req.user.role === "customer") {
       const Customer = (await import("../models/Customer.model.js")).default;
