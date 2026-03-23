@@ -92,6 +92,11 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         localStorage.removeItem('isAuthenticated');
       })
+      .addCase(logoutUser.rejected, (state) => {
+        state.user = null;
+        state.isAuthenticated = false;
+        localStorage.removeItem('isAuthenticated');
+      })
       .addCase(fetchCurrentUser.pending, (state) => {
         state.loading = true;
       })
