@@ -37,6 +37,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
+  "https://crm-of-kleardocs.vercel.app",
   ...(process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',').map(o => o.trim()) : []),
 ];
 
@@ -82,7 +83,7 @@ app.use(express.static("public"));
 
 // API Routes
 app.get("/", (req, res) => {
-    res.send("Server is healthy ✅");
+  res.send("Server is healthy ✅");
 });
 app.use("/api/v1/auth", AuthRoutes);
 app.use("/api/v1/leads", LeadRoutes);

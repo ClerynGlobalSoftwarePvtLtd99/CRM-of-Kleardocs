@@ -41,7 +41,7 @@ const Header = () => {
             Welcome,
           </span>
           <span className="text-sm font-semibold text-[var(--color-text-primary)]">
-            {user?.name || 'Guest'}
+            {user?.name || '...'}
           </span>
         </div>
         <div className="w-10 h-10 rounded-full bg-[var(--color-accent)] flex items-center justify-center text-[var(--color-bg-primary)] font-bold shadow-lg ring-2 ring-[var(--color-bg-tertiary)] ring-offset-2 ring-offset-[var(--color-bg-secondary)]">

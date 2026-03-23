@@ -5,6 +5,7 @@ import leadsReducer from './slices/leadsSlice';
 import customersReducer from './slices/customersSlice';
 import invoicesReducer from './slices/invoicesSlice';
 import dashboardReducer from './slices/dashboardSlice';
+import settingsReducer from './slices/settingsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     customers: customersReducer,
     invoices: invoicesReducer,
     dashboard: dashboardReducer,
+    settings: settingsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
