@@ -35,8 +35,8 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
-export const getMe = createAsyncThunk(
-  'auth/getMe',
+export const fetchCurrentUser = createAsyncThunk(
+  'auth/me',
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get('/auth/me');
@@ -89,16 +89,16 @@ const authSlice = createSlice({
         localStorage.removeItem('token');
         localStorage.removeItem('isAuthenticated');
       })
-      .addCase(getMe.pending, (state) => {
+      .addCase(fetchCurrentUser.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getMe.fulfilled, (state, action) => {
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user || action.payload.customer;
         state.isAuthenticated = true;
         localStorage.setItem('isAuthenticated', 'true');
       })
-      .addCase(getMe.rejected, (state) => {
+      .addCase(fetchCurrentUser.rejected, (state) => {
         state.loading = false;
         state.user = null;
         state.token = null;

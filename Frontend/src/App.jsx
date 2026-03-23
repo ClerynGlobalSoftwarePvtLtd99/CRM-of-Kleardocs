@@ -33,7 +33,7 @@ const App = () => {
   useEffect(() => {
     // 1. If we have a token but no user, verify the session
     if (token && !user) {
-      dispatch(getMe())
+      dispatch(fetchCurrentUser())
     }
 
     // 2. Simulate initial loading for 1 second to show the loader as requested
