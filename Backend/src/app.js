@@ -75,8 +75,8 @@ app.use(express.urlencoded({ extended: true, limit: "50kb" }));
 app.use(cookieParser());
 
 // Anti-Hacking Middlewares
-app.use(mongoSanitize()); // Prevent NoSQL Injections
-app.use(hpp()); // Prevent HTTP Parameter Pollution
+// app.use(mongoSanitize()); // Prevent NoSQL Injections - Temporarily disabled for Express 5 debug
+// app.use(hpp()); // Prevent HTTP Parameter Pollution - Temporarily disabled for Express 5 debug
 app.use(securityMiddleware); // Custom XSS Payload Scrubber
 
 // Serve static files to client
