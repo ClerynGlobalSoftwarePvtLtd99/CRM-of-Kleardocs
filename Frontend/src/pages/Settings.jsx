@@ -49,6 +49,12 @@ const Settings = () => {
   // Load settings from backend on mount
   useEffect(() => {
     dispatch(fetchSettings())
+      .unwrap()
+      .catch((err) => {
+        toast.error(err || 'Failed to load settings', {
+          id: 'fetch-settings-error', // Prevent duplicate toasts
+        })
+      })
   }, [dispatch])
 
   // Seed form when Redux state loads

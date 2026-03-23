@@ -8,7 +8,8 @@ export const fetchSettings = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get('/settings/general');
-      return response.data.data;
+      // Handle both wrapped { data: { ... } } and raw { ... } responses
+      return response.data?.data || response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch settings');
     }
@@ -20,7 +21,8 @@ export const updateSettings = createAsyncThunk(
   async (settingsData, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.put('/settings/general', settingsData);
-      return response.data.data;
+      // Handle both wrapped and raw responses
+      return response.data?.data || response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to update settings');
     }

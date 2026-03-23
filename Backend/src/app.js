@@ -36,6 +36,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
+  "https://crm-of-kleardocs.vercel.app",
   ...(process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',').map(o => o.trim()) : []),
 ];
 
@@ -43,23 +44,12 @@ const corsOptions = {
   origin: (origin, callback) => {
     // Allow requests with no origin (e.g. mobile apps, Postman, server-to-server)
     if (!origin) return callback(null, true);
-
-    const isAllowed = allowedOrigins.some(ao => {
-        const originClean = origin.replace(/\/$/, "");
-        const aoClean = ao.replace(/\/$/, "");
-        return originClean === aoClean || originClean.endsWith(".vercel.app");
-    });
-
-    if (isAllowed) {
-      callback(null, true);
-    } else {
-      console.warn(`CORS blocked for origin: ${origin}`);
-      callback(new Error(`CORS policy: origin '${origin}' is not allowed`));
-    }
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error(`CORS policy: origin '${origin}' is not allowed`));
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cors(corsOptions));
@@ -91,7 +81,7 @@ app.use(express.static("public"));
 
 // API Routes
 app.get("/", (req, res) => {
-    res.send("Server is healthy ✅");
+  res.send("Server is healthy ✅");
 });
 app.use("/api/v1/auth", AuthRoutes);
 app.use("/api/v1/leads", LeadRoutes);
