@@ -66,3 +66,9 @@ export const logout = async (req, res) => {
      .cookie("refreshToken", "", clearOptions)
      .json(new ApiResponse(200, null, "Logged out successfully"));
 };
+
+export const getMe = async (req, res) => {
+  // auth middleware adds user to req
+  const result = await authService.getProfile(req.user.id, req.user.role);
+  res.status(200).json(new ApiResponse(200, result, "Profile retrieved successfully"));
+};

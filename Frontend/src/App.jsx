@@ -27,16 +27,23 @@ import Login from './pages/Login'
 
 const App = () => {
   const dispatch = useAppDispatch()
-  const { isAuthenticated, loading } = useAppSelector((state) => state.auth)
+  const { isAuthenticated, loading, token, user } = useAppSelector((state) => state.auth)
   const [initialLoading, setInitialLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate initial loading for 1 second to show the loader as requested
+    // 1. If we have a token but no user, verify the session
+    if (token && !user) {
+      dispatch(getMe())
+    }
+
+    // 2. Simulate initial loading for 1 second to show the loader as requested
+    // But also wait for auth loading if it's happening
     const timer = setTimeout(() => {
       setInitialLoading(false)
     }, 1000)
+
     return () => clearTimeout(timer)
-  }, [])
+  }, [dispatch, token, user])
 
   const handleLogin = (credentials) => {
     dispatch(loginUser(credentials))

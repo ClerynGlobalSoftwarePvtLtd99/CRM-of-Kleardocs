@@ -4,8 +4,9 @@ import axiosInstance from '../../api/axiosInstance';
 const initialState = {
   user: null,
   token: localStorage.getItem('token') || null,
-  isAuthenticated: localStorage.getItem('isAuthenticated') === 'true',
-  loading: false,
+  // Don't blindly trust localStorage for isAuthenticated; we'll verify it with getMe
+  isAuthenticated: false, 
+  loading: true, // Start with loading: true so App.jsx knows to wait for getMe
   error: null,
 };
 
@@ -30,6 +31,18 @@ export const logoutUser = createAsyncThunk(
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Logout failed');
+    }
+  }
+);
+
+export const getMe = createAsyncThunk(
+  'auth/getMe',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get('/auth/me');
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Session expired');
     }
   }
 );
@@ -69,6 +82,24 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(logoutUser.fulfilled, (state) => {
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
+        state.loading = false;
+        localStorage.removeItem('token');
+        localStorage.removeItem('isAuthenticated');
+      })
+      .addCase(getMe.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getMe.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user || action.payload.customer;
+        state.isAuthenticated = true;
+        localStorage.setItem('isAuthenticated', 'true');
+      })
+      .addCase(getMe.rejected, (state) => {
+        state.loading = false;
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
