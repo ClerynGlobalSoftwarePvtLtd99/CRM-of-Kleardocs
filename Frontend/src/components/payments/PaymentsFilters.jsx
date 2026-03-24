@@ -7,6 +7,9 @@ const PaymentsFilters = ({
   setSearchTerm,
   paymentType,
   setPaymentType,
+  startDate,
+  endDate,
+  onRangeChange,
   PAYMENT_TYPES,
   onFilter,
   onClear,
@@ -31,7 +34,11 @@ const PaymentsFilters = ({
 
         {/* Date Range Picker */}
         <div className="w-full md:w-auto shrink-0">
-          <DateRangePicker />
+          <DateRangePicker 
+            startDate={startDate}
+            endDate={endDate}
+            onRangeChange={onRangeChange}
+          />
         </div>
 
         {/* Payment Type Dropdown */}
