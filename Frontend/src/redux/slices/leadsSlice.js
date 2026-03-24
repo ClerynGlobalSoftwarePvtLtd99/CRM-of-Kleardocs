@@ -25,8 +25,6 @@ export const fetchLeads = createAsyncThunk(
   'leads/fetchAll',
   async (params = {}, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get('/leads', { params });
-      return response.data.data.leads;
       const response = await getAllLeads(params);
       return response.data;
     } catch (error) {
@@ -51,8 +49,6 @@ export const createNewLead = createAsyncThunk(
   'leads/create',
   async (leadData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post('/leads', leadData);
-      return response.data.data;
       const response = await createLead(leadData);
       return response.data;
     } catch (error) {
