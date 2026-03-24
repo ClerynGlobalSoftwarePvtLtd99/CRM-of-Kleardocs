@@ -29,24 +29,28 @@ const NewCustomerModal = ({ onClose, onAdd }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    const newCustomer = {
-      ...formData,
-      id: Math.random().toString(36).substr(2, 9), // Simple ID generation
-      customerName: formData.name, // Mapping 'name' to 'customerName' as used in Customers.jsx
-      onboardingDate: new Date(formData.onboardingDate).toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      }).replace(/\//g, '-'),
-      incorporationDate: new Date(formData.incorporationDate).toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      }).replace(/\//g, '-'),
-      logo: null,
+    // Validate required fields
+    if (!formData.name || !formData.phone || !formData.companyName) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    // Format data for backend API
+    const customerData = {
+      name: formData.name,
+      phone: formData.phone,
+      companyName: formData.companyName,
+      address: formData.address,
+      state: formData.state,
+      gst: formData.gst,
+      type: formData.type,
+      incorporationDate: formData.incorporationDate,
+      onboardingDate: formData.onboardingDate,
+      newlyIncorporated: formData.newlyIncorporated,
+      username: formData.companyName.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 12) + Math.floor(Math.random() * 1000).toString().padStart(3, '0')
     };
 
-    onAdd(newCustomer);
+    onAdd(customerData);
     toast.success("New Customer added successfully!");
     onClose();
   };

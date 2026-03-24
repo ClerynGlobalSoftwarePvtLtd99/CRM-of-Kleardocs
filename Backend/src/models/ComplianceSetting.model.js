@@ -18,6 +18,7 @@ const complianceSettingSchema = new mongoose.Schema(
     hasExpiry: { type: Boolean, default: false },
     expiryDate: { type: Date },
     forNewCompany: { type: Boolean, default: false },        // new companies only
+    isNewCompany: { type: Boolean, default: false },        // new companies only
     inc20: { type: Boolean, default: false },        // INC-20A relevant
     daysOfExpiry: { type: Number, default: 30 },
     expiryTemplate: { type: mongoose.Schema.Types.ObjectId, ref: "EmailTemplate" },

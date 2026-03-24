@@ -1,4 +1,3 @@
-
 const LeadsHeader = ({ onAdd, count }) => {
   return (
     <div className="flex items-center justify-between mb-6">
@@ -9,12 +8,14 @@ const LeadsHeader = ({ onAdd, count }) => {
         </h1>
       </div>
 
-      <button
-        onClick={onAdd}
-        className="btn-raised btn-raised-orange text-white px-6 py-2 rounded-md text-sm font-bold uppercase tracking-widest shadow-lg"
-      >
-        + New Lead
-      </button>
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onAdd}
+          className="btn-raised btn-raised-orange text-white px-6 py-2 rounded-md text-sm font-bold uppercase tracking-widest shadow-lg"
+        >
+          + New Lead
+        </button>
+      </div>
     </div>
   );
 };

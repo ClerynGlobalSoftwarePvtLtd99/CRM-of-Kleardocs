@@ -1,32 +1,33 @@
 import React, { useState, useEffect } from 'react'
-import { X } from 'lucide-react'
+import { X, Eye, EyeOff } from 'lucide-react'
 
-const UserFormModal = ({ isOpen, onClose, onSubmit, editingUser }) => {
+const UserFormModal = ({ isOpen, onClose, onSubmit, editingUser, loading }) => {
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
+    email: '',
     password: '',
-    type: 'Agent',
-    status: 'Active',
+    role: 'agent',
+    active: true,
   })
+  const [showPassword, setShowPassword] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
       if (editingUser) {
         setFormData({
           name: editingUser.name || '',
-          phone: editingUser.phone ? editingUser.phone.replace('+91 ', '') : '',
+          email: editingUser.email || '',
           password: '', // Keep blank if not changed
-          type: editingUser.type || 'Agent',
-          status: editingUser.status || 'Active',
+          role: editingUser.role || 'agent',
+          active: editingUser.active !== undefined ? editingUser.active : true,
         })
       } else {
         setFormData({
           name: '',
-          phone: '',
+          email: '',
           password: '',
-          type: 'Agent',
-          status: 'Active',
+          role: 'agent',
+          active: true,
         })
       }
     }
@@ -37,18 +38,16 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, editingUser }) => {
   const isEditMode = !!editingUser
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    const { name, value, type, checked } = e.target
+    setFormData((prev) => ({ 
+      ...prev, 
+      [name]: type === 'checkbox' ? checked : value 
+    }))
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const formattedPhone = formData.phone ? `+91 ${formData.phone}` : ''
-    onSubmit({
-      ...formData,
-      phone: formattedPhone,
-      id: editingUser ? editingUser.id : Date.now(),
-    })
+    onSubmit(formData)
   }
 
   return (
@@ -83,25 +82,20 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, editingUser }) => {
             />
           </div>
 
-          {/* Phone */}
+          {/* Email */}
           <div>
             <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1.5">
-              Phone <span className="text-red-500">*</span>
+              Email <span className="text-red-500">*</span>
             </label>
-            <div className="flex">
-              <span className="inline-flex items-center px-3.5 border border-r-0 border-[var(--color-bg-tertiary)] rounded-l-lg bg-[var(--color-bg-tertiary)]/50 text-[var(--color-text-secondary)] font-medium text-sm">
-                +91
-              </span>
-              <input
-                type="tel"
-                name="phone"
-                required
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="Phone number"
-                className="flex-1 w-full p-2.5 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-r-lg text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] transition-all"
-              />
-            </div>
+            <input
+              type="email"
+              name="email"
+              required
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter email address"
+              className="w-full p-2.5 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] transition-all"
+            />
           </div>
 
           {/* Password */}
@@ -117,39 +111,41 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, editingUser }) => {
                 </span>
               )}
             </label>
-            <input
-              type="password"
-              name="password"
-              required={!isEditMode}
-              value={formData.password}
-              onChange={handleChange}
-              placeholder={isEditMode ? 'Enter new password' : 'Enter password'}
-              className="w-full p-2.5 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] transition-all"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                required={!isEditMode}
+                value={formData.password}
+                onChange={handleChange}
+                placeholder={isEditMode ? 'Enter new password' : 'Enter password'}
+                className="w-full p-2.5 pr-10 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] transition-all"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] focus:outline-none transition-colors"
+              >
+                {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+              </button>
+            </div>
           </div>
 
-          {/* Type Dropdown */}
+          {/* Role Dropdown */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1.5">
-                Type
+                Role
               </label>
               <select
-                name="type"
-                value={formData.type}
+                name="role"
+                value={formData.role}
                 onChange={handleChange}
-                disabled={isEditMode && formData.type === 'Admin'} // Admin type not possible to modify
-                className={`w-full p-2.5 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] transition-all ${
-                  isEditMode && formData.type === 'Admin'
-                    ? 'opacity-60 cursor-not-allowed'
-                    : 'cursor-pointer'
-                }`}
+                className="w-full p-2.5 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] transition-all cursor-pointer"
               >
-                {(!isEditMode || formData.type === 'Admin') && (
-                  <option value="Admin">Admin</option>
-                )}
-                <option value="Agent">Agent</option>
-                <option value="Accountant">Accountant</option>
+                <option value="admin">Admin</option>
+                <option value="agent">Agent</option>
+                <option value="accountant">Accountant</option>
               </select>
             </div>
 
@@ -159,29 +155,24 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, editingUser }) => {
                 Status
               </label>
               <select
-                name="status"
-                value={formData.status}
+                name="active"
+                value={formData.active ? 'true' : 'false'}
                 onChange={handleChange}
                 className="w-full p-2.5 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] transition-all cursor-pointer"
               >
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
               </select>
             </div>
           </div>
 
-          {isEditMode && formData.type === 'Admin' && (
-            <p className="text-xs text-orange-500 font-medium -mt-2">
-              Admin type cannot be modified.
-            </p>
-          )}
-
           <div className="pt-2">
             <button
               type="submit"
-              className="w-full py-3 bg-[var(--color-accent)] text-white rounded-lg hover:bg-yellow-600 transition-colors font-bold text-sm tracking-wide cursor-pointer shadow-sm"
+              disabled={loading}
+              className="w-full py-3 bg-[var(--color-accent)] text-white rounded-lg hover:bg-yellow-600 transition-colors font-bold text-sm tracking-wide cursor-pointer shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isEditMode ? 'Update user' : 'ADD USER'}
+              {loading ? 'Saving...' : (isEditMode ? 'Update user' : 'ADD USER')}
             </button>
           </div>
         </form>

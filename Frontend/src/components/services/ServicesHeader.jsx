@@ -1,10 +1,10 @@
-import React from "react";
 
-const ServicesHeader = ({ onAddClick }) => {
+
+const ServicesHeader = ({ onAddClick, servicesCount }) => {
   return (
     <div className="flex justify-between items-center mb-6">
       <h1 className="text-2xl font-semibold text-text-primary">
-        Services <span className="text-text-secondary">(18)</span>
+        Services <span className="text-text-secondary">({servicesCount || 0})</span>
       </h1>
 
       <button

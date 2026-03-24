@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 import { 
   Building2, Phone, Mail, MapPin, Calendar, User, 
   ArrowLeft, FileText, Send, Edit, MessageSquare, Plus, 
@@ -8,6 +9,8 @@ import {
   Search, ChevronDown, IdCard
 } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { fetchCustomerById, updateCustomerEmails, addCustomerDirector } from "../redux/slices/customersSlice";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 // Modals
 import DirectorReportModal from "../components/customer-modals/DirectorReportModal";
@@ -31,87 +34,183 @@ import EmailTemplateDetailsModal from "../components/customer-modals/EmailTempla
 const CustomerDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [customer, setCustomer] = useState({
-    id: id || "69b94faa7ee9313f5f04acd3",
-    customerName: "VIRALITY360 PRIVATE LIMITED",
-    phone: "7891858821",
-    companyName: "VIRALITY360 PRIVATE LIMITED",
-    type: "Private Limited Company",
-    onboardingDate: "4th February 2026",
-    incorporationDate: "29th December 2025",
-    salesPerson: "Ritu Kaur",
-    emails: ["imeenasanju@gmail.com"],
-    address: "C/O GAURAV MISHRA, NEW PATHAKPURA, Orai, Orai, Jalaun- 285001, Uttar Pradesh",
-    state: "UTTAR PRADESH",
-    username: "VIRALITY0000",
-    password: "w6ss645g",
-    newlyIncorporated: true,
-    directors: [
-      { name: "RAJ MISHRA", phone: "7891858821", designation: "Managing Director", din: "09123456" }
-    ],
-    compliances: [
-      { id: 1, name: "Preparation of 07 Required Statutory Registers", expiry: "-", status: "To Be Done", completedOn: "-", accountant: "-" },
-      { id: 2, name: "Preparation & Filing of Form DPT - 03", expiry: "-", status: "To Be Done", completedOn: "-", accountant: "-" },
-      { id: 3, name: "Preparation of Notice and Minutes of Board Meetings", expiry: "-", status: "To Be Done", completedOn: "-", accountant: "-" },
-      { id: 4, name: "Preparation of Notice and Minutes of the Annual General Meeting & Extra-Ordinary General Meeting", expiry: "-", status: "To Be Done", completedOn: "-", accountant: "-" },
-      { id: 5, name: "Preparation & Filing of Form ADT-01 (Auditor Appointment)", expiry: "24th Mar 2026", status: "To Be Done", completedOn: "-", accountant: "-" },
-      { id: 6, name: "Preparation & Filing of Form INC - 20A", expiry: "21st Aug 2026", status: "To Be Done", completedOn: "-", accountant: "-" },
-      { id: 7, name: "Issuance of Share Certificates (for all Shareholders)", expiry: "24th Mar 2026", status: "To Be Done", completedOn: "-", accountant: "-" },
-    ],
-    services: [
-      { id: 1, name: "Annual Compliance", startDate: "17th Mar 2026", endDate: "-", status: "Active" }
-    ],
-    invoices: [
-      { id: 1, date: "17th Mar 2026", number: "INV-24-2510941", service: "Annual Compliance", price: 2000, gst: 0, total: 2000, due: 2000 }
-    ],
-    recurringInvoices: [
-      { id: 1, startDate: "17th Mar 2026", endDate: "17th Mar 2027", service: "Annual Compliance", interval: "3 Months", nextDate: "17th Jun 2026", status: "Active" }
-    ],
-    emailHistory: [
-      { id: 1, date: "17th Mar 2026 6:28 pm", name: "Annual Compliance - Onboarding" }
-    ]
-  });
-
-  const [showModals, setShowModals] = useState({
-    directorReport: false,
-    boardResolution: false,
-    emails: false,
-    addJob: false,
-    editCustomer: false,
-    sendTemplate: false,
-    consentLetter: false,
-    auditorsReport: false,
-    addDirector: false,
-    addService: false,
-    whatsapp: false,
-    modifyComp: false,
-    addInvoice: false,
-    endService: false,
-    recurringInvoiceDetails: false,
-    emailTemplateDetails: false,
-  });
-
+  const dispatch = useDispatch();
+  const { currentCustomer, loading, error } = useSelector((state) => state.customers);
+  
+  // Move ALL useState hooks to the top before any conditional returns
+  const [activeTab, setActiveTab] = useState("overview");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showEmailsModal, setShowEmailsModal] = useState(false);
+  const [emailUpdateLoading, setEmailUpdateLoading] = useState(false);
+  const [showAddDirectorModal, setShowAddDirectorModal] = useState(false);
+  const [showAddServiceModal, setShowAddServiceModal] = useState(false);
+  const [showSendTemplateModal, setShowSendTemplateModal] = useState(false);
+  const [showWhatsappModal, setShowWhatsappModal] = useState(false);
+  const [showAddInvoiceModal, setShowAddInvoiceModal] = useState(false);
+  const [showAddComplianceModal, setShowAddComplianceModal] = useState(false);
+  const [showModifyComplianceModal, setShowModifyComplianceModal] = useState(false);
+  const [showDirectorReportModal, setShowDirectorReportModal] = useState(false);
+  const [showBoardResolutionModal, setShowBoardResolutionModal] = useState(false);
+  const [showConsentLetterModal, setShowConsentLetterModal] = useState(false);
+  const [showAuditorsReportModal, setShowAuditorsReportModal] = useState(false);
+  const [showAddAccountantJobModal, setShowAddAccountantJobModal] = useState(false);
+  const [showRecurringInvoiceDetailsModal, setShowRecurringInvoiceDetailsModal] = useState(false);
+  const [showEmailTemplateDetailsModal, setShowEmailTemplateDetailsModal] = useState(false);
+  const [showEndServiceModal, setShowEndServiceModal] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
+  const [selectedCompliance, setSelectedCompliance] = useState(null);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const [selectedRecurringInvoice, setSelectedRecurringInvoice] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [customer, setCustomer] = useState(currentCustomer);
+
+  // Fetch customer data on component mount
+  useEffect(() => {
+    if (id) {
+      console.log('Fetching customer details for ID:', id);
+      dispatch(fetchCustomerById(id));
+    }
+  }, [dispatch, id]);
+
+  // Update local customer state when Redux data changes
+  useEffect(() => {
+    if (currentCustomer) {
+      setCustomer(currentCustomer);
+    }
+  }, [currentCustomer]);
+
+  // Handle loading state
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-t-accent border-t-transparent"></div>
+      </div>
+    );
+  }
+
+  // Handle error state
+  if (error) {
+    const errorMessage = typeof error === 'string' ? error : 
+                         error?.message || 
+                         error?.toString() || 
+                         'An error occurred';
+    
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          <p className="text-sm">{errorMessage}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle no customer found
+  if (!customer) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
+          <p className="text-sm">Customer not found</p>
+        </div>
+      </div>
+    );
+  }
 
   const toggleModal = (modalName, show, item = null) => {
     setSelectedItem(item);
-    setShowModals(prev => ({ ...prev, [modalName]: show }));
+    // Use individual state setters instead of showModals object
+    switch(modalName) {
+      case 'directorReport': setShowDirectorReportModal(show); break;
+      case 'boardResolution': setShowBoardResolutionModal(show); break;
+      case 'emails': setShowEmailsModal(show); break;
+      case 'addJob': setShowAddAccountantJobModal(show); break;
+      case 'editCustomer': setShowEditModal(show); break;
+      case 'sendTemplate': setShowSendTemplateModal(show); break;
+      case 'consentLetter': setShowConsentLetterModal(show); break;
+      case 'auditorsReport': setShowAuditorsReportModal(show); break;
+      case 'addDirector': setShowAddDirectorModal(show); break;
+      case 'addService': setShowAddServiceModal(show); break;
+      case 'whatsapp': setShowWhatsappModal(show); break;
+      case 'modifyComp': setShowModifyComplianceModal(show); break;
+      case 'addInvoice': setShowAddInvoiceModal(show); break;
+      case 'endService': setShowEndServiceModal(show); break;
+      case 'recurringInvoiceDetails': setShowRecurringInvoiceDetailsModal(show); break;
+      case 'emailTemplateDetails': setShowEmailTemplateDetailsModal(show); break;
+      default: break;
+    }
   };
 
-  const handleUpdateEmails = (newEmails) => {
-    setCustomer(prev => ({ ...prev, emails: newEmails }));
-    toast.success("Emails updated successfully!");
-  };
-
-  const handleUpdateCustomer = (updatedData) => {
-    setCustomer(prev => ({ ...prev, ...updatedData }));
+  const handleUpdateCustomer = (updatedCustomer) => {
+    setCustomer(prev => ({ ...prev, ...updatedCustomer }));
     toast.success("Customer updated successfully!");
   };
 
-  const handleAddDirector = (newDirector) => {
-    setCustomer(prev => ({ ...prev, directors: [...prev.directors, newDirector] }));
+  const handleUpdateEmails = async (updatedCustomer) => {
+  try {
+    if (!customer || !customer._id) {
+      throw new Error('Customer data not available');
+    }
+    
+    // Ensure customer has emails property
+    const customerWithEmails = {
+      ...customer,
+      emails: customer.emails || []
+    };
+    
+    setEmailUpdateLoading(true);
+    
+    const result = await dispatch(updateCustomerEmails({ 
+      customerId: customer._id, 
+      emails: updatedCustomer.emails || [] 
+    })).unwrap();
+    
+    // Update local state to reflect changes immediately
+    setCustomer(prev => ({ 
+      ...prev, 
+      emails: updatedCustomer.emails || [] 
+    }));
+    console.log('Emails updated successfully:', result);
+    toast.success("Emails updated successfully!");
+    
+    // Close modal after successful update
+    setShowEmailsModal(false);
+  } catch (error) {
+    const errorMessage = typeof error === 'string' ? error : 
+                         error?.message || 
+                         error?.toString() || 
+                         'Failed to update emails';
+    console.error('Email update error:', error);
+    toast.error(errorMessage);
+  } finally {
+    setEmailUpdateLoading(false);
+  }
+};
+
+  const handleAddDirector = async (newDirector) => {
+  try {
+    const directorData = {
+      name: newDirector.name,
+      email: newDirector.email,
+      phone: newDirector.phone,
+      pan: newDirector.pan,
+      din: newDirector.din
+    };
+    
+    await dispatch(addCustomerDirector({ 
+      customerId: customer._id, 
+      directorData 
+    })).unwrap();
+    
+    // Don't update local state - Redux will handle it
     toast.success("Director added!");
-  };
+  } catch (error) {
+    const errorMessage = typeof error === 'string' ? error : 
+                         error?.message || 
+                         error?.toString() || 
+                         'Failed to add director';
+    toast.error(errorMessage);
+  }
+};
 
   const handleDeleteDirector = (index) => {
     setCustomer(prev => ({
@@ -152,7 +251,8 @@ const CustomerDetailsPage = () => {
   };
 
   return (
-    <div className="p-4 bg-bg-primary min-h-screen text-text-primary">
+    <ErrorBoundary>
+      <div className="p-4 bg-bg-primary min-h-screen text-text-primary">
       <div className="max-w-7xl mx-auto space-y-6">
         
         {/* ROW 1: HEADER & PRIMARY ACTIONS */}
@@ -224,13 +324,13 @@ const CustomerDetailsPage = () => {
           {/* Column 1: Basic Info */}
           <div className="space-y-4">
              {[
-                { label: "Customer Name", value: customer.customerName },
+                { label: "Customer Name", value: customer.name },
                 { label: "Customer Phone", value: customer.phone },
                 { label: "Company Name", value: customer.companyName },
                 { label: "Type", value: customer.type },
-                { label: "Onboarding Date", value: customer.onboardingDate },
-                { label: "Incorporation Date", value: customer.incorporationDate },
-                { label: "Sales Person", value: customer.salesPerson },
+                { label: "Onboarding Date", value: customer.onboardingDate ? new Date(customer.onboardingDate).toLocaleDateString('en-IN') : 'N/A' },
+                { label: "Incorporation Date", value: customer.incorporationDate ? new Date(customer.incorporationDate).toLocaleDateString('en-IN') : 'N/A' },
+                { label: "Sales Person", value: customer.salesPerson || 'N/A' },
              ].map((item, i) => (
                 <div key={i} className="flex items-center gap-2 text-lg">
                   <span className="font-bold text-text-primary">{item.label}:</span>
@@ -244,18 +344,22 @@ const CustomerDetailsPage = () => {
               <div className="flex items-center gap-2 text-lg">
                 <span className="font-bold text-text-primary">Emails</span>
                 <div className="flex flex-col">
-                  {customer.emails.map((email, idx) => (
-                    <span key={idx} className="text-blue-400 hover:underline cursor-pointer">{email}</span>
-                  ))}
+                  {customer?.emails && customer.emails.length > 0 ? (
+                    customer.emails.map((email, idx) => (
+                      <span key={idx} className="text-blue-400 hover:underline cursor-pointer">{email}</span>
+                    ))
+                  ) : (
+                    <span className="text-text-primary">No emails added</span>
+                  )}
                 </div>
               </div>
               <div className="flex flex-start gap-2 text-lg">
                 <span className="font-bold text-text-primary">Address</span>
-                <span className="text-text-primary">{customer.address}</span>
+                <span className="text-text-primary">{customer.address || 'N/A'}</span>
               </div>
               <div className="flex items-center gap-2 text-lg">
                   <span className="font-bold text-text-primary">State:</span>
-                  <span className="text-text-primary uppercase">{customer.state}</span>
+                  <span className="text-text-primary uppercase">{customer.state || 'N/A'}</span>
               </div>
               <div className="flex items-center gap-2 text-lg pt-4">
                   <span className="font-bold text-text-primary">Username:</span>
@@ -274,32 +378,38 @@ const CustomerDetailsPage = () => {
             <User size={24} className="text-yellow-500" /> Directors
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {customer.directors.map((director, idx) => (
-              <div key={idx} className="bg-bg-tertiary/20 border border-bg-tertiary rounded-2xl p-6 relative group overflow-hidden">
-                <div className="relative space-y-3">
-                  <div className="flex flex-col">
-                    <h4 className="text-base font-black uppercase tracking-tight italic text-yellow-500 leading-tight">{director.name}</h4>
-                    <span className="text-[10px] font-bold text-text-secondary uppercase tracking-widest">{director.designation || "Director"}</span>
-                  </div>
-                  <div className="space-y-1 pt-2">
-                    <p className="text-sm font-bold flex items-center gap-2 text-text-primary">
-                      <Phone size={14} className="text-yellow-500/50" /> {director.phone}
-                    </p>
-                    {director.din && (
-                      <p className="text-xs font-medium flex items-center gap-2 text-text-secondary">
-                        <IdCard size={14} className="text-blue-500/50" /> DIN: {director.din}
+            {customer?.directors && customer.directors.length > 0 ? (
+              customer.directors.map((director, idx) => (
+                <div key={idx} className="bg-bg-tertiary/20 border border-bg-tertiary rounded-2xl p-6 relative group overflow-hidden">
+                  <div className="relative space-y-3">
+                    <div className="flex flex-col">
+                      <h4 className="text-base font-black uppercase tracking-tight italic text-yellow-500 leading-tight">{director.name}</h4>
+                      <span className="text-[10px] font-bold text-text-secondary uppercase tracking-widest">{director.designation || "Director"}</span>
+                    </div>
+                    <div className="space-y-1 pt-2">
+                      <p className="text-sm font-bold flex items-center gap-2 text-text-primary">
+                        <Phone size={14} className="text-yellow-500/50" /> {director.phone}
                       </p>
-                    )}
+                      {director.din && (
+                        <p className="text-xs font-medium flex items-center gap-2 text-text-secondary">
+                          <IdCard size={14} className="text-blue-500/50" /> DIN: {director.din}
+                        </p>
+                      )}
+                    </div>
                   </div>
+                  <button 
+                    onClick={() => handleDeleteDirector(idx)}
+                    className="absolute bottom-4 right-4 p-2 text-red-500 transition-all hover:bg-red-500/10 rounded-lg"
+                  >
+                      <Trash2 size={16} />
+                  </button>
                 </div>
-                <button 
-                  onClick={() => handleDeleteDirector(idx)}
-                  className="absolute bottom-4 right-4 p-2 text-red-500 transition-all hover:bg-red-500/10 rounded-lg"
-                >
-                    <Trash2 size={16} />
-                </button>
+              ))
+            ) : (
+              <div className="col-span-full text-center text-text-secondary py-8">
+                No directors available
               </div>
-            ))}
+            )}
           </div>
         </div>
 
@@ -342,23 +452,33 @@ const CustomerDetailsPage = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-bg-tertiary">
-                {customer.compliances.map((comp) => (
-                  <tr key={comp.id} className="hover:bg-bg-tertiary/10 transition-colors">
-                    <td className="px-6 py-4 text-sm font-medium">{comp.name}</td>
-                    <td className={`px-6 py-4 text-sm ${comp.expiry !== '-' ? 'text-crm-orange font-bold' : ''}`}>{comp.expiry}</td>
-                    <td className="px-6 py-4 text-sm text-text-secondary">{comp.status}</td>
-                    <td className="px-6 py-4 text-sm">{comp.completedOn}</td>
-                    <td className="px-6 py-4 text-sm">{comp.accountant}</td>
-                    <td className="px-6 py-4">
-                      <button 
-                        onClick={() => toggleModal("modifyComp", true, comp)}
-                        className="btn-raised btn-raised-green px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all"
-                      >
-                        Modify
-                      </button>
+                {customer?.compliances && customer.compliances.length > 0 ? (
+                  customer.compliances.map((comp) => (
+                    <tr key={comp._id} className="hover:bg-bg-tertiary/10 transition-colors">
+                      <td className="px-6 py-4 text-sm font-medium">{comp.name}</td>
+                      <td className={`px-6 py-4 text-sm ${comp.expiryDate && comp.expiryDate !== '-' ? 'text-crm-orange font-bold' : ''}`}>
+                        {comp.expiryDate ? new Date(comp.expiryDate).toLocaleDateString('en-IN') : '-'}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-text-secondary">{comp.status}</td>
+                      <td className="px-6 py-4 text-sm">{comp.completedOn ? new Date(comp.completedOn).toLocaleDateString('en-IN') : '-'}</td>
+                      <td className="px-6 py-4 text-sm">{comp.accountant || '-'}</td>
+                      <td className="px-6 py-4">
+                        <button 
+                          onClick={() => toggleModal("modifyComp", true, comp)}
+                          className="btn-raised btn-raised-green px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all"
+                        >
+                          Modify
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-8 text-center text-text-secondary">
+                      No compliance data available
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -382,30 +502,38 @@ const CustomerDetailsPage = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-bg-tertiary">
-                {customer.services.map((svc) => (
-                  <tr key={svc.id}>
-                    <td className="px-6 py-4 text-sm">{svc.name}</td>
-                    <td className="px-6 py-4 text-sm">{svc.startDate}</td>
-                    <td className="px-6 py-4 text-sm">{svc.endDate}</td>
-                    <td className="px-6 py-4 text-sm text-crm-green font-bold">{svc.status}</td>
-                    <td className="px-6 py-4">
-                      <button 
-                        onClick={() => toggleModal("addInvoice", true, svc)}
-                        className="btn-raised btn-raised-orange px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all"
-                      >
-                        Add Invoice
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <button 
-                        onClick={() => toggleModal("endService", true, svc)}
-                        className="btn-raised-red px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all bg-red-600 text-white shadow-[0_4px_0_rgb(185,28,28)] active:translate-y-1 active:shadow-none"
-                      >
-                        End Service
-                      </button>
+                {customer?.services && customer.services.length > 0 ? (
+                  customer.services.map((svc) => (
+                    <tr key={svc.id}>
+                      <td className="px-6 py-4 text-sm">{svc.name}</td>
+                      <td className="px-6 py-4 text-sm">{svc.startDate ? new Date(svc.startDate).toLocaleDateString('en-IN') : '-'}</td>
+                      <td className="px-6 py-4 text-sm">{svc.endDate ? new Date(svc.endDate).toLocaleDateString('en-IN') : '-'}</td>
+                      <td className="px-6 py-4 text-sm text-crm-green font-bold">{svc.status}</td>
+                      <td className="px-6 py-4">
+                        <button 
+                          onClick={() => toggleModal("addInvoice", true, svc)}
+                          className="btn-raised btn-raised-orange px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all"
+                        >
+                          Add Invoice
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <button 
+                          onClick={() => toggleModal("endService", true, svc)}
+                          className="btn-raised-red px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all bg-red-600 text-white shadow-[0_4px_0_rgb(185,28,28)] active:translate-y-1 active:shadow-none"
+                        >
+                          End Service
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-8 text-center text-text-secondary">
+                      No services available
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -431,25 +559,33 @@ const CustomerDetailsPage = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-bg-tertiary">
-                {customer.invoices.map((inv) => (
-                  <tr key={inv.id}>
-                    <td className="px-6 py-4 text-sm">{inv.date}</td>
-                    <td className="px-6 py-4 text-sm text-text-secondary">{inv.number}</td>
-                    <td className="px-6 py-4 text-sm">{inv.service}</td>
-                    <td className="px-6 py-4 text-sm">₹ {inv.price}</td>
-                    <td className="px-6 py-4 text-sm">₹ {inv.gst}</td>
-                    <td className="px-6 py-4 text-sm">₹ {inv.total}</td>
-                    <td className="px-6 py-4 text-sm text-crm-orange font-bold">₹ {inv.due}</td>
-                    <td className="px-6 py-4">
-                      <button 
-                        onClick={() => navigate(`/invoice/${inv.id}`)}
-                        className="btn-raised btn-raised-blue px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all"
-                      >
-                        View
-                      </button>
+                {customer?.invoices && customer.invoices.length > 0 ? (
+                  customer.invoices.map((inv) => (
+                    <tr key={inv._id}>
+                      <td className="px-6 py-4 text-sm">{inv.invoiceDate ? new Date(inv.invoiceDate).toLocaleDateString('en-IN') : '-'}</td>
+                      <td className="px-6 py-4 text-sm text-text-secondary">{inv.invoiceNo || '-'}</td>
+                      <td className="px-6 py-4 text-sm">{inv.linkedService || '-'}</td>
+                      <td className="px-6 py-4 text-sm">₹ {inv.price || 0}</td>
+                      <td className="px-6 py-4 text-sm">₹ {inv.gst || 0}</td>
+                      <td className="px-6 py-4 text-sm">₹ {inv.total || 0}</td>
+                      <td className="px-6 py-4 text-sm text-crm-orange font-bold">₹ {inv.due || 0}</td>
+                      <td className="px-6 py-4">
+                        <button 
+                          onClick={() => navigate(`/invoice/${inv._id}`)}
+                          className="btn-raised btn-raised-blue px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all"
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="8" className="px-6 py-8 text-center text-text-secondary">
+                      No invoices available
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -474,24 +610,32 @@ const CustomerDetailsPage = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-bg-tertiary">
-                {customer.recurringInvoices.map((inv) => (
-                  <tr key={inv.id}>
-                    <td className="px-6 py-4 text-sm">{inv.startDate}</td>
-                    <td className="px-6 py-4 text-sm">{inv.endDate}</td>
-                    <td className="px-6 py-4 text-sm">{inv.service}</td>
-                    <td className="px-6 py-4 text-sm">{inv.interval}</td>
-                    <td className="px-6 py-4 text-sm">{inv.nextDate}</td>
-                    <td className="px-6 py-4 text-sm text-crm-green font-bold">{inv.status}</td>
-                    <td className="px-6 py-4">
-                      <button 
-                        onClick={() => navigate(`/recurring-invoice-details/${inv.id}`)}
-                        className="btn-raised btn-raised-blue px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all"
-                      >
-                        View
-                      </button>
+                {customer?.recurringInvoices && customer.recurringInvoices.length > 0 ? (
+                  customer.recurringInvoices.map((inv) => (
+                    <tr key={inv._id}>
+                      <td className="px-6 py-4 text-sm">{inv.startDate ? new Date(inv.startDate).toLocaleDateString('en-IN') : '-'}</td>
+                      <td className="px-6 py-4 text-sm">{inv.endDate ? new Date(inv.endDate).toLocaleDateString('en-IN') : '-'}</td>
+                      <td className="px-6 py-4 text-sm">{inv.linkedService || '-'}</td>
+                      <td className="px-6 py-4 text-sm">{inv.interval || '-'}</td>
+                      <td className="px-6 py-4 text-sm">{inv.nextDate ? new Date(inv.nextDate).toLocaleDateString('en-IN') : '-'}</td>
+                      <td className="px-6 py-4 text-sm text-crm-green font-bold">{inv.status}</td>
+                      <td className="px-6 py-4">
+                        <button 
+                          onClick={() => navigate(`/recurring-invoice-details/${inv._id}`)}
+                          className="btn-raised btn-raised-blue px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all"
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="px-6 py-8 text-center text-text-secondary">
+                      No recurring invoices available
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -512,20 +656,28 @@ const CustomerDetailsPage = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-bg-tertiary">
-                {customer.emailHistory.map((hist) => (
-                  <tr key={hist.id}>
-                    <td className="px-6 py-4 text-sm">{hist.date}</td>
-                    <td className="px-6 py-4 text-sm font-medium">{hist.name}</td>
-                    <td className="px-6 py-4">
-                      <button 
-                        onClick={() => toggleModal("emailTemplateDetails", true, hist)}
-                        className="btn-raised btn-raised-blue px-4 py-1.5 rounded text-[10px] font-bold uppercase transition-all"
-                      >
-                        View
-                      </button>
+                {customer?.emailHistory && customer.emailHistory.length > 0 ? (
+                  customer.emailHistory.map((hist) => (
+                    <tr key={hist.id}>
+                      <td className="px-6 py-4 text-sm">{new Date(hist.date).toLocaleDateString('en-IN')}</td>
+                      <td className="px-6 py-4 text-sm font-medium">{hist.name}</td>
+                      <td className="px-6 py-4">
+                        <button 
+                          onClick={() => toggleModal("emailTemplateDetails", true, hist)}
+                          className="text-blue-400 hover:underline"
+                        >
+                          View Details
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3" className="px-6 py-8 text-center text-text-secondary">
+                      No email history available
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -534,30 +686,30 @@ const CustomerDetailsPage = () => {
       </div>
 
       {/* RENDER MODALS */}
-      {showModals.directorReport && <DirectorReportModal customer={customer} onClose={() => toggleModal("directorReport", false)} />}
-      {showModals.boardResolution && <BoardResolutionModal customer={customer} onClose={() => toggleModal("boardResolution", false)} />}
-      {showModals.emails && <EditEmailsModal customer={customer} onClose={() => toggleModal("emails", false)} onUpdate={handleUpdateEmails} />}
-      {showModals.addJob && <AddAccountantJobModal onClose={() => toggleModal("addJob", false)} />}
-      {showModals.editCustomer && <EditCustomerModal customer={customer} onClose={() => toggleModal("editCustomer", false)} onUpdate={handleUpdateCustomer} />}
-      {showModals.sendTemplate && <SendTemplateModal customer={customer} onClose={() => toggleModal("sendTemplate", false)} />}
-      {showModals.consentLetter && <ConsentLetterModal customer={customer} onClose={() => toggleModal("consentLetter", false)} />}
-      {showModals.auditorsReport && <AuditorsReportModal customer={customer} onClose={() => toggleModal("auditorsReport", false)} />}
+      {showDirectorReportModal && <DirectorReportModal customer={customer} onClose={() => toggleModal("directorReport", false)} />}
+      {showBoardResolutionModal && <BoardResolutionModal customer={customer} onClose={() => toggleModal("boardResolution", false)} />}
+      {showEmailsModal && <EditEmailsModal customer={customer} onClose={() => toggleModal("emails", false)} onUpdate={handleUpdateEmails} loading={emailUpdateLoading} />}
+      {showAddAccountantJobModal && <AddAccountantJobModal onClose={() => toggleModal("addJob", false)} />}
+      {showEditModal && <EditCustomerModal customer={customer} onClose={() => toggleModal("editCustomer", false)} onUpdate={handleUpdateCustomer} />}
+      {showSendTemplateModal && <SendTemplateModal customer={customer} onClose={() => toggleModal("sendTemplate", false)} />}
+      {showConsentLetterModal && <ConsentLetterModal customer={customer} onClose={() => toggleModal("consentLetter", false)} />}
+      {showAuditorsReportModal && <AuditorsReportModal customer={customer} onClose={() => toggleModal("auditorsReport", false)} />}
       
-      {showModals.addDirector && (
+      {showAddDirectorModal && (
         <AddDirectorModal 
           onClose={() => toggleModal("addDirector", false)} 
           onAdd={handleAddDirector} 
         />
       )}
       
-      {showModals.addService && (
+      {showAddServiceModal && (
         <AddServiceModal 
           onClose={() => toggleModal("addService", false)} 
           onAdd={handleAddService} 
         />
       )}
 
-      {showModals.modifyComp && (
+      {showModifyComplianceModal && (
         <ModifyComplianceModal 
           compliance={selectedItem}
           onClose={() => toggleModal("modifyComp", false)} 
@@ -565,7 +717,7 @@ const CustomerDetailsPage = () => {
         />
       )}
 
-      {showModals.addInvoice && (
+      {showAddInvoiceModal && (
         <AddInvoiceModal 
           service={selectedItem}
           onClose={() => toggleModal("addInvoice", false)} 
@@ -587,7 +739,7 @@ const CustomerDetailsPage = () => {
             if (data.isRecurring) {
               const recurringInvoice = {
                 id: Date.now(),
-                customer: customer.customerName,
+                customer: customer.name,
                 service: selectedItem.name,
                 interval: data.interval,
                 intervalType: data.intervalType,
@@ -611,7 +763,7 @@ const CustomerDetailsPage = () => {
         />
       )}
 
-      {showModals.endService && (
+      {showEndServiceModal && (
         <EndServiceModal 
           service={selectedItem}
           onClose={() => toggleModal("endService", false)} 
@@ -619,9 +771,9 @@ const CustomerDetailsPage = () => {
         />
       )}
 
-      {showModals.whatsapp && (
+      {showWhatsappModal && (
         <WhatsappTemplateModal 
-          lead={{ name: customer.customerName, companyName: customer.companyName, phone: customer.phone }} 
+          lead={{ name: customer.name, companyName: customer.companyName, phone: customer.phone }} 
           onClose={() => toggleModal("whatsapp", false)} 
           onSend={(data) => {
             toast.success("WhatsApp message sent!");
@@ -630,14 +782,14 @@ const CustomerDetailsPage = () => {
         />
       )}
 
-      {showModals.recurringInvoiceDetails && (
+      {showRecurringInvoiceDetailsModal && (
         <RecurringInvoiceDetailsModal 
           invoice={selectedItem}
           onClose={() => toggleModal("recurringInvoiceDetails", false)} 
         />
       )}
 
-      {showModals.emailTemplateDetails && (
+      {showEmailTemplateDetailsModal && (
         <EmailTemplateDetailsModal 
           emailHistory={selectedItem}
           onClose={() => toggleModal("emailTemplateDetails", false)} 
@@ -645,6 +797,7 @@ const CustomerDetailsPage = () => {
       )}
 
     </div>
+    </ErrorBoundary>
   );
 };
 

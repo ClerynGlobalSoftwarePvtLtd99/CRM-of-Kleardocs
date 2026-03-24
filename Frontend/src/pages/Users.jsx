@@ -1,78 +1,53 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-hot-toast'
 import UsersTopSection from '../components/users/UsersTopSection'
 import UsersTable from '../components/users/UsersTable'
 import UserFormModal from '../components/users/UserFormModal'
-
-const initialUsers = [
-  {
-    id: 1,
-    created: '5th January 2025 4:49 pm',
-    name: 'Amit Samanta',
-    phone: '+91 8100521654',
-    type: 'Admin',
-    status: 'Active',
-    sessions: '',
-  },
-  {
-    id: 2,
-    created: '8th January 2025 12:06 am',
-    name: 'Ritu Kaur',
-    phone: '+91 5496665',
-    type: 'Agent',
-    status: 'Active',
-    sessions: '',
-  },
-  {
-    id: 3,
-    created: '8th January 2025 12:10 am',
-    name: 'Jagjyot Singh',
-    phone: '+91 588548',
-    type: 'Agent',
-    status: 'Active',
-    sessions: '',
-  },
-  {
-    id: 4,
-    created: '19th January 2025 2:03 pm',
-    name: 'Samrat',
-    phone: '+91 9674560601',
-    type: 'Accountant',
-    status: 'Active',
-    sessions: '',
-  },
-  {
-    id: 5,
-    created: '20th January 2025 12:58 pm',
-    name: 'TAPAS',
-    phone: '+91 9583723661',
-    type: 'Accountant',
-    status: 'Active',
-    sessions: '',
-  },
-  {
-    id: 6,
-    created: '12th February 2025 12:25 pm',
-    name: 'Jagjyot Singh',
-    phone: '+91 9674560602',
-    type: 'Admin',
-    status: 'Active',
-    sessions: '',
-  },
-  {
-    id: 7,
-    created: '14th May 2025 4:25 pm',
-    name: 'Jagjyot',
-    phone: '+91 9804492472',
-    type: 'Accountant',
-    status: 'Active',
-    sessions: '',
-  },
-]
+import { fetchUsers, createUser, updateUser, deleteUser } from '../redux/slices/usersSlice'
 
 const Users = () => {
-  const [users, setUsers] = useState(initialUsers)
+  const dispatch = useDispatch()
+  const { users, loading, error, pagination } = useSelector((state) => state.users)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingUser, setEditingUser] = useState(null)
+  const [filters, setFilters] = useState({
+    page: 1,
+    limit: 10,
+    search: '',
+  })
+  const [searchTimeout, setSearchTimeout] = useState(null)
+
+  // Debounced search function
+  const debouncedSearch = useCallback((searchTerm) => {
+    if (searchTimeout) {
+      clearTimeout(searchTimeout)
+    }
+    
+    const timeout = setTimeout(() => {
+      setFilters(prev => ({ ...prev, search: searchTerm, page: 1 }))
+    }, 500) // 500ms debounce
+    
+    setSearchTimeout(timeout)
+  }, [searchTimeout])
+
+  useEffect(() => {
+    dispatch(fetchUsers(filters))
+  }, [dispatch, filters])
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error)
+    }
+  }, [error])
+
+  useEffect(() => {
+    return () => {
+      if (searchTimeout) {
+        clearTimeout(searchTimeout)
+      }
+    }
+  }, [searchTimeout])
 
   const handleNewUserClick = () => {
     setEditingUser(null)
@@ -89,58 +64,67 @@ const Users = () => {
     setEditingUser(null)
   }
 
-  const handleSubmit = (formData) => {
-    if (editingUser) {
-      // Update existing user
-      setUsers((prev) =>
-        prev.map((u) => (u.id === formData.id ? { ...u, ...formData } : u))
-      )
-    } else {
-      // Add new user
-      const now = new Date()
-      const timeFormatter = new Intl.DateTimeFormat('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true,
-      })
-
-      const day = now.getDate()
-      const suffix = ['th', 'st', 'nd', 'rd'][
-        day % 10 > 3 ? 0 : (((day % 100) - (day % 10) !== 10) * day) % 10
-      ]
-
-      const createdStr = `${day}${suffix} ${now.toLocaleString('en-US', { month: 'long' })} ${now.getFullYear()} ${timeFormatter.format(now).toLowerCase()}`
-
-      setUsers((prev) => [
-        ...prev,
-        {
-          id: formData.id,
-          created: createdStr,
-          name: formData.name,
-          phone: formData.phone,
-          type: formData.type,
-          status: formData.status,
-          sessions: '',
-        },
-      ])
+  const handleSubmit = async (formData) => {
+    try {
+      if (editingUser) {
+        // Update existing user
+        await dispatch(updateUser({ id: editingUser._id, userData: formData })).unwrap()
+        toast.success('User updated successfully')
+      } else {
+        // Add new user
+        await dispatch(createUser(formData)).unwrap()
+        toast.success('User created successfully')
+      }
+      handleCloseModal()
+      // Refresh users list
+      dispatch(fetchUsers(filters))
+    } catch (error) {
+      toast.error(error || 'Failed to save user')
     }
-    handleCloseModal()
+  }
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      await dispatch(deleteUser(userId)).unwrap()
+      toast.success('User deleted successfully')
+      dispatch(fetchUsers(filters))
+    } catch (error) {
+      toast.error(error || 'Failed to delete user')
+    }
+  }
+
+  const handleSearch = (searchTerm) => {
+    debouncedSearch(searchTerm)
+  }
+
+  const handlePageChange = (newPage) => {
+    setFilters(prev => ({ ...prev, page: newPage }))
   }
 
   return (
     <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full animate-in fade-in duration-300">
       <UsersTopSection
-        usersCount={users.length}
+        usersCount={pagination.total}
         onNewUserClick={handleNewUserClick}
+        onSearch={handleSearch}
+        loading={loading}
       />
 
-      <UsersTable users={users} onEditClick={handleEditClick} />
+      <UsersTable 
+        users={users} 
+        onEditClick={handleEditClick}
+        onDeleteClick={handleDeleteUser}
+        loading={loading}
+        pagination={pagination}
+        onPageChange={handlePageChange}
+      />
 
       <UserFormModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onSubmit={handleSubmit}
         editingUser={editingUser}
+        loading={loading}
       />
     </div>
   )
