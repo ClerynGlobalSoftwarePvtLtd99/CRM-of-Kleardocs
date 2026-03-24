@@ -10,7 +10,7 @@
     "method": "POST",
     "queryParams": [],
     "headers": [],
-    "body": "{\n  \"email\": \"admin2@kleardocs.com\",\n  \"password\": \"securepassword1234\"\n}",
+    "body": "{\n  \"email\": \"admin@kleardocs.com\",\n  \"password\": \"securepassword123\"\n}",
     "contentType": "application/json",
     "auth": {
       "currentAuthType": "BEARER_TOKEN",

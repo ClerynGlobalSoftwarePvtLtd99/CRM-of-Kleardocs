@@ -10,6 +10,7 @@ import complianceReducer from './slices/complianceSlice';
 
 import jobsReducer from './slices/jobsSlice';
 import usersReducer from './slices/usersSlice';
+import templatesReducer from './slices/templatesSlice';
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
     compliance: complianceReducer,
     jobs: jobsReducer,
     users: usersReducer,
+    templates: templatesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
