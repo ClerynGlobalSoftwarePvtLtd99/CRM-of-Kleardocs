@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { X, Trash2, Mail } from "lucide-react";
 import toast from "react-hot-toast";
 
-const EditEmailsModal = ({ customer, onClose, onUpdate }) => {
+const EditEmailsModal = ({ customer, onClose, onUpdate, loading = false }) => {
   const [emails, setEmails] = useState(customer.emails || []);
   const [newEmail, setNewEmail] = useState("");
 
@@ -22,7 +22,6 @@ const EditEmailsModal = ({ customer, onClose, onUpdate }) => {
 
   const handleUpdate = () => {
     onUpdate({ ...customer, emails });
-    toast.success("Emails updated successfully");
     onClose();
   };
 
@@ -60,6 +59,8 @@ const EditEmailsModal = ({ customer, onClose, onUpdate }) => {
                   placeholder="Add Email" 
                   value={newEmail} 
                   onChange={(e) => setNewEmail(e.target.value)} 
+                  autoComplete="off"
+                  data-lp-ignore="true"
                   className="w-full bg-transparent border border-bg-tertiary rounded-md p-3 text-text-primary outline-none focus:border-crm-orange transition-colors"
                />
             </div>
@@ -73,9 +74,19 @@ const EditEmailsModal = ({ customer, onClose, onUpdate }) => {
 
           <button
             onClick={handleUpdate}
-            className="w-full btn-raised btn-raised-orange text-white py-4 rounded-md text-sm font-bold uppercase tracking-widest shadow-lg flex items-center justify-center gap-2"
+            disabled={loading}
+            className="w-full btn-raised btn-raised-orange text-white py-4 rounded-md text-sm font-bold uppercase tracking-widest shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Mail size={16} /> UPDATE EMAILS
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                UPDATING...
+              </>
+            ) : (
+              <>
+                <Mail size={16} /> UPDATE EMAILS
+              </>
+            )}
           </button>
         </div>
       </div>

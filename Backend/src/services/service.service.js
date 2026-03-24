@@ -16,7 +16,7 @@ export const getServiceById = async (serviceId) => {
 };
 
 export const updateService = async (serviceId, updateData) => {
-  const updatedService = await Service.findByIdAndUpdate(serviceId, updateData, { new: true, runValidators: true });
+  const updatedService = await Service.findByIdAndUpdate(serviceId, updateData, { returnDocument: 'after', runValidators: true });
   return updatedService;
 };
 

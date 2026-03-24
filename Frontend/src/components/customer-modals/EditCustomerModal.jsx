@@ -4,7 +4,17 @@ import { STATES_AND_UTS, COMPANY_TYPES, AGENTS } from "../../utils/constants";
 import toast from "react-hot-toast";
 
 const EditCustomerModal = ({ customer, onClose, onUpdate }) => {
-  const [formData, setFormData] = useState({ ...customer });
+  // Convert ISO dates to yyyy-MM-dd format for HTML date inputs
+  const formatDateString = (dateString) => {
+    if (!dateString) return '';
+    return dateString.split('T')[0];
+  };
+
+  const [formData, setFormData] = useState({ 
+    ...customer,
+    incorporationDate: formatDateString(customer.incorporationDate),
+    onboardingDate: formatDateString(customer.onboardingDate)
+  });
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
