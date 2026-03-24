@@ -20,8 +20,9 @@ const AddComplianceModal = ({ isOpen, onClose, onSubmit }) => {
     hasExpiry: false,
     expiryDate: '',
     inc20: 'No',
-    expiryTemplate: 'GST Filing',
-    completeTemplate: 'None',
+    daysOfExpiry: '30',
+    expiryTemplate: 'None',
+    completeTemplate: 'Compliance Update',
   })
 
   if (!isOpen) return null
@@ -44,9 +45,7 @@ const AddComplianceModal = ({ isOpen, onClose, onSubmit }) => {
     const submissionData = {
       ...formData,
       inc20: formData.inc20 === 'Yes',
-      // For now we send names as strings, backend should be updated or we need to find IDs.
-      // Given the requirement, we will send these as strings and assume backend handles it.
-      // Actually backend needs ObjectId. I'll just send the names and hope for the best or assume user handles seeding IDs later.
+      daysOfExpiry: parseInt(formData.daysOfExpiry || '30'),
     }
     onSubmit(submissionData)
   }
@@ -104,15 +103,17 @@ const AddComplianceModal = ({ isOpen, onClose, onSubmit }) => {
               </button>
             </div>
 
-            <FormFieldWrapper label="Expiry date" id="expiryDate">
-              <input
-                type="date"
-                id="expiryDate"
-                value={formData.expiryDate}
-                onChange={handleChange}
-                className="w-full bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-2.5 rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] transition-colors"
-              />
-            </FormFieldWrapper>
+            {formData.hasExpiry && (
+              <FormFieldWrapper label="Expiry Date" id="expiryDate">
+                <input
+                  type="date"
+                  id="expiryDate"
+                  value={formData.expiryDate}
+                  onChange={handleChange}
+                  className="w-full bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-2.5 rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] transition-colors"
+                />
+              </FormFieldWrapper>
+            )}
 
             <FormFieldWrapper label="Inc 20?" id="inc20">
               <select
@@ -131,6 +132,20 @@ const AddComplianceModal = ({ isOpen, onClose, onSubmit }) => {
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
+            </FormFieldWrapper>
+
+            <FormFieldWrapper
+              label="Days of Expiry after INC Data"
+              id="daysOfExpiry"
+            >
+              <input
+                type="number"
+                id="daysOfExpiry"
+                value={formData.daysOfExpiry}
+                onChange={handleChange}
+                placeholder="30"
+                className="w-full bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-2.5 rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] transition-colors"
+              />
             </FormFieldWrapper>
 
             <FormFieldWrapper label="Expiry Template" id="expiryTemplate">

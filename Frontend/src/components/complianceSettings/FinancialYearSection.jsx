@@ -109,7 +109,7 @@ const FinancialYearSection = () => {
                   <td className="py-3 px-4 text-sm text-right">
                     <button
                       onClick={() => handleEditClick(fy)}
-                      className="text-[var(--color-accent)] hover:text-yellow-600 font-semibold cursor-pointer transition-colors px-2 py-1 rounded-md hover:bg-yellow-50/10 active:opacity-70"
+                      className="bg-[var(--color-accent)] hover:bg-yellow-600 cursor-pointer text-white font-bold py-2.5 px-4 rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 text-sm whitespace-nowrap"
                     >
                       Modify
                     </button>

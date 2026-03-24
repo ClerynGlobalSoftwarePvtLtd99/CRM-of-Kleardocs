@@ -1,4 +1,5 @@
 import ComplianceSetting, { FinancialYear } from "../models/ComplianceSetting.model.js";
+import EmailTemplate from "../models/EmailTemplate.model.js";
 import { CustomerCompliance } from "../models/Customer.model.js";
 import { ApiError } from "../utils/response.js";
 
@@ -35,18 +36,35 @@ export const getComplianceSettings = async (year) => {
 };
 
 export const createComplianceSetting = async (data) => {
+  // Resolve templates if names are provided instead of IDs
+  let expiryTemplateId = data.expiryTemplateId
+  let completeTemplateId = data.completeTemplateId
+
+  if (!expiryTemplateId && data.expiryTemplate && data.expiryTemplate !== 'None') {
+    const t = await EmailTemplate.findOne({ name: data.expiryTemplate })
+    if (t) expiryTemplateId = t._id
+  }
+  if (!completeTemplateId && data.completeTemplate && data.completeTemplate !== 'None') {
+    const t = await EmailTemplate.findOne({ name: data.completeTemplate })
+    if (t) completeTemplateId = t._id
+  }
+
   const setting = await ComplianceSetting.create({
     name: data.name,
-    financialYear: data.financialYear || data.year, // Support both during migration
+    financialYear: data.financialYear || data.year,
     hasExpiry: data.hasExpiry ?? false,
     expiryDate: data.expiryDate ? new Date(data.expiryDate) : undefined,
-    isNew: data.isNew ?? false,
+    forNewCompany: data.forNewCompany ?? false,
     inc20: data.inc20 ?? false,
     daysOfExpiry: data.daysOfExpiry ?? 30,
-    expiryTemplate: data.expiryTemplateId || undefined,
-    completeTemplate: data.completeTemplateId || undefined
+    expiryTemplate: expiryTemplateId || undefined,
+    completeTemplate: completeTemplateId || undefined
   });
-  return setting;
+  
+  return ComplianceSetting.findById(setting._id)
+    .populate("expiryTemplate", "name")
+    .populate("completeTemplate", "name")
+    .lean();
 };
 
 export const updateComplianceSetting = async (complianceId, data) => {
@@ -59,14 +77,38 @@ export const updateComplianceSetting = async (complianceId, data) => {
   }
   if (data.hasExpiry !== undefined) setting.hasExpiry = data.hasExpiry;
   if (data.expiryDate !== undefined) setting.expiryDate = data.expiryDate ? new Date(data.expiryDate) : null;
-  if (data.isNew !== undefined) setting.isNew = data.isNew;
+  if (data.forNewCompany !== undefined) setting.forNewCompany = data.forNewCompany;
   if (data.inc20 !== undefined) setting.inc20 = data.inc20;
   if (data.daysOfExpiry !== undefined) setting.daysOfExpiry = data.daysOfExpiry;
-  if (data.expiryTemplateId !== undefined) setting.expiryTemplate = data.expiryTemplateId || null;
-  if (data.completeTemplateId !== undefined) setting.completeTemplate = data.completeTemplateId || null;
+
+  // Resolve templates if names are provided
+  if (data.expiryTemplateId !== undefined) {
+    setting.expiryTemplate = data.expiryTemplateId || null;
+  } else if (data.expiryTemplate !== undefined) {
+    if (data.expiryTemplate === 'None') {
+      setting.expiryTemplate = null;
+    } else {
+      const t = await EmailTemplate.findOne({ name: data.expiryTemplate });
+      if (t) setting.expiryTemplate = t._id;
+    }
+  }
+
+  if (data.completeTemplateId !== undefined) {
+    setting.completeTemplate = data.completeTemplateId || null;
+  } else if (data.completeTemplate !== undefined) {
+    if (data.completeTemplate === 'None') {
+      setting.completeTemplate = null;
+    } else {
+      const t = await EmailTemplate.findOne({ name: data.completeTemplate });
+      if (t) setting.completeTemplate = t._id;
+    }
+  }
 
   await setting.save();
-  return setting;
+  return ComplianceSetting.findById(setting._id)
+    .populate("expiryTemplate", "name")
+    .populate("completeTemplate", "name")
+    .lean();
 };
 
 export const deleteComplianceSetting = async (complianceId) => {
