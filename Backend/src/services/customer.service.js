@@ -6,6 +6,7 @@ import Customer, {
 import { ApiError } from "../utils/response.js";
 import crypto from "crypto";
 import mongoose from "mongoose";
+import EmailLog from "../models/EmailLog.model.js";
 
 // ─── Helper: generate 8-char random password ─────────────────────────────────
 const generatePassword = () => crypto.randomBytes(4).toString("hex");
@@ -125,13 +126,17 @@ export const getCustomerById = async (customerId) => {
 
   if (!customer) throw new ApiError(404, "Customer not found");
 
-  const [directors, services, compliances] = await Promise.all([
+  const [directors, services, compliances, emailHistory] = await Promise.all([
     Director.find({ customer: customerId }).lean(),
     CustomerService.find({ customer: customerId })
       .populate("service", "name")
       .lean(),
     CustomerCompliance.find({ customer: customerId })
       .sort({ financialYear: -1, createdAt: 1 })
+      .lean(),
+    EmailLog.find({ customer: customerId })
+      .populate("template", "name")
+      .sort({ date: -1 })
       .lean()
   ]);
 
@@ -170,7 +175,13 @@ export const getCustomerById = async (customerId) => {
     })),
     compliances,
     invoices,
-    recurringInvoices
+    recurringInvoices,
+    emailHistory: emailHistory.map(log => ({
+      id: log._id,
+      date: log.date,
+      name: log.template?.name || log.templateName || 'Unknown Template',
+      template: log.template
+    }))
   };
 };
 

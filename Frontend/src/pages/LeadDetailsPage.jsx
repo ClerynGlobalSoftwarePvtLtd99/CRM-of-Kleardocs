@@ -1,5 +1,15 @@
-import React, { useMemo, useState } from "react";
-import { useParams } from "react-router";
+import React, { useMemo, useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { 
+  fetchLeadById, 
+  addLeadFollowup, 
+  addLeadInteraction, 
+  assignLeadToAgent, 
+  convertLeadToCustomer, 
+  fetchLeadEmails 
+} from "../redux/slices/leadsSlice";
 import LeadDetailsCard from "../components/lead-details/LeadDetailsCard";
 import LeadHistorySection from "../components/lead-details/LeadHistorySection";
 import AddInteractionModal from "../components/lead-modals/AddInteractionModal";
@@ -12,81 +22,13 @@ import EditLeadModal from "../components/lead-modals/EditLeadModal";
 import NextFollowupModal from "../components/lead-modals/NextFollowupModal";
 import ChangeAgentModal from "../components/lead-modals/ChangeAgentModal";
 
-const mockLead = {
-  id: "678f8daa1b59325fcdf734a4",
-  customerName: "HIDESTAY INDIA PRIVATE LIMITED",
-  customerPhone: "8679335165",
-  companyName: "HIDESTAY INDIA PRIVATE LIMITED",
-  service: "Annual Compliance",
-  source: "Whatsapp",
-  createdAt: "17th March 2026 6:25 pm",
-  lastFollowup: "17th March 2026 7:10 pm",
-  email: "hidestayindiapvtltd@gmail.com",
-  address:
-    "HIMJYOTI ENCLAVE KHATA, NO-945 KHASRA NO-24KH, Ambiwala, Dehradun, Dehradun - 248007, Uttarakhand",
-  state: "UTTARAKHAND",
-  agent: "Ritu Kaur",
-  type: "Customer",
-  heat: "Hot",
-  priority: "High",
-};
-
-const initialHistory = [
-  {
-    id: 1,
-    datetime: "2nd February 2026 4:00 pm",
-    user: "Jagjyot Singh",
-    type: "text",
-    text: "Assigned to Ritu Kaur",
-  },
-  {
-    id: 2,
-    datetime: "2nd February 2026 4:00 pm",
-    user: "Ritu Kaur",
-    type: "text",
-    text: "Assigned to Jagjyot Singh",
-  },
-  {
-    id: 3,
-    datetime: "2nd February 2026 3:39 pm",
-    user: "Ritu Kaur",
-    type: "whatsapp",
-    text: "Whatsapp Template: retargeting_v4",
-  },
-  {
-    id: 4,
-    datetime: "2nd February 2026 3:31 pm",
-    user: "Ritu Kaur",
-    type: "email",
-    text: "Email Template sent - Startup India Registration",
-    subject: "Startup India Registration - Next Steps & Document Submission",
-    body: `Accordion summary...
-
-Accordion body...`,
-  },
-  {
-    id: 5,
-    datetime: "2nd February 2026 3:07 pm",
-    user: "Ritu Kaur",
-    type: "call",
-    text: "fvscgvdc",
-    called: true,
-  },
-  {
-    id: 6,
-    datetime: "2nd February 2026 1:23 pm",
-    user: "Ritu Kaur",
-    type: "call",
-    text: "He is very interested do this work.",
-    called: true,
-  },
-];
-
 const LeadDetailsPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { currentLead: lead, loading, error, emails } = useSelector((state) => state.leads);
 
-  const [lead, setLead] = useState({ ...mockLead, id });
-  const [history, setHistory] = useState(initialHistory);
+  const [history, setHistory] = useState([]);
 
   // Modal States
   const [showAddInteraction, setShowAddInteraction] = useState(false);
@@ -99,35 +41,121 @@ const LeadDetailsPage = () => {
   const [showWhatsappModal, setShowWhatsappModal] = useState(false);
 
   const [selectedHistoryEmail, setSelectedHistoryEmail] = useState(null);
-  const [toast, setToast] = useState("");
+  const [toastMessage, setToastMessage] = useState("");
 
   const [interactionForm, setInteractionForm] = useState({
     details: "",
     called: false,
   });
 
-  const showToastMessage = (message) => {
-    setToast(message);
-    setTimeout(() => setToast(""), 2500);
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchLeadById(id));
+    }
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      if (error.includes('not found')) {
+        navigate('/leads');
+      }
+    }
+  }, [error, navigate]);
+
+  const showToastMessage = (message, type = 'success') => {
+    toast[type](message);
   };
 
-  const handleAddInteraction = () => {
+  const handleAddInteraction = async () => {
     if (!interactionForm.details.trim()) return;
 
-    const newItem = {
-      id: Date.now(),
-      datetime: new Date().toLocaleString(),
-      user: lead.agent,
-      type: interactionForm.called ? "call" : "text",
-      text: interactionForm.details,
-      called: interactionForm.called,
-    };
-
-    setHistory((prev) => [newItem, ...prev]);
-    setInteractionForm({ details: "", called: false });
-    setShowAddInteraction(false);
-    showToastMessage("Interaction Added");
+    try {
+      await dispatch(addLeadInteraction({
+        id,
+        interactionData: {
+          type: interactionForm.called ? "call" : "text",
+          details: interactionForm.details,
+          called: interactionForm.called,
+        }
+      })).unwrap();
+      
+      setInteractionForm({ details: "", called: false });
+      setShowAddInteraction(false);
+      showToastMessage("Interaction Added");
+      
+      // Refresh lead data
+      dispatch(fetchLeadById(id));
+    } catch (error) {
+      showToastMessage(error || "Failed to add interaction", "error");
+    }
   };
+
+  const handleConvertToCustomer = async (convertData) => {
+    try {
+      await dispatch(convertLeadToCustomer({ id, convertData })).unwrap();
+      setShowConvertModal(false);
+      showToastMessage("Converted to Customer");
+      dispatch(fetchLeadById(id));
+    } catch (error) {
+      showToastMessage(error || "Failed to convert lead", "error");
+    }
+  };
+
+  const handleScheduleFollowup = async (followupData) => {
+    try {
+      await dispatch(addLeadFollowup({ id, followupData })).unwrap();
+      setShowFollowupModal(false);
+      showToastMessage("Followup Scheduled");
+      dispatch(fetchLeadById(id));
+    } catch (error) {
+      showToastMessage(error || "Failed to schedule followup", "error");
+    }
+  };
+
+  const handleAssignAgent = async (newAgent) => {
+    try {
+      await dispatch(assignLeadToAgent({ id, assignData: { agent: newAgent } })).unwrap();
+      setShowAssignModal(false);
+      showToastMessage(`Assigned to ${newAgent}`);
+      dispatch(fetchLeadById(id));
+    } catch (error) {
+      showToastMessage(error || "Failed to assign agent", "error");
+    }
+  };
+
+  const handleFetchEmails = async () => {
+    try {
+      await dispatch(fetchLeadEmails(id)).unwrap();
+      dispatch(fetchLeadById(id));
+    } catch (error) {
+      showToastMessage(error || "Failed to fetch emails", "error");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="p-4 bg-bg-primary min-h-screen text-text-primary flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-500"></div>
+      </div>
+    );
+  }
+
+  if (!lead) {
+    return (
+      <div className="p-4 bg-bg-primary min-h-screen text-text-primary flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-text-secondary mb-4">Lead not found</p>
+          <button
+            onClick={() => navigate('/leads')}
+            className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md text-sm font-bold"
+          >
+            Back to Leads
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 bg-bg-primary min-h-screen text-text-primary">
@@ -189,10 +217,7 @@ const LeadDetailsPage = () => {
         <ConvertCustomerModal
           lead={lead}
           onClose={() => setShowConvertModal(false)}
-          onConvert={() => {
-            showToastMessage("Converted to Customer");
-            setLead(prev => ({ ...prev, isCustomer: true }));
-          }}
+          onConvert={handleConvertToCustomer}
         />
       )}
 
@@ -200,17 +225,7 @@ const LeadDetailsPage = () => {
         <NextFollowupModal
           lead={lead}
           onClose={() => setShowFollowupModal(false)}
-          onUpdate={(data) => {
-            setLead(prev => ({ ...prev, lastFollowup: data.nextFollowup }));
-            setHistory(prev => [{
-              id: Date.now(),
-              datetime: new Date().toLocaleString(),
-              user: lead.agent,
-              type: "text",
-              text: `Next Followup scheduled: ${data.nextFollowup}. ${data.details}`
-            }, ...prev]);
-            showToastMessage("Followup Scheduled");
-          }}
+          onUpdate={handleScheduleFollowup}
         />
       )}
 
@@ -240,17 +255,7 @@ const LeadDetailsPage = () => {
         <ChangeAgentModal
           currentAgent={lead.agent}
           onClose={() => setShowAssignModal(false)}
-          onUpdate={(newAgent) => {
-            setLead(prev => ({ ...prev, agent: newAgent }));
-            setHistory(prev => [{
-              id: Date.now(),
-              datetime: new Date().toLocaleString(),
-              user: "System",
-              type: "text",
-              text: `Assigned to ${newAgent}`
-            }, ...prev]);
-            showToastMessage(`Assigned to ${newAgent}`);
-          }}
+          onUpdate={handleAssignAgent}
         />
       )}
 
@@ -319,9 +324,9 @@ const LeadDetailsPage = () => {
         />
       )}
 
-      {toast && (
+      {toastMessage && (
         <div className="fixed bottom-5 right-5 z-[60] bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] text-[var(--color-text-primary)] px-4 py-3 rounded-xl shadow-xl">
-          {toast}
+          {toastMessage}
         </div>
       )}
     </div>

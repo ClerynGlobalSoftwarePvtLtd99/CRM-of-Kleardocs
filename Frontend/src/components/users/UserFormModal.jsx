@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { X } from 'lucide-react'
+import { X, Eye, EyeOff } from 'lucide-react'
 
 const UserFormModal = ({ isOpen, onClose, onSubmit, editingUser, loading }) => {
   const [formData, setFormData] = useState({
@@ -9,6 +9,7 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, editingUser, loading }) => {
     role: 'agent',
     active: true,
   })
+  const [showPassword, setShowPassword] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
@@ -110,15 +111,24 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, editingUser, loading }) => {
                 </span>
               )}
             </label>
-            <input
-              type="password"
-              name="password"
-              required={!isEditMode}
-              value={formData.password}
-              onChange={handleChange}
-              placeholder={isEditMode ? 'Enter new password' : 'Enter password'}
-              className="w-full p-2.5 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] transition-all"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                required={!isEditMode}
+                value={formData.password}
+                onChange={handleChange}
+                placeholder={isEditMode ? 'Enter new password' : 'Enter password'}
+                className="w-full p-2.5 pr-10 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg text-[var(--color-text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] transition-all"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] focus:outline-none transition-colors"
+              >
+                {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+              </button>
+            </div>
           </div>
 
           {/* Role Dropdown */}

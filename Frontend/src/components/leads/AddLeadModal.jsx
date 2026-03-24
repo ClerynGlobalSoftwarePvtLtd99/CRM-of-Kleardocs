@@ -15,7 +15,8 @@ import {
   STATES_AND_UTS, 
   AGENTS, 
   CLIENT_TYPES, 
-  PRIORITIES 
+  PRIORITIES,
+  RESPONSES
 } from "../../utils/constants";
 
 const getSourceIcon = (sourceName) => {
@@ -28,11 +29,10 @@ const getSourceIcon = (sourceName) => {
 };
 
 const sourceOptions = SOURCES.map(source => ({
-  value: source.toLowerCase(),
+  value: source, // Keep original case
   label: source,
   icon: getSourceIcon(source)
 }));
-
 
 const SourceDropdown = ({ value, onChange }) => {
   const [open, setOpen] = useState(false);
@@ -104,13 +104,12 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
     name: "",
     phone: "",
     companyName: "",
-    service: "",
-    source: SOURCES[0].toLowerCase(),
-    type: CLIENT_TYPES[0],
-    priority: PRIORITIES[3], // None
+    source: SOURCES[1], // Facebook
+    type: CLIENT_TYPES[0], // Hot
+    priority: PRIORITIES[0], // High
+    response: RESPONSES[0], // Interested
     address: "",
     state: "",
-    agent: "",
   });
 
   const handleChange = (e) => {
@@ -128,7 +127,7 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.name.trim() || !formData.phone.trim() || !formData.service) {
+    if (!formData.name.trim() || !formData.phone.trim()) {
       return;
     }
 
@@ -205,25 +204,6 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
 
             <div>
               <label className="mb-1 block text-sm font-medium text-text-primary">
-                Service <span className="text-red-500">*</span>
-              </label>
-              <select
-                name="service"
-                value={formData.service}
-                onChange={handleChange}
-                className="w-full rounded-md border border-text-primary bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-yellow-500"
-              >
-                <option value="">Select service</option>
-                {SERVICES.map((service) => (
-                  <option key={service} value={service}>
-                    {service}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="mb-1 block text-sm font-medium text-text-primary">
                 Source
               </label>
               <SourceDropdown
@@ -244,8 +224,10 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
                 onChange={handleChange}
                 className="w-full rounded-md border border-text-primary bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-yellow-500"
               >
-                {CLIENT_TYPES.map(type => (
-                  <option key={type} value={type}>{type}</option>
+                {CLIENT_TYPES.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
                 ))}
               </select>
             </div>
@@ -260,8 +242,28 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
                 onChange={handleChange}
                 className="w-full rounded-md border border-text-primary bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-yellow-500"
               >
-                {PRIORITIES.map(p => (
-                  <option key={p} value={p}>{p}</option>
+                {PRIORITIES.map((p) => (
+                  <option key={p} value={p}>
+                    {p}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="mb-1 block text-sm font-medium text-text-primary">
+                Response
+              </label>
+              <select
+                name="response"
+                value={formData.response}
+                onChange={handleChange}
+                className="w-full rounded-md border border-text-primary bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-yellow-500"
+              >
+                {RESPONSES.map((r) => (
+                  <option key={r} value={r}>
+                    {r}
+                  </option>
                 ))}
               </select>
             </div>
@@ -294,25 +296,6 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
                 {STATES_AND_UTS.map((state) => (
                   <option key={state} value={state}>
                     {state}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="mb-1 block text-sm font-medium text-text-primary">
-                Agent
-              </label>
-              <select
-                name="agent"
-                value={formData.agent}
-                onChange={handleChange}
-                className="w-full rounded-md border border-text-primary bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-yellow-500"
-              >
-                <option value="">Select agent</option>
-                {AGENTS.map((agent) => (
-                  <option key={agent} value={agent}>
-                    {agent}
                   </option>
                 ))}
               </select>

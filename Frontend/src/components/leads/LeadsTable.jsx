@@ -27,7 +27,7 @@ const getInitials = (name) => {
   return parts[0].slice(0, 2).toUpperCase();
 };
 
-const LeadsTable = ({ leads }) => {
+const LeadsTable = ({ leads, loading, onLeadClick }) => {
   const navigate = useNavigate();
 
   return (
@@ -41,7 +41,7 @@ const LeadsTable = ({ leads }) => {
               <th className="px-1.5 py-3 font-bold">Name</th>
               <th className="px-1.5 py-3 font-bold">Phone</th>
               <th className="px-1.5 py-3 font-bold">Company</th>
-              <th className="px-1.5 py-3 font-bold">Service</th>
+              <th className="px-1.5 py-3 font-bold">Service/Type</th>
               <th className="px-1.5 py-3 font-bold">Source</th>
               <th className="px-1.5 py-3 font-bold">Status</th>
               <th className="px-1.5 py-3 font-bold text-center">Prio.</th>
@@ -50,7 +50,11 @@ const LeadsTable = ({ leads }) => {
           </thead>
           <tbody className="divide-y divide-bg-tertiary">
             {leads.map((lead) => (
-              <tr key={lead.id} className="hover:bg-bg-tertiary/20 transition-colors">
+              <tr
+                key={lead._id || lead.id}
+                className="hover:bg-bg-tertiary/20 transition-colors cursor-pointer"
+                onClick={() => onLeadClick && onLeadClick(lead._id || lead.id)}
+              >
                 {/* Logo */}
                 <td className="px-1.5 py-4">
                   <div className="flex justify-center">
@@ -80,31 +84,35 @@ const LeadsTable = ({ leads }) => {
                   </span>
                 </td>
 
-                {/* 6. Service */}
+                {/* 6. Service/Type */}
                 <td className="px-1.5 py-4">
                   <span className="text-sm text-text-secondary font-semibold italic truncate max-w-[150px] inline-block">
-                    {lead.service}
+                    {lead.type || lead.service || "—"}
                   </span>
                 </td>
 
                 {/* 7. Lead Source */}
                 <td className="px-1.5 py-4">
-                   <span className="text-sm font-bold text-text-primary capitalize whitespace-nowrap">{lead.source}</span>
+                  <span className="text-sm font-bold text-text-primary capitalize whitespace-nowrap">{lead.source}</span>
                 </td>
 
                 {/* 8. Status */}
                 <td className="px-1.5 py-4">
-                  <span className={`px-2 py-0.5 rounded text-sm font-black uppercase ${lead.isCustomer ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 'bg-gray-500/10 text-gray-500 border border-gray-500/20'}`}>
-                    {lead.isCustomer ? 'CUST.' : 'LEAD'}
+                  <span className={`px-2 py-0.5 rounded text-sm font-black uppercase ${
+                    lead.isCustomer || lead.response === 'Converted'
+                      ? 'bg-green-500/10 text-green-500 border border-green-500/20'
+                      : 'bg-blue-500/10 text-blue-500 border border-blue-500/20'
+                  }`}>
+                    {lead.isCustomer || lead.response === 'Converted' ? 'CUST.' : 'LEAD'}
                   </span>
                 </td>
 
                 {/* 9. Priority */}
                 <td className="px-1.5 py-4 text-center">
                   <span className={`px-2 py-0.5 rounded-full text-sm font-black ${
-                    lead.priority?.toLowerCase() === 'high' ? 'bg-orange-500 text-white' :
-                    lead.priority?.toLowerCase() === 'medium' ? 'bg-yellow-500 text-white' :
-                    'bg-green-500 text-white'
+                    lead.priority?.toLowerCase() === 'high' ? 'bg-orange-500 text-white'
+                      : lead.priority?.toLowerCase() === 'medium' ? 'bg-yellow-500 text-white'
+                      : 'bg-green-500 text-white'
                   }`}>
                     {lead.priority?.split('')[0].toUpperCase() || "N"}
                   </span>
@@ -113,7 +121,10 @@ const LeadsTable = ({ leads }) => {
                 {/* 10. Details */}
                 <td className="px-1.5 py-4 text-center">
                   <button
-                    onClick={() => navigate(`/lead/${lead.id}`)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onLeadClick && onLeadClick(lead._id || lead.id);
+                    }}
                     className="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1.5 rounded text-sm font-black shadow-md transition-all whitespace-nowrap"
                   >
                     DETAILS
@@ -123,11 +134,15 @@ const LeadsTable = ({ leads }) => {
             ))}
           </tbody>
         </table>
-        {leads.length === 0 && (
+        {loading && leads.length === 0 ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-500"></div>
+          </div>
+        ) : leads.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-text-secondary">
             <p className="text-sm font-medium">No leads found matching your criteria</p>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );
