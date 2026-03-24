@@ -1,6 +1,6 @@
 import React from "react";
 
-const ServicesTable = ({ services, onEditClick }) => {
+const ServicesTable = ({ services, onEditClick, loading }) => {
   return (
     <div className="bg-bg-secondary border border-bg-tertiary rounded-xl overflow-hidden shadow-sm">
       
@@ -13,6 +13,7 @@ const ServicesTable = ({ services, onEditClick }) => {
             <tr className="text-text-secondary text-sm uppercase">
               <th className="sticky top-0 bg-bg-secondary px-4 py-4">Service</th>
               <th className="sticky top-0 bg-bg-secondary px-4 py-4">Template</th>
+
               <th className="sticky top-0 bg-bg-secondary px-4 py-4">HSN</th>
               <th className="sticky top-0 bg-bg-secondary px-4 py-4 text-right">Professional</th>
               <th className="sticky top-0 bg-bg-secondary px-4 py-4 text-right">Govt</th>
@@ -24,13 +25,14 @@ const ServicesTable = ({ services, onEditClick }) => {
           <tbody>
             {services.map((s) => (
               <tr
-                key={s.id}
+                key={s._id}
                 className="bg-bg-primary hover:bg-bg-tertiary transition rounded-md"
               >
                 <td className="px-4 py-3 text-text-primary font-medium rounded-l-lg">
                   {s.name}
                 </td>
                 <td className="px-4 py-3 text-text-secondary">{s.template}</td>
+
                 <td className="px-4 py-3 text-text-secondary">{s.hsn}</td>
                 <td className="px-4 py-3 text-right text-text-primary">
                   ₹ {s.professionalFees}
@@ -41,12 +43,12 @@ const ServicesTable = ({ services, onEditClick }) => {
                 <td className="px-4 py-3">
                   <span
                     className={`px-2 py-1 rounded text-xs font-medium ${
-                      s.status === "Active"
+                      s.status === true || s.status === "Active"
                         ? "bg-green-100 text-green-600"
                         : "bg-red-100 text-red-500"
                     }`}
                   >
-                    {s.status}
+                    {s.status === true ? "Active" : s.status === "Active" ? "Active" : "Inactive"}
                   </span>
                 </td>
                 <td className="px-4 py-3 text-center rounded-r-lg">
@@ -63,7 +65,7 @@ const ServicesTable = ({ services, onEditClick }) => {
             {services.length === 0 && (
               <tr>
                 <td
-                  colSpan="7"
+                  colSpan="6"
                   className="text-center py-6 text-text-secondary"
                 >
                   No services found

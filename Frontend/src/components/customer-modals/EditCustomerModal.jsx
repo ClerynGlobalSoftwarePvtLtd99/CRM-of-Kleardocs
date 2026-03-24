@@ -1,10 +1,21 @@
 import React, { useState } from "react";
-import { X, Save } from "lucide-react";
+import { X, Save, Eye, EyeOff } from "lucide-react";
 import { STATES_AND_UTS, COMPANY_TYPES, AGENTS } from "../../utils/constants";
 import toast from "react-hot-toast";
 
 const EditCustomerModal = ({ customer, onClose, onUpdate }) => {
-  const [formData, setFormData] = useState({ ...customer });
+  // Convert ISO dates to yyyy-MM-dd format for HTML date inputs
+  const formatDateString = (dateString) => {
+    if (!dateString) return '';
+    return dateString.split('T')[0];
+  };
+
+  const [formData, setFormData] = useState({ 
+    ...customer,
+    incorporationDate: formatDateString(customer.incorporationDate),
+    onboardingDate: formatDateString(customer.onboardingDate)
+  });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -106,9 +117,22 @@ const EditCustomerModal = ({ customer, onClose, onUpdate }) => {
               <span className="fieldset-label">Username</span>
               <input name="username" value={formData.username} onChange={handleChange} />
             </div>
-            <div className="fieldset-input">
+            <div className="fieldset-input relative">
               <span className="fieldset-label">Password</span>
-              <input name="password" value={formData.password} onChange={handleChange} />
+              <input 
+                type={showPassword ? "text" : "password"}
+                name="password" 
+                value={formData.password} 
+                onChange={handleChange} 
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 top-8 text-text-secondary hover:text-text-primary focus:outline-none transition-colors"
+              >
+                {showPassword ? <Eye size={16} /> : <EyeOff size={16} />}
+              </button>
             </div>
           </div>
 

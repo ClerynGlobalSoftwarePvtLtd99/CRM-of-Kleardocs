@@ -19,11 +19,12 @@ import {
   X,
 } from 'lucide-react'
 import { NavLink, useLocation } from 'react-router'
-import { useAppDispatch } from '../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { logoutUser } from '../redux/slices/authSlice'
 
 const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const dispatch = useAppDispatch()
+  const { user } = useAppSelector((state) => state.auth)
   const [isOpen, setIsOpen] = useState(false)
   const [showLogoutPopup, setShowLogoutPopup] = useState(false)
   const location = useLocation()
@@ -52,7 +53,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       icon: <BookOpen size={20} />,
       path: '/accountantjobs',
     },
-    { name: 'Users', icon: <Users2 size={20} />, path: '/users' },
+    ...(user?.role === 'admin' ? [{ name: 'Users', icon: <Users2 size={20} />, path: '/users' }] : []),
     {
       name: 'Compliance Settings',
       icon: <Sliders size={20} />,

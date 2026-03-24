@@ -1,13 +1,17 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Plus, Download, Building2, Phone, Calendar, Search, Filter } from "lucide-react";
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 import CustomersFilter from "../components/customers/CustomersFilter";
 import NewCustomerModal from "../components/customer-modals/NewCustomerModal";
 import CompanyLogo from "../components/common/CompanyLogo";
+import { fetchCustomers, createCustomer } from "../redux/slices/customersSlice";
 import toast from "react-hot-toast";
 
 const Customers = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { list: customers, loading, error } = useSelector((state) => state.customers);
   const [showNewCustomerModal, setShowNewCustomerModal] = useState(false);
   const [showFilter, setShowFilter] = useState(true);
   
@@ -22,56 +26,42 @@ const Customers = () => {
     bookkeeping: ""
   });
 
-  // State for customers
-  const [customers, setCustomers] = useState([
-    {
-      id: "69b53f8665b9911c9c0b8336",
-      customerName: "NEBULSOFT TECHNOLOGIA PRIVATE LIMITED",
-      phone: "9775520007",
-      companyName: "NEBULSOFT TECHNOLOGIA PRIVATE LIMITED",
-      type: "Private Limited Company",
-      onboardingDate: "14-03-2026",
-      incorporationDate: "06-03-2026",
-      logo: null,
-    },
-    {
-      id: "2",
-      customerName: "KLEARDOCS SOLUTIONS LLP",
-      phone: "9876543210",
-      companyName: "KLEARDOCS SOLUTIONS LLP",
-      type: "LLP",
-      onboardingDate: "10-03-2026",
-      incorporationDate: "01-03-2026",
-      logo: null,
-    },
-    {
-      id: "3",
-      customerName: "VIRALITY360 PRIVATE LIMITED",
-      phone: "7891858821",
-      companyName: "VIRALITY360 PRIVATE LIMITED",
-      type: "Private Limited Company",
-      onboardingDate: "04-02-2026",
-      incorporationDate: "29-12-2025",
-      logo: null,
-    }
-  ]);
+  // Fetch customers on component mount and when filters change
+  useEffect(() => {
+    const queryParams = {
+      search: filters.search || undefined,
+      type: filters.type || undefined,
+      page: 1,
+      limit: 50
+    };
+    
+    console.log('Fetching customers with params:', queryParams);
+    dispatch(fetchCustomers(queryParams));
+  }, [dispatch, filters.search, filters.type]);
 
-  const handleAddCustomer = (newCustomer) => {
-    setCustomers(prev => [newCustomer, ...prev]);
+  // Debug customers data
+  useEffect(() => {
+    console.log('Customers data from Redux:', customers);
+  }, [customers]);
+
+  const handleAddCustomer = async (customerData) => {
+    try {
+      const result = await dispatch(createCustomer(customerData));
+      if (result.meta.requestStatus === 'fulfilled') {
+        toast.success('Customer added successfully!');
+        setShowNewCustomerModal(false);
+      } else {
+        toast.error('Failed to add customer');
+      }
+    } catch (error) {
+      toast.error('Failed to add customer');
+    }
   };
 
   const filteredCustomers = useMemo(() => {
-    return customers.filter(cust => {
-      const searchMatch = !filters.search || 
-        cust.customerName.toLowerCase().includes(filters.search.toLowerCase()) ||
-        cust.phone.includes(filters.search) ||
-        cust.companyName.toLowerCase().includes(filters.search.toLowerCase());
-      
-      const typeMatch = !filters.type || cust.type === filters.type;
-      
-      return searchMatch && typeMatch;
-    });
-  }, [filters, customers]);
+    // Since we're fetching from backend with filters, we can use the customers directly
+    return customers || [];
+  }, [customers]);
 
   const handleClearFilters = () => {
     setFilters({
@@ -93,17 +83,20 @@ const Customers = () => {
       return;
     }
 
-    const headers = ["ID", "Customer Name", "Phone", "Company Name", "Type", "Onboarding Date", "Incorporation Date"];
+    const headers = ["ID", "Name", "Phone", "Company Name", "Type", "GST", "State", "Address", "Onboarding Date", "Incorporation Date"];
     const csvContent = [
       headers.join(","),
       ...filteredCustomers.map(c => [
-        c.id,
-        `"${c.customerName}"`,
-        c.phone,
-        `"${c.companyName}"`,
-        `"${c.type}"`,
-        `"${c.onboardingDate}"`,
-        `"${c.incorporationDate}"`
+        c._id || c.id,
+        `"${c.name || c.customerName}"`,
+        c.phone || "",
+        `"${c.companyName || ""}"`,
+        `"${c.type || ""}"`,
+        `"${c.gst || ""}"`,
+        `"${c.state || ""}"`,
+        `"${c.address || ""}"`,
+        `"${c.onboardingDate ? new Date(c.onboardingDate).toLocaleDateString('en-IN') : ""}"`,
+        `"${c.incorporationDate ? new Date(c.incorporationDate).toLocaleDateString('en-IN') : ""}"`
       ].join(","))
     ].join("\n");
 
@@ -123,6 +116,20 @@ const Customers = () => {
   return (
     <div className="p-8 space-y-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
 
+      {/* LOADING STATE */}
+      {loading && (
+        <div className="flex items-center justify-center min-h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-t-accent border-t-transparent"></div>
+        </div>
+      )}
+
+      {/* ERROR STATE */}
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <p className="text-sm">{error}</p>
+        </div>
+      )}
+
       {/* HEADER SECTION */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="flex items-center gap-4">
@@ -140,7 +147,8 @@ const Customers = () => {
           </button>
           <button
             onClick={handleExport}
-            className="btn-raised btn-raised-blue text-white px-6 py-3 rounded-md text-sm font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg"
+            disabled={loading || filteredCustomers.length === 0}
+            className="btn-raised btn-raised-blue text-white px-6 py-3 rounded-md text-sm font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg disabled:opacity-50"
           >
             <Download size={18} /> Export
           </button>
@@ -192,26 +200,26 @@ const Customers = () => {
         ) : (
           filteredCustomers.map((cust) => {
             const isMatch = filters.search && (
-              cust.customerName.toLowerCase().includes(filters.search.toLowerCase()) ||
-              cust.phone.includes(filters.search) ||
-              cust.companyName.toLowerCase().includes(filters.search.toLowerCase())
+              (cust.name || cust.customerName || "").toLowerCase().includes(filters.search.toLowerCase()) ||
+              (cust.phone || "").includes(filters.search) ||
+              (cust.companyName || "").toLowerCase().includes(filters.search.toLowerCase())
             );
 
             return (
               <div
-                key={cust.id}
-                onClick={() => navigate(`/customer/${cust.id}`)}
+                key={cust._id || cust.id}
+                onClick={() => navigate(`/customer/${cust._id || cust.id}`)}
                 className={`bg-bg-secondary border border-bg-tertiary lg:rounded-none rounded-lg p-6 lg:p-4 lg:grid lg:grid-cols-[1fr_2fr_1.5fr_1.5fr_1.5fr_1.5fr_1fr] items-center gap-4 hover:border-crm-orange/50 transition-all cursor-pointer group shadow-sm last:rounded-b-lg first:rounded-t-lg ${isMatch ? 'row-highlight' : ''}`}
               >
                 {/* Logo */}
                 <div className="flex items-center justify-start lg:justify-center mb-4 lg:mb-0">
-                  <CompanyLogo name={cust.companyName} size="w-12 h-12" />
+                  <CompanyLogo name={cust.companyName || cust.name} size="w-12 h-12" />
                 </div>
 
                 {/* Name */}
                 <div className="mb-4 lg:mb-0">
                   <span className="block lg:hidden text-[10px] font-bold text-text-secondary uppercase tracking-widest mb-1">Company Name</span>
-                  <h3 className="text-sm font-bold text-text-primary group-hover:text-crm-blue transition-colors">{cust.companyName}</h3>
+                  <h3 className="text-sm font-bold text-text-primary group-hover:text-crm-blue transition-colors">{cust.companyName || cust.name}</h3>
                 </div>
 
                 {/* Phone */}
@@ -219,7 +227,7 @@ const Customers = () => {
                   <Phone size={14} className="text-crm-blue lg:hidden" />
                   <div>
                     <span className="block lg:hidden text-[10px] font-bold text-text-secondary uppercase tracking-widest mb-1">Phone</span>
-                    <span className="text-sm text-text-primary">{cust.phone}</span>
+                    <span className="text-sm text-text-primary">{cust.phone || 'N/A'}</span>
                   </div>
                 </div>
 
@@ -236,7 +244,9 @@ const Customers = () => {
                   <span className="block lg:hidden text-[10px] font-bold text-text-secondary uppercase tracking-widest mb-1">Onboarding Date</span>
                   <div className="flex items-center gap-2">
                     <Calendar size={14} className="text-crm-green" />
-                    <span className="text-sm text-text-primary">{cust.onboardingDate}</span>
+                    <span className="text-sm text-text-primary">
+                      {cust.onboardingDate ? new Date(cust.onboardingDate).toLocaleDateString('en-IN') : 'N/A'}
+                    </span>
                   </div>
                 </div>
 
@@ -244,14 +254,16 @@ const Customers = () => {
                   <span className="block lg:hidden text-[10px] font-bold text-text-secondary uppercase tracking-widest mb-1">Incorporation Date</span>
                   <div className="flex items-center gap-2 text-blue-400">
                     <Calendar size={14} />
-                    <span className="text-sm">{cust.incorporationDate}</span>
+                    <span className="text-sm">
+                      {cust.incorporationDate ? new Date(cust.incorporationDate).toLocaleDateString('en-IN') : 'N/A'}
+                    </span>
                   </div>
                 </div>
 
                 {/* Details Button */}
                 <div className="mt-4 lg:mt-0 flex justify-end">
                   <button 
-                    onClick={(e) => { e.stopPropagation(); navigate(`/customer/${cust.id}`); }}
+                    onClick={(e) => { e.stopPropagation(); navigate(`/customer/${cust._id || cust.id}`); }}
                     className="btn-raised btn-raised-blue px-6 py-2 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all"
                   >
                     Details

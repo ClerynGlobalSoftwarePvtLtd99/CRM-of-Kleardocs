@@ -24,6 +24,7 @@ import LeadDetailsPage from './pages/LeadDetailsPage'
 import CustomerDetailsPage from './pages/CustomerDetailsPage'
 import Customers from './pages/Customers'
 import Login from './pages/Login'
+import AdminRoute from './components/AdminRoute'
 
 const App = () => {
   const dispatch = useAppDispatch()
@@ -31,12 +32,24 @@ const App = () => {
   const [initialLoading, setInitialLoading] = useState(true)
 
   useEffect(() => {
-    // Authenticate natively using the HttpOnly backend cookie endpoint
-    dispatch(fetchCurrentUser())
-      .finally(() => {
-        setInitialLoading(false)
-      })
-  }, [dispatch])
+    // Check if we have a stored authentication state
+    const storedAuth = localStorage.getItem('isAuthenticated');
+    
+    // If we have a token or stored auth state, try to verify the session
+    if (token || storedAuth === 'true') {
+      dispatch(fetchCurrentUser()).catch(() => {
+        // If fetch fails, clear the invalid auth state
+        dispatch(clearAuth());
+      });
+    }
+
+    // Simulate initial loading for 1 second to show the loader as requested
+    const timer = setTimeout(() => {
+      setInitialLoading(false)
+    }, 1000)
+
+    return () => clearTimeout(timer)
+  }, [dispatch, token])
 
   const handleLogin = (credentials) => {
     dispatch(loginUser(credentials))
@@ -86,7 +99,11 @@ const App = () => {
             <Route path="/compliance-settings" element={<ComplianceSettings />} />
             <Route path="/accountantjobs" element={<AccountantJobs />} />
             <Route path="/templates" element={<Templates />} />
-            <Route path="/users" element={<Users />} />
+            <Route path="/users" element={
+              <AdminRoute>
+                <Users />
+              </AdminRoute>
+            } />
             <Route path="/payments" element={<Payments />} />
             <Route path="/recurringinvoices" element={<RecurringInvoices />} />
             <Route path="/recurring-invoice-details/:id" element={<RecurringInvoiceDetails />} />

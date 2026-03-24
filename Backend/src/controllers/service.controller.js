@@ -1,5 +1,6 @@
 import * as serviceService from "../services/service.service.js";
 import { ApiResponse, ApiError } from "../utils/response.js";
+import { populateServiceTemplates } from "../scripts/populateServiceTemplates.js";
 
 export const createService = async (req, res, next) => {
   try {
@@ -44,6 +45,19 @@ export const deleteService = async (req, res, next) => {
     const success = await serviceService.deleteService(req.params.id);
     if (!success) throw new ApiError(404, "Service not found");
     res.status(200).json(new ApiResponse(200, null, "Service deleted successfully"));
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const populateTemplates = async (req, res, next) => {
+  try {
+    const success = await populateServiceTemplates();
+    if (success) {
+      res.status(200).json(new ApiResponse(200, null, "Service templates populated successfully"));
+    } else {
+      throw new ApiError(500, "Failed to populate service templates");
+    }
   } catch (error) {
     next(error);
   }

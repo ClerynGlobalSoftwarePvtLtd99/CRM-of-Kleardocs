@@ -3,8 +3,8 @@ import axiosInstance from '../../api/axiosInstance';
 
 const initialState = {
   user: null,
-  isAuthenticated: localStorage.getItem('isAuthenticated') === 'true',
-  loading: false,
+  isAuthenticated: false, // Don't trust localStorage blindly
+  loading: false, // Start as false to avoid infinite loading
   error: null,
 };
 
@@ -45,17 +45,7 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
-export const getMe = createAsyncThunk(
-  'auth/getMe',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.get('/auth/me');
-      return response.data.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Session expired');
-    }
-  }
-);
+
 
 const authSlice = createSlice({
   name: 'auth',

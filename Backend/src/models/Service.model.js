@@ -7,7 +7,7 @@ const serviceSchema = new mongoose.Schema(
     professionalFees: { type: Number, default: 0 },
     govtFees: { type: Number, default: 0 },
     hsn: { type: String, default: "998399" },
-    template: { type: mongoose.Schema.Types.ObjectId, ref: "EmailTemplate" }
+    template: { type: String, default: "" }
   },
   { timestamps: true }
 );
