@@ -6,8 +6,8 @@ const jobSchema = new mongoose.Schema(
     jobTitle: { type: String, required: true },
     status: {
       type: String,
-      enum: ["To Be Done", "Ongoing", "Done"],
-      default: "To Be Done"
+      enum: ["To be done", "Ongoing", "Done"],
+      default: "To be done"
     },
     accountant: { type: String }, // name like "Samrat", "Tapas", "Jagjyot"
     hasExpiry: { type: Boolean, default: false },

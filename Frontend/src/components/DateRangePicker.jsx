@@ -162,12 +162,10 @@ const DateRangePicker = ({
     month: (startDate || new Date()).getMonth() 
   }
   const [leftMonth, setLeftMonth] = useState(initialLeft)
-
   const getInitialRight = () => {
     if (endDate) {
       const endM = endDate.getMonth()
       const endY = endDate.getFullYear()
-      // Show end date's month if it's after the start date's month
       if (endY > initialLeft.year || (endY === initialLeft.year && endM > initialLeft.month)) {
         return { year: endY, month: endM }
       }
@@ -177,7 +175,19 @@ const DateRangePicker = ({
 
   const [rightMonth, setRightMonth] = useState(getInitialRight())
 
-  // Ensure months are different if dates are available
+  const handlePrevMonths = () => {
+    const newLeft = prevMonth(leftMonth)
+    setLeftMonth(newLeft)
+    setRightMonth(leftMonth) // right becomes the old left
+  }
+
+  const handleNextMonths = () => {
+    const newRight = nextMonth(rightMonth)
+    setRightMonth(newRight)
+    setLeftMonth(rightMonth) // left becomes the old right
+  }
+
+  // Ensure months are different if dates are available - keep them in sync
   useEffect(() => {
     if (startDate && endDate) {
       const startM = startDate.getMonth()
@@ -185,14 +195,20 @@ const DateRangePicker = ({
       const endM = endDate.getMonth()
       const endY = endDate.getFullYear()
       
-      setLeftMonth({ year: startY, month: startM })
+      const left = { year: startY, month: startM }
+      setLeftMonth(left)
       
-      // If same month, set right to next month
-      if (startY === endY && startM === endM) {
-        const next = nextMonth({ year: endY, month: endM })
-        setRightMonth(next)
+      const next = nextMonth(left)
+      // Only set right to next if it's not already the correct month
+      if (endY > startY || (endY === startY && endM > startM)) {
+         setRightMonth({ year: endY, month: endM })
+         // If they are not adjacent, it's fine, but user usually wants them together?
+         // For now, if they are the same, make them next.
+         if (startY === endY && startM === endM) {
+           setRightMonth(next)
+         }
       } else {
-        setRightMonth({ year: endY, month: endM })
+        setRightMonth(next)
       }
     }
   }, [startDate, endDate])
@@ -243,8 +259,10 @@ const DateRangePicker = ({
     
     if (start && end) {
       setTempRange({ start, end })
-      setLeftMonth({ year: start.getFullYear(), month: start.month })
-      setRightMonth(nextMonth({ year: start.getFullYear(), month: start.month }))
+      const sY = start.getFullYear()
+      const sM = start.getMonth()
+      setLeftMonth({ year: sY, month: sM })
+      setRightMonth(nextMonth({ year: sY, month: sM }))
     }
   }
 
@@ -325,7 +343,7 @@ const DateRangePicker = ({
               <DatePickerMonth
                 year={leftMonth.year}
                 month={leftMonth.month}
-                onPrev={() => setLeftMonth(prevMonth(leftMonth))}
+                onPrev={handlePrevMonths}
                 onNext={null}
                 startDate={tempRange.start}
                 endDate={tempRange.end}
@@ -336,15 +354,15 @@ const DateRangePicker = ({
                 year={rightMonth.year}
                 month={rightMonth.month}
                 onPrev={null}
-                onNext={() => setRightMonth(nextMonth(rightMonth))}
+                onNext={handleNextMonths}
                 startDate={tempRange.start}
                 endDate={tempRange.end}
                 onDateClick={handleDateClick}
               />
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-2">
-              <div className="flex flex-wrap justify-center gap-2 text-sm">
+            <div className="flex flex-row justify-between items-center gap-4 px-2">
+              <div className="flex flex-wrap justify-start gap-2 text-sm">
                 {['Today', 'Yesterday', 'Last 7 Days'].map(preset => (
                    <button
                     key={preset}
@@ -356,11 +374,11 @@ const DateRangePicker = ({
                   </button>
                 ))}
               </div>
-              <div className="flex gap-3 w-full sm:w-auto">
+              <div className="flex gap-3 w-auto">
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="flex-1 sm:flex-none px-6 py-2.5 rounded-lg font-bold text-[var(--color-text-primary)] border border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-secondary)] transition-all"
+                  className="px-6 py-2.5 rounded-lg font-bold text-[var(--color-text-primary)] border border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-secondary)] transition-all"
                 >
                   Cancel
                 </button>
@@ -368,9 +386,9 @@ const DateRangePicker = ({
                   type="button"
                   onClick={handleConfirm}
                   disabled={!tempRange.start || !tempRange.end}
-                  className="flex-1 sm:flex-none bg-[var(--color-accent)] text-[var(--color-bg-primary)] px-10 py-2.5 rounded-lg font-bold hover:opacity-90 disabled:opacity-50 transition-all shadow-lg"
+                  className="bg-[var(--color-accent)] text-[var(--color-bg-primary)] px-10 py-2.5 rounded-lg font-bold hover:opacity-90 disabled:opacity-50 transition-all shadow-lg"
                 >
-                  Apply Range
+                  OK
                 </button>
               </div>
             </div>

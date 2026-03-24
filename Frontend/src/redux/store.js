@@ -8,6 +8,9 @@ import dashboardReducer from './slices/dashboardSlice';
 import settingsReducer from './slices/settingsSlice';
 import complianceReducer from './slices/complianceSlice';
 
+import jobsReducer from './slices/jobsSlice';
+import usersReducer from './slices/usersSlice';
+
 export const store = configureStore({
   reducer: {
     ui: uiReducer,
@@ -18,6 +21,8 @@ export const store = configureStore({
     dashboard: dashboardReducer,
     settings: settingsReducer,
     compliance: complianceReducer,
+    jobs: jobsReducer,
+    users: usersReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
