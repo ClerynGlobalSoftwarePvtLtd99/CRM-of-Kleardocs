@@ -39,9 +39,9 @@ export const updateFinancialYear = createAsyncThunk(
 
 export const fetchComplianceSettings = createAsyncThunk(
   'compliance/fetchComplianceSettings',
-  async (year, { rejectWithValue }) => {
+  async (financialYear, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get('/compliance-settings', { params: { year } });
+      const response = await axiosInstance.get('/compliance-settings', { params: { financialYear } });
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch compliance settings');

@@ -46,42 +46,46 @@ const ComplianceTable = ({ compliances, onEdit, onDelete }) => {
                 key={comp._id}
                 className="border-b border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-primary)] transition-colors last:border-0"
               >
-                <td className="py-3 px-4 text-sm font-medium text-[var(--color-text-primary)]">
+                <td className="py-4 px-4 text-sm font-medium text-[var(--color-text-primary)] max-w-[300px]">
                   {comp.name}
                 </td>
-                <td className="py-3 px-4 text-sm text-[var(--color-text-secondary)] whitespace-nowrap">
+                <td className="py-4 px-4 text-sm text-[var(--color-text-secondary)] whitespace-nowrap">
                   {comp.expiryDate
                     ? new Date(comp.expiryDate).toLocaleDateString('en-GB', {
                         day: 'numeric',
                         month: 'short',
                         year: 'numeric',
                       })
-                    : ''}
+                    : '-'}
                 </td>
-                <td className="py-3 px-4 text-sm text-[var(--color-text-secondary)]">
-                  {comp.isNew ? 'Yes' : 'No'}
+                <td className="py-4 px-4 text-sm text-[var(--color-text-secondary)]">
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold ${comp.forNewCompany ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+                    {comp.forNewCompany ? 'Yes' : 'No'}
+                  </span>
                 </td>
-                <td className="py-3 px-4 text-sm text-[var(--color-text-secondary)] whitespace-nowrap">
-                  {comp.daysOfExpiry ? `${comp.daysOfExpiry} days` : ''}
+                <td className="py-4 px-4 text-sm text-[var(--color-text-secondary)] whitespace-nowrap">
+                  {comp.daysOfExpiry ? (
+                    <span className="font-medium text-[var(--color-text-primary)]">
+                      {comp.daysOfExpiry} days
+                    </span>
+                  ) : '-'}
                 </td>
-                <td className="py-3 px-4 text-sm text-[var(--color-text-secondary)]">
-                  {comp.expiryTemplate?.name || 'None'}
+                <td className="py-4 px-4 text-sm text-[var(--color-text-secondary)]">
+                  <div className="max-w-[150px] truncate" title={comp.expiryTemplate?.name || 'None'}>
+                    {comp.expiryTemplate?.name || 'None'}
+                  </div>
                 </td>
-                <td className="py-3 px-4 text-sm text-[var(--color-text-secondary)]">
-                  {comp.completeTemplate?.name || 'None'}
+                <td className="py-4 px-4 text-sm text-[var(--color-text-secondary)]">
+                  <div className="max-w-[150px] truncate" title={comp.completeTemplate?.name || 'None'}>
+                    {comp.completeTemplate?.name || 'None'}
+                  </div>
                 </td>
-                <td className="py-3 px-4 text-sm text-right space-x-2">
+                <td className="py-4 px-4 text-sm text-right">
                   <button
                     onClick={() => onEdit(comp)}
-                    className="text-[var(--color-accent)] hover:text-yellow-600 font-semibold cursor-pointer transition-colors px-2 py-1 rounded-md hover:bg-yellow-50/10 active:opacity-70"
+                    className="bg-transparent text-[var(--color-accent)] hover:text-yellow-600 font-bold cursor-pointer transition-all px-3 py-1.5 rounded-lg border border-transparent hover:border-[var(--color-accent)] hover:bg-yellow-50/10 active:scale-95 text-xs uppercase tracking-wider"
                   >
                     Modify
-                  </button>
-                  <button
-                    onClick={() => onDelete(comp._id)}
-                    className="text-red-500 hover:text-red-700 font-semibold cursor-pointer transition-colors px-2 py-1 rounded-md hover:bg-red-50/10 active:opacity-70"
-                  >
-                    Delete
                   </button>
                 </td>
               </tr>

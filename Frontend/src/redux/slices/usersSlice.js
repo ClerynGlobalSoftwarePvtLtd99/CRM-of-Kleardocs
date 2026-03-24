@@ -3,6 +3,17 @@ import axiosInstance from '../../api/axiosInstance';
 
 const initialState = {
   users: [],
+  accountants: [],
+  loading: false,
+  error: null,
+};
+
+export const fetchUsers = createAsyncThunk(
+  'users/fetchAll',
+  async (params, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get('/users', { params });
+      return response.data.data;
   loading: false,
   error: null,
   pagination: {
@@ -50,6 +61,19 @@ export const fetchUsers = createAsyncThunk(
   }
 );
 
+const userSlice = createSlice({
+  name: 'users',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+        state.accountants = action.payload.filter(u => u.role !== 'customer' && u.role !== 'admin');
 // Create new user
 export const createUser = createAsyncThunk(
   'users/createUser',
@@ -134,6 +158,11 @@ const usersSlice = createSlice({
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      });
+  },
+});
+
+export default userSlice.reducer;
       })
       // Create user
       .addCase(createUser.pending, (state) => {

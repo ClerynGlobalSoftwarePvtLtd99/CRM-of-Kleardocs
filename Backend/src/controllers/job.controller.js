@@ -12,15 +12,25 @@ export const createJob = async (req, res, next) => {
 
 export const getAllJobs = async (req, res, next) => {
   try {
-    const filters = {};
-    if (req.query.status) filters.status = req.query.status;
-    if (req.query.customer) filters.customer = req.query.customer;
-    if (req.query.accountant) filters.accountant = req.query.accountant;
-    
-    // If agent/accountant, maybe filter by who is logged in? 
-    // Usually admin sees all. Let's keep it global for now based on query params.
+    const { 
+      status, 
+      accountant, 
+      customer, 
+      search, 
+      dateType, 
+      startDate, 
+      endDate 
+    } = req.query;
 
-    const jobs = await jobService.getAllJobs(filters);
+    const jobs = await jobService.getAllJobs({ 
+      status, 
+      accountant, 
+      customer, 
+      search, 
+      dateType, 
+      startDate, 
+      endDate 
+    });
     res.status(200).json(new ApiResponse(200, jobs, "Jobs retrieved successfully"));
   } catch (error) {
     next(error);

@@ -11,11 +11,15 @@
     "method": "POST",
     "queryParams": [],
     "headers": [],
-    "body": "{\n  \"jobTitle\": \"Complete Q3 GST Filing\",\n  \"customer\": \"69bcf4fb3b2c2f7ac07dd287\",\n  \"status\": \"To Be Done\",\n  \"hasExpiry\": true,\n  \"expiryDate\": \"2026-03-22T09:24:22.477Z\"\n}",
+    "body": "{\n  \"jobTitle\": \"Complete Q3 GST Filing\",\n  \"customer\": \"69bcf4fb3b2c2f7ac07dd287\",\n  \"hasExpiry\": true,\n  \"expiryDate\": \"2026-03-22T09:24:22.477Z\",\n  \"status\": \"Ongoing\",\n  \"accountant\": \"Samrat\"\n}\n",
     "contentType": "application/json",
     "auth": {
-      "currentAuthType": "INHERIT",
-      "authConfigStore": {}
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDM0MjMxNywiZXhwIjoxNzc0MzQzMjE3fQ.gx1YrfMfn2O2OlDr-UV92YzxoXqy7v00X2yZW7uNyG4"
+        }
+      }
     }
   }
 }

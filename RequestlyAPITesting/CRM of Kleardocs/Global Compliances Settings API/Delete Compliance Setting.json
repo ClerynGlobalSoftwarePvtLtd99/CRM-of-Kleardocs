@@ -1,0 +1,26 @@
+{
+  "name": "Delete Compliance Setting",
+  "rank": "ay",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/compliance-settings/69c2246fc584f22fae67680a",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "DELETE",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"daysOfExpiry\": 150\n}",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDMzMDY4NSwiZXhwIjoxNzc0MzMxNTg1fQ.3B3IZmm82aeLn1jHq40cgzTzScP4MMX1QFhfvEfxEn0"
+        }
+      }
+    },
+    "pathVariables": []
+  }
+}

@@ -1,9 +1,9 @@
 {
-  "name": " Get All Templates",
-  "rank": "auntit17742436609231",
+  "name": "Get Compliance Settings",
+  "rank": "auu",
   "request": {
     "type": "http",
-    "url": "http://localhost:5000/api/v1/templates",
+    "url": "http://localhost:5000/api/v1/compliance-settings",
     "scripts": {
       "preRequest": "",
       "postResponse": ""
@@ -17,7 +17,7 @@
       "currentAuthType": "BEARER_TOKEN",
       "authConfigStore": {
         "BEARER_TOKEN": {
-          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmI5ODgzNGM2MGE2ZTcwYWZjM2YyYyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDM0ODg5NywiZXhwIjoxNzc0MzQ5Nzk3fQ.T_QPFoMGVZam0YBEIX3H7cz7G6jbQP9hamMgmrGOy8Q"
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDMyOTAyNCwiZXhwIjoxNzc0MzI5OTI0fQ.A-2qf_kZvZsb45GCVqcwLiDgxBh9zwrSHHFHqLV8XD8"
         }
       }
     }

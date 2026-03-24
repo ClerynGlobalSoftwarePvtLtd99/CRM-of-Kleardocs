@@ -1,39 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { X, Trash2, ChevronDown } from 'lucide-react'
+import toast from 'react-hot-toast'
 import AccountantJobsHeader from '../components/accountantJobs/AccountantJobsHeader'
 import AccountantJobsFilters from '../components/accountantJobs/AccountantJobsFilters'
 import AccountantJobsTable from '../components/accountantJobs/AccountantJobsTable'
-
-const CUSTOMERS = [
-  '7DAYS TRAVENTURE (OPC) PRIVATE LIMITED - 7DAYS TRAVENTURE (OPC) PRIVATE LIMITED',
-  'A & A FAUCETS PRIVATE LIMITED-A & A FAUCETS PRIVATE LIMITED',
-  'o Be',
-  'AAJ CODERS HUB PRIVATE LIMITED - AAJ CODERS HUB PRIVATE LIMITED',
-  'o Be Do',
-  'AARND SERVICES PRIVATE LIMITED - AARND SERVICES PRIVATE LIMITED',
-  'AARVION SERVICES INDIA PRIVATE LIMITED -AARVION SERVICES INDIA PRIVATE LIMITED',
-  'AATIKSH INTERACTIVE SOLUTIONS (OPC) PRIVATE LIMITED'
-]
+import { fetchJobs, createJob, updateJob, deleteJob } from '../redux/slices/jobsSlice'
+import { fetchCustomers } from '../redux/slices/customersSlice'
+import { fetchUsers } from '../redux/slices/usersSlice'
 
 const STATUSES = ['To be done', 'Ongoing', 'Done']
-const ACCOUNTANTS = ['Samrat', 'Tapas', 'Jagjyot']
-
-const INITIAL_JOBS = Array.from({ length: 20 }, (_, i) => ({
-  id: i + 1,
-  created: `6th Feb 2026 11:${String(10 + i).padStart(2, '0')} am`,
-  jobName: `Accountant Task ${i + 1}`,
-  customer: CUSTOMERS[i % CUSTOMERS.length].split('-')[0].trim(),
-  customerLink: `https://crm.startupstation.in/customer/6982ebaf65b9911c9c0b0d1${i}`,
-  companyName: CUSTOMERS[i % CUSTOMERS.length],
-  phone: `+91 ${9800000000 + i}`,
-  expiry: i % 4 === 0 ? `1st Mar 2026` : '-',
-  status: STATUSES[i % STATUSES.length],
-  completedDate: i % 3 === 2 ? `10th Feb 2026` : '-',
-  accountant: ACCOUNTANTS[i % ACCOUNTANTS.length]
-}))
 
 const AccountantJobs = () => {
-  const [jobs, setJobs] = useState(INITIAL_JOBS)
+  const dispatch = useDispatch()
+  const { list: jobs, loading: jobsLoading } = useSelector(state => state.jobs)
+  const { list: customers } = useSelector(state => state.customers)
+  const { accountants } = useSelector(state => state.users)
+  
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -51,22 +34,63 @@ const AccountantJobs = () => {
   // Form states for Add/Edit
   const [formData, setFormData] = useState({
     jobTitle: '',
-    customer: CUSTOMERS[0],
-    status: STATUSES[0],
-    accountant: ACCOUNTANTS[0],
+    customer: '',
+    status: 'To be done',
+    accountant: '',
     hasExpiryDate: false,
-    expiryDate: new Date().toISOString().split('T')[0]
+    expiryDate: formatForDateTimeLocal(new Date().toISOString()),
+    completedOn: ''
   })
+
+  const handleApplyFilters = () => {
+    dispatch(fetchJobs({ 
+      search: searchFilter, 
+      dateType: dateTypeFilter, 
+      status: statusFilter, 
+      accountant: accountantFilter,
+      startDate: startDate ? startDate.toISOString() : null,
+      endDate: endDate ? endDate.toISOString() : null
+    }))
+  }
+
+  useEffect(() => {
+    handleApplyFilters()
+  }, [dispatch])
+
+  useEffect(() => {
+    dispatch(fetchCustomers())
+    dispatch(fetchUsers())
+  }, [dispatch])
+
+  const handleClearFilters = () => {
+    setSearchFilter('')
+    setDateTypeFilter('Created')
+    setStatusFilter('')
+    setAccountantFilter('')
+    setStartDate(null)
+    setEndDate(null)
+    dispatch(fetchJobs({})) // Fetch all without filters
+  }
 
   const resetForm = () => {
     setFormData({
       jobTitle: '',
-      customer: CUSTOMERS[0],
-      status: STATUSES[0],
-      accountant: ACCOUNTANTS[0],
+      customer: customers[0]?._id || '',
+      status: 'To be done',
+      accountant: accountants[0]?.name || '',
       hasExpiryDate: false,
-      expiryDate: new Date().toISOString().split('T')[0]
+      expiryDate: formatForDateTimeLocal(new Date().toISOString()),
+      completedOn: ''
     })
+  }
+
+  function formatForDateTimeLocal(dateString) {
+    if (!dateString) return ''
+    const date = new Date(dateString)
+    if (isNaN(date.getTime())) return ''
+    const tzOffset = date.getTimezoneOffset() * 60000
+    const localISOTime = new Date(date.getTime() - tzOffset).toISOString().slice(0, 16)
+    return localISOTime
   }
 
   const openAddModal = () => {
@@ -77,12 +101,13 @@ const AccountantJobs = () => {
   const openEditModal = (job) => {
     setSelectedJob(job)
     setFormData({
-      jobTitle: job.jobName,
-      customer: job.companyName || CUSTOMERS[0], // using first customer as fallback or matching if possible
+      jobTitle: job.jobTitle,
+      customer: typeof job.customer === 'object' ? job.customer._id : (job.customer || ''),
       status: job.status,
       accountant: job.accountant,
-      hasExpiryDate: job.expiry !== '' && job.expiry !== '-',
-      expiryDate: new Date().toISOString().split('T')[0] // simplified for demo
+      hasExpiryDate: !!job.expiryDate,
+      expiryDate: formatForDateTimeLocal(job.expiryDate || new Date().toISOString()),
+      completedOn: formatForDateTimeLocal(job.completedOn)
     })
     setIsEditModalOpen(true)
   }
@@ -92,56 +117,55 @@ const AccountantJobs = () => {
     setIsDeleteModalOpen(true)
   }
 
-  const handleAddSubmit = (e) => {
+  const handleAddSubmit = async (e) => {
     e.preventDefault()
-    const now = new Date()
-    const formattedDate = `${now.getDate()} ${now.toLocaleString('en-US', { month: 'short' })} ${now.getFullYear()} ${now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase()}`
-    
-    const newJob = {
-      id: Date.now(),
-      created: formattedDate,
-      jobName: formData.jobTitle,
-      customer: formData.customer.split('-')[0].trim(),
-      customerLink: '#',
-      companyName: formData.customer,
-      phone: '-',
-      expiry: formData.hasExpiryDate ? formData.expiryDate : '-',
-      status: formData.status,
-      completedDate: formData.status === 'Done' ? formattedDate : '-',
-      accountant: formData.accountant
+    try {
+      await dispatch(createJob({
+        jobTitle: formData.jobTitle,
+        customer: formData.customer,
+        status: formData.status,
+        accountant: formData.accountant,
+        hasExpiry: formData.hasExpiryDate,
+        expiryDate: formData.hasExpiryDate ? formData.expiryDate : undefined,
+        completedOn: formData.status === 'Done' ? (formData.completedOn || undefined) : undefined
+      })).unwrap()
+      setIsAddModalOpen(false)
+      toast.success('Job created successfully')
+    } catch (err) {
+      toast.error(err || 'Failed to create job')
     }
-    setJobs([newJob, ...jobs])
-    setIsAddModalOpen(false)
   }
 
-  const handleEditSubmit = (e) => {
+  const handleEditSubmit = async (e) => {
     e.preventDefault()
-    const updatedJobs = jobs.map(j => {
-      if (j.id === selectedJob.id) {
-        const now = new Date();
-        const formattedDate = `${now.getDate()} ${now.toLocaleString('en-US', { month: 'short' })} ${now.getFullYear()} ${now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase()}`;
-        
-        return {
-          ...j,
-          jobName: formData.jobTitle,
-          customer: formData.customer.split('-')[0].trim(),
-          companyName: formData.customer,
-          expiry: formData.hasExpiryDate ? formData.expiryDate : '-',
+    try {
+      await dispatch(updateJob({
+        id: selectedJob._id,
+        data: {
+          jobTitle: formData.jobTitle,
+          customer: formData.customer,
           status: formData.status,
-          // Auto-stamp date if status is Done and date was empty
-          completedDate: formData.status === 'Done' ? (j.completedDate === '-' ? formattedDate : j.completedDate) : '-',
-          accountant: formData.accountant
+          accountant: formData.accountant,
+          hasExpiry: formData.hasExpiryDate,
+          expiryDate: formData.hasExpiryDate ? formData.expiryDate : null,
+          completedOn: formData.status === 'Done' ? (formData.completedOn || null) : null
         }
-      }
-      return j
-    })
-    setJobs(updatedJobs)
-    setIsEditModalOpen(false)
+      })).unwrap()
+      setIsEditModalOpen(false)
+      toast.success('Job updated successfully')
+    } catch (err) {
+      toast.error(err || 'Failed to update job')
+    }
   }
 
-  const handleDeleteConfirm = () => {
-    setJobs(jobs.filter(j => j.id !== selectedJob.id))
-    setIsDeleteModalOpen(false)
+  const handleDeleteConfirm = async () => {
+    try {
+      await dispatch(deleteJob(selectedJob._id)).unwrap()
+      setIsDeleteModalOpen(false)
+      toast.success('Job deleted successfully')
+    } catch (err) {
+      toast.error(err || 'Failed to delete job')
+    }
   }
 
   return (
@@ -166,13 +190,16 @@ const AccountantJobs = () => {
         endDate={endDate}
         setEndDate={setEndDate}
         STATUSES={STATUSES}
-        ACCOUNTANTS={ACCOUNTANTS}
+        ACCOUNTANTS={accountants.map(a => a.name)}
+        onApply={handleApplyFilters}
+        onClear={handleClearFilters}
       />
 
       <AccountantJobsTable 
         jobs={jobs}
         onEditClick={openEditModal}
         onDeleteClick={openDeleteModal}
+        loading={jobsLoading}
       />
 
       {/* Add Job Modal */}
@@ -205,7 +232,8 @@ const AccountantJobs = () => {
                       onChange={(e) => setFormData({...formData, customer: e.target.value})}
                       className="w-full appearance-none px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] max-h-40 overflow-y-auto"
                     >
-                      {CUSTOMERS.map(c => <option key={c} value={c}>{c}</option>)}
+                      <option value="">Select Customer</option>
+                      {customers.map(c => <option key={c._id} value={c._id}>{c.name} - {c.companyName}</option>)}
                     </select>
                     <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" size={16} />
                   </div>
@@ -215,7 +243,14 @@ const AccountantJobs = () => {
                   <div className="relative">
                     <select 
                       value={formData.status}
-                      onChange={(e) => setFormData({...formData, status: e.target.value})}
+                      onChange={(e) => {
+                        const newStatus = e.target.value
+                        setFormData(prev => ({
+                          ...prev,
+                          status: newStatus,
+                          completedOn: newStatus === 'Done' ? formatForDateTimeLocal(new Date().toISOString()) : ''
+                        }))
+                      }}
                       className="w-full appearance-none px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)]"
                     >
                       {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
@@ -231,11 +266,26 @@ const AccountantJobs = () => {
                       onChange={(e) => setFormData({...formData, accountant: e.target.value})}
                       className="w-full appearance-none px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)]"
                     >
-                      {ACCOUNTANTS.map(a => <option key={a} value={a}>{a}</option>)}
+                      <option value="">Select Accountant</option>
+                      {accountants.map(a => <option key={a._id} value={a.name}>{a.name}</option>)}
                     </select>
                     <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" size={16} />
                   </div>
                 </div>
+                
+                {formData.status === 'Done' && (
+                  <div>
+                    <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Completed Date & Time</label>
+                    <div className="relative">
+                      <input 
+                        type="datetime-local"
+                        value={formData.completedOn}
+                        onChange={(e) => setFormData({...formData, completedOn: e.target.value})}
+                        className="w-full px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] color-scheme-dark"
+                      />
+                    </div>
+                  </div>
+                )}
                 
                 <div className="flex items-center justify-between border-t border-[var(--color-bg-tertiary)] pt-4 mt-4">
                   <span className="text-sm font-medium">Has Expiry Date?</span>
@@ -252,13 +302,13 @@ const AccountantJobs = () => {
 
                 {formData.hasExpiryDate && (
                   <div>
-                    <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Expiry Date</label>
+                    <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Expiry Date & Time</label>
                     <div className="relative">
                       <input 
-                        type="date"
+                        type="datetime-local"
                         value={formData.expiryDate}
                         onChange={(e) => setFormData({...formData, expiryDate: e.target.value})}
-                        className="w-full px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)]"
+                        className="w-full px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] color-scheme-dark"
                       />
                     </div>
                   </div>
@@ -270,8 +320,9 @@ const AccountantJobs = () => {
                 type="submit" 
                 form="add-job-form"
                 className="w-full bg-[var(--color-accent)] hover:bg-yellow-500 text-white py-2 rounded-lg font-bold transition-colors"
+                disabled={jobsLoading}
               >
-                ADD NEW JOB
+                {jobsLoading ? 'ADDING...' : 'ADD NEW JOB'}
               </button>
             </div>
           </div>
@@ -308,7 +359,8 @@ const AccountantJobs = () => {
                       onChange={(e) => setFormData({...formData, customer: e.target.value})}
                       className="w-full appearance-none px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] max-h-40 overflow-y-auto"
                     >
-                      {CUSTOMERS.map(c => <option key={c} value={c}>{c}</option>)}
+                      <option value="">Select Customer</option>
+                      {customers.map(c => <option key={c._id} value={c._id}>{c.name} - {c.companyName}</option>)}
                     </select>
                     <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" size={16} />
                   </div>
@@ -318,7 +370,14 @@ const AccountantJobs = () => {
                   <div className="relative">
                     <select 
                       value={formData.status}
-                      onChange={(e) => setFormData({...formData, status: e.target.value})}
+                      onChange={(e) => {
+                        const newStatus = e.target.value
+                        setFormData(prev => ({
+                          ...prev,
+                          status: newStatus,
+                          completedOn: newStatus === 'Done' ? (prev.completedOn || formatForDateTimeLocal(new Date().toISOString())) : ''
+                        }))
+                      }}
                       className="w-full appearance-none px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)]"
                     >
                       {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
@@ -334,11 +393,26 @@ const AccountantJobs = () => {
                       onChange={(e) => setFormData({...formData, accountant: e.target.value})}
                       className="w-full appearance-none px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)]"
                     >
-                      {ACCOUNTANTS.map(a => <option key={a} value={a}>{a}</option>)}
+                      <option value="">Select Accountant</option>
+                      {accountants.map(a => <option key={a._id} value={a.name}>{a.name}</option>)}
                     </select>
                     <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" size={16} />
                   </div>
                 </div>
+                
+                {formData.status === 'Done' && (
+                  <div>
+                    <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Completed Date & Time</label>
+                    <div className="relative">
+                      <input 
+                        type="datetime-local"
+                        value={formData.completedOn}
+                        onChange={(e) => setFormData({...formData, completedOn: e.target.value})}
+                        className="w-full px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] color-scheme-dark"
+                      />
+                    </div>
+                  </div>
+                )}
                 
                 <div className="flex items-center justify-between border-t border-[var(--color-bg-tertiary)] pt-4 mt-4">
                   <span className="text-sm font-medium">Has Expiry Date?</span>
@@ -355,13 +429,13 @@ const AccountantJobs = () => {
 
                 {formData.hasExpiryDate && (
                   <div>
-                    <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Expiry Date</label>
+                    <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Expiry Date & Time</label>
                     <div className="relative">
                       <input 
-                        type="date"
+                        type="datetime-local"
                         value={formData.expiryDate}
                         onChange={(e) => setFormData({...formData, expiryDate: e.target.value})}
-                        className="w-full px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)]"
+                        className="w-full px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] color-scheme-dark"
                       />
                     </div>
                   </div>
@@ -373,8 +447,9 @@ const AccountantJobs = () => {
                 type="submit" 
                 form="edit-job-form"
                 className="w-full bg-[var(--color-accent)] hover:bg-yellow-500 text-white py-2 rounded-lg font-bold transition-colors"
+                disabled={jobsLoading}
               >
-                Update Job
+                {jobsLoading ? 'UPDATING...' : 'Update Job'}
               </button>
             </div>
           </div>
@@ -393,21 +468,23 @@ const AccountantJobs = () => {
               Delete this Job Permanently?
             </h2>
             <p className="text-[var(--color-text-secondary)] mb-8 text-sm">
-              Job: <span className="font-semibold text-[var(--color-text-primary)]">{selectedJob.jobName}</span> for <span className="font-semibold text-[var(--color-text-primary)]">{selectedJob.accountant}</span>
+              Job: <span className="font-semibold text-[var(--color-text-primary)]">{selectedJob.jobTitle}</span> for <span className="font-semibold text-[var(--color-text-primary)]">{selectedJob.accountant}</span>
             </p>
 
             <div className="flex gap-3 w-full">
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
                 className="flex-1 px-4 py-2.5 border border-[var(--color-bg-tertiary)] cursor-pointer text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)] hover:text-white rounded-lg font-semibold transition-colors focus:ring-2 focus:ring-[var(--color-bg-tertiary)] focus:outline-none"
+                disabled={jobsLoading}
               >
                 Cancel
               </button>
               <button
                 onClick={handleDeleteConfirm}
                 className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-800 text-white cursor-pointer rounded-lg font-semibold transition-colors focus:ring-2 focus:ring-red-600 focus:outline-none"
+                disabled={jobsLoading}
               >
-                Confirm
+                {jobsLoading ? 'DELETING...' : 'Confirm'}
               </button>
             </div>
           </div>

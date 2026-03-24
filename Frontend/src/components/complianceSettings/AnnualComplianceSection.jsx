@@ -1,6 +1,11 @@
+import React, { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { fetchComplianceSettings, addComplianceSetting, updateComplianceSetting, deleteComplianceSetting } from '../../redux/slices/complianceSlice'
 import toast from 'react-hot-toast'
+import FinancialYearDropdown from './FinancialYearDropdown'
+import ComplianceTable from './ComplianceTable'
+import AddComplianceModal from './AddComplianceModal'
+import EditComplianceModal from './EditComplianceModal'
 
 const AnnualComplianceSection = () => {
   const dispatch = useAppDispatch()
@@ -29,7 +34,7 @@ const AnnualComplianceSection = () => {
 
   const handleAddCompliance = async (newCompliance) => {
     try {
-      await dispatch(addComplianceSetting({ ...newCompliance, year: selectedYear })).unwrap()
+      await dispatch(addComplianceSetting({ ...newCompliance, financialYear: selectedYear })).unwrap()
       setIsAddModalOpen(false)
       toast.success('Compliance added successfully')
     } catch (err) {
@@ -68,28 +73,29 @@ const AnnualComplianceSection = () => {
 
   return (
     <section className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl p-6 shadow-sm">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[var(--color-bg-tertiary)] pb-4 mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
         <h2 className="text-xl font-bold text-[var(--color-text-primary)]">
           Annual Compliances Settings
         </h2>
-        {isDataLoaded && (
-          <button
-            onClick={() => setIsAddModalOpen(true)}
-            className="bg-[var(--color-accent)] hover:bg-yellow-500 cursor-pointer text-white font-bold py-2.5 px-6 rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 text-sm whitespace-nowrap ml-auto"
-          >
-            Add Compliance
-          </button>
-        )}
+        <div className="flex items-center gap-4">
+          <FinancialYearDropdown
+            financialYears={financialYears}
+            selectedYear={selectedYear}
+            setSelectedYear={setSelectedYear}
+            onLoad={handleLoad}
+          />
+          {/* {isDataLoaded && (
+            <button
+              onClick={() => setIsAddModalOpen(true)}
+              className="bg-[var(--color-accent)] hover:bg-yellow-500 cursor-pointer text-white font-bold py-2.5 px-6 rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 text-sm whitespace-nowrap"
+            >
+              Add Compliance
+            </button>
+          )} */}
+        </div>
       </div>
 
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
-        <FinancialYearDropdown
-          financialYears={financialYears}
-          selectedYear={selectedYear}
-          setSelectedYear={setSelectedYear}
-          onLoad={handleLoad}
-        />
-      </div>
+      <hr className="border-[var(--color-bg-tertiary)] mb-6" />
 
       <ComplianceTable compliances={compliances} onEdit={openEditModal} onDelete={handleDeleteCompliance} />
 

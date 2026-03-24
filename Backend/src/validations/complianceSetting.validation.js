@@ -15,7 +15,7 @@ export const createComplianceSettingSchema = z.object({
   year: z.string().regex(/^\d{4}-\d{4}$/, "Format must be YYYY-YYYY"),
   hasExpiry: z.boolean().optional().default(false),
   expiryDate: z.string().optional(),
-  isNew: z.boolean().optional().default(false),
+  forNewCompany: z.boolean().optional().default(false),
   inc20: z.boolean().optional().default(false),
   daysOfExpiry: z.number().optional().default(30),
   expiryTemplateId: mongoId.optional(),

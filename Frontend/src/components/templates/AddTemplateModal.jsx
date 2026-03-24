@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { X } from 'lucide-react'
 import RichTextEditor from '../RichTextEditor'
+import { createTemplate } from '../../redux/slices/templatesSlice'
 
 const STATUSES = ['Active', 'Inactive']
 
@@ -115,23 +117,19 @@ export const TemplateFormFields = ({ formData, setFormData }) => (
  *   onClose  — called to close the modal
  *   onAdd    — called with the new template object on submit (optional)
  */
-const AddTemplateModal = ({ onClose, onAdd }) => {
+const AddTemplateModal = ({ onClose }) => {
   const [formData, setFormData] = useState(DEFAULT_FORM)
+  const dispatch = useDispatch()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    const now = new Date()
-    const d = now.getDate()
-    const suffix = d === 1 ? 'st' : d === 2 ? 'nd' : d === 3 ? 'rd' : 'th'
-    const months = [
-      'January', 'February', 'March', 'April', 'May',
-      'June', 'July', 'August', 'September', 'October', 'November', 'December',
-    ]
-    const created = `${d}${suffix} ${months[now.getMonth()]} ${now.getFullYear()} ${now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase()}`
-    if (onAdd) {
-      onAdd({ id: Date.now(), created, ...formData, attachments: [] })
+    try {
+      await dispatch(createTemplate(formData)).unwrap()
+      onClose()
+    } catch (error) {
+      console.error('Failed to create template:', error)
+      alert(error || 'Failed to create template')
     }
-    onClose()
   }
 
   return (

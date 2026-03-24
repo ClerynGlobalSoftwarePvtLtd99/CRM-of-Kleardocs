@@ -121,65 +121,20 @@ const EditComplianceModal = ({ isOpen, onClose, data, onSubmit }) => {
               </button>
             </div>
 
-            {/* When toggled ON in Edit Mode, user requested another Complete Template dropdown according to requirements  */}
             {formData.hasExpiry && (
-              <div className="pb-4 mb-2 border-b border-gray-100 space-y-4">
-                <FormFieldWrapper
-                  label="Complete Template"
-                  id="completeTemplate"
-                >
-                  <select
-                    id="completeTemplate"
-                    value={formData.completeTemplate || 'Compliance Update'}
-                    onChange={handleChange}
-                    className="w-full bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-2.5 rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] transition-colors appearance-none"
-                    style={{
-                      backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
-                      backgroundPosition: 'right 0.5rem center',
-                      backgroundRepeat: 'no-repeat',
-                      backgroundSize: '1.5em 1.5em',
-                      paddingRight: '2.5rem',
-                    }}
-                  >
-                    {editCompleteTemplateOptions.map((opt) => (
-                      <option key={opt} value={opt}>
-                        {opt}
-                      </option>
-                    ))}
-                  </select>
-                </FormFieldWrapper>
-              </div>
-            )}
-
-            {/* Repeat fields as per prompt for Edit mode specifically requesting repeating Compliance Name input */}
-            {formData.hasExpiry && (
-              <FormFieldWrapper label="Compliance Name *" id="name">
+              <FormFieldWrapper label="Expiry Date" id="expiryDate">
                 <input
-                  type="text"
-                  id="name"
-                  value={formData.name}
+                  type="date"
+                  id="expiryDate"
+                  value={formData.expiryDate}
                   onChange={handleChange}
-                  required
-                  className="w-full bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-2.5 rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] transition-colors opacity-90 cursor-not-allowed"
-                  disabled
+                  className="w-full bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-2.5 rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] transition-colors"
+                  style={{
+                    colorScheme: 'light',
+                  }}
                 />
               </FormFieldWrapper>
             )}
-
-            {/* Rest of default edit popup fields */}
-
-            <FormFieldWrapper label="Expiry date" id="expiryDate">
-              <input
-                type="date"
-                id="expiryDate"
-                value={formData.expiryDate}
-                onChange={handleChange}
-                className="w-full bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-2.5 rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] transition-colors"
-                style={{
-                  colorScheme: 'light', // to help with dark mode styling icons
-                }}
-              />
-            </FormFieldWrapper>
 
             <FormFieldWrapper label="Inc 20?" id="inc20">
               <select
@@ -229,6 +184,28 @@ const EditComplianceModal = ({ isOpen, onClose, data, onSubmit }) => {
                 }}
               >
                 {templateOptions.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+            </FormFieldWrapper>
+
+            <FormFieldWrapper label="Complete Template" id="completeTemplate">
+              <select
+                id="completeTemplate"
+                value={formData.completeTemplate}
+                onChange={handleChange}
+                className="w-full bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-2.5 rounded-lg text-sm text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] transition-colors appearance-none"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+                  backgroundPosition: 'right 0.5rem center',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '1.5em 1.5em',
+                  paddingRight: '2.5rem',
+                }}
+              >
+                {completeTemplateOptions.map((opt) => (
                   <option key={opt} value={opt}>
                     {opt}
                   </option>

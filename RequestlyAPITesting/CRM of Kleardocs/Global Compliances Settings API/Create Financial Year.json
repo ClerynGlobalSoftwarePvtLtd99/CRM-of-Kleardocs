@@ -1,0 +1,25 @@
+{
+  "name": "Create Financial Year",
+  "rank": "av",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/financial-years",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{ \"year\": \"2022-2023\" }",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDMyOTAyNCwiZXhwIjoxNzc0MzI5OTI0fQ.A-2qf_kZvZsb45GCVqcwLiDgxBh9zwrSHHFHqLV8XD8"
+        }
+      }
+    }
+  }
+}

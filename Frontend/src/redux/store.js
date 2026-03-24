@@ -10,6 +10,10 @@ import complianceReducer from './slices/complianceSlice';
 import usersReducer from './slices/usersSlice';
 import servicesReducer from './slices/servicesSlice';
 
+import jobsReducer from './slices/jobsSlice';
+import usersReducer from './slices/usersSlice';
+import templatesReducer from './slices/templatesSlice';
+
 export const store = configureStore({
   reducer: {
     ui: uiReducer,
@@ -20,6 +24,9 @@ export const store = configureStore({
     dashboard: dashboardReducer,
     settings: settingsReducer,
     compliance: complianceReducer,
+    jobs: jobsReducer,
+    users: usersReducer,
+    templates: templatesReducer,
     users: usersReducer,
     services: servicesReducer,
   },

@@ -1,0 +1,32 @@
+{
+  "name": "Get Compliance Settings (by Year)",
+  "rank": "aux",
+  "request": {
+    "type": "http",
+    "url": "http://localhost:5000/api/v1/compliance-settings",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [
+      {
+        "id": 0.7412654965416203,
+        "key": "year",
+        "value": "2026-2027",
+        "isEnabled": true
+      }
+    ],
+    "headers": [],
+    "body": "",
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmJjMWZiMjZhMDY3MGUzNWJkNDA1YiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDMzMTYzNCwiZXhwIjoxNzc0MzMyNTM0fQ.yC-uimFVhrmYIaPp_DnLUD7x8I9x96oaIu9RaTtfJao"
+        }
+      }
+    }
+  }
+}
