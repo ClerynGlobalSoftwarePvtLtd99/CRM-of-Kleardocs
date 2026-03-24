@@ -24,6 +24,7 @@ import LeadDetailsPage from './pages/LeadDetailsPage'
 import CustomerDetailsPage from './pages/CustomerDetailsPage'
 import Customers from './pages/Customers'
 import Login from './pages/Login'
+import AdminRoute from './components/AdminRoute'
 
 const App = () => {
   const dispatch = useAppDispatch()
@@ -98,7 +99,11 @@ const App = () => {
             <Route path="/compliance-settings" element={<ComplianceSettings />} />
             <Route path="/accountantjobs" element={<AccountantJobs />} />
             <Route path="/templates" element={<Templates />} />
-            <Route path="/users" element={<Users />} />
+            <Route path="/users" element={
+              <AdminRoute>
+                <Users />
+              </AdminRoute>
+            } />
             <Route path="/payments" element={<Payments />} />
             <Route path="/recurringinvoices" element={<RecurringInvoices />} />
             <Route path="/recurring-invoice-details/:id" element={<RecurringInvoiceDetails />} />
