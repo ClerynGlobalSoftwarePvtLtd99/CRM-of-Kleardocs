@@ -6,17 +6,17 @@ export const createService = async (serviceData) => {
 };
 
 export const getAllServices = async () => {
-  const services = await Service.find().populate("template", "name subject").sort({ createdAt: -1 });
+  const services = await Service.find().sort({ createdAt: -1 });
   return services;
 };
 
 export const getServiceById = async (serviceId) => {
-  const service = await Service.findById(serviceId).populate("template", "name subject");
+  const service = await Service.findById(serviceId);
   return service;
 };
 
 export const updateService = async (serviceId, updateData) => {
-  const updatedService = await Service.findByIdAndUpdate(serviceId, updateData, { new: true, runValidators: true }).populate("template", "name subject");
+  const updatedService = await Service.findByIdAndUpdate(serviceId, updateData, { new: true, runValidators: true });
   return updatedService;
 };
 

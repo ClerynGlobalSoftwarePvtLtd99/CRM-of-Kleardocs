@@ -4,7 +4,8 @@ import {
   getAllServices,
   getServiceById,
   updateService,
-  deleteService
+  deleteService,
+  populateTemplates
 } from "../controllers/service.controller.js";
 import { auth, authorize } from "../middleware/auth.middleware.js";
 
@@ -17,5 +18,6 @@ router.get("/:id", getServiceById);
 router.post("/", authorize("admin", "agent"), createService);
 router.put("/:id", authorize("admin", "agent"), updateService);
 router.delete("/:id", authorize("admin"), deleteService);
+router.post("/populate-templates", authorize("admin"), populateTemplates);
 
 export default router;
