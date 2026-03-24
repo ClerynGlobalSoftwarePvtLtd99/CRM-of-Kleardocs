@@ -9,10 +9,10 @@ import {
   STATES_AND_UTS
 } from "../../utils/constants";
 import DateRangePicker from "../DateRangePicker";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
-const LeadsFilter = () => {
+const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
   const initialFilters = {
     search: "",
     dateType: "Created",
@@ -27,10 +27,21 @@ const LeadsFilter = () => {
     state: "",
   };
 
-  const [filters, setFilters] = useState(initialFilters);
+  const [filters, setFilters] = useState({ ...initialFilters, ...externalFilters });
+
+  useEffect(() => {
+    setFilters({ ...initialFilters, ...externalFilters });
+  }, [JSON.stringify(externalFilters)]);
+
+  useEffect(() => {
+    if (onFilterChange) {
+      onFilterChange(filters);
+    }
+  }, [filters]);
 
   const handleClear = () => {
-    setFilters(initialFilters);
+    const clearedFilters = initialFilters;
+    setFilters(clearedFilters);
     toast.success("Filters cleared");
   };
 
