@@ -3,7 +3,7 @@
   "rank": "ax",
   "request": {
     "type": "http",
-    "url": "http://localhost:5000/api/v1/invoices/69be31ac09c8437245840ce6/payments",
+    "url": "http://localhost:5000/api/v1/invoices/69c38472b079f718a298e132/payments",
     "scripts": {
       "preRequest": "",
       "postResponse": ""
@@ -11,7 +11,7 @@
     "method": "POST",
     "queryParams": [],
     "headers": [],
-    "body": "{\n  \"amount\": 3000,\n  \"mode\": \"UPI\",\n  \"note\": \"Partial payment via PhonePe\",\n  \"paymentDate\": \"2026-03-20\"\n}",
+    "body": "{\n  \"amount\": 3000,\n  \"mode\": \"UPI\",\n  \"note\": \"Partial payment via PhonePe\",\n  \"paymentDate\": \"2026-03-25\"\n}",
     "contentType": "application/json",
     "auth": {
       "currentAuthType": "BEARER_TOKEN",

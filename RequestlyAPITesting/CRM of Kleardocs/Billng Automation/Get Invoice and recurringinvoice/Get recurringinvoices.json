@@ -12,10 +12,14 @@
     "queryParams": [],
     "headers": [],
     "body": "",
-    "contentType": "text/plain",
+    "contentType": "application/json",
     "auth": {
-      "currentAuthType": "INHERIT",
-      "authConfigStore": {}
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmI5ODgzNGM2MGE2ZTcwYWZjM2YyYyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDQyMDY4NCwiZXhwIjoxNzc0NDIxNTg0fQ.yDFaS_KUslQkJEooo1ehTEW7ej87URVWhQtWbdzNDQE"
+        }
+      }
     }
   }
 }
