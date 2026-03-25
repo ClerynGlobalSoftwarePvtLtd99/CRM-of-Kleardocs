@@ -1,5 +1,6 @@
 import * as invoiceService from "../services/invoice.service.js";
 import { ApiResponse } from "../utils/response.js";
+import ExcelJS from "exceljs";
 
 // ══════════════════════════════════════════════════════════════════════════════
 // INVOICE CONTROLLERS
@@ -67,8 +68,52 @@ export const getRecurringInvoiceById = async (req, res) => {
   res.status(200).json(new ApiResponse(200, ri, "Recurring invoice fetched"));
 };
 
+// GET /api/v1/recurringinvoices/export
+export const exportRecurringInvoices = async (req, res) => {
+  const ris = await invoiceService.getAllRecurringInvoicesForExport(req.query);
+
+  const workbook = new ExcelJS.Workbook();
+  const sheet = workbook.addWorksheet("Recurring Invoices");
+
+  sheet.columns = [
+    { header: "Created At", key: "createdAt", width: 20 },
+    { header: "Customer", key: "customerName", width: 30 },
+    { header: "Company", key: "companyName", width: 35 },
+    { header: "Phone", key: "phone", width: 15 },
+    { header: "Services", key: "services", width: 40 },
+    { header: "Start Date", key: "startDate", width: 15 },
+    { header: "End Date", key: "endDate", width: 15 },
+    { header: "Interval", key: "interval", width: 15 },
+    { header: "Next Inv. Date", key: "nextDate", width: 15 },
+    { header: "Status", key: "status", width: 12 }
+  ];
+
+  ris.forEach((ri) => {
+    sheet.addRow({
+      createdAt: ri.createdAt ? new Date(ri.createdAt).toLocaleDateString("en-IN") : "",
+      customerName: ri.customer?.name || "",
+      companyName: ri.customer?.companyName || "",
+      phone: ri.customer?.phone || "",
+      services: ri.items.map(it => it.service?.name || it.description).join(", "),
+      startDate: ri.startDate ? new Date(ri.startDate).toLocaleDateString("en-IN") : "",
+      endDate: ri.endDate ? new Date(ri.endDate).toLocaleDateString("en-IN") : "",
+      interval: `${ri.interval} ${ri.intervalType}${ri.interval > 1 ? "s" : ""}`,
+      nextDate: ri.nextDate ? new Date(ri.nextDate).toLocaleDateString("en-IN") : "",
+      status: ri.status
+    });
+  });
+
+  res.setHeader(
+    "Content-Type",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  );
+  res.setHeader("Content-Disposition", "attachment; filename=recurring_invoices.xlsx");
+  await workbook.xlsx.write(res);
+  res.end();
+};
+
 // PUT /api/v1/recurringinvoices/:riId/disable
 export const disableRecurringInvoice = async (req, res) => {
   const ri = await invoiceService.disableRecurringInvoice(req.params.riId);
-  res.status(200).json(new ApiResponse(200, ri, "Recurring invoice disabled"));
+  res.status(200).json(new ApiResponse(200, ri, "Recurring invoice status toggled"));
 };
