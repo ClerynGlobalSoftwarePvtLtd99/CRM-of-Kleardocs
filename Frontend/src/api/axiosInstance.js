@@ -6,16 +6,22 @@ const getBaseURL = () => {
     const manualBase = localStorage.getItem('API_URL_OVERRIDE');
     if (manualBase) return manualBase;
 
-    // Priority 2: VITE_API_BASE_URL (used in both Local Dev and Build Env)
-    if (import.meta.env.VITE_API_BASE_URL) return import.meta.env.VITE_API_BASE_URL;
-
-    // Priority 3: Automatic fallback based on build mode
-    return import.meta.env.MODE === 'production' 
-        ? 'https://crm-of-kleardocs-backend.onrender.com/api/v1' 
-        : 'http://localhost:5000/api/v1';
+    // Priority 2: Check if running on localhost vs production using window.location
+    const isLocalhost = window.location.hostname === 'localhost' || 
+                       window.location.hostname === '127.0.0.1' || 
+                       window.location.hostname.includes('localhost');
+    
+    // Priority 3: Use ternary operator for local vs production
+    return isLocalhost 
+        ? 'http://localhost:5000/api/v1' 
+        : 'https://crm-of-kleardocs-backend.onrender.com/api/v1';
 };
 
 const baseURL = getBaseURL();
+
+// Debug logging (remove in production)
+console.log('🔗 API Base URL:', baseURL);
+console.log('🌐 Current hostname:', window.location.hostname);
 
 const axiosInstance = axios.create({
   baseURL,
@@ -43,8 +49,11 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem('isAuthenticated');
       
-      // Prevent loop if already on login page
-      if (window.location.pathname !== '/') {
+      // Prevent loop - only redirect if not already on login page and not in the middle of login
+      const isLoginPage = window.location.pathname === '/' || window.location.pathname === '/login';
+      const isLoginRequest = error.config?.url?.includes('/auth/login');
+      
+      if (!isLoginPage && !isLoginRequest) {
         window.location.href = '/'; 
       }
     }
