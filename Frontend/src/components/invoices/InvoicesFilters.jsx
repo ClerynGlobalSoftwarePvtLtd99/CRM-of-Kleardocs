@@ -53,10 +53,10 @@ const InvoicesFilters = ({
             className="w-full xl:w-auto appearance-none pl-4 pr-10 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-text-primary)] cursor-pointer min-w-[120px] text-sm"
           >
             <option value="">Type</option>
-            <option value="Price">Price</option>
-            <option value="GST">GST</option>
-            <option value="Total">Total</option>
-            <option value="Due">Due</option>
+            <option value="subTotal">Price</option>
+            <option value="totalGst">GST</option>
+            <option value="total">Total</option>
+            <option value="due">Due</option>
           </select>
           <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" size={16} />
         </div>

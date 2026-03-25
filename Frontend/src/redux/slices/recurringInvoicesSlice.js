@@ -62,8 +62,8 @@ const recurringInvoicesSlice = createSlice({
       })
       .addCase(fetchRecurringInvoices.fulfilled, (state, action) => {
         state.loading = false;
-        state.list = action.payload.data;
-        state.count = action.payload.count;
+        state.list = action.payload.data || [];
+        state.count = action.payload.count || 0;
       })
       .addCase(fetchRecurringInvoices.rejected, (state, action) => {
         state.loading = false;
