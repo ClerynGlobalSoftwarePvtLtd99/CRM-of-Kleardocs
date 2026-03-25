@@ -6,6 +6,7 @@ import FinancialYearDropdown from './FinancialYearDropdown'
 import ComplianceTable from './ComplianceTable'
 import AddComplianceModal from './AddComplianceModal'
 import EditComplianceModal from './EditComplianceModal'
+import ContentLoader from '../common/ContentLoader'
 
 const AnnualComplianceSection = () => {
   const dispatch = useAppDispatch()
@@ -97,7 +98,13 @@ const AnnualComplianceSection = () => {
 
       <hr className="border-[var(--color-bg-tertiary)] mb-6" />
 
-      <ComplianceTable compliances={compliances} onEdit={openEditModal} onDelete={handleDeleteCompliance} />
+      {loading ? (
+        <div className="py-6">
+          <ContentLoader message="Fetching compliance settings..." />
+        </div>
+      ) : (
+        <ComplianceTable compliances={compliances} onEdit={openEditModal} onDelete={handleDeleteCompliance} />
+      )}
 
       <AddComplianceModal
         isOpen={isAddModalOpen}

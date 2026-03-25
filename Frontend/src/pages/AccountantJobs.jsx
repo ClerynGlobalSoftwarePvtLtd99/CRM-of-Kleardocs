@@ -8,6 +8,7 @@ import AccountantJobsTable from '../components/accountantJobs/AccountantJobsTabl
 import { fetchJobs, createJob, updateJob, deleteJob } from '../redux/slices/jobsSlice'
 import { fetchCustomers } from '../redux/slices/customersSlice'
 import { fetchUsers } from '../redux/slices/usersSlice'
+import ContentLoader from '../components/common/ContentLoader'
 
 const STATUSES = ['To be done', 'Ongoing', 'Done']
 
@@ -195,12 +196,17 @@ const AccountantJobs = () => {
         onClear={handleClearFilters}
       />
 
-      <AccountantJobsTable 
-        jobs={jobs}
-        onEditClick={openEditModal}
-        onDeleteClick={openDeleteModal}
-        loading={jobsLoading}
-      />
+      {jobsLoading ? (
+        <div className="py-8">
+          <ContentLoader message="Fetching accountant jobs..." />
+        </div>
+      ) : (
+        <AccountantJobsTable 
+          jobs={jobs}
+          onEditClick={openEditModal}
+          onDeleteClick={openDeleteModal}
+        />
+      )}
 
       {/* Add Job Modal */}
       {isAddModalOpen && (

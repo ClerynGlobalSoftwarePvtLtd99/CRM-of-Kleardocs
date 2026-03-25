@@ -10,6 +10,7 @@ import {
   convertLeadToCustomer, 
   fetchLeadEmails 
 } from "../redux/slices/leadsSlice";
+import ContentLoader from "../components/common/ContentLoader";
 import LeadDetailsCard from "../components/lead-details/LeadDetailsCard";
 import LeadHistorySection from "../components/lead-details/LeadHistorySection";
 import AddInteractionModal from "../components/lead-modals/AddInteractionModal";
@@ -168,8 +169,8 @@ const LeadDetailsPage = () => {
 
   if (loading) {
     return (
-      <div className="p-4 bg-bg-primary min-h-screen text-text-primary flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-500"></div>
+      <div className="p-4 bg-bg-primary min-h-screen flex items-center justify-center">
+        <ContentLoader message="Fetching lead details..." />
       </div>
     );
   }

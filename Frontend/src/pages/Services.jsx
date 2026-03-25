@@ -5,6 +5,7 @@ import ServicesTable from "../components/services/ServicesTable";
 import ServiceFormModal from "../components/services/AddServicesForm";
 import { fetchServices, createService, updateService, clearSuccess } from "../redux/slices/servicesSlice";
 import toast from "react-hot-toast";
+import ContentLoader from "../components/common/ContentLoader";
 
 const Services = () => {
   const dispatch = useDispatch();
@@ -63,8 +64,8 @@ const Services = () => {
   return (
     <div className="p-6 bg-bg-primary min-h-screen">
       {loading && (
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-t-accent border-t-transparent"></div>
+        <div className="py-8">
+          <ContentLoader message="Fetching services..." />
         </div>
       )}
       

@@ -11,6 +11,7 @@ import {
 import { toast } from "react-hot-toast";
 import { fetchCustomerById, updateCustomerEmails, addCustomerDirector } from "../redux/slices/customersSlice";
 import ErrorBoundary from "../components/ErrorBoundary";
+import ContentLoader from "../components/common/ContentLoader";
 
 // Modals
 import DirectorReportModal from "../components/customer-modals/DirectorReportModal";
@@ -84,7 +85,7 @@ const CustomerDetailsPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-t-accent border-t-transparent"></div>
+        <ContentLoader message="Fetching customer details..." />
       </div>
     );
   }

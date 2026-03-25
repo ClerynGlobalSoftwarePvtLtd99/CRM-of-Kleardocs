@@ -8,7 +8,7 @@ import LeadsHeader from "../components/leads/LeadsHeader";
 import LeadsFilter from "../components/leads/LeadsFilter";
 import LeadsTable from "../components/leads/LeadsTable";
 import AddLeadModal from "../components/leads/AddLeadModal";
-import Loader from "../components/Loader";
+import ContentLoader from "../components/common/ContentLoader";
 
 const Leads = () => {
   const dispatch = useDispatch();
@@ -49,8 +49,8 @@ const Leads = () => {
 
   if (loading && leads.length === 0) {
     return (
-      <div className="p-4 bg-bg-primary text-text-primary h-full flex items-center justify-center">
-        <Loader />
+      <div className="p-4 md:p-8">
+        <ContentLoader message="Fetching leads..." />
       </div>
     );
   }

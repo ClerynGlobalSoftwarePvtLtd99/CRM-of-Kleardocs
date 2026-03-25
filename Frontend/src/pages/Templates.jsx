@@ -8,6 +8,7 @@ import AddTemplateModal from '../components/templates/AddTemplateModal'
 import { TemplateFormFields, DEFAULT_FORM } from '../components/templates/AddTemplateModal'
 import { fetchTemplates, updateTemplate, deleteTemplate } from '../redux/slices/templatesSlice'
 import { injectTemplateData } from '../utils/templateEngine'
+import ContentLoader from '../components/common/ContentLoader'
 
 const PREVIEW_CONTEXT = {
   companyName: 'CLERYN GLOBAL SOFTWARE PVT LTD',
@@ -121,12 +122,18 @@ const Templates = () => {
         searchFilter={searchFilter}
         setSearchFilter={setSearchFilter}
       />
-      <TemplatesTable
-        templates={filteredTemplates}
-        onEditClick={openEditModal}
-        onManageClick={openManageModal}
-        onPreviewClick={handlePreviewClick}
-      />
+      {loading ? (
+        <div className="py-8">
+          <ContentLoader message="Fetching templates..." />
+        </div>
+      ) : (
+        <TemplatesTable
+          templates={filteredTemplates}
+          onEditClick={openEditModal}
+          onManageClick={openManageModal}
+          onPreviewClick={handlePreviewClick}
+        />
+      )}
 
       {/* Preview Modal */}
       {isPreviewModalOpen && selectedTemplate && (
