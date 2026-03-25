@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
+import { toast } from "react-hot-toast";
+import { generateBoardResolutionPdf } from "../../utils/boardResolutionPdfGenerator";
 
 const BoardResolutionModal = ({ customer, onClose }) => {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 
   const handleGeneratePDF = () => {
-    const baseUrl = `https://crm.startupstation.in/api/v1/customers/board-resolution/${customer.id}`;
-    
-    // In actual app, we might need director validation logic here before opening
-    window.open(`${baseUrl}?date=${date}`, "_blank");
+    // Check if customer has directors
+    if (!customer.directors || customer.directors.length === 0) {
+      toast.error("Please add a director first");
+      return;
+    }
+
+    generateBoardResolutionPdf(customer, date, 'view');
     onClose();
   };
 

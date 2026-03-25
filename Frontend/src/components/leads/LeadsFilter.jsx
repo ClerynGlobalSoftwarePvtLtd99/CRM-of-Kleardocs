@@ -33,15 +33,24 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
     setFilters({ ...initialFilters, ...externalFilters });
   }, [JSON.stringify(externalFilters)]);
 
-  useEffect(() => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleApplyFilters = () => {
     if (onFilterChange) {
       onFilterChange(filters);
+      toast.success("Filters applied");
     }
-  }, [filters]);
+  };
 
   const handleClear = () => {
     const clearedFilters = initialFilters;
     setFilters(clearedFilters);
+    if (onFilterChange) {
+      onFilterChange(clearedFilters);
+    }
     toast.success("Filters cleared");
   };
 
@@ -53,11 +62,10 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
           <span className="fieldset-label uppercase">Search</span>
           <div className="relative">
             <input
+              name="search"
               placeholder="Name / Phone / Company"
               value={filters.search}
-              onChange={(e) =>
-                setFilters((prev) => ({ ...prev, search: e.target.value }))
-              }
+              onChange={handleChange}
               className="w-full !font-bold !text-sm"
             />
             <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary" />
@@ -67,10 +75,9 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
         <div className="fieldset-input !mt-0">
           <span className="fieldset-label uppercase">Date Type</span>
           <select
+            name="dateType"
             value={filters.dateType}
-            onChange={(e) =>
-              setFilters((prev) => ({ ...prev, dateType: e.target.value }))
-            }
+            onChange={handleChange}
             className="w-full !font-bold !text-sm"
           >
             <option>Created</option>
@@ -97,10 +104,9 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
         <div className="fieldset-input !mt-0">
           <span className="fieldset-label uppercase">Service</span>
           <select
+            name="service"
             value={filters.service}
-            onChange={(e) =>
-              setFilters((prev) => ({ ...prev, service: e.target.value }))
-            }
+            onChange={handleChange}
             className="w-full !font-bold !text-sm"
           >
             <option value="">All Services</option>
@@ -114,10 +120,9 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
         <div className="flex-1 min-w-[180px] fieldset-input !mt-0">
           <span className="fieldset-label uppercase">Agent</span>
           <select
+            name="agent"
             value={filters.agent}
-            onChange={(e) =>
-              setFilters((prev) => ({ ...prev, agent: e.target.value }))
-            }
+            onChange={handleChange}
             className="w-full !font-bold !text-sm"
           >
             <option value="">All Agents</option>
@@ -128,24 +133,22 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
         <div className="flex-1 min-w-[180px] fieldset-input !mt-0">
           <span className="fieldset-label uppercase">Source</span>
           <select
+            name="source"
             value={filters.source}
-            onChange={(e) =>
-              setFilters((prev) => ({ ...prev, source: e.target.value }))
-            }
+            onChange={handleChange}
             className="w-full !font-bold !text-sm"
           >
             <option value="">All Sources</option>
-            {SOURCES.map(s => <option key={s} value={s.toLowerCase()}>{s}</option>)}
+            {SOURCES.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
         </div>
 
         <div className="flex-1 min-w-[140px] fieldset-input !mt-0">
           <span className="fieldset-label uppercase">Type</span>
           <select
+            name="type"
             value={filters.type}
-            onChange={(e) =>
-              setFilters((prev) => ({ ...prev, type: e.target.value }))
-            }
+            onChange={handleChange}
             className="w-full !font-bold !text-sm"
           >
             <option value="">All Types</option>
@@ -156,10 +159,9 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
         <div className="flex-1 min-w-[140px] fieldset-input !mt-0">
           <span className="fieldset-label uppercase">Priority</span>
           <select
+            name="priority"
             value={filters.priority}
-            onChange={(e) =>
-              setFilters((prev) => ({ ...prev, priority: e.target.value }))
-            }
+            onChange={handleChange}
             className="w-full !font-bold !text-sm"
           >
             <option value="">All Priorities</option>
@@ -170,10 +172,9 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
         <div className="flex-1 min-w-[180px] fieldset-input !mt-0">
           <span className="fieldset-label uppercase">Response</span>
           <select
+            name="response"
             value={filters.response}
-            onChange={(e) =>
-              setFilters((prev) => ({ ...prev, response: e.target.value }))
-            }
+            onChange={handleChange}
             className="w-full !font-bold !text-sm"
           >
             <option value="">All Responses</option>
@@ -184,20 +185,24 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
         <div className="flex-1 min-w-[180px] fieldset-input !mt-0">
           <span className="fieldset-label uppercase">State & UT</span>
           <select
+            name="state"
             value={filters.state}
-            onChange={(e) =>
-              setFilters((prev) => ({ ...prev, state: e.target.value }))
-            }
+            onChange={handleChange}
             className="w-full !font-bold !text-sm"
           >
             <option value="">All States & UTs</option>
-            {STATES_AND_UTS.map(s => <option key={s} value={s}>{s}</option>)}
+            {STATES_AND_UTS.map(state => (
+              <option key={state} value={state}>
+                {state}
+              </option>
+            ))}
           </select>
         </div>
 
         <div className="flex items-center gap-3 pb-0.5">
           <button
             type="button"
+            onClick={handleApplyFilters}
             className="btn-raised btn-raised-orange text-white px-6 py-2 rounded-md text-sm font-bold uppercase tracking-widest shadow-lg flex items-center gap-2"
           >
             <Search size={16} />

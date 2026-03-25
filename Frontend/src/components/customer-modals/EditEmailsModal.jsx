@@ -72,19 +72,20 @@ const EditEmailsModal = ({ customer, onClose, onUpdate, loading = false }) => {
             </button>
           </div>
 
-          <button
-            onClick={handleUpdate}
-            disabled={loading}
-            className="w-full btn-raised btn-raised-orange text-white py-4 rounded-md text-sm font-bold uppercase tracking-widest shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          <button 
+                onClick={handleUpdate}
+                disabled={loading}
+                className="w-full btn-raised btn-raised-orange text-white px-4 py-3 rounded-md text-sm font-bold uppercase tracking-widest shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
           >
             {loading ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                UPDATING...
+                <span className="text-xs">UPDATING...</span>
               </>
             ) : (
               <>
-                <Mail size={16} /> UPDATE EMAILS
+                <Mail size={16} />
+                <span className="hidden sm:inline text-xs md:inline">UPDATE EMAILS</span>
               </>
             )}
           </button>

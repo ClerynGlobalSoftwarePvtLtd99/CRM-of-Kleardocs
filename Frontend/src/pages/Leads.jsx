@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
@@ -16,35 +16,14 @@ const Leads = () => {
   const { list: leads, loading, error } = useSelector((state) => state.leads);
   const [showModal, setShowModal] = useState(false);
   const [filters, setFilters] = useState({});
-  const [debouncedFilters, setDebouncedFilters] = useState({});
-  const debounceTimeoutRef = useRef(null);
 
-  const handleFilterChange = useCallback((newFilters) => {
+  const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
-    
-    // Clear existing timeout
-    if (debounceTimeoutRef.current) {
-      clearTimeout(debounceTimeoutRef.current);
-    }
-    
-    // Set new timeout to debounce API calls
-    debounceTimeoutRef.current = setTimeout(() => {
-      setDebouncedFilters(newFilters);
-    }, 300);
-  }, []);
+  };
 
   useEffect(() => {
-    dispatch(fetchLeads(debouncedFilters));
-  }, [dispatch, debouncedFilters]);
-
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (debounceTimeoutRef.current) {
-        clearTimeout(debounceTimeoutRef.current);
-      }
-    };
-  }, []);
+    dispatch(fetchLeads(filters));
+  }, [dispatch, filters]);
 
   useEffect(() => {
     if (error) {
