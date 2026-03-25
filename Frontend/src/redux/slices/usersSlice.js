@@ -6,16 +6,6 @@ const initialState = {
   accountants: [],
   loading: false,
   error: null,
-};
-
-export const fetchUsers = createAsyncThunk(
-  'users/fetchAll',
-  async (params, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.get('/users', { params });
-      return response.data.data;
-  loading: false,
-  error: null,
   pagination: {
     page: 1,
     limit: 10,
@@ -37,16 +27,15 @@ export const fetchUsers = createAsyncThunk(
       if (role) queryParams.append('role', role);
       if (active !== '') queryParams.append('active', active);
       
-      // For search, we'll implement client-side filtering since backend doesn't support search
       const response = await axiosInstance.get(`/users${queryParams.toString() ? '?' + queryParams.toString() : ''}`);
       
       let users = response.data.data || [];
       
-      // Client-side search filtering
+      // Client-side search filtering if backend doesn't support it directly
       if (search) {
         users = users.filter(user => 
-          user.name.toLowerCase().includes(search.toLowerCase()) ||
-          user.email.toLowerCase().includes(search.toLowerCase())
+          user.name?.toLowerCase().includes(search.toLowerCase()) ||
+          user.email?.toLowerCase().includes(search.toLowerCase())
         );
       }
       
@@ -61,19 +50,6 @@ export const fetchUsers = createAsyncThunk(
   }
 );
 
-const userSlice = createSlice({
-  name: 'users',
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchUsers.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchUsers.fulfilled, (state, action) => {
-        state.loading = false;
-        state.users = action.payload;
-        state.accountants = action.payload.filter(u => u.role !== 'customer' && u.role !== 'admin');
 // Create new user
 export const createUser = createAsyncThunk(
   'users/createUser',
@@ -148,6 +124,7 @@ const usersSlice = createSlice({
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.loading = false;
         state.users = action.payload.data || [];
+        state.accountants = state.users.filter(u => u.role !== 'customer' && u.role !== 'admin');
         state.pagination = {
           page: action.payload.page || 1,
           limit: action.payload.limit || 10,
@@ -158,11 +135,6 @@ const usersSlice = createSlice({
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
-  },
-});
-
-export default userSlice.reducer;
       })
       // Create user
       .addCase(createUser.pending, (state) => {

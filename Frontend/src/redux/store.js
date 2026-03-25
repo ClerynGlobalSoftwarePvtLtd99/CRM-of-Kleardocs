@@ -7,12 +7,11 @@ import invoicesReducer from './slices/invoicesSlice';
 import dashboardReducer from './slices/dashboardSlice';
 import settingsReducer from './slices/settingsSlice';
 import complianceReducer from './slices/complianceSlice';
-import usersReducer from './slices/usersSlice';
-import servicesReducer from './slices/servicesSlice';
-
 import jobsReducer from './slices/jobsSlice';
 import usersReducer from './slices/usersSlice';
 import templatesReducer from './slices/templatesSlice';
+import paymentsReducer from './slices/paymentsSlice';
+import servicesReducer from './slices/servicesSlice';
 
 export const store = configureStore({
   reducer: {
@@ -27,7 +26,7 @@ export const store = configureStore({
     jobs: jobsReducer,
     users: usersReducer,
     templates: templatesReducer,
-    users: usersReducer,
+    payments: paymentsReducer,
     services: servicesReducer,
   },
   middleware: (getDefaultMiddleware) =>
