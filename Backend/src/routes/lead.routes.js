@@ -1,7 +1,7 @@
 import express from "express";
 import {
   getLeads, createLead, getLeadById, updateLead,
-  addFollowup, addInteraction, updateEmails, assignAgent, convertToCustomer
+  addFollowup, addInteraction, getEmails, updateEmails, assignAgent, convertToCustomer
 } from "../controllers/lead.controller.js";
 import { auth } from "../middleware/auth.middleware.js";
 import { checkRole } from "../middleware/role.middleware.js";
@@ -25,6 +25,7 @@ router.put("/:leadId", checkRole("admin", "agent"), validate(updateLeadSchema), 
 // ─── LEAD ACTIONS ─────────────────────────────────────────────────────────
 router.post("/:leadId/followup", checkRole("admin", "agent"), validate(followupSchema), addFollowup);
 router.post("/:leadId/interaction", checkRole("admin", "agent"), validate(interactionSchema), addInteraction);
+router.get("/:leadId/emails", getEmails);
 router.put("/:leadId/emails", checkRole("admin", "agent"), validate(updateEmailsSchema), updateEmails);
 router.put("/:leadId/assign", checkRole("admin"), validate(assignAgentSchema), assignAgent);
 router.post("/:leadId/convert", checkRole("admin", "agent"), validate(convertToCustomerSchema), convertToCustomer);

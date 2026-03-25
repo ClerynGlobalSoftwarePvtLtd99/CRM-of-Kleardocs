@@ -26,23 +26,23 @@ const LeadDetailsCard = ({
             <div className="space-y-4">
               <div>
                 <label className="text-xs font-bold text-text-secondary uppercase">Customer Name</label>
-                <p className="text-sm font-semibold text-text-primary">{lead.customerName}</p>
+                <p className="text-sm font-semibold text-text-primary">{lead.name || 'N/A'}</p>
               </div>
               <div>
                 <label className="text-xs font-bold text-text-secondary uppercase">Phone</label>
-                <p className="text-sm font-semibold text-text-primary">{lead.customerPhone}</p>
+                <p className="text-sm font-semibold text-text-primary">{lead.phone || 'N/A'}</p>
               </div>
               <div>
                 <label className="text-xs font-bold text-text-secondary uppercase">Company</label>
-                <p className="text-sm font-semibold text-text-primary">{lead.companyName}</p>
+                <p className="text-sm font-semibold text-text-primary">{lead.companyName || 'N/A'}</p>
               </div>
               <div>
                 <label className="text-xs font-bold text-text-secondary uppercase">Service</label>
-                <p className="text-sm font-semibold text-text-primary italic text-blue-500">{lead.service}</p>
+                <p className="text-sm font-semibold text-text-primary italic text-blue-500">{lead.type || 'N/A'}</p>
               </div>
               <div>
                 <label className="text-xs font-bold text-text-secondary uppercase">Source</label>
-                <p className="text-sm font-semibold text-text-primary">{lead.source}</p>
+                <p className="text-sm font-semibold text-text-primary">{lead.source || 'N/A'}</p>
               </div>
             </div>
 
@@ -57,7 +57,17 @@ const LeadDetailsCard = ({
               </div>
               <div>
                 <label className="text-xs font-bold text-text-secondary uppercase">Email</label>
-                <p className="text-sm font-medium text-text-primary break-all">{lead.email}</p>
+                <div className="text-sm font-medium text-text-primary break-all">
+                  {Array.isArray(lead.emails) && lead.emails.length > 0 ? (
+                    lead.emails.map((email, index) => (
+                      <div key={index} className="mb-1">
+                        {email}
+                      </div>
+                    ))
+                  ) : (
+                    <span>No emails</span>
+                  )}
+                </div>
               </div>
               <div>
                 <label className="text-xs font-bold text-text-secondary uppercase">Address</label>

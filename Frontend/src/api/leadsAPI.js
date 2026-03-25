@@ -65,3 +65,21 @@ export const addLeadEmail = async (id, emailData) => {
   const response = await axiosInstance.post(`/leads/${id}/emails`, emailData);
   return response.data;
 };
+
+// Update lead emails
+export const updateLeadEmails = async (id, emails) => {
+  const response = await axiosInstance.put(`/leads/${id}/emails`, { emails });
+  return response.data;
+};
+
+// Send email template to lead
+export const sendEmailTemplate = async (id, templateData) => {
+  const response = await axiosInstance.post(`/leads/${id}/send-email-template`, templateData);
+  return response.data;
+};
+
+// Send WhatsApp template to lead
+export const sendWhatsappTemplate = async (id, templateData) => {
+  const response = await axiosInstance.post(`/leads/${id}/send-whatsapp-template`, templateData);
+  return response.data;
+};
