@@ -75,6 +75,14 @@ const RecurringInvoices = () => {
     }
   }
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <ContentLoader message="Fetching recurring invoices..." />
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 p-4 md:p-8 w-full text-[var(--color-text-primary)]">
       <RecurringInvoicesHeader counts={count} onExport={handleExport} />
@@ -94,11 +102,7 @@ const RecurringInvoices = () => {
         setEndDate={setEndDate}
       />
 
-      {loading ? (
-        <ContentLoader message="Fetching recurring invoices..." />
-      ) : (
-        <RecurringInvoicesTable invoices={invoices} />
-      )}
+      <RecurringInvoicesTable invoices={invoices} />
     </div>
   )
 }

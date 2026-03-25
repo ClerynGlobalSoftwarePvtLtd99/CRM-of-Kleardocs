@@ -47,9 +47,9 @@ const Leads = () => {
     navigate(`/lead/${leadId}`);
   };
 
-  if (loading && leads.length === 0) {
+  if (loading) {
     return (
-      <div className="p-4 md:p-8">
+      <div className="flex items-center justify-center min-h-screen">
         <ContentLoader message="Fetching leads..." />
       </div>
     );
