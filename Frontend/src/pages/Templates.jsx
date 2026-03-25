@@ -115,6 +115,14 @@ const Templates = () => {
     setSelectedTemplate(prev => ({ ...prev, attachments: newAttachments }))
   }
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <ContentLoader message="Fetching templates..." />
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 p-4 md:p-8 w-full text-[var(--color-text-primary)]">
       <TemplatesHeader count={templates.length} onAddClick={openAddModal} />
@@ -122,18 +130,12 @@ const Templates = () => {
         searchFilter={searchFilter}
         setSearchFilter={setSearchFilter}
       />
-      {loading ? (
-        <div className="py-8">
-          <ContentLoader message="Fetching templates..." />
-        </div>
-      ) : (
-        <TemplatesTable
-          templates={filteredTemplates}
-          onEditClick={openEditModal}
-          onManageClick={openManageModal}
-          onPreviewClick={handlePreviewClick}
-        />
-      )}
+      <TemplatesTable
+        templates={filteredTemplates}
+        onEditClick={openEditModal}
+        onManageClick={openManageModal}
+        onPreviewClick={handlePreviewClick}
+      />
 
       {/* Preview Modal */}
       {isPreviewModalOpen && selectedTemplate && (

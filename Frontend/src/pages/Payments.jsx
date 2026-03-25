@@ -38,6 +38,14 @@ const Payments = () => {
     dispatch(fetchPayments())
   }
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <ContentLoader message="Fetching payments..." />
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-[100vw] text-[var(--color-text-primary)]">
       <PaymentsHeader paymentsCount={payments.length} />
@@ -55,11 +63,7 @@ const Payments = () => {
         onClear={handleClear}
       />
 
-      {loading ? (
-        <ContentLoader message="Fetching payments..." />
-      ) : (
-        <PaymentsTable payments={payments} />
-      )}
+      <PaymentsTable payments={payments} />
     </div>
   )
 }

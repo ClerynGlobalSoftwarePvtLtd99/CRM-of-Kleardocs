@@ -53,6 +53,14 @@ const Invoices = () => {
 
   if (error) return <div className="p-8 text-red-500">Error: {error}</div>
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <ContentLoader message="Fetching invoices..." />
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 p-4 md:p-8 w-full text-[var(--color-text-primary)]">
       <InvoicesHeader counts={totalCount} />
@@ -74,11 +82,7 @@ const Invoices = () => {
         setEndDate={setEndDate}
       />
 
-      {loading ? (
-        <ContentLoader message="Fetching invoices..." />
-      ) : (
-        <InvoicesTable invoices={invoices} />
-      )}
+      <InvoicesTable invoices={invoices} />
     </div>
   )
 }

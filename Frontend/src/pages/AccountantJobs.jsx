@@ -169,6 +169,14 @@ const AccountantJobs = () => {
     }
   }
 
+  if (jobsLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <ContentLoader message="Fetching accountant jobs..." />
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 p-4 md:p-8 w-full text-[var(--color-text-primary)]">
       
@@ -196,17 +204,11 @@ const AccountantJobs = () => {
         onClear={handleClearFilters}
       />
 
-      {jobsLoading ? (
-        <div className="py-8">
-          <ContentLoader message="Fetching accountant jobs..." />
-        </div>
-      ) : (
-        <AccountantJobsTable 
-          jobs={jobs}
-          onEditClick={openEditModal}
-          onDeleteClick={openDeleteModal}
-        />
-      )}
+      <AccountantJobsTable 
+        jobs={jobs}
+        onEditClick={openEditModal}
+        onDeleteClick={openDeleteModal}
+      />
 
       {/* Add Job Modal */}
       {isAddModalOpen && (

@@ -114,11 +114,16 @@ const Customers = () => {
     toast.success("Customer data exported successfully!");
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <ContentLoader message="Fetching customers..." />
+      </div>
+    );
+  }
+
   return (
     <div className="p-8 space-y-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
-
-      {/* LOADING STATE */}
-      {loading && <ContentLoader message="Fetching customers..." />}
 
       {/* ERROR STATE */}
       {error && (
