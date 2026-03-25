@@ -11,7 +11,7 @@
     "method": "POST",
     "queryParams": [],
     "headers": [],
-    "body": "{\n  \"customerId\": \"69bcf4fb3b2c2f7ac07dd287\",\n  \"invoiceDate\": \"2026-03-20\",\n  \"items\": [\n    {\n      \"serviceId\": \"676fb41f6591cff83b2efdb6\",\n      \"description\": \"Annual Compliance – GST Filing\",\n      \"hsn\": \"99838\",\n      \"professionalFees\": 5000,\n      \"govtFees\": 2000,\n      \"gstPercent\": 18\n    },\n    {\n      \"description\": \"GST Filing\",\n      \"professionalFees\": 2000,\n      \"govtFees\": 0,\n      \"gstPercent\": 18\n    }\n  ],\n  \"recurring\": false\n}",
+    "body": "{\n  \"customerId\": \"69bcf4fb3b2c2f7ac07dd287\",\n  \"invoiceDate\": \"2026-03-20\",\n  \"items\": [\n    {\n      \"serviceId\": \"676fb41f6591cff83b2efdb6\",\n      \"description\": \"GST Filing\",\n      \"hsn\": \"99833\",\n      \"professionalFees\": 5000,\n      \"govtFees\": 2000,\n      \"gstPercent\": 18\n    },\n    {\n      \"description\": \"GST Filing\",\n      \"professionalFees\": 2000,\n      \"govtFees\": 0,\n      \"gstPercent\": 18\n    }\n  ],\n  \"recurring\": true\n}",
     "contentType": "application/json",
     "auth": {
       "currentAuthType": "INHERIT",

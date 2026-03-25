@@ -10,6 +10,11 @@ const emailTemplateSchema = new mongoose.Schema(
       enum: ["Email", "WhatsApp"], 
       default: "Email" 
     },
+    status: {
+      type: String,
+      enum: ["Active", "Inactive"],
+      default: "Active"
+    },
     attachments: [{ type: String }] // Array of file paths/URLs
   },
   { timestamps: true }

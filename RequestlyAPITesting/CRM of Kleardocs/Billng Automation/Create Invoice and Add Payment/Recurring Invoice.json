@@ -11,7 +11,7 @@
     "method": "POST",
     "queryParams": [],
     "headers": [],
-    "body": "{\n  \"customerId\": \"69bcf4fb3b2c2f7ac07dd287\",\n  \"invoiceDate\": \"2026-03-20\",\n  \"items\": [\n    {\n      \"description\": \"Monthly Accounting\",\n      \"professionalFees\": 3000,\n      \"govtFees\": 0,\n      \"gstPercent\": 18\n    }\n  ],\n  \"recurring\": true,\n  \"interval\": 1,\n  \"intervalType\": \"Month\",\n  \"endDate\": \"2027-03-20\"\n}",
+    "body": "{\n  \"customerId\": \"69bcf4fb3b2c2f7ac07dd287\",\n  \"invoiceDate\": \"2026-03-25\",\n  \"items\": [\n    {\n      \"description\": \"Monthly Accounting\",\n      \"professionalFees\": 3000,\n      \"govtFees\": 0,\n      \"gstPercent\": 18\n    }\n  ],\n  \"recurring\": true,\n  \"interval\": 1,\n  \"intervalType\": \"Month\",\n  \"endDate\": \"2027-03-25\"\n}",
     "contentType": "application/json",
     "auth": {
       "currentAuthType": "BEARER_TOKEN",

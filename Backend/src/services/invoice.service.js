@@ -321,11 +321,13 @@ export const getRecurringInvoices = async (query) => {
     const customers = await Customer.find({
       $or: [
         { name: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
         { companyName: { $regex: search, $options: "i" } }
       ]
     }).select("_id");
     customerIds = customers.map((c) => c._id);
     if (customerIds.length) filter.customer = { $in: customerIds };
+    else filter.customer = new mongoose.Types.ObjectId(); // No matches
   }
 
   const skip = (Number(page) - 1) * Number(limit);
@@ -343,6 +345,42 @@ export const getRecurringInvoices = async (query) => {
   return { recurringInvoices: ris, count };
 };
 
+// ─── 8.1 GET ALL RECURRING INVOICES FOR EXPORT ───────────────────────────────
+export const getAllRecurringInvoicesForExport = async (query) => {
+  const { search, dateType, startDate, endDate, status } = query;
+  const filter = {};
+  if (status) filter.status = status;
+
+  if (startDate || endDate) {
+    const field = dateType === "end" ? "endDate" : dateType === "next" ? "nextDate" :
+                  dateType === "start" ? "startDate" : "createdAt";
+    filter[field] = {};
+    if (startDate) filter[field].$gte = new Date(startDate);
+    if (endDate) filter[field].$lte = new Date(endDate);
+  }
+
+  if (search) {
+    const customers = await Customer.find({
+      $or: [
+        { name: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
+        { companyName: { $regex: search, $options: "i" } }
+      ]
+    }).select("_id");
+    const customerIds = customers.map((c) => c._id);
+    if (customerIds.length) filter.customer = { $in: customerIds };
+    else filter.customer = new mongoose.Types.ObjectId(); 
+  }
+
+  const ris = await RecurringInvoice.find(filter)
+    .populate("customer", "name companyName phone")
+    .populate("items.service", "name")
+    .sort({ createdAt: -1 })
+    .lean();
+
+  return ris;
+};
+
 // ─── 9. GET SINGLE RECURRING INVOICE ─────────────────────────────────────────
 export const getRecurringInvoiceById = async (riId) => {
   const ri = await RecurringInvoice.findById(riId)
@@ -358,7 +396,7 @@ export const getRecurringInvoiceById = async (riId) => {
 export const disableRecurringInvoice = async (riId) => {
   const ri = await RecurringInvoice.findById(riId);
   if (!ri) throw new ApiError(404, "Recurring invoice not found");
-  ri.status = "Inactive";
+  ri.status = ri.status === "Active" ? "Inactive" : "Active";
   await ri.save();
   return ri;
 };
