@@ -23,18 +23,29 @@ const baseURL = getBaseURL();
 console.log('🔗 API Base URL:', baseURL);
 console.log('🌐 Current hostname:', window.location.hostname);
 
+// Check if running on localhost (for cookie-based auth) vs production (for token-based auth)
+const isLocalhost = window.location.hostname === 'localhost' || 
+                   window.location.hostname === '127.0.0.1' || 
+                   window.location.hostname.includes('localhost');
+
 const axiosInstance = axios.create({
   baseURL,
-  withCredentials: true,
+  withCredentials: isLocalhost, // Only use cookies on localhost
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor 
+// Request interceptor - add token for production
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Relying strictly on HttpOnly cookies sent automatically via withCredentials: true
+    // For production (cross-domain), use token from localStorage
+    if (!isLocalhost) {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
     return config;
   },
   (error) => {
@@ -44,10 +55,24 @@ axiosInstance.interceptors.request.use(
 
 // Response interceptor for global errors
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // For production, store tokens from response
+    if (!isLocalhost && response.data?.data?.accessToken) {
+      localStorage.setItem('accessToken', response.data.data.accessToken);
+      if (response.data.data.refreshToken) {
+        localStorage.setItem('refreshToken', response.data.data.refreshToken);
+      }
+    }
+    return response;
+  },
   (error) => {
     if (error.response?.status === 401) {
+      // Clear authentication data
       localStorage.removeItem('isAuthenticated');
+      if (!isLocalhost) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+      }
       
       // Prevent loop - only redirect if not already on login page and not in the middle of login
       const isLoginPage = window.location.pathname === '/' || window.location.pathname === '/login';
