@@ -55,6 +55,8 @@ const authSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
       localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     },
     setAuthenticated: (state, action) => {
       state.isAuthenticated = action.payload;
@@ -72,6 +74,14 @@ const authSlice = createSlice({
         state.user = action.payload.user || action.payload.customer;
         state.isAuthenticated = true;
         localStorage.setItem('isAuthenticated', 'true');
+        
+        // Store tokens for cross-domain (production) use
+        if (action.payload.accessToken) {
+          localStorage.setItem('accessToken', action.payload.accessToken);
+        }
+        if (action.payload.refreshToken) {
+          localStorage.setItem('refreshToken', action.payload.refreshToken);
+        }
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -81,11 +91,15 @@ const authSlice = createSlice({
         state.user = null;
         state.isAuthenticated = false;
         localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
       })
       .addCase(logoutUser.rejected, (state) => {
         state.user = null;
         state.isAuthenticated = false;
         localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
       })
       .addCase(fetchCurrentUser.pending, (state) => {
         state.loading = true;
@@ -101,6 +115,8 @@ const authSlice = createSlice({
         state.user = null;
         state.isAuthenticated = false;
         localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
       });
   },
 });
