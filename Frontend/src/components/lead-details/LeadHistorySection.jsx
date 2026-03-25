@@ -19,13 +19,26 @@ const LeadHistorySection = ({
           </h2>
         </div>
         
-        <div className="p-6 space-y-4 max-h-[600px] overflow-y-auto scrollbar-thin scrollbar-thumb-bg-tertiary">
+        <div 
+          className="p-6 space-y-4 max-h-[350px] overflow-y-auto"
+          style={{
+            scrollbarWidth: 'thin',
+            scrollbarColor: '#eab308 #f3f4f6'
+          }}
+        >
           {history.length === 0 ? (
             <div className="text-center py-10 text-text-secondary italic">No history available for this lead yet.</div>
           ) : (
-            history.map((item) => (
-              <HistoryItem key={item.id} item={item} onViewEmail={onViewEmail} />
-            ))
+            <>
+              {history.length > 5 && (
+                <div className="text-xs text-text-secondary italic mb-2 text-center">
+                  Showing {history.length} history entries • Scroll to see more
+                </div>
+              )}
+              {history.map((item) => (
+                <HistoryItem key={item.id} item={item} onViewEmail={onViewEmail} />
+              ))}
+            </>
           )}
         </div>
       </div>

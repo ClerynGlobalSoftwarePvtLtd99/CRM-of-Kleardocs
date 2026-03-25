@@ -42,6 +42,7 @@ const LeadsTable = ({ leads, loading, onLeadClick }) => {
               <th className="px-1.5 py-3 font-bold">Phone</th>
               <th className="px-1.5 py-3 font-bold">Company</th>
               <th className="px-1.5 py-3 font-bold">Service/Type</th>
+              <th className="px-1.5 py-3 font-bold">Email</th>
               <th className="px-1.5 py-3 font-bold">Source</th>
               <th className="px-1.5 py-3 font-bold">Status</th>
               <th className="px-1.5 py-3 font-bold text-center">Prio.</th>
@@ -91,12 +92,27 @@ const LeadsTable = ({ leads, loading, onLeadClick }) => {
                   </span>
                 </td>
 
-                {/* 7. Lead Source */}
+                {/* 7. Email */}
+                <td className="px-1.5 py-4">
+                  <div className="text-sm font-medium text-text-primary break-all">
+                    {Array.isArray(lead.emails) && lead.emails.length > 0 ? (
+                      lead.emails.map((email, index) => (
+                        <div key={index} className="mb-1">
+                          {email}
+                        </div>
+                      ))
+                    ) : (
+                      <span>No emails</span>
+                    )}
+                  </div>
+                </td>
+
+                {/* 8. Lead Source */}
                 <td className="px-1.5 py-4">
                   <span className="text-sm font-bold text-text-primary capitalize whitespace-nowrap">{lead.source}</span>
                 </td>
 
-                {/* 8. Status */}
+                {/* 9. Status */}
                 <td className="px-1.5 py-4">
                   <span className={`px-2 py-0.5 rounded text-sm font-black uppercase ${
                     lead.isCustomer || lead.response === 'Converted'

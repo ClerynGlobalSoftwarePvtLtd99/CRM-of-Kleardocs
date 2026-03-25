@@ -8,7 +8,10 @@ import {
   addLeadInteraction, 
   assignLeadToAgent, 
   convertLeadToCustomer, 
-  fetchLeadEmails 
+  fetchLeadEmails,
+  updateLeadEmailsThunk,
+  sendEmailTemplateToLead,
+  sendWhatsappTemplateToLead
 } from "../redux/slices/leadsSlice";
 import LeadDetailsCard from "../components/lead-details/LeadDetailsCard";
 import LeadHistorySection from "../components/lead-details/LeadHistorySection";
@@ -51,6 +54,8 @@ const LeadDetailsPage = () => {
   useEffect(() => {
     if (id) {
       dispatch(fetchLeadById(id));
+      // Also fetch emails to ensure they're available
+      dispatch(fetchLeadEmails(id));
     }
   }, [dispatch, id]);
 
@@ -63,12 +68,59 @@ const LeadDetailsPage = () => {
     }
   }, [error, navigate]);
 
+  useEffect(() => {
+    if (lead) {
+      console.log('Lead data loaded:', lead);
+      console.log('Lead history:', lead.history);
+      console.log('Lead emails:', lead.emails);
+      console.log('Redux emails:', emails);
+      
+      // Update lead with emails from Redux if not already present
+      if (emails && (!lead.emails || lead.emails.length === 0)) {
+        lead.emails = emails;
+      }
+      
+      // Check if lead has history property
+      const leadHistory = lead.history || [];
+      
+      // Map history items to consistent format with null checks
+      const formattedHistory = leadHistory.filter(h => h && typeof h === 'object').map(h => {
+        const historyItem = {
+          id: h._id || Date.now(),
+          datetime: h.createdAt ? new Date(h.createdAt).toLocaleString() : new Date().toLocaleString(),
+          user: (h.createdBy && h.createdBy.name) ? h.createdBy.name : h.createdBy || lead.agent || 'System',
+          type: h.type || 'interaction',
+          text: h.details || 'History Entry',
+          details: h.notes || '',
+          notes: h.notes || '' // Add notes field for followup items
+        };
+        
+        // Handle conversion history specially
+        if (h.type === 'converted') {
+          historyItem.text = `Converted to customer`;
+          historyItem.details = h.details || 'Conversion completed';
+        }
+        
+        // Handle followup history specially - put notes in both details and notes for compatibility
+        if (h.type === 'followup') {
+          historyItem.notes = h.notes || '';
+          historyItem.details = h.details || '';
+        }
+        
+        return historyItem;
+      });
+      
+      console.log('Formatted history:', formattedHistory);
+      setHistory(formattedHistory);
+    }
+  }, [lead, emails]);
+
   const showToastMessage = (message, type = 'success') => {
     toast[type](message);
   };
 
   const handleAddInteraction = async () => {
-    if (!interactionForm.details.trim()) return;
+    if (!interactionForm.details.trim()) return;;
 
     try {
       await dispatch(addLeadInteraction({
@@ -87,7 +139,8 @@ const LeadDetailsPage = () => {
       // Refresh lead data
       dispatch(fetchLeadById(id));
     } catch (error) {
-      showToastMessage(error || "Failed to add interaction", "error");
+      const errorMessage = String(error);
+      showToastMessage(errorMessage, "error");
     }
   };
 
@@ -96,20 +149,35 @@ const LeadDetailsPage = () => {
       await dispatch(convertLeadToCustomer({ id, convertData })).unwrap();
       setShowConvertModal(false);
       showToastMessage("Converted to Customer");
+      
+      // Redux slice already handles history updates
+      // Refresh lead data to get updated history
       dispatch(fetchLeadById(id));
     } catch (error) {
-      showToastMessage(error || "Failed to convert lead", "error");
+      const errorMessage = String(error);
+      showToastMessage(errorMessage, "error");
     }
   };
 
   const handleScheduleFollowup = async (followupData) => {
     try {
-      await dispatch(addLeadFollowup({ id, followupData })).unwrap();
+      // Transform data to match backend API structure
+      const apiData = {
+        followupDate: followupData.nextFollowup,
+        phoneCalled: false, // Default value, can be updated if needed
+        details: followupData.details || ""
+      };
+      
+      await dispatch(addLeadFollowup({ id, followupData: apiData })).unwrap();
       setShowFollowupModal(false);
       showToastMessage("Followup Scheduled");
+      
+      // Redux slice already handles history updates
+      // Refresh lead data to get updated history
       dispatch(fetchLeadById(id));
     } catch (error) {
-      showToastMessage(error || "Failed to schedule followup", "error");
+      const errorMessage = String(error);
+      showToastMessage(errorMessage, "error");
     }
   };
 
@@ -118,9 +186,13 @@ const LeadDetailsPage = () => {
       await dispatch(assignLeadToAgent({ id, assignData: { agent: newAgent } })).unwrap();
       setShowAssignModal(false);
       showToastMessage(`Assigned to ${newAgent}`);
+      
+      // Redux slice already handles history updates
+      // Refresh lead data to get updated history
       dispatch(fetchLeadById(id));
     } catch (error) {
-      showToastMessage(error || "Failed to assign agent", "error");
+      const errorMessage = String(error);
+      showToastMessage(errorMessage, "error");
     }
   };
 
@@ -129,7 +201,8 @@ const LeadDetailsPage = () => {
       await dispatch(fetchLeadEmails(id)).unwrap();
       dispatch(fetchLeadById(id));
     } catch (error) {
-      showToastMessage(error || "Failed to fetch emails", "error");
+      const errorMessage = String(error);
+      showToastMessage(errorMessage, "error");
     }
   };
 
@@ -139,30 +212,79 @@ const LeadDetailsPage = () => {
         throw new Error('Lead data not available');
       }
       
-      // Ensure lead has emails property
-      const leadWithEmails = {
-        ...lead,
-        emails: updatedLead.emails || []
-      };
-      
-      // Update lead emails via API (you may need to add this API endpoint)
-      // For now, just update local state and show success
-      setLead(prev => ({ 
-        ...prev, 
+      // Update lead emails via API
+      const result = await dispatch(updateLeadEmailsThunk({ 
+        id: lead._id, 
         emails: updatedLead.emails || [] 
-      }));
-      console.log('Emails updated successfully:', updatedLead.emails);
+      })).unwrap();
+      
+      console.log('Email update result:', result);
+      console.log('Updated lead emails:', updatedLead.emails);
+      
       toast.success("Emails updated successfully!");
       
       // Close modal after successful update
       setShowEmailsModal(false);
     } catch (error) {
-      const errorMessage = typeof error === 'string' ? error : 
-                         error?.message || 
-                         error?.toString() || 
-                         'Failed to update emails';
+      const errorMessage = String(error);
       console.error('Email update error:', error);
       toast.error(errorMessage);
+    }
+  };
+
+  const handleSendEmailTemplate = async (templateData) => {
+    try {
+      await dispatch(sendEmailTemplateToLead({ 
+        id: lead._id, 
+        templateData 
+      })).unwrap();
+      
+      setShowAddTemplateModal(false);
+      showToastMessage("Email template sent successfully!");
+      
+      // Redux slice doesn't handle email template history, so we add it manually
+      setHistory(prev => [{
+        id: Date.now(),
+        datetime: new Date().toLocaleString(),
+        user: lead.agent,
+        type: "email",
+        text: `Email Template sent - ${templateData.templateName}`,
+        subject: templateData.subject,
+        body: templateData.body
+      }, ...prev]);
+      
+      // Refresh lead data
+      dispatch(fetchLeadById(id));
+    } catch (error) {
+      const errorMessage = String(error);
+      showToastMessage(errorMessage, "error");
+    }
+  };
+
+  const handleSendWhatsappTemplate = async (templateData) => {
+    try {
+      await dispatch(sendWhatsappTemplateToLead({ 
+        id: lead._id, 
+        templateData 
+      })).unwrap();
+      
+      setShowWhatsappModal(false);
+      showToastMessage("WhatsApp template sent successfully!");
+      
+      // Redux slice doesn't handle WhatsApp template history, so we add it manually
+      setHistory(prev => [{
+        id: Date.now(),
+        datetime: new Date().toLocaleString(),
+        user: lead.agent,
+        type: "whatsapp",
+        text: `WhatsApp Template: ${templateData.templateName}`
+      }, ...prev]);
+      
+      // Refresh lead data
+      dispatch(fetchLeadById(id));
+    } catch (error) {
+      const errorMessage = String(error);
+      showToastMessage(errorMessage, "error");
     }
   };
 
@@ -196,16 +318,26 @@ const LeadDetailsPage = () => {
         
         {/* SECTION 1: HEADER & TOP ACTIONS */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-bg-secondary p-4 rounded-xl border border-bg-tertiary shadow-sm">
-          <h1 className="text-xl font-bold flex items-center gap-2">
-            <span className="text-yellow-500">|</span> Lead Details
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-bold flex items-center gap-2">
+              <span className="text-yellow-500">|</span> Lead Details
+            </h1>
+            {lead.isCustomer && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold bg-green-600/10 text-green-600 border border-green-600/20 uppercase">
+                <span className="w-2 h-2 bg-green-600 rounded-full"></span>
+                Customer
+              </span>
+            )}
+          </div>
           <div className="flex flex-wrap gap-2">
-            <button 
-              onClick={() => setShowConvertModal(true)}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-xs font-bold shadow-sm transition-all"
-            >
-              CONVERT TO CUSTOMER
-            </button>
+            {!lead.isCustomer && (
+              <button 
+                onClick={() => setShowConvertModal(true)}
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-xs font-bold shadow-sm transition-all"
+              >
+                CONVERT TO CUSTOMER
+              </button>
+            )}
             <button 
               onClick={() => setShowFollowupModal(true)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-xs font-bold shadow-sm transition-all"
@@ -257,10 +389,8 @@ const LeadDetailsPage = () => {
       {showFollowupModal && (
         <NextFollowupModal
           lead={lead}
-          onUpdate={(data) => {
-            setLead(prev => ({ ...prev, ...data }));
-            showToastMessage("Lead Updated");
-          }}
+          onClose={() => setShowFollowupModal(false)}
+          onUpdate={handleScheduleFollowup}
         />
       )}
 
@@ -284,35 +414,14 @@ const LeadDetailsPage = () => {
         <WhatsappTemplateModal
           lead={lead}
           onClose={() => setShowWhatsappModal(false)}
-          onSend={(form) => {
-            setHistory(prev => [{
-              id: Date.now(),
-              datetime: new Date().toLocaleString(),
-              user: lead.agent,
-              type: "whatsapp",
-              text: `Whatsapp Template: ${form.template}`
-            }, ...prev]);
-            setShowWhatsappModal(false);
-            showToastMessage("Whatsapp Template Sent");
-          }}
+          onSend={handleSendWhatsappTemplate}
         />
       )}
 
       {showAddTemplateModal && (
         <AddTemplateModal
           onClose={() => setShowAddTemplateModal(false)}
-          onAdd={(template) => {
-            setHistory(prev => [{
-              id: Date.now(),
-              datetime: new Date().toLocaleString(),
-              user: lead.agent,
-              type: "email",
-              text: `Email Template sent - ${template.name}`,
-              subject: template.subject,
-              body: template.body
-            }, ...prev]);
-            showToastMessage("Email Template Sent");
-          }}
+          onAdd={handleSendEmailTemplate}
         />
       )}
 

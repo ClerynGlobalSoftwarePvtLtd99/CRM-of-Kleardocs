@@ -10,7 +10,10 @@ import {
   assignLead,
   convertLead,
   getLeadEmails,
-  addLeadEmail
+  addLeadEmail,
+  updateLeadEmails,
+  sendEmailTemplate,
+  sendWhatsappTemplate
 } from '../../api/leadsAPI';
 
 const initialState = {
@@ -153,6 +156,44 @@ export const addEmailToLead = createAsyncThunk(
   }
 );
 
+export const updateLeadEmailsThunk = createAsyncThunk(
+  'leads/updateEmails',
+  async ({ id, emails }, { rejectWithValue }) => {
+    try {
+      const response = await updateLeadEmails(id, emails);
+      // Handle case where API returns data: null but operation was successful
+      const emailsData = response.data || emails;
+      return { id, emails: emailsData };
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to update emails');
+    }
+  }
+);
+
+export const sendEmailTemplateToLead = createAsyncThunk(
+  'leads/sendEmailTemplate',
+  async ({ id, templateData }, { rejectWithValue }) => {
+    try {
+      const response = await sendEmailTemplate(id, templateData);
+      return { id, template: response.data };
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to send email template');
+    }
+  }
+);
+
+export const sendWhatsappTemplateToLead = createAsyncThunk(
+  'leads/sendWhatsappTemplate',
+  async ({ id, templateData }, { rejectWithValue }) => {
+    try {
+      const response = await sendWhatsappTemplate(id, templateData);
+      return { id, template: response.data };
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to send WhatsApp template');
+    }
+  }
+);
+
 const leadsSlice = createSlice({
   name: 'leads',
   initialState,
@@ -229,10 +270,42 @@ const leadsSlice = createSlice({
         if (lead) {
           lead.lastFollowup = followup.createdAt;
           lead.nextFollowup = followup.nextFollowup;
+          // Add to history array at the beginning (newest first)
+          if (!lead.history) lead.history = [];
+          lead.history.unshift({
+            _id: followup._id || Date.now(),
+            type: 'followup',
+            details: followup.details || 'Followup scheduled',
+            createdAt: followup.createdAt || new Date().toISOString(),
+            createdBy: followup.createdBy || 'System',
+            notes: `Next followup scheduled for ${followup.nextFollowup ? new Date(followup.nextFollowup).toLocaleDateString('en-IN', {
+              day: 'numeric',
+              month: 'short', 
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            }) : 'Not specified'}`
+          });
         }
         if (state.currentLead?._id === id) {
           state.currentLead.lastFollowup = followup.createdAt;
           state.currentLead.nextFollowup = followup.nextFollowup;
+          // Add to history array at the beginning (newest first)
+          if (!state.currentLead.history) state.currentLead.history = [];
+          state.currentLead.history.unshift({
+            _id: followup._id || Date.now(),
+            type: 'followup',
+            details: followup.details || 'Followup scheduled',
+            createdAt: followup.createdAt || new Date().toISOString(),
+            createdBy: followup.createdBy || 'System',
+            notes: `Next followup scheduled for ${followup.nextFollowup ? new Date(followup.nextFollowup).toLocaleDateString('en-IN', {
+              day: 'numeric',
+              month: 'short', 
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            }) : 'Not specified'}`
+          });
         }
       })
       .addCase(addLeadFollowup.rejected, (state, action) => {
@@ -240,7 +313,32 @@ const leadsSlice = createSlice({
       })
       // Add interaction
       .addCase(addLeadInteraction.fulfilled, (state, action) => {
-        // Update lead with interaction data if needed
+        const { id, interaction } = action.payload;
+        const lead = state.list.find(l => l._id === id);
+        if (lead) {
+          // Add to history array at the beginning (newest first)
+          if (!lead.history) lead.history = [];
+          lead.history.unshift({
+            _id: interaction._id || Date.now(),
+            type: interaction.type || 'interaction',
+            details: interaction.details,
+            createdAt: interaction.createdAt || new Date().toISOString(),
+            createdBy: interaction.createdBy || 'System',
+            notes: interaction.details
+          });
+        }
+        if (state.currentLead?._id === id) {
+          // Add to history array at the beginning (newest first)
+          if (!state.currentLead.history) state.currentLead.history = [];
+          state.currentLead.history.unshift({
+            _id: interaction._id || Date.now(),
+            type: interaction.type || 'interaction',
+            details: interaction.details,
+            createdAt: interaction.createdAt || new Date().toISOString(),
+            createdBy: interaction.createdBy || 'System',
+            notes: interaction.details
+          });
+        }
       })
       .addCase(addLeadInteraction.rejected, (state, action) => {
         state.error = action.payload;
@@ -250,10 +348,32 @@ const leadsSlice = createSlice({
         const { id, assignment } = action.payload;
         const lead = state.list.find(l => l._id === id);
         if (lead) {
+          const previousAgent = lead.agent;
           lead.agent = assignment.agent;
+          // Add to history array at the beginning (newest first)
+          if (!lead.history) lead.history = [];
+          lead.history.unshift({
+            _id: Date.now(),
+            type: 'assignment',
+            details: `Agent changed to ${assignment.agent}`,
+            createdAt: new Date().toISOString(),
+            createdBy: assignment.createdBy || 'System',
+            notes: `Previous agent: ${previousAgent || 'None'}`
+          });
         }
         if (state.currentLead?._id === id) {
+          const previousAgent = state.currentLead.agent;
           state.currentLead.agent = assignment.agent;
+          // Add to history array at the beginning (newest first)
+          if (!state.currentLead.history) state.currentLead.history = [];
+          state.currentLead.history.unshift({
+            _id: Date.now(),
+            type: 'assignment',
+            details: `Agent changed to ${assignment.agent}`,
+            createdAt: new Date().toISOString(),
+            createdBy: assignment.createdBy || 'System',
+            notes: `Previous agent: ${previousAgent || 'None'}`
+          });
         }
       })
       .addCase(assignLeadToAgent.rejected, (state, action) => {
@@ -261,15 +381,35 @@ const leadsSlice = createSlice({
       })
       // Convert lead
       .addCase(convertLeadToCustomer.fulfilled, (state, action) => {
-        const { id } = action.payload;
+        const { id, conversion } = action.payload;
         const lead = state.list.find(l => l._id === id);
         if (lead) {
           lead.isCustomer = true;
           lead.response = 'Converted';
+          // Add to history array at the beginning (newest first)
+          if (!lead.history) lead.history = [];
+          lead.history.unshift({
+            _id: Date.now(),
+            type: 'converted',
+            details: `Converted to customer`,
+            createdAt: new Date().toISOString(),
+            createdBy: conversion.createdBy || 'System',
+            notes: conversion.details || 'Conversion completed'
+          });
         }
         if (state.currentLead?._id === id) {
           state.currentLead.isCustomer = true;
           state.currentLead.response = 'Converted';
+          // Add to history array at the beginning (newest first)
+          if (!state.currentLead.history) state.currentLead.history = [];
+          state.currentLead.history.unshift({
+            _id: Date.now(),
+            type: 'converted',
+            details: `Converted to customer`,
+            createdAt: new Date().toISOString(),
+            createdBy: conversion.createdBy || 'System',
+            notes: conversion.details || 'Conversion completed'
+          });
         }
       })
       .addCase(convertLeadToCustomer.rejected, (state, action) => {
@@ -303,6 +443,54 @@ const leadsSlice = createSlice({
         }
       })
       .addCase(addEmailToLead.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      // Update emails
+      .addCase(updateLeadEmailsThunk.fulfilled, (state, action) => {
+        const { id, emails } = action.payload;
+        const lead = state.list.find(l => l._id === id);
+        if (lead) {
+          lead.emails = emails;
+          // Add to history array at the beginning (newest first)
+          if (!lead.history) lead.history = [];
+          lead.history.unshift({
+            _id: Date.now(),
+            type: 'email_update',
+            details: `Email addresses updated`,
+            createdAt: new Date().toISOString(),
+            createdBy: 'System',
+            notes: `Updated to: ${Array.isArray(emails) ? emails.join(', ') : 'No emails'}`
+          });
+        }
+        if (state.currentLead?._id === id) {
+          state.currentLead.emails = emails;
+          // Add to history array at the beginning (newest first)
+          if (!state.currentLead.history) state.currentLead.history = [];
+          state.currentLead.history.unshift({
+            _id: Date.now(),
+            type: 'email_update',
+            details: `Email addresses updated`,
+            createdAt: new Date().toISOString(),
+            createdBy: 'System',
+            notes: `Updated to: ${Array.isArray(emails) ? emails.join(', ') : 'No emails'}`
+          });
+        }
+      })
+      .addCase(updateLeadEmailsThunk.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      // Send email template
+      .addCase(sendEmailTemplateToLead.fulfilled, (state, action) => {
+        // Template sent successfully - could update lead status if needed
+      })
+      .addCase(sendEmailTemplateToLead.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      // Send WhatsApp template
+      .addCase(sendWhatsappTemplateToLead.fulfilled, (state, action) => {
+        // WhatsApp template sent successfully - could update lead status if needed
+      })
+      .addCase(sendWhatsappTemplateToLead.rejected, (state, action) => {
         state.error = action.payload;
       });
   },

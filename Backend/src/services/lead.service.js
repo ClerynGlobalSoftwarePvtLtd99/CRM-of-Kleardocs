@@ -121,15 +121,26 @@ export const addFollowup = async (leadId, data, userId) => {
   const lead = await Lead.findById(leadId);
   if (!lead) throw new ApiError(404, "Lead not found");
 
-  lead.nextFollowup = new Date(data.followupDate);
+  const followupDate = new Date(data.followupDate);
+  lead.nextFollowup = followupDate;
   lead.lastFollowup = new Date();
   await lead.save();
+
+  // Format the date for display
+  const formattedDate = followupDate.toLocaleDateString('en-IN', {
+    day: 'numeric',
+    month: 'short', 
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 
   await LeadHistory.create({
     lead: leadId,
     type: "followup",
-    details: data.details || `Follow-up scheduled for ${data.followupDate}`,
+    details: data.details || `Follow-up scheduled`,
     phoneCalled: data.phoneCalled || false,
+    notes: `Next followup scheduled for ${formattedDate}`,
     createdBy: userId
   });
 };
@@ -150,13 +161,34 @@ export const addInteraction = async (leadId, data, userId) => {
   return entry;
 };
 
+// ─── GET LEAD EMAILS ────────────────────────────────────────────────────────────
+export const getLeadEmails = async (leadId) => {
+  const lead = await Lead.findById(leadId);
+  if (!lead) throw new ApiError(404, "Lead not found");
+  
+  return lead.emails || [];
+};
+
 // ─── UPDATE EMAILS ────────────────────────────────────────────────────────────
 export const updateEmails = async (leadId, emails, userId) => {
   const lead = await Lead.findById(leadId);
   if (!lead) throw new ApiError(404, "Lead not found");
 
-  lead.emails = emails;
+  if (typeof emails === 'string') {
+    lead.emails = [emails];
+  } else {
+    lead.emails = emails;
+  }
   await lead.save();
+
+  // Add history entry for email update
+  await LeadHistory.create({
+    lead: leadId,
+    type: "email_update",
+    details: `Email addresses updated`,
+    notes: `Updated to: ${Array.isArray(emails) ? emails.join(', ') : emails}`,
+    createdBy: userId
+  });
 };
 
 // ─── ASSIGN AGENT ────────────────────────────────────────────────────────────
