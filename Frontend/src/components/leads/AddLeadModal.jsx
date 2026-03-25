@@ -99,11 +99,72 @@ const SourceDropdown = ({ value, onChange }) => {
   );
 };
 
+const ServiceDropdown = ({ value, onChange }) => {
+  const [open, setOpen] = useState(false);
+  const wrapperRef = useRef(null);
+
+  const selectedService =
+    SERVICES.find((item) => item === value) || SERVICES[0];
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative" ref={wrapperRef}>
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex w-full items-center justify-between rounded-md border border-text-primary bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none transition hover:bg-bg-tertiary"
+      >
+        <span className="flex items-center gap-2">
+          {selectedService}
+        </span>
+        <ChevronDown size={16} className={`transition ${open ? "rotate-180" : ""}`} />
+      </button>
+
+      {open && (
+        <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-md border border-text-primary bg-bg-secondary shadow-lg">
+          {SERVICES.map((service) => {
+            const active = value === service;
+
+            return (
+              <button
+                key={service}
+                type="button"
+                onClick={() => {
+                  onChange(service);
+                  setOpen(false);
+                }}
+                className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition ${
+                  active
+                    ? "bg-yellow-500 text-white"
+                    : "bg-bg-secondary text-text-primary hover:bg-bg-tertiary"
+                }`}
+              >
+                {service}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const AddLeadModal = ({ onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     companyName: "",
+    service: SERVICES[0], // Default to first service
     source: SOURCES[1], // Facebook
     type: CLIENT_TYPES[0], // Hot
     priority: PRIORITIES[0], // High
@@ -199,6 +260,18 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
                 value={formData.companyName}
                 onChange={handleChange}
                 className="w-full rounded-md border border-text-primary bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none placeholder:text-text-secondary focus:border-yellow-500"
+              />
+            </div>
+
+            <div>
+              <label className="mb-1 block text-sm font-medium text-text-primary">
+                Service
+              </label>
+              <ServiceDropdown
+                value={formData.service}
+                onChange={(value) =>
+                  setFormData((prev) => ({ ...prev, service: value }))
+                }
               />
             </div>
 

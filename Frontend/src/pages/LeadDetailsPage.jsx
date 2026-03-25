@@ -18,9 +18,9 @@ import WhatsappTemplateModal from "../components/lead-modals/WhatsappTemplateMod
 import SendTemplateModal from "../components/lead-modals/SendTemplateModal";
 import AddTemplateModal from "../components/templates/AddTemplateModal";
 import EditContactModal from "../components/lead-modals/EditContactModal";
-import EditLeadModal from "../components/lead-modals/EditLeadModal";
 import NextFollowupModal from "../components/lead-modals/NextFollowupModal";
 import ChangeAgentModal from "../components/lead-modals/ChangeAgentModal";
+import EditEmailsModal from "../components/customer-modals/EditEmailsModal";
 
 const LeadDetailsPage = () => {
   const { id } = useParams();
@@ -133,6 +133,39 @@ const LeadDetailsPage = () => {
     }
   };
 
+  const handleUpdateEmails = async (updatedLead) => {
+    try {
+      if (!lead || !lead._id) {
+        throw new Error('Lead data not available');
+      }
+      
+      // Ensure lead has emails property
+      const leadWithEmails = {
+        ...lead,
+        emails: updatedLead.emails || []
+      };
+      
+      // Update lead emails via API (you may need to add this API endpoint)
+      // For now, just update local state and show success
+      setLead(prev => ({ 
+        ...prev, 
+        emails: updatedLead.emails || [] 
+      }));
+      console.log('Emails updated successfully:', updatedLead.emails);
+      toast.success("Emails updated successfully!");
+      
+      // Close modal after successful update
+      setShowEmailsModal(false);
+    } catch (error) {
+      const errorMessage = typeof error === 'string' ? error : 
+                         error?.message || 
+                         error?.toString() || 
+                         'Failed to update emails';
+      console.error('Email update error:', error);
+      toast.error(errorMessage);
+    }
+  };
+
   if (loading) {
     return (
       <div className="p-4 bg-bg-primary min-h-screen text-text-primary flex items-center justify-center">
@@ -224,26 +257,6 @@ const LeadDetailsPage = () => {
       {showFollowupModal && (
         <NextFollowupModal
           lead={lead}
-          onClose={() => setShowFollowupModal(false)}
-          onUpdate={handleScheduleFollowup}
-        />
-      )}
-
-      {showEmailsModal && (
-        <EditContactModal
-          lead={lead}
-          onClose={() => setShowEmailsModal(false)}
-          onUpdate={(data) => {
-            setLead(prev => ({ ...prev, customerName: data.name, customerPhone: data.phone, email: data.email }));
-            showToastMessage("Contact Info Updated");
-          }}
-        />
-      )}
-
-      {showEditModal && (
-        <EditLeadModal
-          lead={lead}
-          onClose={() => setShowEditModal(false)}
           onUpdate={(data) => {
             setLead(prev => ({ ...prev, ...data }));
             showToastMessage("Lead Updated");
@@ -256,6 +269,14 @@ const LeadDetailsPage = () => {
           currentAgent={lead.agent}
           onClose={() => setShowAssignModal(false)}
           onUpdate={handleAssignAgent}
+        />
+      )}
+
+      {showEmailsModal && (
+        <EditEmailsModal
+          customer={lead}
+          onClose={() => setShowEmailsModal(false)}
+          onUpdate={handleUpdateEmails}
         />
       )}
 

@@ -7,7 +7,7 @@ import crypto from "crypto";
 export const getLeads = async (query) => {
   const {
     search, dateType, startDate, endDate,
-    service, agent, source, type, priority, response,
+    service, agent, source, type, priority, response, state,
     page = 1, limit = 20
   } = query;
 
@@ -41,6 +41,8 @@ export const getLeads = async (query) => {
   if (type) filter.type = type;
   if (priority) filter.priority = priority;
   if (response) filter.response = response;
+  if (state) filter.state = { $regex: state, $options: "i" };
+
 
   const skip = (Number(page) - 1) * Number(limit);
 

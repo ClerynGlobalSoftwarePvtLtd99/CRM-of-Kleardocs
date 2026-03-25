@@ -14,6 +14,7 @@ const LeadDetailsCard = ({
   onChangeAssignClick,
   onSendTemplateClick,
   onSendWhatsappTemplateClick,
+  onEditEmailsClick,
 }) => {
   return (
     <div className="bg-bg-secondary border border-bg-tertiary rounded-2xl shadow-sm overflow-hidden">
@@ -89,6 +90,12 @@ const LeadDetailsCard = ({
                 className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-lg text-xs font-bold shadow-sm transition-all uppercase tracking-wider"
               >
                 Send Whatsapp Template
+              </button>
+              <button
+                onClick={onEditEmailsClick}
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2.5 rounded-lg text-xs font-bold shadow-sm transition-all uppercase tracking-wider"
+              >
+                Edit Emails
               </button>
             </div>
 
