@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { fetchSettings, updateSettings } from '../redux/slices/settingsSlice'
 import GeneralSettings from '../components/settings/GeneralSettings'
 import EmailCount from '../components/settings/EmailCount'
+import ContentLoader from '../components/common/ContentLoader'
 
 const templateOptions = [
   'Compliance Update',
@@ -104,6 +105,14 @@ const Settings = () => {
           },
         })
       })
+  }
+
+  if (settingsLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <ContentLoader message="Fetching settings..." />
+      </div>
+    );
   }
 
   return (

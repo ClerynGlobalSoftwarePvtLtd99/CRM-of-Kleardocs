@@ -3,6 +3,7 @@ import { Plus, Download, Building2, Phone, Calendar, Search, Filter } from "luci
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import CustomersFilter from "../components/customers/CustomersFilter";
+import ContentLoader from "../components/common/ContentLoader";
 import NewCustomerModal from "../components/customer-modals/NewCustomerModal";
 import CompanyLogo from "../components/common/CompanyLogo";
 import { fetchCustomers, createCustomer } from "../redux/slices/customersSlice";
@@ -117,11 +118,7 @@ const Customers = () => {
     <div className="p-8 space-y-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
 
       {/* LOADING STATE */}
-      {loading && (
-        <div className="flex items-center justify-center min-h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-t-accent border-t-transparent"></div>
-        </div>
-      )}
+      {loading && <ContentLoader message="Fetching customers..." />}
 
       {/* ERROR STATE */}
       {error && (

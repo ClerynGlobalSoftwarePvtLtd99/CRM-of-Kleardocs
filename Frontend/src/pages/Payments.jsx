@@ -4,6 +4,7 @@ import PaymentsHeader from '../components/payments/PaymentsHeader'
 import PaymentsFilters from '../components/payments/PaymentsFilters'
 import PaymentsTable from '../components/payments/PaymentsTable'
 import { fetchPayments } from '../redux/slices/paymentsSlice'
+import ContentLoader from '../components/common/ContentLoader'
 
 const PAYMENT_TYPES = ['Cash', 'Card', 'UPI', 'Net Banking']
 
@@ -54,7 +55,11 @@ const Payments = () => {
         onClear={handleClear}
       />
 
-      <PaymentsTable payments={payments} />
+      {loading ? (
+        <ContentLoader message="Fetching payments..." />
+      ) : (
+        <PaymentsTable payments={payments} />
+      )}
     </div>
   )
 }
