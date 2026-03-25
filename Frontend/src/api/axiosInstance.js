@@ -10,7 +10,7 @@ const getBaseURL = () => {
     if (import.meta.env.VITE_API_BASE_URL) return import.meta.env.VITE_API_BASE_URL;
 
     // Priority 3: Automatic fallback based on build mode
-    return import.meta.env.PROD 
+    return import.meta.env.MODE === 'production' 
         ? 'https://crm-of-kleardocs-backend.onrender.com/api/v1' 
         : 'http://localhost:5000/api/v1';
 };
