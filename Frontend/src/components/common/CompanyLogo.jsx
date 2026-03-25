@@ -21,12 +21,14 @@ const CompanyLogo = ({ name, className = "", size = "w-10 h-10" }) => {
 
   const initials = getInitials(name);
 
-  // Simple hash to consistently pick a background color based on name
+  // Enhanced hash to consistently pick a background color based on name
   const getBGColor = (str) => {
     const colors = [
       'bg-blue-500', 'bg-indigo-500', 'bg-purple-500', 
       'bg-pink-500', 'bg-red-500', 'bg-orange-500', 
-      'bg-yellow-500', 'bg-green-500', 'bg-teal-500', 'bg-cyan-500'
+      'bg-yellow-500', 'bg-emerald-500', 'bg-teal-500', 'bg-cyan-500',
+      'bg-sky-500', 'bg-violet-500', 'bg-fuchsia-500', 'bg-rose-500',
+      'bg-amber-500', 'bg-lime-500', 'bg-green-600', 'bg-blue-600'
     ];
     if (!str) return colors[0];
     let hash = 0;
@@ -40,10 +42,10 @@ const CompanyLogo = ({ name, className = "", size = "w-10 h-10" }) => {
 
   return (
     <div 
-      className={`rounded-full flex items-center justify-center text-white font-bold tracking-tighter ${size} ${bgColor} ${className} shadow-sm border border-white/10`}
+      className={`rounded-full flex items-center justify-center text-white font-black tracking-tighter ${size} ${bgColor} ${className} shadow-md border-2 border-white/20`}
       title={name}
     >
-      <span className="text-[0.9em]">{initials}</span>
+      <span className="text-[14px]">{initials}</span>
     </div>
   );
 };
