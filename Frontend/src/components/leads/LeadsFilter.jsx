@@ -2,8 +2,6 @@ import { Search, X } from "lucide-react";
 
 import { 
 
-  SERVICES, 
-
   SOURCES, 
 
   CLIENT_TYPES, 
@@ -24,6 +22,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { fetchUsers } from "../../redux/slices/usersSlice";
 
+import { fetchServices } from "../../redux/slices/servicesSlice";
+
 import toast from "react-hot-toast";
 
 
@@ -31,11 +31,11 @@ import toast from "react-hot-toast";
 const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
   const dispatch = useDispatch();
   const { agents } = useSelector((state) => state.users);
+  const { services } = useSelector((state) => state.services);
 
   const initialFilters = {
 
     search: "",
-
     dateType: "Created",
 
     startDate: null,
@@ -67,6 +67,8 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
   useEffect(() => {
     // Fetch agents for filter dropdown
     dispatch(fetchUsers({ role: 'agent' }));
+    // Fetch services for filter dropdown
+    dispatch(fetchServices());
   }, [dispatch]);
 
 
@@ -235,7 +237,9 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
 
             <option value="">All Services</option>
 
-            {SERVICES.map(s => <option key={s} value={s}>{s}</option>)}
+            {services.filter(s => s.status).map((service) => (
+              <option key={service._id} value={service.name}>{service.name}</option>
+            ))}
 
           </select>
 
