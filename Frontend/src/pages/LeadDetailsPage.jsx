@@ -10,6 +10,7 @@ import {
   convertLeadToCustomer, 
   fetchLeadEmails,
   updateLeadEmailsThunk,
+  updateExistingLead,
   sendEmailTemplateToLead,
   sendWhatsappTemplateToLead
 } from "../redux/slices/leadsSlice";
@@ -182,14 +183,14 @@ const LeadDetailsPage = () => {
     }
   };
 
-  const handleAssignAgent = async (newAgent) => {
+  const handleAssignAgent = async (newAgentId) => {
     try {
-      await dispatch(assignLeadToAgent({ id, assignData: { agent: newAgent } })).unwrap();
+      await dispatch(assignLeadToAgent({ id, assignData: { agentId: newAgentId } })).unwrap();
       setShowAssignModal(false);
-      showToastMessage(`Assigned to ${newAgent}`);
       
-      // Redux slice already handles history updates
-      // Refresh lead data to get updated history
+      const selectedAgent = agents.find(a => a._id === newAgentId);
+      showToastMessage(`Assigned to ${selectedAgent?.name || 'Agent'}`);
+      
       dispatch(fetchLeadById(id));
     } catch (error) {
       const errorMessage = String(error);
@@ -204,6 +205,32 @@ const LeadDetailsPage = () => {
     } catch (error) {
       const errorMessage = String(error);
       showToastMessage(errorMessage, "error");
+    }
+  };
+
+  const handleEditLead = async (updatedData) => {
+    try {
+      if (!lead || !lead._id) {
+        throw new Error('Lead data not available');
+      }
+      
+      // Update lead via API
+      await dispatch(updateExistingLead({ 
+        id: lead._id, 
+        leadData: updatedData 
+      })).unwrap();
+      
+      toast.success("Lead updated successfully!");
+      
+      // Refresh lead data to get updated information
+      await dispatch(fetchLeadById(id));
+      
+      // Close modal after successful update
+      setShowEditModal(false);
+    } catch (error) {
+      const errorMessage = String(error);
+      console.error('Lead update error:', error);
+      toast.error(errorMessage);
     }
   };
 
@@ -223,6 +250,10 @@ const LeadDetailsPage = () => {
       console.log('Updated lead emails:', updatedLead.emails);
       
       toast.success("Emails updated successfully!");
+      
+      // Refresh lead data to get updated information
+      await dispatch(fetchLeadById(id));
+      await dispatch(fetchLeadEmails(id));
       
       // Close modal after successful update
       setShowEmailsModal(false);
@@ -353,7 +384,7 @@ const LeadDetailsPage = () => {
             </button>
             <button 
               onClick={() => setShowEditModal(true)}
-              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-xs font-bold shadow-sm transition-all"
+              className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md text-xs font-bold shadow-sm transition-all"
             >
               EDIT
             </button>
@@ -397,7 +428,7 @@ const LeadDetailsPage = () => {
 
       {showAssignModal && (
         <ChangeAgentModal
-          currentAgent={lead.agent}
+          currentAgentId={lead.agent?._id}
           onClose={() => setShowAssignModal(false)}
           onUpdate={handleAssignAgent}
         />
@@ -408,6 +439,14 @@ const LeadDetailsPage = () => {
           customer={lead}
           onClose={() => setShowEmailsModal(false)}
           onUpdate={handleUpdateEmails}
+        />
+      )}
+
+      {showEditModal && (
+        <EditContactModal
+          lead={lead}
+          onClose={() => setShowEditModal(false)}
+          onUpdate={handleEditLead}
         />
       )}
 

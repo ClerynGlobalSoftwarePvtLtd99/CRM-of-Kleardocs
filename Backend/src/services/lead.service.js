@@ -199,13 +199,19 @@ export const assignAgent = async (leadId, agentId, userId) => {
   const previousAgent = lead.agent?.name || "Unassigned";
   lead.agent = agentId;
   await lead.save();
+  
+  // Fetch the updated lead with populated agent
+  const updatedLead = await Lead.findById(leadId).populate("agent", "name");
 
+  // Create history entry with the agent name
   await LeadHistory.create({
     lead: leadId,
     type: "assigned",
-    details: `Agent changed from ${previousAgent} to new agent`,
+    details: `Agent changed from ${previousAgent} to ${updatedLead.agent?.name || 'New Agent'}`,
     createdBy: userId
   });
+
+  return updatedLead;
 };
 
 // ─── CONVERT LEAD TO CUSTOMER ─────────────────────────────────────────────────

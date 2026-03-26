@@ -4,6 +4,7 @@ import axiosInstance from '../../api/axiosInstance';
 const initialState = {
   users: [],
   accountants: [],
+  agents: [],
   loading: false,
   error: null,
   pagination: {
@@ -125,6 +126,7 @@ const usersSlice = createSlice({
         state.loading = false;
         state.users = action.payload.data || [];
         state.accountants = state.users.filter(u => u.role !== 'customer' && u.role !== 'admin');
+        state.agents = state.users.filter(u => u.role === 'agent');
         state.pagination = {
           page: action.payload.page || 1,
           limit: action.payload.limit || 10,

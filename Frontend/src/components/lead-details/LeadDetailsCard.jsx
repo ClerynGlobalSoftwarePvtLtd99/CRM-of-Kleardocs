@@ -61,7 +61,16 @@ const LeadDetailsCard = ({
                   {Array.isArray(lead.emails) && lead.emails.length > 0 ? (
                     lead.emails.map((email, index) => (
                       <div key={index} className="mb-1">
-                        {email}
+                        <a 
+                          href={`mailto:${email}`}
+                          className="text-crm-orange hover:text-crm-orange/80 transition-colors cursor-pointer underline"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            window.location.href = `mailto:${email}`;
+                          }}
+                        >
+                          {email}
+                        </a>
                       </div>
                     ))
                   ) : (
@@ -120,7 +129,7 @@ const LeadDetailsCard = ({
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-text-secondary uppercase">Current Agent</span>
-                <span className="text-sm font-bold text-text-primary">{lead.agent}</span>
+                <span className="text-sm font-bold text-text-primary">{lead.agent?.name || 'N/A'}</span>
               </div>
             </div>
           </div>

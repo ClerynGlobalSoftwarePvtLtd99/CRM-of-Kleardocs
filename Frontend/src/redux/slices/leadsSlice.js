@@ -350,12 +350,13 @@ const leadsSlice = createSlice({
         if (lead) {
           const previousAgent = lead.agent;
           lead.agent = assignment.agent;
+          lead.agentId = assignment.agentId;
           // Add to history array at the beginning (newest first)
           if (!lead.history) lead.history = [];
           lead.history.unshift({
             _id: Date.now(),
             type: 'assignment',
-            details: `Agent changed to ${assignment.agent}`,
+            details: `Agent changed to ${assignment.agent || 'New Agent'}`,
             createdAt: new Date().toISOString(),
             createdBy: assignment.createdBy || 'System',
             notes: `Previous agent: ${previousAgent || 'None'}`
@@ -364,12 +365,13 @@ const leadsSlice = createSlice({
         if (state.currentLead?._id === id) {
           const previousAgent = state.currentLead.agent;
           state.currentLead.agent = assignment.agent;
+          state.currentLead.agentId = assignment.agentId;
           // Add to history array at the beginning (newest first)
           if (!state.currentLead.history) state.currentLead.history = [];
           state.currentLead.history.unshift({
             _id: Date.now(),
             type: 'assignment',
-            details: `Agent changed to ${assignment.agent}`,
+            details: `Agent changed to ${assignment.agent || 'New Agent'}`,
             createdAt: new Date().toISOString(),
             createdBy: assignment.createdBy || 'System',
             notes: `Previous agent: ${previousAgent || 'None'}`

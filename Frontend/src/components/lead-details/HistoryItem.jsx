@@ -24,8 +24,9 @@ const HistoryItem = ({ item, onViewEmail }) => {
       case "call": return { bg: "bg-orange-500/10", color: "text-orange-500", border: "border-orange-500/20", text: "Call" };
       case "followup": return { bg: "bg-purple-500/10", color: "text-purple-500", border: "border-purple-500/20", text: "Followup" };
       case "conversion": return { bg: "bg-green-600/10", color: "text-green-600", border: "border-green-600/20", text: "Converted" };
-      case "assignment": return { bg: "bg-purple-500/10", color: "text-purple-500", border: "border-purple-500/20", text: "Assigned" };
+      case "assignment": return { bg: "bg-purple-500/10", color: "text-purple-500", border: "border-purple-500/20", text: "Agent Update" };
       case "email_update": return { bg: "bg-blue-600/10", color: "text-blue-600", border: "border-blue-600/20", text: "Email Update" };
+      case "assigned": return { bg: "bg-purple-500/10", color: "text-purple-500", border: "border-purple-500/20", text: "Assigned" };
       default: return { bg: "bg-gray-500/10", color: "text-gray-500", border: "border-gray-500/20", text: "Other" };
     }
   };

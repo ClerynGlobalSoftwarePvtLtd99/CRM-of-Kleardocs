@@ -1,13 +1,31 @@
-import React, { useState } from "react";
-import { X, UserCheck, Save } from "lucide-react";
-import { AGENTS } from "../../utils/constants";
+import React, { useState, useEffect } from "react";
+import { X, UserCheck } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsers } from "../../redux/slices/usersSlice";
 
-const ChangeAgentModal = ({ currentAgent, onClose, onUpdate }) => {
-  const [selectedAgent, setSelectedAgent] = useState(currentAgent || "");
+const ChangeAgentModal = ({ currentAgentId, onClose, onUpdate }) => {
+  const dispatch = useDispatch();
+  const { agents, loading } = useSelector((state) => state.users);
+  const [selectedAgentId, setSelectedAgentId] = useState(currentAgentId || "");
+
+  useEffect(() => {
+    // Fetch agents when modal opens
+    console.log('ChangeAgentModal: Fetching agents...');
+    dispatch(fetchUsers({ role: 'agent' }));
+  }, [dispatch]);
+
+  useEffect(() => {
+    setSelectedAgentId(currentAgentId || "");
+  }, [currentAgentId]);
+
+  useEffect(() => {
+    console.log('ChangeAgentModal - agents:', agents, 'count:', agents.length, 'loading:', loading);
+    console.log('ChangeAgentModal - currentAgentId:', currentAgentId);
+  }, [agents, loading, currentAgentId]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onUpdate(selectedAgent);
+    onUpdate(selectedAgentId);
     onClose();
   };
 
@@ -25,14 +43,20 @@ const ChangeAgentModal = ({ currentAgent, onClose, onUpdate }) => {
           <div>
             <label className="mb-1 block text-xs font-bold text-text-secondary uppercase">Select Agent</label>
             <select
-              value={selectedAgent}
-              onChange={(e) => setSelectedAgent(e.target.value)}
+              value={selectedAgentId}
+              onChange={(e) => setSelectedAgentId(e.target.value)}
               className="w-full rounded-lg border border-bg-tertiary bg-bg-tertiary/10 px-4 py-2.5 text-sm text-text-primary outline-none focus:border-yellow-500"
             >
               <option value="">Select Agent</option>
-              {AGENTS.map(agent => (
-                <option key={agent} value={agent}>{agent}</option>
-              ))}
+              {loading ? (
+                <option value="" disabled>Loading agents...</option>
+              ) : agents.length === 0 ? (
+                <option value="" disabled>No agents available</option>
+              ) : (
+                agents.map(agent => (
+                  <option key={agent._id} value={agent._id}>{agent.name}</option>
+                ))
+              )}
             </select>
           </div>
 
