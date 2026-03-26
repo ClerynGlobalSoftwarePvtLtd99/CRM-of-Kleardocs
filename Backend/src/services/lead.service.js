@@ -152,7 +152,7 @@ export const addInteraction = async (leadId, data, userId) => {
 
   const entry = await LeadHistory.create({
     lead: leadId,
-    type: "interaction",
+    type: data.type || "interaction",
     details: data.details,
     phoneCalled: data.phoneCalled || false,
     createdBy: userId
@@ -199,13 +199,19 @@ export const assignAgent = async (leadId, agentId, userId) => {
   const previousAgent = lead.agent?.name || "Unassigned";
   lead.agent = agentId;
   await lead.save();
+  
+  // Fetch the updated lead with populated agent
+  const updatedLead = await Lead.findById(leadId).populate("agent", "name");
 
+  // Create history entry with the agent name
   await LeadHistory.create({
     lead: leadId,
     type: "assigned",
-    details: `Agent changed from ${previousAgent} to new agent`,
+    details: `Agent changed from ${previousAgent} to ${updatedLead.agent?.name || 'New Agent'}`,
     createdBy: userId
   });
+
+  return updatedLead;
 };
 
 // ─── CONVERT LEAD TO CUSTOMER ─────────────────────────────────────────────────
@@ -213,12 +219,19 @@ export const convertToCustomer = async (leadId, data, userId) => {
   const lead = await Lead.findById(leadId);
   if (!lead) throw new ApiError(404, "Lead not found");
   if (lead.isCustomer) throw new ApiError(400, "This lead is already a customer");
+  if (!lead.agent) throw new ApiError(400, "Lead must be assigned to an agent before converting to customer");
 
   // Lazy import to avoid circular dependencies
   const { default: Customer } = await import("../models/Customer.model.js");
 
   // Auto-generate a random 8-char password for the customer portal
   const generatedPassword = crypto.randomBytes(4).toString("hex");
+
+  // Handle incorporation date for newly incorporated companies
+  let incorporationDate = data.incorporationDate;
+  if (data.newlyIncorporated && !incorporationDate) {
+    incorporationDate = new Date();
+  }
 
   const customer = await Customer.create({
     name: lead.name,
@@ -229,7 +242,7 @@ export const convertToCustomer = async (leadId, data, userId) => {
     state: data.state,
     gst: data.gst,
     type: data.type,
-    incorporationDate: data.incorporationDate,
+    incorporationDate: incorporationDate,
     newlyIncorporated: data.newlyIncorporated || false,
     username: data.username,
     password: generatedPassword,

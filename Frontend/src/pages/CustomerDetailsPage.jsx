@@ -9,7 +9,7 @@ import {
   Search, ChevronDown, IdCard
 } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { fetchCustomerById, updateCustomerEmails, addCustomerDirector } from "../redux/slices/customersSlice";
+import { fetchCustomerById, updateCustomerEmails, addCustomerDirector, addServiceToCustomer, endCustomerService } from "../redux/slices/customersSlice";
 import ErrorBoundary from "../components/ErrorBoundary";
 import ContentLoader from "../components/common/ContentLoader";
 
@@ -73,6 +73,19 @@ const CustomerDetailsPage = () => {
       dispatch(fetchCustomerById(id));
     }
   }, [dispatch, id]);
+
+  useEffect(() => {
+    if (customer) {
+      console.log('Customer data loaded:', customer);
+      console.log('Customer services:', customer.services);
+      // Check if services are populated correctly
+      if (customer.services && customer.services.length > 0) {
+        customer.services.forEach((svc, index) => {
+          console.log(`Service ${index}:`, svc);
+        });
+      }
+    }
+  }, [customer]);
 
   // Update local customer state when Redux data changes
   useEffect(() => {
@@ -221,18 +234,28 @@ const CustomerDetailsPage = () => {
     toast.success("Director deleted!");
   };
 
-  const handleAddService = (newService) => {
-    setCustomer(prev => ({ 
-      ...prev, 
-      services: [...prev.services, { 
-        id: Date.now(), 
-        name: newService.serviceName, 
-        startDate: new Date(newService.startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }), 
-        endDate: "-", 
-        status: "Active" 
-      }] 
-    }));
-    toast.success("Service added!");
+  const handleAddService = async (newService) => {
+    try {
+      await dispatch(addServiceToCustomer({ 
+        customerId: customer._id, 
+        serviceData: {
+          serviceName: newService.serviceName,
+          startDate: newService.startDate,
+          status: "Active"
+        }
+      })).unwrap();
+      
+      toast.success("Service added!");
+      
+      // Refresh customer data to get updated services list
+      await dispatch(fetchCustomerById(customer._id));
+    } catch (error) {
+      const errorMessage = typeof error === 'string' ? error : 
+                           error?.message || 
+                           error?.toString() || 
+                           'Failed to add service';
+      toast.error(errorMessage);
+    }
   };
 
   const handleUpdateCompliance = (updatedComp) => {
@@ -243,12 +266,21 @@ const CustomerDetailsPage = () => {
     toast.success("Compliance updated!");
   };
 
-  const handleEndService = (serviceId) => {
-    setCustomer(prev => ({
-      ...prev,
-      services: prev.services.filter(s => s.id !== serviceId)
-    }));
-    toast.success("Service ended and removed!");
+  const handleEndService = async (serviceId) => {
+    try {
+      await dispatch(endCustomerService({ 
+        customerId: customer._id, 
+        serviceId 
+      })).unwrap();
+      
+      toast.success("Service ended and removed!");
+    } catch (error) {
+      const errorMessage = typeof error === 'string' ? error : 
+                           error?.message || 
+                           error?.toString() || 
+                           'Failed to end service';
+      toast.error(errorMessage);
+    }
   };
 
   return (
@@ -505,8 +537,8 @@ const CustomerDetailsPage = () => {
               <tbody className="divide-y divide-bg-tertiary">
                 {customer?.services && customer.services.length > 0 ? (
                   customer.services.map((svc) => (
-                    <tr key={svc.id}>
-                      <td className="px-6 py-4 text-sm">{svc.name}</td>
+                    <tr key={svc._id}>
+                      <td className="px-6 py-4 text-sm">{svc.service?.name || svc.name}</td>
                       <td className="px-6 py-4 text-sm">{svc.startDate ? new Date(svc.startDate).toLocaleDateString('en-IN') : '-'}</td>
                       <td className="px-6 py-4 text-sm">{svc.endDate ? new Date(svc.endDate).toLocaleDateString('en-IN') : '-'}</td>
                       <td className="px-6 py-4 text-sm text-crm-green font-bold">{svc.status}</td>

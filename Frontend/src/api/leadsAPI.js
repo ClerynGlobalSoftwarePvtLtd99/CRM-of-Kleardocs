@@ -44,7 +44,7 @@ export const addInteraction = async (id, interactionData) => {
 
 // Assign lead to agent
 export const assignLead = async (id, assignData) => {
-  const response = await axiosInstance.post(`/leads/${id}/assign`, assignData);
+  const response = await axiosInstance.put(`/leads/${id}/assign`, assignData);
   return response.data;
 };
 

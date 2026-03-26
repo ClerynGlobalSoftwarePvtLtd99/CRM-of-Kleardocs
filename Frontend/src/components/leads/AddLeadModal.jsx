@@ -7,10 +7,15 @@ import {
   MessageCircleMore,
   Globe,
   ChevronDown,
+  Youtube,
+  Phone,
+  Users,
+  Monitor,
+  Snowflake,
 } from "lucide-react";
+import { useSelector } from "react-redux";
 
 import { 
-  SERVICES, 
   SOURCES, 
   STATES_AND_UTS, 
   AGENTS, 
@@ -23,7 +28,12 @@ const getSourceIcon = (sourceName) => {
   switch (sourceName.toLowerCase()) {
     case "instagram": return Instagram;
     case "facebook": return Facebook;
+    case "youtube": return Youtube;
     case "whatsapp": return MessageCircleMore;
+    case "referral": return Users;
+    case "website": return Monitor;
+    case "cold call": return Phone;
+    case "other": return Globe;
     default: return Globe;
   }
 };
@@ -102,9 +112,11 @@ const SourceDropdown = ({ value, onChange }) => {
 const ServiceDropdown = ({ value, onChange }) => {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);
+  const { services } = useSelector((state) => state.services);
 
+  const activeServices = services.filter(s => s.status);
   const selectedService =
-    SERVICES.find((item) => item === value) || SERVICES[0];
+    activeServices.find((item) => item.name === value) || activeServices[0];
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -125,22 +137,22 @@ const ServiceDropdown = ({ value, onChange }) => {
         className="flex w-full items-center justify-between rounded-md border border-text-primary bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none transition hover:bg-bg-tertiary"
       >
         <span className="flex items-center gap-2">
-          {selectedService}
+          {selectedService?.name || 'Select Service'}
         </span>
         <ChevronDown size={16} className={`transition ${open ? "rotate-180" : ""}`} />
       </button>
 
       {open && (
         <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-md border border-text-primary bg-bg-secondary shadow-lg">
-          {SERVICES.map((service) => {
-            const active = value === service;
+          {activeServices.map((service) => {
+            const active = value === service.name;
 
             return (
               <button
-                key={service}
+                key={service._id}
                 type="button"
                 onClick={() => {
-                  onChange(service);
+                  onChange(service.name);
                   setOpen(false);
                 }}
                 className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition ${
@@ -149,7 +161,7 @@ const ServiceDropdown = ({ value, onChange }) => {
                     : "bg-bg-secondary text-text-primary hover:bg-bg-tertiary"
                 }`}
               >
-                {service}
+                {service.name}
               </button>
             );
           })}
@@ -160,11 +172,14 @@ const ServiceDropdown = ({ value, onChange }) => {
 };
 
 const AddLeadModal = ({ onClose, onSubmit }) => {
+  const { services } = useSelector((state) => state.services);
+  const activeServices = services.filter(s => s.status);
+  
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     companyName: "",
-    service: SERVICES[0], // Default to first service
+    service: activeServices[0]?.name || "", // Default to first active service
     source: SOURCES[1], // Facebook
     type: CLIENT_TYPES[0], // Hot
     priority: PRIORITIES[0], // High

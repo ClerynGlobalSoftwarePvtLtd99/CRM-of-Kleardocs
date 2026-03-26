@@ -5,7 +5,7 @@ const leadHistorySchema = new mongoose.Schema(
     lead: { type: mongoose.Schema.Types.ObjectId, ref: "Lead", required: true },
     type: {
       type: String,
-      enum: ["created", "updated", "followup", "interaction", "converted", "assigned", "email_update"],
+      enum: ["created", "updated", "followup", "interaction", "converted", "assigned", "email_update", "call", "text"],
       required: true
     },
     details: { type: String },

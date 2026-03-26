@@ -74,8 +74,8 @@ export const updateEmails = async (req, res) => {
 
 // PUT /api/v1/leads/:leadId/assign
 export const assignAgent = async (req, res) => {
-  await leadService.assignAgent(req.params.leadId, req.body.agentId, req.user.id);
-  res.status(200).json(new ApiResponse(200, null, "Agent assigned successfully"));
+  const updatedLead = await leadService.assignAgent(req.params.leadId, req.body.agentId, req.user.id);
+  res.status(200).json(new ApiResponse(200, updatedLead, "Agent assigned successfully"));
 };
 
 // POST /api/v1/leads/:leadId/convert

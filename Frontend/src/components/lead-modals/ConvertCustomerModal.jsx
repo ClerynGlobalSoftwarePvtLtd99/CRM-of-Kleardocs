@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { X, UserCheck } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { X, UserCheck, AlertCircle } from "lucide-react";
 import { COMPANY_TYPES, STATES_AND_UTS } from "../../utils/constants";
 
 const ConvertCustomerModal = ({ lead, onClose, onConvert }) => {
@@ -14,11 +14,30 @@ const ConvertCustomerModal = ({ lead, onClose, onConvert }) => {
     username: "",
   });
 
+  // Handle newlyIncorporated toggle
+  useEffect(() => {
+    if (formData.newlyIncorporated && !formData.incorporationDate) {
+      // Set to today's date when newly incorporated is true and no date is set
+      const today = new Date().toISOString().split('T')[0];
+      setFormData(prev => ({ ...prev, incorporationDate: today }));
+    }
+  }, [formData.newlyIncorporated]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Check if lead has an agent assigned
+    if (!lead?.agent) {
+      alert("Lead must be assigned to an agent before converting to customer. Please assign an agent first.");
+      return;
+    }
+    
     onConvert(formData);
     onClose();
   };
+
+  // Disable conversion if no agent is assigned
+  const isConversionDisabled = !lead?.agent;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 text-text-primary">
@@ -29,6 +48,19 @@ const ConvertCustomerModal = ({ lead, onClose, onConvert }) => {
             <X size={20} />
           </button>
         </div>
+
+        {/* Warning message if no agent assigned */}
+        {isConversionDisabled && (
+          <div className="mx-6 mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-start gap-3">
+            <AlertCircle size={20} className="text-red-500 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-semibold text-red-500">Agent Assignment Required</p>
+              <p className="text-xs text-red-400 mt-1">
+                This lead must be assigned to an agent before it can be converted to a customer.
+              </p>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[80vh] overflow-y-auto scrollbar-thin scrollbar-thumb-bg-tertiary">
           <div className="md:col-span-2">
@@ -133,10 +165,15 @@ const ConvertCustomerModal = ({ lead, onClose, onConvert }) => {
             </button>
             <button
               type="submit"
-              className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg text-sm font-bold shadow-lg transition-all uppercase"
+              disabled={isConversionDisabled}
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-bold shadow-lg transition-all uppercase ${
+                isConversionDisabled 
+                  ? "bg-gray-500 text-gray-300 cursor-not-allowed" 
+                  : "bg-green-600 hover:bg-green-700 text-white"
+              }`}
             >
               <UserCheck size={18} />
-              Confirm Conversion
+              {isConversionDisabled ? "Assign Agent First" : "Confirm Conversion"}
             </button>
           </div>
         </form>

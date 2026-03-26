@@ -14,7 +14,6 @@ const LeadDetailsCard = ({
   onChangeAssignClick,
   onSendTemplateClick,
   onSendWhatsappTemplateClick,
-  onEditEmailsClick,
 }) => {
   return (
     <div className="bg-bg-secondary border border-bg-tertiary rounded-2xl shadow-sm overflow-hidden">
@@ -61,7 +60,16 @@ const LeadDetailsCard = ({
                   {Array.isArray(lead.emails) && lead.emails.length > 0 ? (
                     lead.emails.map((email, index) => (
                       <div key={index} className="mb-1">
-                        {email}
+                        <a 
+                          href={`mailto:${email}`}
+                          className="text-crm-orange hover:text-crm-orange/80 transition-colors cursor-pointer underline"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            window.location.href = `mailto:${email}`;
+                          }}
+                        >
+                          {email}
+                        </a>
                       </div>
                     ))
                   ) : (
@@ -101,12 +109,6 @@ const LeadDetailsCard = ({
               >
                 Send Whatsapp Template
               </button>
-              <button
-                onClick={onEditEmailsClick}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2.5 rounded-lg text-xs font-bold shadow-sm transition-all uppercase tracking-wider"
-              >
-                Edit Emails
-              </button>
             </div>
 
             <div className="pt-4 border-t border-bg-tertiary space-y-4">
@@ -120,7 +122,7 @@ const LeadDetailsCard = ({
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-text-secondary uppercase">Current Agent</span>
-                <span className="text-sm font-bold text-text-primary">{lead.agent}</span>
+                <span className="text-sm font-bold text-text-primary">{lead.agent?.name || 'N/A'}</span>
               </div>
             </div>
           </div>

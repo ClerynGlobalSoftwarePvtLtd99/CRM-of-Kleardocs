@@ -1,10 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Trash2, Mail } from "lucide-react";
 import toast from "react-hot-toast";
 
 const EditEmailsModal = ({ customer, onClose, onUpdate, loading = false }) => {
-  const [emails, setEmails] = useState(customer.emails || []);
+  // Ensure emails is always an array
+  const [emails, setEmails] = useState(() => {
+    const customerEmails = customer?.emails;
+    if (Array.isArray(customerEmails)) {
+      return customerEmails;
+    } else if (customerEmails && typeof customerEmails === 'object') {
+      // Convert object to array if needed
+      return Object.values(customerEmails).filter(email => typeof email === 'string');
+    }
+    return [];
+  });
   const [newEmail, setNewEmail] = useState("");
+
+  // Reset emails state when customer prop changes
+  useEffect(() => {
+    const customerEmails = customer?.emails;
+    if (Array.isArray(customerEmails)) {
+      setEmails(customerEmails);
+    } else if (customerEmails && typeof customerEmails === 'object') {
+      setEmails(Object.values(customerEmails).filter(email => typeof email === 'string'));
+    } else {
+      setEmails([]);
+    }
+  }, [customer?.emails]);
 
   const handleAddEmail = () => {
     if (!newEmail) return;
@@ -40,7 +62,16 @@ const EditEmailsModal = ({ customer, onClose, onUpdate, loading = false }) => {
           <div className="space-y-4 mb-8">
             {emails.map((email, idx) => (
               <div key={idx} className="flex items-center justify-between py-2 border-b border-bg-tertiary/50">
-                <span className="text-text-primary text-sm">{email}</span>
+                <a 
+                  href={`mailto:${email}`}
+                  className="text-text-primary text-sm hover:text-crm-orange transition-colors cursor-pointer underline"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = `mailto:${email}`;
+                  }}
+                >
+                  {email}
+                </a>
                 <button 
                   onClick={() => handleRemoveEmail(email)}
                   className="p-1 text-red-500 hover:bg-red-500/10 rounded"

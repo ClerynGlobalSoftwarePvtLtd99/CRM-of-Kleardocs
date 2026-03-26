@@ -1,6 +1,7 @@
 import React from "react";
+import { Trash2 } from "lucide-react";
 
-const ServicesTable = ({ services, onEditClick, loading }) => {
+const ServicesTable = ({ services, onEditClick, onDeleteClick, loading }) => {
   return (
     <div className="bg-bg-secondary border border-bg-tertiary rounded-xl overflow-hidden shadow-sm">
       
@@ -54,9 +55,16 @@ const ServicesTable = ({ services, onEditClick, loading }) => {
                 <td className="px-4 py-3 text-center rounded-r-lg">
                   <button
                     onClick={() => onEditClick(s)}
-                    className="text-accent hover:underline"
+                    className="text-accent hover:underline mr-3"
                   >
                     Edit
+                  </button>
+                  <button
+                    onClick={() => onDeleteClick(s._id)}
+                    className="text-red-500 hover:text-red-700"
+                    title="Delete Service"
+                  >
+                    <Trash2 size={16} />
                   </button>
                 </td>
               </tr>
@@ -65,7 +73,7 @@ const ServicesTable = ({ services, onEditClick, loading }) => {
             {services.length === 0 && (
               <tr>
                 <td
-                  colSpan="6"
+                  colSpan="7"
                   className="text-center py-6 text-text-secondary"
                 >
                   No services found

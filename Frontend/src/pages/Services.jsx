@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ServicesHeader from "../components/services/ServicesHeader";
 import ServicesTable from "../components/services/ServicesTable";
 import ServiceFormModal from "../components/services/AddServicesForm";
-import { fetchServices, createService, updateService, clearSuccess } from "../redux/slices/servicesSlice";
+import { fetchServices, createService, updateService, deleteService, clearSuccess } from "../redux/slices/servicesSlice";
 import toast from "react-hot-toast";
 import ContentLoader from "../components/common/ContentLoader";
 
@@ -61,6 +61,17 @@ const Services = () => {
     }
   };
 
+  const handleDeleteClick = async (serviceId) => {
+    if (window.confirm('Are you sure you want to delete this service? This will remove it from all leads and customers.')) {
+      try {
+        await dispatch(deleteService(serviceId)).unwrap();
+        toast.success('Service deleted successfully!');
+      } catch (error) {
+        toast.error('Failed to delete service. Please try again.');
+      }
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -89,6 +100,7 @@ const Services = () => {
       <ServicesTable
         services={services}
         onEditClick={handleEditClick}
+        onDeleteClick={handleDeleteClick}
         loading={loading}
       />
       

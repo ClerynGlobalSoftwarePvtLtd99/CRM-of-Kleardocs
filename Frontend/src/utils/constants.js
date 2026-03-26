@@ -18,11 +18,12 @@ export const SERVICES = [
 export const SOURCES = [
   "Instagram",
   "Facebook",
-  "Whatsapp",
-  "Google",
-  "LinkedIn",
-  "Reference",
-  "Others",
+  "YouTube",
+  "WhatsApp",
+  "Referral",
+  "Website",
+  "Cold Call",
+  "Other",
 ];
 
 export const STATES_AND_UTS = [
@@ -67,11 +68,11 @@ export const STATES_AND_UTS = [
 
 export const AGENTS = ["Ritu Kaur", "Jagjyot Singh", "Admin"];
 
-export const CLIENT_TYPES = ["Hot", "Cold"];
+export const CLIENT_TYPES = ["Hot", "Cold", "Warm"];
 
-export const PRIORITIES = ["High", "Medium", "Low", "None"];
+export const PRIORITIES = ["High", "Medium", "Low"];
 
-export const RESPONSES = ["Interested", "Medium", "Not Interested", "None"];
+export const RESPONSES = ["Interested", "Not Interested", "Call Back", "No Response", "Converted"];
 
 export const COMPANY_TYPES = [
   "Private Limited Company",
