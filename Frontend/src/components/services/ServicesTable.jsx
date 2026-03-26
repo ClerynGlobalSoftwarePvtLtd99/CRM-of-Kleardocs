@@ -59,13 +59,6 @@ const ServicesTable = ({ services, onEditClick, onDeleteClick, loading }) => {
                   >
                     Edit
                   </button>
-                  <button
-                    onClick={() => onDeleteClick(s._id)}
-                    className="text-red-500 hover:text-red-700"
-                    title="Delete Service"
-                  >
-                    <Trash2 size={16} />
-                  </button>
                 </td>
               </tr>
             ))}

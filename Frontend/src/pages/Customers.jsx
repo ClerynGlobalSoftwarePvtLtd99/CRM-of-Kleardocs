@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { Plus, Download, Building2, Phone, Calendar, Search, Filter } from "lucide-react";
+import { Plus, Download, Building2, Phone, Calendar, Search } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import CustomersFilter from "../components/customers/CustomersFilter";
 import ContentLoader from "../components/common/ContentLoader";
-import NewCustomerModal from "../components/customer-modals/NewCustomerModal";
+import NewCustomerModal from "../components/customers/NewCustomerModal";
 import CompanyLogo from "../components/common/CompanyLogo";
 import { fetchCustomers, createCustomer } from "../redux/slices/customersSlice";
 import toast from "react-hot-toast";
@@ -14,17 +14,13 @@ const Customers = () => {
   const dispatch = useDispatch();
   const { list: customers, loading, error } = useSelector((state) => state.customers);
   const [showNewCustomerModal, setShowNewCustomerModal] = useState(false);
-  const [showFilter, setShowFilter] = useState(true);
   
   const [filters, setFilters] = useState({
     search: "",
     dataType: "onboarding",
     type: "",
     status: "",
-    annualcompliance: "",
-    gstservices: "",
-    taxation: "",
-    bookkeeping: ""
+    activeService: ""
   });
 
   // Fetch customers on component mount and when filters change
@@ -32,13 +28,14 @@ const Customers = () => {
     const queryParams = {
       search: filters.search || undefined,
       type: filters.type || undefined,
+      activeService: filters.activeService || undefined,
       page: 1,
       limit: 50
     };
     
     console.log('Fetching customers with params:', queryParams);
     dispatch(fetchCustomers(queryParams));
-  }, [dispatch, filters.search, filters.type]);
+  }, [dispatch, filters.search, filters.type, filters.activeService]);
 
   // Debug customers data
   useEffect(() => {
@@ -70,10 +67,7 @@ const Customers = () => {
       dataType: "onboarding",
       type: "",
       status: "",
-      annualcompliance: "",
-      gstservices: "",
-      taxation: "",
-      bookkeeping: ""
+      activeService: ""
     });
     toast.success("Filters cleared");
   };
@@ -158,29 +152,11 @@ const Customers = () => {
       </div>
 
       {/* FILTER SECTION */}
-      <div className="bg-bg-secondary border border-bg-tertiary rounded-lg shadow-sm overflow-hidden">
-        <button
-          onClick={() => setShowFilter(!showFilter)}
-          className="w-full flex items-center justify-between px-6 py-4 border-b border-bg-tertiary hover:bg-bg-tertiary/10 transition-colors"
-        >
-          <div className="flex items-center gap-2 text-text-primary font-bold uppercase tracking-wider text-sm">
-            <Filter size={16} className="text-crm-orange" />
-            Filter Section
-          </div>
-          <div className={`transition-transform duration-300 ${showFilter ? 'rotate-180' : ''}`}>
-            <Plus size={16} />
-          </div>
-        </button>
-        {showFilter && (
-          <div className="p-6">
-            <CustomersFilter 
-              filters={filters} 
-              setFilters={setFilters} 
-              onClear={handleClearFilters}
-            />
-          </div>
-        )}
-      </div>
+      <CustomersFilter 
+        filters={filters} 
+        setFilters={setFilters} 
+        onClear={handleClearFilters}
+      />
 
       {/* LIST TABLE HEADER (Hidden on mobile) */}
       <div className="hidden lg:grid grid-cols-[1fr_2fr_1.5fr_1.5fr_1.5fr_1.5fr_1fr] gap-4 px-8 py-4 bg-bg-tertiary/30 rounded-t-lg border-x border-t border-bg-tertiary text-xs font-bold text-text-secondary uppercase tracking-[0.2em]">

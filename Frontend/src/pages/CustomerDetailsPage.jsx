@@ -14,23 +14,23 @@ import ErrorBoundary from "../components/ErrorBoundary";
 import ContentLoader from "../components/common/ContentLoader";
 
 // Modals
-import DirectorReportModal from "../components/customer-modals/DirectorReportModal";
-import BoardResolutionModal from "../components/customer-modals/BoardResolutionModal";
-import EditEmailsModal from "../components/customer-modals/EditEmailsModal";
-import AddAccountantJobModal from "../components/customer-modals/AddAccountantJobModal";
-import EditCustomerModal from "../components/customer-modals/EditCustomerModal";
-import SendTemplateModal from "../components/customer-modals/SendTemplateModal";
-import ConsentLetterModal from "../components/customer-modals/ConsentLetterModal";
-import AuditorsReportModal from "../components/customer-modals/AuditorsReportModal";
-import AddDirectorModal from "../components/customer-modals/AddDirectorModal";
-import AddServiceModal from "../components/customer-modals/AddServiceModal";
+import DirectorReportModal from "../components/customers/DirectorReportModal";
+import BoardResolutionModal from "../components/customers/BoardResolutionModal";
+import EditEmailsModal from "../components/customers/EditEmailsModal";
+import AddAccountantJobModal from "../components/customers/AddAccountantJobModal";
+import EditCustomerModal from "../components/customers/EditCustomerModal";
+import SendTemplateModal from "../components/customers/SendTemplateModal";
+import ConsentLetterModal from "../components/customers/ConsentLetterModal";
+import AuditorsReportModal from "../components/customers/AuditorsReportModal";
+import AddDirectorModal from "../components/customers/AddDirectorModal";
+import AddServiceModal from "../components/customers/AddServiceModal";
 import WhatsappTemplateModal from "../components/lead-modals/WhatsappTemplateModal";
-import ModifyComplianceModal from "../components/customer-modals/ModifyComplianceModal";
-import AddInvoiceModal from "../components/customer-modals/AddInvoiceModal";
-import EndServiceModal from "../components/customer-modals/EndServiceModal";
+import ModifyComplianceModal from "../components/customers/ModifyComplianceModal";
+import AddInvoiceModal from "../components/customers/AddInvoiceModal";
+import EndServiceModal from "../components/customers/EndServiceModal";
 import { generateInvoicePdf } from "../utils/invoicePdfGenerator";
-import RecurringInvoiceDetailsModal from "../components/customer-modals/RecurringInvoiceDetailsModal";
-import EmailTemplateDetailsModal from "../components/customer-modals/EmailTemplateDetailsModal";
+import RecurringInvoiceDetailsModal from "../components/customers/RecurringInvoiceDetailsModal";
+import EmailTemplateDetailsModal from "../components/customers/EmailTemplateDetailsModal";
 
 const CustomerDetailsPage = () => {
   const { id } = useParams();
