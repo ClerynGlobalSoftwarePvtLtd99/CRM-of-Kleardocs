@@ -27,6 +27,7 @@ const HistoryItem = ({ item, onViewEmail }) => {
       case "assignment": return { bg: "bg-purple-500/10", color: "text-purple-500", border: "border-purple-500/20", text: "Agent Update" };
       case "email_update": return { bg: "bg-blue-600/10", color: "text-blue-600", border: "border-blue-600/20", text: "Email Update" };
       case "assigned": return { bg: "bg-purple-500/10", color: "text-purple-500", border: "border-purple-500/20", text: "Assigned" };
+      case "text": return { bg: "bg-gray-500/10", color: "text-gray-500", border: "border-gray-500/20", text: "Interaction" };
       default: return { bg: "bg-gray-500/10", color: "text-gray-500", border: "border-gray-500/20", text: "Other" };
     }
   };
@@ -85,13 +86,6 @@ const HistoryItem = ({ item, onViewEmail }) => {
                 </div>
               )}
 
-              {item.subject && (
-                <div className="bg-blue-500/5 rounded-lg p-3 border border-blue-500/20">
-                  <p className="text-xs font-medium text-blue-600 mb-1">Subject:</p>
-                  <p className="text-xs text-text-primary">{item.subject}</p>
-                </div>
-              )}
-              
               {item.called && (
                 <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold bg-green-500/10 text-green-500 border border-green-500/20 uppercase">
                   <Phone size={10} />
@@ -99,6 +93,13 @@ const HistoryItem = ({ item, onViewEmail }) => {
                 </span>
               )}
 
+              {item.subject && (
+                <div className="bg-blue-500/5 rounded-lg p-3 border border-blue-500/20">
+                  <p className="text-xs font-medium text-blue-600 mb-1">Subject:</p>
+                  <p className="text-xs text-text-primary">{item.subject}</p>
+                </div>
+              )}
+              
               {item.type === "email" && (
                 <button
                   onClick={() => onViewEmail(item)}

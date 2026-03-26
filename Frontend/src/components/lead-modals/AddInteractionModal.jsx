@@ -7,11 +7,12 @@ const AddInteractionModal = ({
   onClose,
   onSubmit,
 }) => {
+  
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-2xl shadow-xl">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--color-bg-tertiary)]">
-          <h3 className="text-xl font-semibold">Add Interaction</h3>
+    <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center">
+      <div className="w-[300px] max-w-[90vw] bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-2xl shadow-xl">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--color-bg-tertiary)]">
+          <h3 className="text-lg font-semibold text-text-primary">Add Interaction</h3>
           <button
             onClick={onClose}
             className="p-2 rounded-md hover:bg-[var(--color-bg-tertiary)]"
@@ -20,19 +21,19 @@ const AddInteractionModal = ({
           </button>
         </div>
 
-        <div className="p-6 space-y-5">
+        <div className="p-4 space-y-4">
           <div>
-            <label className="block mb-2 font-medium">Interaction Details *</label>
+            <label className="block mb-2 font-medium text-sm">Interaction Details *</label>
             <textarea
-              rows={5}
-              value={interactionForm.details}
+              rows={4}
+              value={interactionForm.details || ''}
               onChange={(e) =>
                 setInteractionForm((prev) => ({
                   ...prev,
                   details: e.target.value,
                 }))
               }
-              className="w-full px-4 py-3 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-xl outline-none focus:border-[var(--color-accent)]"
+              className="w-full px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg outline-none focus:border-[var(--color-accent)] text-sm"
               placeholder="Enter interaction details..."
             />
           </div>
@@ -55,15 +56,14 @@ const AddInteractionModal = ({
                 }`}
               />
             </button>
-            <span className="font-medium">Phone call made?</span>
+            <span className="font-medium text-sm">Phone call made?</span>
           </div>
 
           <div className="flex justify-end">
             <button
               onClick={onSubmit}
-              className="bg-[var(--color-accent)] hover:opacity-90 text-white px-5 py-2.5 rounded-lg font-semibold inline-flex items-center gap-2"
+              className="bg-[var(--color-accent)] hover:opacity-90 text-white px-4 py-2 rounded-lg text-sm font-semibold"
             >
-              <Plus size={16} />
               Add Interaction
             </button>
           </div>

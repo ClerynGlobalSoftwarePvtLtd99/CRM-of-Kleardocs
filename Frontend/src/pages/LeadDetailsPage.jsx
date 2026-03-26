@@ -32,6 +32,7 @@ const LeadDetailsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { currentLead: lead, loading, error, emails } = useSelector((state) => state.leads);
+  const { agents } = useSelector((state) => state.users);
 
   const [history, setHistory] = useState([]);
 
@@ -52,6 +53,8 @@ const LeadDetailsPage = () => {
     details: "",
     called: false,
   });
+
+  const [isInteractionFormVisible, setIsInteractionFormVisible] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -94,7 +97,8 @@ const LeadDetailsPage = () => {
           type: h.type || 'interaction',
           text: h.details || 'History Entry',
           details: h.notes || '',
-          notes: h.notes || '' // Add notes field for followup items
+          notes: h.notes || '', // Add notes field for followup items
+          called: h.phoneCalled || false // Use phoneCalled from backend response
         };
         
         // Handle conversion history specially
@@ -121,16 +125,19 @@ const LeadDetailsPage = () => {
     toast[type](message);
   };
 
-  const handleAddInteraction = async () => {
-    if (!interactionForm.details.trim()) return;;
+  const handleAddInteraction = () => {
+    setShowAddInteraction(true);
+  };
 
+  const handleSubmitInteraction = async () => {
+    if (!interactionForm.details.trim()) return;
     try {
       await dispatch(addLeadInteraction({
         id,
         interactionData: {
           type: interactionForm.called ? "call" : "text",
           details: interactionForm.details,
-          called: interactionForm.called,
+          phoneCalled: interactionForm.called,
         }
       })).unwrap();
       
@@ -148,13 +155,26 @@ const LeadDetailsPage = () => {
 
   const handleConvertToCustomer = async (convertData) => {
     try {
-      await dispatch(convertLeadToCustomer({ id, convertData })).unwrap();
+      const result = await dispatch(convertLeadToCustomer({ id, convertData })).unwrap();
       setShowConvertModal(false);
       showToastMessage("Converted to Customer");
       
-      // Redux slice already handles history updates
-      // Refresh lead data to get updated history
-      dispatch(fetchLeadById(id));
+      // After successful conversion, fetch the new customer and add to customers list
+      if (result.conversion.customerId) {
+        try {
+          const { createCustomer } = await import('../redux/slices/customersSlice');
+          const axiosInstance = (await import('../api/axiosInstance')).default;
+          const customerResponse = await axiosInstance.get(`/customers/${result.conversion.customerId}`);
+          
+          // Add the new customer to the customers list
+          await dispatch(createCustomer(customerResponse.data.data));
+        } catch (error) {
+          console.error('Failed to add converted customer to list:', error);
+        }
+      }
+      
+      // Redirect to customers page after successful conversion
+      navigate('/customers');
     } catch (error) {
       const errorMessage = String(error);
       showToastMessage(errorMessage, "error");
@@ -219,6 +239,45 @@ const LeadDetailsPage = () => {
         id: lead._id, 
         leadData: updatedData 
       })).unwrap();
+      
+      // If lead is converted to customer and service was updated, also update customer service
+      if (lead.isCustomer && lead.customer && updatedData.service) {
+        try {
+          // Check if service actually changed
+          const oldService = lead.service || lead.type || '';
+          const newService = updatedData.service;
+          
+          if (oldService !== newService) {
+            // Fetch services to find the serviceId by name
+            const { fetchServices } = await import('../redux/slices/servicesSlice');
+            const servicesResult = await dispatch(fetchServices()).unwrap();
+            
+            // Find the service by name
+            const service = servicesResult.find(s => s.name === newService);
+            
+            if (service) {
+              const { addServiceToCustomer } = await import('../redux/slices/customersSlice');
+              const serviceData = {
+                serviceId: service._id,
+                startDate: new Date().toISOString().split('T')[0],
+                status: 'Active'
+              };
+              
+              await dispatch(addServiceToCustomer({ 
+                customerId: lead.customer, 
+                serviceData 
+              })).unwrap();
+              
+              console.log('Service updated for customer:', lead.customer, 'New service:', newService);
+            } else {
+              console.warn('Service not found:', newService);
+            }
+          }
+        } catch (serviceError) {
+          console.error('Failed to update customer service:', serviceError);
+          // Don't fail the whole operation if service update fails
+        }
+      }
       
       toast.success("Lead updated successfully!");
       
@@ -402,11 +461,11 @@ const LeadDetailsPage = () => {
         {/* SECTION 3: BOTTOM CONTENT (HISTORY & INTERACTION) */}
         <LeadHistorySection
           history={history}
-          onAddInteraction={() => setShowAddInteraction(true)}
+          onAddInteraction={handleAddInteraction}
           onViewEmail={(item) => setSelectedHistoryEmail(item)}
           interactionForm={interactionForm}
           setInteractionForm={setInteractionForm}
-          handleAddInteraction={handleAddInteraction}
+          handleAddInteraction={handleSubmitInteraction}
         />
       </div>
 
@@ -471,7 +530,7 @@ const LeadDetailsPage = () => {
           interactionForm={interactionForm}
           setInteractionForm={setInteractionForm}
           onClose={() => setShowAddInteraction(false)}
-          onSubmit={handleAddInteraction}
+          onSubmit={handleSubmitInteraction}
         />
       )}
 

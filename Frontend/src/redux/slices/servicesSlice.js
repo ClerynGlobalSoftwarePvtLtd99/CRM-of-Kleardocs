@@ -38,6 +38,18 @@ export const updateService = createAsyncThunk(
   }
 );
 
+export const deleteService = createAsyncThunk(
+  'services/deleteService',
+  async (id, { rejectWithValue }) => {
+    try {
+      await axiosInstance.delete(`/services/${id}`);
+      return id;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to delete service');
+    }
+  }
+);
+
 // Slice
 const servicesSlice = createSlice({
   name: 'services',
@@ -101,6 +113,22 @@ const servicesSlice = createSlice({
         );
       })
       .addCase(updateService.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      
+      // Delete service
+      .addCase(deleteService.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteService.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.successMessage = 'Service deleted successfully!';
+        state.services = state.services.filter(service => service._id !== action.payload);
+      })
+      .addCase(deleteService.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

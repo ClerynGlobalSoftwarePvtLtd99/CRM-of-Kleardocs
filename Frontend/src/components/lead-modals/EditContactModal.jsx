@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Save } from "lucide-react";
+import { useSelector } from "react-redux";
 import { 
-  SERVICES, 
   SOURCES, 
   CLIENT_TYPES, 
   PRIORITIES, 
@@ -10,6 +10,8 @@ import {
 } from "../../utils/constants";
 
 const EditContactModal = ({ lead, onClose, onUpdate }) => {
+  const { services } = useSelector((state) => state.services);
+  
   const [formData, setFormData] = useState({
     name: lead.name || lead.customerName || "",
     phone: lead.phone || lead.customerPhone || "",
@@ -22,6 +24,12 @@ const EditContactModal = ({ lead, onClose, onUpdate }) => {
     address: lead.address || "",
     state: lead.state || "",
   });
+
+  // Fetch services on component mount
+  useEffect(() => {
+    // Services should already be fetched from the Services page
+    // But we can add a fallback if needed
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -82,8 +90,8 @@ const EditContactModal = ({ lead, onClose, onUpdate }) => {
               className="w-full bg-transparent border border-bg-tertiary rounded-md p-3 text-text-primary outline-none focus:border-crm-orange transition-colors"
             >
               <option value="">Select Service</option>
-              {SERVICES.map((service) => (
-                <option key={service} value={service}>{service}</option>
+              {services.filter(s => s.status).map((service) => (
+                <option key={service._id} value={service.name}>{service.name}</option>
               ))}
             </select>
           </div>

@@ -122,7 +122,7 @@ export const assignLeadToAgent = createAsyncThunk(
 
 export const convertLeadToCustomer = createAsyncThunk(
   'leads/convert',
-  async ({ id, convertData }, { rejectWithValue }) => {
+  async ({ id, convertData }, { rejectWithValue, dispatch }) => {
     try {
       const response = await convertLead(id, convertData);
       return { id, conversion: response.data };
@@ -324,7 +324,8 @@ const leadsSlice = createSlice({
             details: interaction.details,
             createdAt: interaction.createdAt || new Date().toISOString(),
             createdBy: interaction.createdBy || 'System',
-            notes: interaction.details
+            notes: interaction.details,
+            called: interaction.phoneCalled || false, // Use phoneCalled from backend response
           });
         }
         if (state.currentLead?._id === id) {
@@ -336,7 +337,8 @@ const leadsSlice = createSlice({
             details: interaction.details,
             createdAt: interaction.createdAt || new Date().toISOString(),
             createdBy: interaction.createdBy || 'System',
-            notes: interaction.details
+            notes: interaction.details,
+            called: interaction.phoneCalled || false, // Use phoneCalled from backend response
           });
         }
       })
