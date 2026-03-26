@@ -1,15 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { ChevronDown, Search, Plus, Trash2 } from 'lucide-react'
-import { PRODUCTS } from './addInvoiceData'
-
-const InvoiceItemsSection = ({ items, setItems }) => {
+const InvoiceItemsSection = ({ items, setItems, services = [] }) => {
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [productSearch, setProductSearch] = useState('')
   const [productOpen, setProductOpen] = useState(false)
   const productRef = useRef(null)
 
-  const filteredProducts = PRODUCTS.filter((p) =>
-    p.name.toLowerCase().includes(productSearch.toLowerCase())
+  const filteredProducts = (services || []).filter((p) =>
+    p?.name?.toLowerCase().includes(productSearch.toLowerCase())
   )
 
   useEffect(() => {
@@ -24,8 +22,8 @@ const InvoiceItemsSection = ({ items, setItems }) => {
 
   const handleAddProduct = () => {
     if (!selectedProduct) return
-    const newPrice = selectedProduct.professional || 0;
-    const newGovFee = selectedProduct.govt || 0;
+    const newPrice = selectedProduct.professionalFees || 0;
+    const newGovFee = selectedProduct.govtFees || 0;
     setItems((prev) => [
       ...prev,
       {
@@ -57,9 +55,10 @@ const InvoiceItemsSection = ({ items, setItems }) => {
       prev.map((item) => {
         if (item.id === id) {
           const percentage = parseFloat(newPercentage) || 0;
-          const gstAmount = (item.price * percentage) / 100;
           const govFee = item.govFee !== undefined ? item.govFee : (item.gst || 0);
-          const amount = item.price + gstAmount + govFee;
+          const taxableAmount = (item.price || 0) + (govFee || 0);
+          const gstAmount = (taxableAmount * percentage) / 100;
+          const amount = taxableAmount + gstAmount;
           return { ...item, gstPercentage: newPercentage, gstAmount, amount };
         }
         return item;
@@ -176,7 +175,7 @@ const InvoiceItemsSection = ({ items, setItems }) => {
           >
             <span className={selectedProduct ? 'text-[var(--color-text-primary)] font-medium' : 'text-[var(--color-text-secondary)]'}>
               {selectedProduct
-                ? `${selectedProduct.name} – ₹${selectedProduct.professional}`
+                ? `${selectedProduct.name} – ₹${selectedProduct.professionalFees}`
                 : 'Select a product...'}
             </span>
             <ChevronDown
@@ -206,13 +205,13 @@ const InvoiceItemsSection = ({ items, setItems }) => {
                 ) : (
                   filteredProducts.map((p) => (
                     <li
-                      key={p.id}
+                      key={p._id}
                       onClick={() => { setSelectedProduct(p); setProductOpen(false); setProductSearch('') }}
-                      className={`px-4 py-2.5 text-sm cursor-pointer hover:bg-[var(--color-bg-tertiary)] transition-colors flex justify-between items-center ${selectedProduct?.id === p.id ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]' : 'text-[var(--color-text-primary)]'
+                      className={`px-4 py-2.5 text-sm cursor-pointer hover:bg-[var(--color-bg-tertiary)] transition-colors flex justify-between items-center ${selectedProduct?._id === p._id ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]' : 'text-[var(--color-text-primary)]'
                         }`}
                     >
                       <span className="font-medium">{p.name}</span>
-                      <span className="text-xs text-[var(--color-text-secondary)] ml-4 whitespace-nowrap">₹{p.professional}</span>
+                      <span className="text-xs text-[var(--color-text-secondary)] ml-4 whitespace-nowrap">₹{p.professionalFees}</span>
                     </li>
                   ))
                 )}

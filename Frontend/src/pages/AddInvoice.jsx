@@ -1,58 +1,101 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router'
 import AddInvoiceHeader from '../components/addInvoice/AddInvoiceHeader'
 import InvoiceDetailsSection from '../components/addInvoice/InvoiceDetailsSection'
 import InvoiceItemsSection from '../components/addInvoice/InvoiceItemsSection'
 import CreateInvoiceButton from '../components/addInvoice/CreateInvoiceButton'
 import { generateInvoicePdf } from '../utils/invoicePdfGenerator'
+import { fetchCustomerList } from '../redux/slices/customersSlice'
+import { fetchServices } from '../redux/slices/servicesSlice'
+import { createInvoice } from '../redux/slices/invoicesSlice'
+import { toast } from 'react-hot-toast'
 
 const today = new Date().toISOString().split('T')[0]
 
 const AddInvoice = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  
+  // Redux state
+  const { dropdownList: customers } = useSelector((state) => state.customers)
+  const { services } = useSelector((state) => state.services)
+  const { loading: creating } = useSelector((state) => state.invoices)
+
   // Invoice Details state
   const [selectedCustomer, setSelectedCustomer] = useState(null)
   const [invoiceDate, setInvoiceDate] = useState(today)
   const [isRecurring, setIsRecurring] = useState(false)
-  const [interval, setInterval] = useState(0)
+  const [interval, setInterval] = useState(1)
   const [intervalType, setIntervalType] = useState('Month')
-  const [endDate, setEndDate] = useState(today)
+  const [endDate, setEndDate] = useState('')
 
   // Invoice Items state
   const [items, setItems] = useState([])
 
-  const handleCreateInvoice = () => {
+  // Fetch initial data
+  useEffect(() => {
+    dispatch(fetchCustomerList())
+    dispatch(fetchServices())
+  }, [dispatch])
+
+  const handleCreateInvoice = async () => {
     if (!selectedCustomer) {
-      alert('Please select a customer.')
+      toast.error('Please select a customer.')
       return
     }
     if (items.length === 0) {
-      alert('Please add at least one invoice item.')
+      toast.error('Please add at least one invoice item.')
       return
     }
 
-    const invoicePayload = {
-      customer: selectedCustomer,
-      invoiceDate: isRecurring ? null : invoiceDate,
+    // Map items to backend payload structure
+    const mappedItems = items.map((item, idx) => ({
+      serviceId: item.product?._id,
+      hsn: item.product?.hsn || '998399',
+      description: item.product?.name,
+      professionalFees: item.price,
+      govtFees: item.govFee || 0,
+      gstPercent: parseFloat(item.gstPercentage) || 0,
+    }))
+
+    const payload = {
+      customerId: selectedCustomer._id,
+      invoiceDate,
       isRecurring,
-      interval: isRecurring ? interval : null,
-      intervalType: isRecurring ? intervalType : null,
-      endDate: isRecurring ? endDate : null,
-      items,
-      totals: {
-        price: items.reduce((acc, i) => acc + i.price, 0),
-        gst: items.reduce((acc, i) => acc + i.gst, 0),
-        amount: items.reduce((acc, i) => acc + i.amount, 0),
-      },
+      items: mappedItems,
+      // Recurring fields
+      recurring: isRecurring,
+      interval: isRecurring ? parseInt(interval) : undefined,
+      intervalType: isRecurring ? intervalType : undefined,
+      endDate: isRecurring && endDate ? endDate : undefined,
     }
 
-    console.log('Invoice Payload:', invoicePayload)
-    // TODO: POST to API
-    // Provide a mocked invoice number for the generator
-    const pdfInvoiceData = {
-      ...invoicePayload,
-      number: `INV-24-${Math.floor(Math.random() * 10000000)}`,
-      date: invoiceDate
-    };
-    generateInvoicePdf(pdfInvoiceData, selectedCustomer);
+    try {
+      const resultAction = await dispatch(createInvoice(payload))
+      if (createInvoice.fulfilled.match(resultAction)) {
+        const { invoice } = resultAction.payload
+        toast.success(isRecurring ? 'Recurring invoice setup successfully!' : 'Invoice created successfully!')
+        
+        // Generate PDF using the created invoice data
+        // Populate the customer data as it was selected in UI
+        const pdfData = {
+          ...invoice,
+          customer: selectedCustomer
+        }
+        generateInvoicePdf(pdfData, selectedCustomer)
+
+        // Reset Form
+        setSelectedCustomer(null)
+        setItems([])
+        setIsRecurring(false)
+        setInvoiceDate(today)
+      } else {
+        toast.error(resultAction.payload || 'Failed to create invoice')
+      }
+    } catch (err) {
+      toast.error('An unexpected error occurred.')
+    }
   }
 
   return (
@@ -74,13 +117,21 @@ const AddInvoice = () => {
         setIntervalType={setIntervalType}
         endDate={endDate}
         setEndDate={setEndDate}
+        customers={customers}
       />
 
       {/* Section 3: Invoice Items */}
-      <InvoiceItemsSection items={items} setItems={setItems} />
+      <InvoiceItemsSection 
+        items={items} 
+        setItems={setItems} 
+        services={services}
+      />
 
       {/* Section 4: Create Invoice Button */}
-      <CreateInvoiceButton onClick={handleCreateInvoice} />
+      <CreateInvoiceButton 
+        onClick={handleCreateInvoice} 
+        disabled={creating}
+      />
     </div>
   )
 }

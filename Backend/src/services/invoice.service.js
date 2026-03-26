@@ -150,12 +150,13 @@ export const createInvoice = async (data, userId) => {
   });
 
   // If recurring → create RecurringInvoice
+  let ri = null;
   if (data.recurring && data.interval && data.intervalType) {
     const startDate = invoice.invoiceDate;
     const endDate = data.endDate ? new Date(data.endDate) : undefined;
     const nextDate = calcNextDate(startDate, data.interval, data.intervalType);
 
-    const ri = await RecurringInvoice.create({
+    ri = await RecurringInvoice.create({
       customer: data.customerId,
       items: data.items.map((item) => ({
         service: item.serviceId || undefined,
@@ -176,9 +177,12 @@ export const createInvoice = async (data, userId) => {
 
     invoice.recurringInvoice = ri._id;
     await invoice.save();
+
+    // Populate customer info for the recurring invoice for frontend use
+    ri = await RecurringInvoice.findById(ri._id).populate("customer", "name companyName phone");
   }
 
-  return invoice;
+  return { invoice, recurringInvoice: ri };
 };
 
 // ─── 3. GET SINGLE INVOICE ────────────────────────────────────────────────────

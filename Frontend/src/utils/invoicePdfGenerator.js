@@ -41,7 +41,24 @@ const getBase64ImageFromUrl = async (imageUrl) => {
 export const generateInvoicePdf = async (invoice, customer, action = 'view') => {
   const doc = new jsPDF('p', 'pt', 'a4');
   const pageWidth = doc.internal.pageSize.width;
-  
+
+  // ── Normalize totals ──────────────────────────────────────────────────────────
+  // Backend returns flat fields (subTotal, totalGst, total, paid, due).
+  // Frontend AddInvoice may pass a nested `.totals` object. Handle both.
+  const t = {
+    subTotal : invoice.subTotal  ?? invoice.totals?.price    ?? invoice.totals?.subTotal ?? 0,
+    gst      : invoice.totalGst  ?? invoice.totals?.gstAmount ?? invoice.totals?.gst    ?? 0,
+    total    : invoice.total     ?? invoice.totals?.amount   ?? invoice.totals?.total    ?? 0,
+    paid     : invoice.paid      ?? invoice.totals?.paid     ?? 0,
+    due      : invoice.due       ?? invoice.totals?.due      ?? 0,
+  };
+
+  // Normalize invoice number / date
+  const invoiceNumber = invoice.invoiceNo || invoice.number || '—';
+  const invoiceDate   = invoice.invoiceDate
+    ? new Date(invoice.invoiceDate).toLocaleDateString('en-IN')
+    : invoice.date || '—';
+
   const primaryColor = [252, 191, 73]; // Golden yellow accent
   const borderColor = [0, 0, 0];
 
@@ -102,7 +119,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     body: [[
       `${customer.companyName || customer.customerName}\n${customer.address || '-'}\nContact No: ${customer.phone || '-'}`,
       `\n\n\n\n`,
-      `Invoice No: ${invoice.number}\nDate: ${invoice.date}\nPlace of Supply: 19-WEST BENGAL\nE-way Bill number:`
+      `Invoice No: ${invoiceNumber}\nDate: ${invoiceDate}\nPlace of Supply: ${invoice.placeOfSupply || '19-WEST BENGAL'}\nE-way Bill number:`
     ]],
     columnStyles: {
       0: { cellWidth: 230 },
@@ -111,69 +128,134 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     }
   });
 
+  // Formatting Helpers
+  const formatMoney = (value) => `Rs. ${parseFloat(value || 0).toFixed(2)}`;
+  const formatPercent = (value) => `${parseFloat(value || 0)}%`;
+
   // Items Table
-  const tableRows = (invoice.items || []).map((item, idx) => [
-    (idx + 1).toString(),
-    item.hsn || '998399',
-    item.product?.name || item.name || item.description,
-    `${parseFloat(item.price || 0).toFixed(2)}`,
-    `${parseFloat(item.amount || 0).toFixed(2)}`
-  ]);
+  const hasGst = (invoice.items || []).some(item => (parseFloat(item.gstAmount || 0) > 0 || parseFloat(item.gstPercent || item.gstPercentage || 0) > 0));
+  
+  const tableHeaders = hasGst 
+    ? [['#', 'HSN/SAC', 'Item Name', 'Price', 'IGST', 'Amount']]
+    : [['#', 'HSN/SAC', 'Item Name', 'Price', 'Amount']];
+
+  const tableRows = (invoice.items || []).map((item, idx) => {
+    const rate = item.gstPercent ?? item.gstPercentage ?? 0;
+    const price = parseFloat(item.price || 0);
+    const gstAmount = parseFloat(item.gstAmount || 0);
+    const totalAmount = parseFloat(item.amount || 0);
+
+    const row = [
+      (idx + 1).toString(),
+      item.hsn || '998399',
+      item.product?.name || item.name || item.description,
+      formatMoney(price)
+    ];
+    
+    if (hasGst) {
+      row.push(`${formatMoney(gstAmount)}\n(${formatPercent(rate)})`);
+    }
+    
+    row.push(formatMoney(totalAmount));
+    return row;
+  });
+
+  const totalRow = hasGst
+    ? [
+        { content: 'Total', colSpan: 3, styles: { fontStyle: 'bold', halign: 'right' } }, 
+        formatMoney(t.subTotal),
+        formatMoney(t.gst),
+        formatMoney(t.total)
+      ]
+    : [
+        { content: 'Total', colSpan: 3, styles: { fontStyle: 'bold', halign: 'right' } }, 
+        formatMoney(t.subTotal),
+        formatMoney(t.total)
+      ];
 
   autoTable(doc, {
     startY: doc.lastAutoTable.finalY,
     margin: { left: 20, right: 20 },
     theme: 'grid',
-    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
-    bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
-    head: [['#', 'HSN/SAC', 'Item Name', 'Price', 'Amount']],
+    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9, halign: 'center' },
+    bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, charSpace: 0, cellPadding: 4, font: 'helvetica' },
+    head: tableHeaders,
     body: [
       ...tableRows,
-      [{ content: 'Total', colSpan: 3, styles: { fontStyle: 'bold' } }, `${parseFloat(invoice.totals.subTotal || 0).toFixed(2)}`, `${parseFloat(invoice.totals.total || 0).toFixed(2)}`]
+      totalRow
     ],
-    columnStyles: {
-      0: { cellWidth: 30 },
-      1: { cellWidth: 60 },
+    columnStyles: hasGst ? {
+      0: { cellWidth: 22, halign: 'center' },
+      1: { cellWidth: 55, halign: 'center' },
       2: { cellWidth: 'auto' },
-      3: { cellWidth: 70, halign: 'right' },
-      4: { cellWidth: 70, halign: 'right' }
+      3: { cellWidth: 80, halign: 'right' },
+      4: { cellWidth: 85, halign: 'right' },
+      5: { cellWidth: 80, halign: 'right' }
+    } : {
+      0: { cellWidth: 22, halign: 'center' },
+      1: { cellWidth: 55, halign: 'center' },
+      2: { cellWidth: 'auto' },
+      3: { cellWidth: 80, halign: 'right' },
+      4: { cellWidth: 80, halign: 'right' }
     }
   });
 
   // Tax Breakdown & Summary
-  const nextY = doc.lastAutoTable.finalY;
+  const nextY = doc.lastAutoTable.finalY + 10;
   
   // Tax Table (Left)
+  const taxRows = (invoice.items || [])
+    .filter(item => (parseFloat(item.gstAmount || 0) > 0 || parseFloat(item.gstPercent || item.gstPercentage || 0) > 0))
+    .map(item => [
+      'IGST',
+      formatMoney(item.price || (item.professionalFees + item.govtFees)),
+      formatPercent(item.gstPercent ?? item.gstPercentage ?? 0),
+      formatMoney(item.gstAmount)
+    ]);
+
   autoTable(doc, {
     startY: nextY,
-    margin: { left: 20, right: pageWidth / 2 + 30 },
+    margin: { left: 20, right: pageWidth / 2 + 5 },
     theme: 'grid',
-    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
-    bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, minCellHeight: 15 },
+    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9, halign: 'center' },
+    bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, minCellHeight: 15, charSpace: 0, cellPadding: 3, font: 'helvetica' },
     head: [['Tax Type', 'Taxable amount', 'Rate', 'Tax amount']],
-    body: [
-      ['CGST', `${parseFloat(invoice.totals.subTotal || 0).toFixed(2)}`, '9%', `${(parseFloat(invoice.totals.gst || 0) / 2).toFixed(2)}`],
-      ['SGST', `${parseFloat(invoice.totals.subTotal || 0).toFixed(2)}`, '9%', `${(parseFloat(invoice.totals.gst || 0) / 2).toFixed(2)}`],
-      ['Total', '', '', `${parseFloat(invoice.totals.gst || 0).toFixed(2)}`]
-    ]
+    body: taxRows.length > 0 
+      ? [...taxRows, [{ content: 'Total', styles: { fontStyle: 'bold' } }, '', '', { content: formatMoney(t.gst), styles: { fontStyle: 'bold' } }]]
+      : [['IGST', formatMoney(0), '0%', formatMoney(0)]],
+    columnStyles: {
+      0: { cellWidth: 40 },
+      1: { halign: 'right' },
+      2: { halign: 'center' },
+      3: { halign: 'right' }
+    }
   });
 
   // Summary Table (Right)
+  const summaryBody = [
+    ['Sub Total', formatMoney(t.subTotal)]
+  ];
+  
+  if (hasGst) {
+    summaryBody.push(['GST', formatMoney(t.gst)]);
+  }
+  
+  summaryBody.push(
+    ['Total', formatMoney(t.total)],
+    ['Received Balance', formatMoney(t.paid)],
+    ['Due Balance', formatMoney(t.due)]
+  );
+
   autoTable(doc, {
     startY: nextY,
-    margin: { left: pageWidth / 2 - 20, right: 20 },
+    margin: { left: pageWidth / 2 + 5, right: 20 },
     theme: 'grid',
     headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
-    bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
+    bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, charSpace: 0, cellPadding: 3, font: 'helvetica' },
     head: [['Amounts', '']],
-    body: [
-      ['Sub Total', `Rs ${parseFloat(invoice.totals.subTotal || 0).toFixed(2)}`],
-      ['Total', `Rs ${parseFloat(invoice.totals.total || 0).toFixed(2)}`],
-      ['Received Balance', `Rs ${parseFloat(invoice.totals.paid || 0).toFixed(2)}`],
-      ['Due Balance', `Rs ${parseFloat(invoice.totals.due || 0).toFixed(2)}`]
-    ],
+    body: summaryBody,
     columnStyles: {
-      0: { fontStyle: 'bold', cellWidth: 100 },
+      0: { fontStyle: 'bold', cellWidth: 70 },
       1: { halign: 'right', cellWidth: 'auto' }
     }
   });
@@ -187,7 +269,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 9, halign: 'center' },
     head: [['Invoice Amount In Words', 'Description']],
     body: [[
-      numberToWords(Math.round(invoice.totals.total || 0)),
+      numberToWords(Math.round(t.total || 0)),
       ''
     ]]
   });
@@ -238,7 +320,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   doc.text("Authorized Signatory", centerX, centerY + 50, { align: "center" });
 
   if (action === 'download') {
-    doc.save(`Invoice_${invoice.number}.pdf`);
+    doc.save(`Invoice_${invoiceNumber}.pdf`);
   } else {
     const pdfBlobUrl = doc.output('bloburl');
     window.open(pdfBlobUrl, '_blank');
