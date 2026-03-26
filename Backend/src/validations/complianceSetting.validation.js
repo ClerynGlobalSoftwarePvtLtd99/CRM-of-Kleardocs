@@ -10,16 +10,27 @@ export const createFinancialYearSchema = z.object({
 export const updateFinancialYearSchema = createFinancialYearSchema;
 
 // ─── Compliance Setting ───────────────────────────────────────────────────────
-export const createComplianceSettingSchema = z.object({
-  name: z.string().min(3, "Compliance name required"),
-  year: z.string().regex(/^\d{4}-\d{4}$/, "Format must be YYYY-YYYY"),
+const baseComplianceSettingSchema = z.object({
+  name: z.string().min(3, "Compliance name required").optional(),
+  financialYear: z.string().regex(/^\d{4}-\d{4}$/, "Format must be YYYY-YYYY").optional(),
+  year: z.string().regex(/^\d{4}-\d{4}$/, "Format must be YYYY-YYYY").optional(),
   hasExpiry: z.boolean().optional().default(false),
   expiryDate: z.string().optional(),
   forNewCompany: z.boolean().optional().default(false),
   inc20: z.boolean().optional().default(false),
   daysOfExpiry: z.number().optional().default(30),
   expiryTemplateId: mongoId.optional(),
-  completeTemplateId: mongoId.optional()
+  completeTemplateId: mongoId.optional(),
+  expiryTemplate: z.string().optional(),
+  completeTemplate: z.string().optional(),
 });
 
-export const updateComplianceSettingSchema = createComplianceSettingSchema.partial();
+export const createComplianceSettingSchema = baseComplianceSettingSchema.extend({
+  name: z.string().min(3, "Compliance name required"),
+}).refine(
+  (d) => d.financialYear || d.year,
+  { message: "financialYear is required", path: ["financialYear"] }
+);
+
+export const updateComplianceSettingSchema = baseComplianceSettingSchema.partial();
+

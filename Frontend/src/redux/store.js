@@ -13,6 +13,7 @@ import templatesReducer from './slices/templatesSlice';
 import paymentsReducer from './slices/paymentsSlice';
 import servicesReducer from './slices/servicesSlice';
 import recurringInvoicesReducer from './slices/recurringInvoicesSlice';
+import globalCompliancesReducer from './slices/globalCompliancesSlice';
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ export const store = configureStore({
     payments: paymentsReducer,
     services: servicesReducer,
     recurringInvoices: recurringInvoicesReducer,
+    globalCompliances: globalCompliancesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

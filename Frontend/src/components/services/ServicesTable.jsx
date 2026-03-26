@@ -12,7 +12,7 @@ const ServicesTable = ({ services, onEditClick, loading }) => {
           <thead>
             <tr className="text-text-secondary text-sm uppercase">
               <th className="sticky top-0 bg-bg-secondary px-4 py-4">Service</th>
-              <th className="sticky top-0 bg-bg-secondary px-4 py-4">Template</th>
+              <th className="sticky top-0 bg-bg-secondary px-4 py-4">Email Template</th>
 
               <th className="sticky top-0 bg-bg-secondary px-4 py-4">HSN</th>
               <th className="sticky top-0 bg-bg-secondary px-4 py-4 text-right">Professional</th>

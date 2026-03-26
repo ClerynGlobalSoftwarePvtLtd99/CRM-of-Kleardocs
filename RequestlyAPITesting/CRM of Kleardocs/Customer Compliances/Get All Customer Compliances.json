@@ -14,8 +14,12 @@
     "body": "",
     "contentType": "text/plain",
     "auth": {
-      "currentAuthType": "INHERIT",
-      "authConfigStore": {}
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YmI5ODgzNGM2MGE2ZTcwYWZjM2YyYyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3NDUyMTcwNiwiZXhwIjoxNzc0NTIyNjA2fQ.Zmi_AcG8l5wJxjKcpb4zEgVwtgbOQKWozO870yS6coA"
+        }
+      }
     }
   }
 }
