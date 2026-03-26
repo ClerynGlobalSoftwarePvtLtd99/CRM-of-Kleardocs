@@ -85,14 +85,14 @@ const AnnualComplianceSection = () => {
             setSelectedYear={setSelectedYear}
             onLoad={handleLoad}
           />
-          {/* {isDataLoaded && (
+          {selectedYear && (
             <button
               onClick={() => setIsAddModalOpen(true)}
               className="bg-[var(--color-accent)] hover:bg-yellow-500 cursor-pointer text-white font-bold py-2.5 px-6 rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 text-sm whitespace-nowrap"
             >
-              Add Compliance
+              + Add Compliance
             </button>
-          )} */}
+          )}
         </div>
       </div>
 

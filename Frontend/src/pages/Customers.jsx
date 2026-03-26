@@ -123,7 +123,7 @@ const Customers = () => {
   }
 
   return (
-    <div className="p-8 space-y-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
+    <div className="p-8 space-y-8 max-w-[1600px] mx-auto">
 
       {/* ERROR STATE */}
       {error && (

@@ -1,100 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import CompliancesHeader from "../components/compliances/CompliancesHeader";
 import CompliancesFilter from "../components/compliances/CompliancesFilter";
 import CompliancesTable from "../components/compliances/CompliancesTable";
-
-const dummyData = [
-  {
-    id: 1,
-    customerName: "Amit Sharma",
-    phone: "9876543210",
-    company: "ABC Pvt Ltd",
-    compliance: "MGT-07",
-    expiry: "10/05/2025",
-    status: "To Be Done",
-    completed: "",
-    accountant: "Rahul",
-  },
-  {
-    id: 2,
-    customerName: "Priya Singh",
-    phone: "9999999999",
-    company: "XYZ Ltd",
-    compliance: "AOC-04",
-    expiry: "02/04/2025",
-    status: "Completed",
-    completed: "01/04/2025",
-    accountant: "Priya",
-  },
-  {
-    id: 3,
-    customerName: "Priya Singh",
-    phone: "9999999999",
-    company: "XYZ Ltd",
-    compliance: "AOC-04",
-    expiry: "02/04/2025",
-    status: "Completed",
-    completed: "01/04/2025",
-    accountant: "Priya",
-  },
-  {
-    id: 4,
-    customerName: "Priya Singh",
-    phone: "9999999999",
-    company: "XYZ Ltd",
-    compliance: "AOC-04",
-    expiry: "02/04/2025",
-    status: "Completed",
-    completed: "01/04/2025",
-    accountant: "Priya",
-  },
-  {
-    id: 5,
-    customerName: "Priya Singh",
-    phone: "9999999999",
-    company: "XYZ Ltd",
-    compliance: "AOC-04",
-    expiry: "02/04/2025",
-    status: "Completed",
-    completed: "01/04/2025",
-    accountant: "Priya",
-  },
-  {
-    id: 6,
-    customerName: "Priya Singh",
-    phone: "9999999999",
-    company: "XYZ Ltd",
-    compliance: "AOC-04",
-    expiry: "02/04/2025",
-    status: "Completed",
-    completed: "01/04/2025",
-    accountant: "Priya",
-  },
-  {
-    id: 7,
-    customerName: "Priya Singh",
-    phone: "9999999999",
-    company: "XYZ Ltd",
-    compliance: "AOC-04",
-    expiry: "02/04/2025",
-    status: "Completed",
-    completed: "01/04/2025",
-    accountant: "Priya",
-  },
-  {
-    id: 8,
-    customerName: "Priya Singh",
-    phone: "9999999999",
-    company: "XYZ Ltd",
-    compliance: "AOC-04",
-    expiry: "02/04/2025",
-    status: "Completed",
-    completed: "01/04/2025",
-    accountant: "Priya",
-  },
-];
+import toast from "react-hot-toast";
+import { fetchGlobalCompliances } from "../redux/slices/globalCompliancesSlice";
+import ContentLoader from "../components/common/ContentLoader";
 
 const Compliances = () => {
+  const dispatch = useDispatch();
+  const { list: compliances, loading, totalCount } = useSelector((state) => state.globalCompliances);
 
   const [filters, setFilters] = useState({
     search: "",
@@ -105,54 +20,41 @@ const Compliances = () => {
     endDate: null,
   });
 
-  const [tableData, setTableData] = useState([]);
-
-  const [financialYear , setFinancialYear] = useState("");
+  const [financialYear, setFinancialYear] = useState("");
 
   const handleView = () => {
-
     if (!financialYear) {
-      alert("Please select financial year");
+      toast.error("Please select a financial year");
       return;
     }
-  
-    let filtered = dummyData;
-  
-    // Search
-    if (filters.search) {
-      filtered = filtered.filter(
-        (d) =>
-          d.customerName.toLowerCase().includes(filters.search.toLowerCase()) ||
-          d.company.toLowerCase().includes(filters.search.toLowerCase()) ||
-          d.phone.includes(filters.search)
-      );
-    }
-  
-    // Compliance
-    if (filters.compliance) {
-      filtered = filtered.filter((d) => d.compliance === filters.compliance);
-    }
-  
-    // Status
-    if (filters.status) {
-      filtered = filtered.filter((d) => d.status === filters.status);
-    }
-  
-    // Accountant
-    if (filters.accountant) {
-      filtered = filtered.filter((d) => d.accountant === filters.accountant);
-    }
-  
-    setTableData(filtered);
+
+    const params = {
+      financialYear,
+      search: filters.search || undefined,
+      status: filters.status || undefined,
+      compliance: filters.compliance || undefined,
+      accountant: filters.accountant || undefined,
+      startDate: filters.startDate ? filters.startDate.toISOString() : undefined,
+      endDate: filters.endDate ? filters.endDate.toISOString() : undefined,
+    };
+
+    dispatch(fetchGlobalCompliances(params));
   };
+
+  // Automatically refresh when filters change, if a financial year is selected
+  useEffect(() => {
+    if (financialYear) {
+      handleView();
+    }
+  }, [filters]);
 
   return (
     <div className="space-y-6">
-
       <CompliancesHeader
-        financialYear = {financialYear}
-        setFinancialYear = {setFinancialYear}
-        onView = {handleView}
+        financialYear={financialYear}
+        setFinancialYear={setFinancialYear}
+        onView={handleView}
+        totalCount={totalCount > 0 ? totalCount : null}
       />
 
       <CompliancesFilter
@@ -161,8 +63,13 @@ const Compliances = () => {
         onView={handleView}
       />
 
-      <CompliancesTable data={tableData} />
-
+      {loading ? (
+        <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl p-20 flex justify-center items-center shadow-sm">
+          <ContentLoader message="Loading compliances..." />
+        </div>
+      ) : (
+        <CompliancesTable data={compliances} />
+      )}
     </div>
   );
 };

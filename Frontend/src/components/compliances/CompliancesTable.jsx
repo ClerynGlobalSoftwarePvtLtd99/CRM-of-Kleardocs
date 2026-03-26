@@ -1,6 +1,15 @@
-import React from 'react'
+import React from 'react';
 
 const CompliancesTable = ({ data }) => {
+  const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    return new Date(dateString).toLocaleDateString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
+
   return (
     <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl overflow-hidden shadow-sm flex flex-col h-[65vh] min-h-[400px]">
       <div className="overflow-auto scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] flex-1 px-4">
@@ -33,34 +42,36 @@ const CompliancesTable = ({ data }) => {
           <tbody>
             {(data && data.length > 0) ? (
               data.map((row) => (
-                <tr key={row.id} className="bg-[var(--color-bg-primary)] hover:bg-[var(--color-bg-tertiary)] transition-colors group rounded-md shadow-sm">
+                <tr key={row._id} className="bg-[var(--color-bg-primary)] hover:bg-[var(--color-bg-tertiary)] transition-colors group rounded-md shadow-sm">
                   {/* Customer Name + Phone */}
                   <td className="px-1.5 py-3 text-sm rounded-l-lg">
                     <div className="font-medium text-[var(--color-text-primary)]">
-                      {row.customerName}
+                      {row.customer?.name || "N/A"}
                     </div>
-                    <div className="text-[var(--color-text-secondary)] text-xs">{row.phone}</div>
+                    <div className="text-[var(--color-text-secondary)] text-xs">{row.customer?.phone || ""}</div>
                   </td>
 
                   {/* Company */}
                   <td className="px-1.5 py-3 text-sm text-[var(--color-text-secondary)]">
-                    {row.company}
+                    {row.customer?.companyName || "-"}
                   </td>
 
                   {/* Compliance */}
-                  <td className="px-1.5 py-3 text-sm text-[var(--color-text-secondary)] truncate">
-                    {row.compliance}
+                  <td className="px-1.5 py-3 text-sm text-[var(--color-text-secondary)] truncate max-w-[200px]" title={row.name}>
+                    {row.name}
                   </td>
 
                   {/* Expiry */}
-                  <td className="px-1.5 py-3 text-sm text-center text-green-500 font-medium">
-                    {row.expiry}
+                  <td className="px-1.5 py-3 text-sm text-center text-red-400 font-medium">
+                    {formatDate(row.expiryDate)}
                   </td>
 
                   {/* Status */}
                   <td className="px-1.5 py-3 text-sm text-center">
                     <span className={`px-3 py-1 rounded-full text-xs font-medium 
-                      ${row.status === 'Completed' ? 'bg-green-500/10 text-green-500' : 'bg-orange-500/10 text-orange-500'}
+                      ${row.status === 'Done' ? 'bg-green-500/10 text-green-500' : 
+                        row.status === 'Ongoing' ? 'bg-blue-500/10 text-blue-500' : 
+                        'bg-orange-500/10 text-orange-500'}
                     `}>
                       {row.status}
                     </span>
@@ -68,19 +79,19 @@ const CompliancesTable = ({ data }) => {
 
                   {/* Completed */}
                   <td className="px-1.5 py-3 text-sm text-center text-[var(--color-text-secondary)]">
-                    {row.completed || "-"}
+                    {formatDate(row.completedOn)}
                   </td>
 
                   {/* Accountant */}
                   <td className="px-1.5 py-3 text-sm rounded-r-lg text-[var(--color-text-secondary)]">
-                    {row.accountant}
+                    {row.accountant || "Unassigned"}
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
                 <td colSpan="7" className="px-4 py-10 text-center text-[var(--color-text-secondary)] bg-[var(--color-bg-primary)] rounded-lg">
-                  No data found
+                  No compliances found for this period.
                 </td>
               </tr>
             )}
@@ -88,7 +99,7 @@ const CompliancesTable = ({ data }) => {
         </table>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CompliancesTable
+export default CompliancesTable;
