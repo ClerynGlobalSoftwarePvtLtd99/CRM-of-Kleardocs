@@ -3,6 +3,7 @@ import axiosInstance from '../../api/axiosInstance';
 
 const initialState = {
   list: [],
+  dropdownList: [],
   currentCustomer: null,
   loading: false,
   error: null,
@@ -17,6 +18,19 @@ export const fetchCustomers = createAsyncThunk(
       return response.data.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch customers');
+    }
+  }
+);
+
+export const fetchCustomerList = createAsyncThunk(
+  'customers/fetchList',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get('/customers/list');
+      // Backend returns { statusCode, data: [customers], message }
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch customer list');
     }
   }
 );
@@ -91,6 +105,19 @@ const customersSlice = createSlice({
         console.log('Redux fetchCustomers fulfilled with payload:', action.payload);
       })
       .addCase(fetchCustomers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Fetch Customer List (for dropdowns)
+      .addCase(fetchCustomerList.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCustomerList.fulfilled, (state, action) => {
+        state.loading = false;
+        state.dropdownList = action.payload || [];
+      })
+      .addCase(fetchCustomerList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

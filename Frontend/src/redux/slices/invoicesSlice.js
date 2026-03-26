@@ -45,6 +45,18 @@ export const deleteInvoice = createAsyncThunk(
   }
 );
 
+export const createInvoice = createAsyncThunk(
+  'invoices/create',
+  async (invoiceData, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post('/invoices', invoiceData);
+      return response.data.data; // { invoice, recurringInvoice }
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to create invoice');
+    }
+  }
+);
+
 export const addPayment = createAsyncThunk(
   'invoices/addPayment',
   async ({ invoiceId, paymentData }, { rejectWithValue }) => {
@@ -76,6 +88,11 @@ const invoicesSlice = createSlice({
     clearSelectedInvoice: (state) => {
       state.selectedInvoice = null;
     },
+    // New action to manually add an invoice if needed
+    addInvoiceToList: (state, action) => {
+      state.list.unshift(action.payload);
+      state.totalCount += 1;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -90,6 +107,24 @@ const invoicesSlice = createSlice({
         state.totalCount = action.payload.count || 0;
       })
       .addCase(fetchInvoices.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Create Invoice
+      .addCase(createInvoice.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createInvoice.fulfilled, (state, action) => {
+        state.loading = false;
+        const { invoice } = action.payload;
+        // Case 1: Normal Invoice (Recurring OFF) -> Add to Invoices Table
+        if (invoice && !invoice.isRecurring) {
+          state.list.unshift(invoice);
+          state.totalCount += 1;
+        }
+      })
+      .addCase(createInvoice.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

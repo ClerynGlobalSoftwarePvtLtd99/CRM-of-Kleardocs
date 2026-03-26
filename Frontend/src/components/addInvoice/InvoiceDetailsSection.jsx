@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { ChevronDown, Search, User } from 'lucide-react'
-import { CUSTOMERS } from './addInvoiceData'
-
 const InvoiceDetailsSection = ({
   selectedCustomer,
   setSelectedCustomer,
@@ -15,15 +13,16 @@ const InvoiceDetailsSection = ({
   setIntervalType,
   endDate,
   setEndDate,
+  customers = [],
 }) => {
   const [search, setSearch] = useState('')
   const [open, setOpen] = useState(false)
   const dropdownRef = useRef(null)
 
-  const filtered = CUSTOMERS.filter(
+  const filtered = (customers || []).filter(
     (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.companyName.toLowerCase().includes(search.toLowerCase())
+      c?.name?.toLowerCase().includes(search.toLowerCase()) ||
+      c?.companyName?.toLowerCase().includes(search.toLowerCase())
   )
 
   useEffect(() => {
@@ -91,24 +90,24 @@ const InvoiceDetailsSection = ({
                   </div>
                 </div>
                 {/* Options */}
-                <ul className="max-h-56 overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)]">
-                  {filtered.length === 0 ? (
-                    <li className="px-4 py-3 text-sm text-[var(--color-text-secondary)] text-center">No customers found</li>
-                  ) : (
-                    filtered.map((c) => (
-                      <li
-                        key={c.id}
-                        onClick={() => handleSelect(c)}
-                        className={`px-4 py-2.5 text-sm cursor-pointer hover:bg-[var(--color-bg-tertiary)] transition-colors flex flex-col gap-0.5 ${
-                          selectedCustomer?.id === c.id ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]' : 'text-[var(--color-text-primary)]'
-                        }`}
-                      >
-                        <span className="font-medium">{c.name}</span>
-                        <span className="text-xs text-[var(--color-text-secondary)]">{c.companyName}</span>
-                      </li>
-                    ))
-                  )}
-                </ul>
+                 <ul className="max-h-56 overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)]">
+                   {filtered.length === 0 ? (
+                     <li className="px-4 py-3 text-sm text-[var(--color-text-secondary)] text-center">No customers found</li>
+                   ) : (
+                     filtered.map((c) => (
+                       <li
+                         key={c._id}
+                         onClick={() => handleSelect(c)}
+                         className={`px-4 py-2.5 text-sm cursor-pointer hover:bg-[var(--color-bg-tertiary)] transition-colors flex flex-col gap-0.5 ${
+                           selectedCustomer?._id === c._id ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]' : 'text-[var(--color-text-primary)]'
+                         }`}
+                       >
+                         <span className="font-medium">{c.name}</span>
+                         <span className="text-xs text-[var(--color-text-secondary)]">{c.companyName}</span>
+                       </li>
+                     ))
+                   )}
+                 </ul>
               </div>
             )}
           </div>

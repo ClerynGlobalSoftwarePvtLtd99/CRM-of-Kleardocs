@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../api/axiosInstance';
+import { createInvoice } from './invoicesSlice';
 
 const initialState = {
   list: [],
@@ -90,6 +91,14 @@ const recurringInvoicesSlice = createSlice({
         const index = state.list.findIndex(inv => inv._id === action.payload._id);
         if (index !== -1) {
           state.list[index] = action.payload;
+        }
+      })
+      // Handle invoice creation (if recurring)
+      .addCase(createInvoice.fulfilled, (state, action) => {
+        const { recurringInvoice } = action.payload;
+        if (recurringInvoice) {
+          state.list.unshift(recurringInvoice);
+          state.count += 1;
         }
       });
   },
