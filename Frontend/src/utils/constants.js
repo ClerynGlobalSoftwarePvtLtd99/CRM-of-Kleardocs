@@ -76,11 +76,14 @@ export const RESPONSES = ["Interested", "Not Interested", "Call Back", "No Respo
 
 export const COMPANY_TYPES = [
   "Private Limited Company",
-  "Partnership",
   "Proprietorship",
-  "LLP",
+  "Partnership",
   "Public Limited Company",
-  "Section 8 Company",
+  "Section 8",
+  "LLP",
+  "FPC",
+  "Trust",
+  "Others"
 ];
 
 export const EMAIL_TEMPLATES = [

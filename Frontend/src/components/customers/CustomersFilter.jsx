@@ -1,11 +1,21 @@
-import React, { useState } from "react";
-import { Search, Calendar, ChevronDown, X } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Search, Filter, X, ChevronDown } from "lucide-react";
 import { COMPANY_TYPES } from "../../utils/constants";
 import DateRangePicker from "../DateRangePicker";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchServices } from "../../redux/slices/servicesSlice";
 
 const CustomersFilter = ({ filters, setFilters, onClear }) => {
+  const dispatch = useDispatch();
+  const { services } = useSelector((state) => state.services);
   const [localFilters, setLocalFilters] = useState(filters);
+
+  useEffect(() => {
+    if (services.length === 0) {
+      dispatch(fetchServices());
+    }
+  }, [dispatch, services.length]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,110 +35,110 @@ const CustomersFilter = ({ filters, setFilters, onClear }) => {
       endDate: null,
       companyType: "",
       status: "",
+      activeService: ""
     };
     setLocalFilters(clearedFilters);
     setFilters(clearedFilters);
+    if (onClear) onClear();
     toast.success("Filters cleared");
   };
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] p-4 rounded-xl mb-6 shadow-sm">
+      <div className="flex flex-col lg:flex-row items-center gap-3 w-full">
         
-        {/* Name/Phone/Company Search */}
-        <div className="fieldset-input">
-          <span className="fieldset-label">Name/Phone/Company</span>
-          <div className="relative">
-            <input 
-              type="text" 
-              name="search"
-              placeholder="Search..." 
-              value={localFilters.search}
-              onChange={handleChange}
-              className="pr-10"
-            />
-            <Search size={18} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary" />
-          </div>
+        {/* Search */}
+        <div className="relative flex-1 min-w-[120px] max-w-[220px] shrink-0 w-full lg:w-auto">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]" size={16} />
+          <input
+            type="text"
+            name="search"
+            placeholder="Search..."
+            value={localFilters.search}
+            onChange={handleChange}
+            className="w-full pl-9 pr-4 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-text-primary)] text-sm h-[38px]"
+          />
         </div>
 
-        {/* Data Type Dropdown */}
-        <div className="fieldset-input">
-          <span className="fieldset-label">Data Type</span>
-          <select name="dataType" value={localFilters.dataType} onChange={handleChange}>
+        {/* Date Type Selector */}
+        <div className="relative shrink-0 w-full lg:w-auto">
+          <select
+            name="dataType"
+            value={localFilters.dataType}
+            onChange={handleChange}
+            className="w-full lg:w-auto appearance-none pl-3 pr-7 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-text-primary)] cursor-pointer min-w-[90px] text-sm h-[38px]"
+          >
             <option value="onboarding">Onboarding Date</option>
             <option value="incorporation">Incorporation Date</option>
-            <option value="expiry">Expiry Date</option>
           </select>
+          <ChevronDown size={14} className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" />
         </div>
 
-        {/* Date Range Selector */}
-        <div className="lg:col-span-2 fieldset-input">
-          <span className="fieldset-label">Select Date Range</span>
-          <DateRangePicker 
+        {/* Date Range Picker */}
+        <div className="shrink-0 z-50 w-full lg:w-auto">
+          <DateRangePicker
             startDate={localFilters.startDate}
             endDate={localFilters.endDate}
             onRangeChange={(startDate, endDate) =>
-              setLocalFilters(prev => ({ ...prev, startDate, endDate }))
+              setLocalFilters((prev) => ({ ...prev, startDate, endDate }))
             }
           />
         </div>
 
         {/* Company Type */}
-        <div className="fieldset-input">
-          <span className="fieldset-label">Type</span>
-          <select name="companyType" value={localFilters.companyType} onChange={handleChange}>
-            <option value="">All Types</option>
+        <div className="relative shrink-0 w-full lg:w-auto">
+          <select
+            name="companyType"
+            value={localFilters.companyType}
+            onChange={handleChange}
+            className="w-full lg:w-auto appearance-none pl-3 pr-8 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-text-primary)] cursor-pointer min-w-[90px] text-sm h-[38px]"
+          >
+            <option value="">Type</option>
             {COMPANY_TYPES.map(type => (
               <option key={type} value={type}>{type}</option>
             ))}
           </select>
+          <ChevronDown size={14} className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" />
         </div>
 
-        {/* Status */}
-        <div className="fieldset-input">
-          <span className="fieldset-label">Status</span>
-          <select name="status" value={localFilters.status} onChange={handleChange}>
-            <option value="">All Statuses</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-            <option value="pending">Pending</option>
+        {/* Active Services */}
+        <div className="relative shrink-0 w-full lg:w-auto">
+          <select
+            name="activeService"
+            value={localFilters.activeService || ""}
+            onChange={handleChange}
+            className="w-full lg:w-auto appearance-none pl-3 pr-7 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-text-primary)] cursor-pointer min-w-[80px] max-w-[110px] truncate text-sm h-[38px]"
+          >
+            <option value="">Services</option>
+            {services.map(service => (
+              <option key={service._id} value={service.name}>{service.name}</option>
+            ))}
           </select>
+          <ChevronDown size={14} className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" />
         </div>
 
-        {/* Services Dropdowns (Mocked for UI) */}
-        {[
-          "Annual Compliance",
-          "GST Services",
-          "Taxation",
-          "Bookkeeping"
-        ].map((service, idx) => (
-          <div key={idx} className="fieldset-input">
-            <span className="fieldset-label">{service}</span>
-            <select name={service.toLowerCase().replace(/\s+/g, '')} value={localFilters[service.toLowerCase().replace(/\s+/g, '')] || ""} onChange={handleChange}>
-              <option value="">Select Status</option>
-              <option value="ongoing">Ongoing</option>
-              <option value="completed">Completed</option>
-              <option value="overdue">Overdue</option>
-            </select>
-          </div>
-        ))}
+        {/* Action Buttons */}
+        <div className="flex gap-1 shrink-0 w-full lg:w-auto">
+          <button
+            type="button"
+            onClick={handleApplyFilters}
+            className="flex-1 lg:flex-none px-2 py-2 bg-[var(--color-accent)] hover:bg-yellow-500 text-white rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1 font-bold text-[11px] uppercase tracking-tighter h-[38px]"
+            title="Apply Filter"
+          >
+            <Filter size={16} />
+            <span className="lg:inline">Filter</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleClear}
+            className="flex-1 lg:flex-none px-2 py-2 bg-[var(--color-bg-tertiary)] hover:bg-red-500 hover:text-white text-[var(--color-text-secondary)] rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1 font-bold text-[11px] uppercase tracking-tighter h-[38px]"
+            title="Clear Filters"
+          >
+            <X size={16} />
+            <span className="lg:inline">Clear</span>
+          </button>
+        </div>
 
-      </div>
-
-      <div className="flex justify-end gap-3 pt-4 border-t border-bg-tertiary">
-        <button 
-          onClick={handleClear}
-          className="px-6 py-2 rounded-md bg-bg-tertiary text-text-primary text-sm font-bold uppercase hover:bg-bg-tertiary/80 transition-all flex items-center gap-2"
-        >
-          <X size={16} /> Clear Filters
-        </button>
-        <button 
-          className="btn-raised btn-raised-orange text-white px-8 py-2 rounded-md text-sm font-bold uppercase tracking-widest shadow-lg"
-          onClick={handleApplyFilters}
-        >
-          <Search size={16} className="inline mr-2" />
-          Apply Filter
-        </button>
       </div>
     </div>
   );

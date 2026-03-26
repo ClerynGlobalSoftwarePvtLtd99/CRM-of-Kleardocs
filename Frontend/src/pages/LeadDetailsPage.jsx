@@ -25,7 +25,7 @@ import AddTemplateModal from "../components/templates/AddTemplateModal";
 import EditContactModal from "../components/lead-modals/EditContactModal";
 import NextFollowupModal from "../components/lead-modals/NextFollowupModal";
 import ChangeAgentModal from "../components/lead-modals/ChangeAgentModal";
-import EditEmailsModal from "../components/customer-modals/EditEmailsModal";
+import EditEmailsModal from "../components/customers/EditEmailsModal";
 
 const LeadDetailsPage = () => {
   const { id } = useParams();
