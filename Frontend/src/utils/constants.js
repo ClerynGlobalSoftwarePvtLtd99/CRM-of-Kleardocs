@@ -68,9 +68,9 @@ export const STATES_AND_UTS = [
 
 export const AGENTS = ["Ritu Kaur", "Jagjyot Singh", "Admin"];
 
-export const CLIENT_TYPES = ["Hot", "Cold", "Warm"];
+export const CLIENT_TYPES = ["Hot", "Cold"];
 
-export const PRIORITIES = ["High", "Medium", "Low"];
+export const PRIORITIES = ["High", "Medium", "Low", "None"];
 
 export const RESPONSES = ["Interested", "Not Interested", "Call Back", "No Response", "Converted"];
 

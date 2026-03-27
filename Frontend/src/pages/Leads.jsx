@@ -13,7 +13,7 @@ import ContentLoader from "../components/common/ContentLoader";
 const Leads = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { list: leads, loading, error } = useSelector((state) => state.leads);
+  const { list: leads, totalCount, loading, error } = useSelector((state) => state.leads);
   const [showModal, setShowModal] = useState(false);
   const [filters, setFilters] = useState({});
 
@@ -56,10 +56,10 @@ const Leads = () => {
   }
 
   return (
-    <div className="p-4 bg-bg-primary text-text-primary h-full">
+    <div className="h-[calc(100vh-64px)] flex flex-col p-4 bg-bg-primary text-text-primary overflow-hidden">
       <LeadsHeader 
         onAdd={() => setShowModal(true)} 
-        count={leads.length} 
+        count={totalCount} 
       />
 
       <LeadsFilter onFilterChange={handleFilterChange} filters={filters} />

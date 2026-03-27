@@ -140,3 +140,15 @@ select option {
   scrollbar-width: thin;
   scrollbar-color: var(--color-crm-orange) var(--color-bg-secondary);
 }
+
+/* Consistent small top gap for sidebar pages (16px) */
+.sidebar-content-wrapper > *:first-child,
+.small-top-gap {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+.sidebar-content-wrapper {
+  padding-top: 0.75rem !important; /* Unified 12px gap */
+}
+

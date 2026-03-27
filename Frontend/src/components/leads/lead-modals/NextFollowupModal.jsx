@@ -14,7 +14,6 @@ const NextFollowupModal = ({ lead, onClose, onUpdate }) => {
       nextFollowup: `${formData.date} ${formData.time}`,
       details: formData.details
     });
-    onClose();
   };
 
   return (

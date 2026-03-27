@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { X, UserCheck } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers } from "../../redux/slices/usersSlice";
+import { fetchUsers } from "../../../redux/slices/usersSlice";
 
 const ChangeAgentModal = ({ currentAgentId, onClose, onUpdate }) => {
   const dispatch = useDispatch();

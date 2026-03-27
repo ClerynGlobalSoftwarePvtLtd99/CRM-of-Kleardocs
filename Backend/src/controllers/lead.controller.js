@@ -25,25 +25,17 @@ export const updateLead = async (req, res) => {
   res.status(200).json(new ApiResponse(200, lead, "Lead updated successfully"));
 };
 
+// DELETE /api/v1/leads/:leadId
+export const deleteLead = async (req, res) => {
+  await leadService.deleteLead(req.params.leadId);
+  res.status(200).json(new ApiResponse(200, null, "Lead deleted successfully"));
+};
+
 // POST /api/v1/leads/:leadId/followup
 export const addFollowup = async (req, res) => {
-  const leadId = req.params.leadId;
-  await leadService.addFollowup(leadId, req.body, req.user.id);
-  
-  // Return the followup data for Redux state management
-  const followupData = {
-    id: leadId,
-    followup: {
-      _id: Date.now().toString(),
-      nextFollowup: req.body.followupDate,
-      details: req.body.details,
-      phoneCalled: req.body.phoneCalled || false,
-      createdAt: new Date().toISOString(),
-      createdBy: req.user.id
-    }
-  };
-  
-  res.status(200).json(new ApiResponse(200, followupData, "Follow-up set successfully"));
+  // Returns the fully populated updated lead
+  const updatedLead = await leadService.addFollowup(req.params.leadId, req.body, req.user.id);
+  res.status(200).json(new ApiResponse(200, updatedLead, "Follow-up set successfully"));
 };
 
 // POST /api/v1/leads/:leadId/interaction
@@ -60,20 +52,13 @@ export const getEmails = async (req, res) => {
 
 // PUT /api/v1/leads/:leadId/emails
 export const updateEmails = async (req, res) => {
-  const leadId = req.params.leadId;
-  await leadService.updateEmails(leadId, req.body.emails, req.user.id);
-  
-  // Return the email update data for Redux state management
-  const emailData = {
-    id: leadId,
-    emails: req.body.emails
-  };
-  
-  res.status(200).json(new ApiResponse(200, emailData, "Emails updated successfully"));
+  const emails = await leadService.updateEmails(req.params.leadId, req.body.emails, req.user.id);
+  res.status(200).json(new ApiResponse(200, { id: req.params.leadId, emails }, "Emails updated successfully"));
 };
 
 // PUT /api/v1/leads/:leadId/assign
 export const assignAgent = async (req, res) => {
+  // Returns the full populated lead document
   const updatedLead = await leadService.assignAgent(req.params.leadId, req.body.agentId, req.user.id);
   res.status(200).json(new ApiResponse(200, updatedLead, "Agent assigned successfully"));
 };
@@ -82,4 +67,16 @@ export const assignAgent = async (req, res) => {
 export const convertToCustomer = async (req, res) => {
   const customer = await leadService.convertToCustomer(req.params.leadId, req.body, req.user.id);
   res.status(200).json(new ApiResponse(200, { customerId: customer._id }, "Lead converted to customer successfully"));
+};
+
+// POST /api/v1/leads/:leadId/send-email-template
+export const sendEmailTemplate = async (req, res) => {
+  const entry = await leadService.logEmailTemplate(req.params.leadId, req.body, req.user.id);
+  res.status(201).json(new ApiResponse(201, entry, "Email template logged successfully"));
+};
+
+// POST /api/v1/leads/:leadId/send-whatsapp-template
+export const sendWhatsappTemplate = async (req, res) => {
+  const entry = await leadService.logWhatsappTemplate(req.params.leadId, req.body, req.user.id);
+  res.status(201).json(new ApiResponse(201, entry, "WhatsApp template logged successfully"));
 };

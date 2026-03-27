@@ -1,22 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { X, Trash2, Mail } from "lucide-react";
+import { X, Trash2, Mail, Plus, AlertCircle } from "lucide-react";
 import toast from "react-hot-toast";
 
 const EditEmailsModal = ({ customer, onClose, onUpdate, loading = false }) => {
-  // Ensure emails is always an array
-  const [emails, setEmails] = useState(() => {
-    const customerEmails = customer?.emails;
-    if (Array.isArray(customerEmails)) {
-      return customerEmails;
-    } else if (customerEmails && typeof customerEmails === 'object') {
-      // Convert object to array if needed
-      return Object.values(customerEmails).filter(email => typeof email === 'string');
-    }
-    return [];
-  });
+  const [emails, setEmails] = useState([]);
   const [newEmail, setNewEmail] = useState("");
 
-  // Reset emails state when customer prop changes
   useEffect(() => {
     const customerEmails = customer?.emails;
     if (Array.isArray(customerEmails)) {
@@ -30,12 +19,17 @@ const EditEmailsModal = ({ customer, onClose, onUpdate, loading = false }) => {
 
   const handleAddEmail = () => {
     if (!newEmail) return;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+      toast.error("Invalid email format");
+      return;
+    }
     if (emails.includes(newEmail)) {
       toast.error("Email already exists");
       return;
     }
     setEmails([...emails, newEmail]);
     setNewEmail("");
+    toast.success("Email added to list");
   };
 
   const handleRemoveEmail = (email) => {
@@ -44,79 +38,91 @@ const EditEmailsModal = ({ customer, onClose, onUpdate, loading = false }) => {
 
   const handleUpdate = () => {
     onUpdate({ ...customer, emails });
-    onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="w-full max-w-md rounded-lg border border-bg-tertiary bg-bg-secondary text-text-primary shadow-2xl animate-in fade-in zoom-in duration-200">
-        <div className="flex items-center justify-between border-b border-bg-tertiary px-6 py-4">
-          <h2 className="text-xl font-normal">Edit Emails</h2>
-          <button onClick={onClose} className="p-2 transition-colors text-text-secondary hover:text-white">
-            <X size={20} />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
+      <div className="w-full max-w-lg rounded-3xl border border-bg-tertiary bg-bg-secondary text-text-primary shadow-2xl animate-in zoom-in-95 duration-200 overflow-hidden">
+        
+        {/* HEADER */}
+        <div className="flex items-center justify-between border-b border-bg-tertiary px-8 py-6 bg-bg-tertiary/10">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-crm-orange/20 flex items-center justify-center text-crm-orange">
+              <Mail size={20} />
+            </div>
+            <h2 className="text-xl font-black uppercase tracking-tight italic">Registered Emails</h2>
+          </div>
+          <button onClick={onClose} className="p-2 transition-colors text-text-secondary hover:text-text-primary rounded-xl hover:bg-bg-tertiary">
+            <X size={24} />
           </button>
         </div>
 
-        <div className="p-8">
-          {/* EMAIL LIST */}
-          <div className="space-y-4 mb-8">
-            {emails.map((email, idx) => (
-              <div key={idx} className="flex items-center justify-between py-2 border-b border-bg-tertiary/50">
-                <a 
-                  href={`mailto:${email}`}
-                  className="text-text-primary text-sm hover:text-crm-orange transition-colors cursor-pointer underline"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.location.href = `mailto:${email}`;
-                  }}
-                >
-                  {email}
-                </a>
-                <button 
-                  onClick={() => handleRemoveEmail(email)}
-                  className="p-1 text-red-500 hover:bg-red-500/10 rounded"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            ))}
-          </div>
-
+        <div className="p-8 space-y-8">
+          
           {/* ADD EMAIL SECTION */}
-          <div className="flex items-center gap-2 mb-8">
-            <div className="flex-1">
-               <input 
-                  type="email" 
-                  placeholder="Add Email" 
-                  value={newEmail} 
-                  onChange={(e) => setNewEmail(e.target.value)} 
-                  autoComplete="off"
-                  data-lp-ignore="true"
-                  className="w-full bg-transparent border border-bg-tertiary rounded-md p-3 text-text-primary outline-none focus:border-crm-orange transition-colors"
-               />
+          <div className="space-y-3">
+            <label className="text-[10px] font-black uppercase tracking-widest text-text-secondary ml-1">Add New Email Address</label>
+            <div className="flex items-center gap-3">
+              <div className="flex-1 relative group">
+                 <input 
+                    type="email" 
+                    placeholder="example@company.com" 
+                    value={newEmail} 
+                    onChange={(e) => setNewEmail(e.target.value)} 
+                    onKeyPress={(e) => e.key === 'Enter' && handleAddEmail()}
+                    className="w-full bg-bg-primary border border-bg-tertiary rounded-xl px-4 py-3 text-sm font-bold text-text-primary outline-none focus:ring-2 focus:ring-crm-orange/20 focus:border-crm-orange transition-all"
+                 />
+              </div>
+              <button 
+                  onClick={handleAddEmail}
+                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-green-600/20 active:scale-95 flex items-center gap-2"
+              >
+                  <Plus size={16} /> ADD
+              </button>
             </div>
-            <button 
-                onClick={handleAddEmail}
-                className="btn-raised btn-raised-green text-white px-6 py-3 rounded-md text-sm font-bold uppercase transition-all"
-            >
-                ADD
-            </button>
           </div>
 
+          {/* EMAIL LIST */}
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-text-secondary ml-1">Current Distribution List</label>
+            <div className="bg-bg-primary/50 border border-bg-tertiary rounded-2xl divide-y divide-bg-tertiary max-h-[240px] overflow-y-auto scrollbar-thin scrollbar-thumb-bg-tertiary">
+              {emails.length > 0 ? (
+                emails.map((email, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-4 group hover:bg-bg-tertiary/10 transition-colors">
+                    <span className="text-sm font-bold text-text-primary truncate">{email}</span>
+                    <button 
+                      onClick={() => handleRemoveEmail(email)}
+                      className="p-1.5 text-red-500 hover:bg-red-500/10 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                      title="Remove email"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <div className="p-8 text-center text-text-secondary flex flex-col items-center gap-2 opacity-40 italic">
+                  <AlertCircle size={32} />
+                  <p className="text-xs font-bold uppercase tracking-widest">No emails configured</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ACTION BUTTON */}
           <button 
                 onClick={handleUpdate}
                 disabled={loading}
-                className="w-full btn-raised btn-raised-orange text-white px-4 py-3 rounded-md text-sm font-bold uppercase tracking-widest shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
+                className="w-full bg-crm-orange hover:bg-orange-600 text-white px-6 py-4 rounded-2xl text-xs font-black uppercase tracking-widest shadow-xl shadow-crm-orange/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed group"
           >
             {loading ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                <span className="text-xs">UPDATING...</span>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/20 border-t-white"></div>
+                <span>Syncing Database...</span>
               </>
             ) : (
               <>
-                <Mail size={16} />
-                <span className="hidden sm:inline text-xs md:inline">UPDATE EMAILS</span>
+                <Mail size={16} className="group-hover:translate-x-1 transition-transform" />
+                <span>Save Registry Changes</span>
               </>
             )}
           </button>
