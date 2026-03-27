@@ -12,8 +12,10 @@ import {
   Users,
   Monitor,
   Snowflake,
+  UserCheck,
 } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsers } from "../../redux/slices/usersSlice";
 
 import { 
   SOURCES, 
@@ -186,7 +188,15 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
     response: RESPONSES[0], // Interested
     address: "",
     state: "",
+    agentId: "",
   });
+
+  const dispatch = useDispatch();
+  const { agents, loading: agentsLoading } = useSelector((state) => state.users);
+
+  useEffect(() => {
+    dispatch(fetchUsers({ role: 'agent' }));
+  }, [dispatch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -208,7 +218,22 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
     }
 
     if (onSubmit) {
-      onSubmit(formData);
+      // Look up serviceId from the selected service name
+      const selectedService = activeServices.find(s => s.name === formData.service);
+      const payload = {
+        name: formData.name,
+        phone: formData.phone,
+        companyName: formData.companyName,
+        source: formData.source,
+        type: formData.type,
+        priority: formData.priority,
+        response: formData.response,
+        address: formData.address,
+        state: formData.state,
+        agentId: formData.agentId,
+        ...(selectedService && { serviceId: selectedService._id }),
+      };
+      onSubmit(payload);
     }
 
     onClose();
@@ -384,6 +409,26 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
                 {STATES_AND_UTS.map((state) => (
                   <option key={state} value={state}>
                     {state}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="mb-1 block text-sm font-medium text-text-primary">
+                Agent <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="agentId"
+                required
+                value={formData.agentId}
+                onChange={handleChange}
+                className="w-full rounded-md border border-text-primary bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-yellow-500"
+              >
+                <option value="">Select Agent</option>
+                {agents.map((agent) => (
+                  <option key={agent._id} value={agent._id}>
+                    {agent.name}
                   </option>
                 ))}
               </select>

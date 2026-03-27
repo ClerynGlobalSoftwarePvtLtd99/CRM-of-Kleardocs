@@ -34,15 +34,18 @@ export const getLeads = async (query) => {
     if (endDate) filter[dateField].$lte = new Date(endDate);
   }
 
-  // Enum filters
-  if (service) filter.service = new mongoose.Types.ObjectId(service);
-  if (agent) filter.agent = new mongoose.Types.ObjectId(agent);
+  // Enum filters — service must be a valid ObjectId
+  if (service && mongoose.Types.ObjectId.isValid(service)) {
+    filter.service = new mongoose.Types.ObjectId(service);
+  }
+  if (agent && mongoose.Types.ObjectId.isValid(agent)) {
+    filter.agent = new mongoose.Types.ObjectId(agent);
+  }
   if (source) filter.source = source;
   if (type) filter.type = type;
   if (priority) filter.priority = priority;
   if (response) filter.response = response;
   if (state) filter.state = { $regex: state, $options: "i" };
-
 
   const skip = (Number(page) - 1) * Number(limit);
 
@@ -104,7 +107,7 @@ export const updateLead = async (leadId, data, userId) => {
     leadId,
     { ...data, service: data.serviceId || lead.service, agent: data.agentId || lead.agent },
     { new: true }
-  );
+  ).populate("service", "name").populate("agent", "name email");
 
   await LeadHistory.create({
     lead: leadId,
@@ -114,6 +117,16 @@ export const updateLead = async (leadId, data, userId) => {
   });
 
   return updated;
+};
+
+// ─── DELETE LEAD ─────────────────────────────────────────────────────────────
+export const deleteLead = async (leadId) => {
+  const lead = await Lead.findById(leadId);
+  if (!lead) throw new ApiError(404, "Lead not found");
+  if (lead.isCustomer) throw new ApiError(400, "Cannot delete a lead that has been converted to a customer");
+
+  await LeadHistory.deleteMany({ lead: leadId });
+  await Lead.findByIdAndDelete(leadId);
 };
 
 // ─── LOG FOLLOW-UP ───────────────────────────────────────────────────────────
@@ -127,12 +140,12 @@ export const addFollowup = async (leadId, data, userId) => {
   await lead.save();
 
   // Format the date for display
-  const formattedDate = followupDate.toLocaleDateString('en-IN', {
-    day: 'numeric',
-    month: 'short', 
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+  const formattedDate = followupDate.toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
   });
 
   await LeadHistory.create({
@@ -143,6 +156,13 @@ export const addFollowup = async (leadId, data, userId) => {
     notes: `Next followup scheduled for ${formattedDate}`,
     createdBy: userId
   });
+
+  // Re-fetch the fully populated lead to return consistent shape to frontend
+  const updatedLead = await Lead.findById(leadId)
+    .populate("service", "name")
+    .populate("agent", "name email");
+
+  return updatedLead;
 };
 
 // ─── LOG INTERACTION ─────────────────────────────────────────────────────────
@@ -158,14 +178,15 @@ export const addInteraction = async (leadId, data, userId) => {
     createdBy: userId
   });
 
-  return entry;
+  // Return with populated createdBy
+  return await LeadHistory.findById(entry._id).populate("createdBy", "name");
 };
 
 // ─── GET LEAD EMAILS ────────────────────────────────────────────────────────────
 export const getLeadEmails = async (leadId) => {
   const lead = await Lead.findById(leadId);
   if (!lead) throw new ApiError(404, "Lead not found");
-  
+
   return lead.emails || [];
 };
 
@@ -174,7 +195,7 @@ export const updateEmails = async (leadId, emails, userId) => {
   const lead = await Lead.findById(leadId);
   if (!lead) throw new ApiError(404, "Lead not found");
 
-  if (typeof emails === 'string') {
+  if (typeof emails === "string") {
     lead.emails = [emails];
   } else {
     lead.emails = emails;
@@ -186,9 +207,11 @@ export const updateEmails = async (leadId, emails, userId) => {
     lead: leadId,
     type: "email_update",
     details: `Email addresses updated`,
-    notes: `Updated to: ${Array.isArray(emails) ? emails.join(', ') : emails}`,
+    notes: `Updated to: ${Array.isArray(emails) ? emails.join(", ") : emails}`,
     createdBy: userId
   });
+
+  return lead.emails;
 };
 
 // ─── ASSIGN AGENT ────────────────────────────────────────────────────────────
@@ -199,19 +222,53 @@ export const assignAgent = async (leadId, agentId, userId) => {
   const previousAgent = lead.agent?.name || "Unassigned";
   lead.agent = agentId;
   await lead.save();
-  
+
   // Fetch the updated lead with populated agent
-  const updatedLead = await Lead.findById(leadId).populate("agent", "name");
+  const updatedLead = await Lead.findById(leadId)
+    .populate("service", "name")
+    .populate("agent", "name email");
 
   // Create history entry with the agent name
   await LeadHistory.create({
     lead: leadId,
     type: "assigned",
-    details: `Agent changed from ${previousAgent} to ${updatedLead.agent?.name || 'New Agent'}`,
+    details: `Agent changed from ${previousAgent} to ${updatedLead.agent?.name || "New Agent"}`,
     createdBy: userId
   });
 
   return updatedLead;
+};
+
+// ─── LOG EMAIL TEMPLATE ──────────────────────────────────────────────────────
+export const logEmailTemplate = async (leadId, data, userId) => {
+  const lead = await Lead.findById(leadId);
+  if (!lead) throw new ApiError(404, "Lead not found");
+
+  const entry = await LeadHistory.create({
+    lead: leadId,
+    type: "interaction",
+    details: `Email template sent: ${data.templateName}`,
+    notes: data.details || "",
+    createdBy: userId
+  });
+
+  return await LeadHistory.findById(entry._id).populate("createdBy", "name");
+};
+
+// ─── LOG WHATSAPP TEMPLATE ───────────────────────────────────────────────────
+export const logWhatsappTemplate = async (leadId, data, userId) => {
+  const lead = await Lead.findById(leadId);
+  if (!lead) throw new ApiError(404, "Lead not found");
+
+  const entry = await LeadHistory.create({
+    lead: leadId,
+    type: "interaction",
+    details: `WhatsApp template sent: ${data.templateName}`,
+    notes: data.details || "",
+    createdBy: userId
+  });
+
+  return await LeadHistory.findById(entry._id).populate("createdBy", "name");
 };
 
 // ─── CONVERT LEAD TO CUSTOMER ─────────────────────────────────────────────────

@@ -25,7 +25,7 @@ export const updateLead = async (id, leadData) => {
 };
 
 // Delete lead
-export const deleteLead = async (id) => {
+export const deleteLeadById = async (id) => {
   const response = await axiosInstance.delete(`/leads/${id}`);
   return response.data;
 };
@@ -60,25 +60,19 @@ export const getLeadEmails = async (id) => {
   return response.data;
 };
 
-// Add email to lead
-export const addLeadEmail = async (id, emailData) => {
-  const response = await axiosInstance.post(`/leads/${id}/emails`, emailData);
-  return response.data;
-};
-
-// Update lead emails
+// Update lead emails (replaces the full email array)
 export const updateLeadEmails = async (id, emails) => {
   const response = await axiosInstance.put(`/leads/${id}/emails`, { emails });
   return response.data;
 };
 
-// Send email template to lead
+// Log email template sent to lead
 export const sendEmailTemplate = async (id, templateData) => {
   const response = await axiosInstance.post(`/leads/${id}/send-email-template`, templateData);
   return response.data;
 };
 
-// Send WhatsApp template to lead
+// Log WhatsApp template sent to lead
 export const sendWhatsappTemplate = async (id, templateData) => {
   const response = await axiosInstance.post(`/leads/${id}/send-whatsapp-template`, templateData);
   return response.data;

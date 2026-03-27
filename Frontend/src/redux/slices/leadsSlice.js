@@ -4,13 +4,12 @@ import {
   getLeadById,
   createLead,
   updateLead,
-  deleteLead,
+  deleteLeadById,
   addFollowup,
   addInteraction,
   assignLead,
   convertLead,
   getLeadEmails,
-  addLeadEmail,
   updateLeadEmails,
   sendEmailTemplate,
   sendWhatsappTemplate
@@ -18,24 +17,28 @@ import {
 
 const initialState = {
   list: [],
+  totalCount: 0,       // total count from backend (across all pages)
   currentLead: null,
+  emails: [],          // emails state — kept for backward compat; also lives in currentLead.emails
   filters: {},
   loading: false,
   error: null,
 };
 
+// ─── FETCH ALL LEADS ──────────────────────────────────────────────────────────
 export const fetchLeads = createAsyncThunk(
   'leads/fetchAll',
   async (params = {}, { rejectWithValue }) => {
     try {
       const response = await getAllLeads(params);
-      return response.data;
+      return response.data; 
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch leads');
     }
   }
 );
 
+// ─── FETCH LEAD BY ID ─────────────────────────────────────────────────────────
 export const fetchLeadById = createAsyncThunk(
   'leads/fetchById',
   async (id, { rejectWithValue }) => {
@@ -48,6 +51,7 @@ export const fetchLeadById = createAsyncThunk(
   }
 );
 
+// ─── CREATE LEAD ──────────────────────────────────────────────────────────────
 export const createNewLead = createAsyncThunk(
   'leads/create',
   async (leadData, { rejectWithValue }) => {
@@ -60,6 +64,7 @@ export const createNewLead = createAsyncThunk(
   }
 );
 
+// ─── UPDATE LEAD ──────────────────────────────────────────────────────────────
 export const updateExistingLead = createAsyncThunk(
   'leads/update',
   async ({ id, leadData }, { rejectWithValue }) => {
@@ -72,11 +77,12 @@ export const updateExistingLead = createAsyncThunk(
   }
 );
 
+// ─── DELETE LEAD ──────────────────────────────────────────────────────────────
 export const deleteExistingLead = createAsyncThunk(
   'leads/delete',
   async (id, { rejectWithValue }) => {
     try {
-      await deleteLead(id);
+      await deleteLeadById(id);
       return id;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to delete lead');
@@ -84,18 +90,21 @@ export const deleteExistingLead = createAsyncThunk(
   }
 );
 
+// ─── ADD FOLLOWUP ─────────────────────────────────────────────────────────────
 export const addLeadFollowup = createAsyncThunk(
   'leads/addFollowup',
   async ({ id, followupData }, { rejectWithValue }) => {
     try {
       const response = await addFollowup(id, followupData);
-      return { id, followup: response.data };
+      // Backend returns: { statusCode, data: <populated lead>, message }
+      return response.data; 
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to add followup');
     }
   }
 );
 
+// ─── ADD INTERACTION ──────────────────────────────────────────────────────────
 export const addLeadInteraction = createAsyncThunk(
   'leads/addInteraction',
   async ({ id, interactionData }, { rejectWithValue }) => {
@@ -108,21 +117,23 @@ export const addLeadInteraction = createAsyncThunk(
   }
 );
 
+// ─── ASSIGN LEAD TO AGENT ─────────────────────────────────────────────────────
 export const assignLeadToAgent = createAsyncThunk(
   'leads/assign',
   async ({ id, assignData }, { rejectWithValue }) => {
     try {
       const response = await assignLead(id, assignData);
-      return { id, assignment: response.data };
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to assign lead');
     }
   }
 );
 
+// ─── CONVERT LEAD TO CUSTOMER ─────────────────────────────────────────────────
 export const convertLeadToCustomer = createAsyncThunk(
   'leads/convert',
-  async ({ id, convertData }, { rejectWithValue, dispatch }) => {
+  async ({ id, convertData }, { rejectWithValue }) => {
     try {
       const response = await convertLead(id, convertData);
       return { id, conversion: response.data };
@@ -132,6 +143,7 @@ export const convertLeadToCustomer = createAsyncThunk(
   }
 );
 
+// ─── FETCH LEAD EMAILS ────────────────────────────────────────────────────────
 export const fetchLeadEmails = createAsyncThunk(
   'leads/fetchEmails',
   async (id, { rejectWithValue }) => {
@@ -144,56 +156,53 @@ export const fetchLeadEmails = createAsyncThunk(
   }
 );
 
-export const addEmailToLead = createAsyncThunk(
-  'leads/addEmail',
-  async ({ id, emailData }, { rejectWithValue }) => {
-    try {
-      const response = await addLeadEmail(id, emailData);
-      return { id, email: response.data };
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to add email');
-    }
-  }
-);
-
+// ─── UPDATE LEAD EMAILS ───────────────────────────────────────────────────────
 export const updateLeadEmailsThunk = createAsyncThunk(
   'leads/updateEmails',
   async ({ id, emails }, { rejectWithValue }) => {
     try {
       const response = await updateLeadEmails(id, emails);
-      // Handle case where API returns data: null but operation was successful
-      const emailsData = response.data || emails;
-      return { id, emails: emailsData };
+      return { id, emails: response.data?.emails || emails };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to update emails');
     }
   }
 );
 
+// ─── SEND EMAIL TEMPLATE ──────────────────────────────────────────────────────
 export const sendEmailTemplateToLead = createAsyncThunk(
   'leads/sendEmailTemplate',
   async ({ id, templateData }, { rejectWithValue }) => {
     try {
       const response = await sendEmailTemplate(id, templateData);
-      return { id, template: response.data };
+      return { id, entry: response.data };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to send email template');
     }
   }
 );
 
+// ─── SEND WHATSAPP TEMPLATE ───────────────────────────────────────────────────
 export const sendWhatsappTemplateToLead = createAsyncThunk(
   'leads/sendWhatsappTemplate',
   async ({ id, templateData }, { rejectWithValue }) => {
     try {
       const response = await sendWhatsappTemplate(id, templateData);
-      return { id, template: response.data };
+      return { id, entry: response.data };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to send WhatsApp template');
     }
   }
 );
 
+// ─── HELPER: prepend history entry to a lead in state ────────────────────────
+const prependHistoryEntry = (lead, entry) => {
+  if (!lead) return;
+  if (!lead.history) lead.history = [];
+  lead.history.unshift(entry);
+};
+
+// ─── SLICE ────────────────────────────────────────────────────────────────────
 const leadsSlice = createSlice({
   name: 'leads',
   initialState,
@@ -207,20 +216,23 @@ const leadsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch all leads
+      // ── Fetch all leads ──
       .addCase(fetchLeads.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchLeads.fulfilled, (state, action) => {
         state.loading = false;
-        state.list = action.payload.leads || [];
+        // action.payload = { count, leads }
+        state.list = action.payload?.leads || [];
+        state.totalCount = action.payload?.count || 0;
       })
       .addCase(fetchLeads.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-      // Fetch lead by ID
+
+      // ── Fetch lead by ID ──
       .addCase(fetchLeadById.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -228,271 +240,165 @@ const leadsSlice = createSlice({
       .addCase(fetchLeadById.fulfilled, (state, action) => {
         state.loading = false;
         state.currentLead = action.payload;
+        // Sync emails state from lead
+        state.emails = action.payload?.emails || [];
       })
       .addCase(fetchLeadById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-      // Create lead
+
+      // ── Create lead ──
       .addCase(createNewLead.fulfilled, (state, action) => {
-        state.list.push(action.payload);
+        state.list.unshift(action.payload);
+        state.totalCount += 1;
       })
       .addCase(createNewLead.rejected, (state, action) => {
         state.error = action.payload;
       })
-      // Update lead
+
+      // ── Update lead ──
       .addCase(updateExistingLead.fulfilled, (state, action) => {
-        const index = state.list.findIndex(lead => lead._id === action.payload._id);
-        if (index !== -1) {
-          state.list[index] = action.payload;
-        }
+        const idx = state.list.findIndex(l => l._id === action.payload._id);
+        if (idx !== -1) state.list[idx] = action.payload;
         if (state.currentLead?._id === action.payload._id) {
-          state.currentLead = action.payload;
+          state.currentLead = { ...action.payload, history: state.currentLead.history };
         }
       })
       .addCase(updateExistingLead.rejected, (state, action) => {
         state.error = action.payload;
       })
-      // Delete lead
+
+      // ── Delete lead ──
       .addCase(deleteExistingLead.fulfilled, (state, action) => {
-        state.list = state.list.filter(lead => lead._id !== action.payload);
-        if (state.currentLead?._id === action.payload) {
-          state.currentLead = null;
-        }
+        state.list = state.list.filter(l => l._id !== action.payload);
+        state.totalCount = Math.max(0, state.totalCount - 1);
+        if (state.currentLead?._id === action.payload) state.currentLead = null;
       })
       .addCase(deleteExistingLead.rejected, (state, action) => {
         state.error = action.payload;
       })
-      // Add followup
+
+      // ── Add followup ──
+      // Backend returns the fully populated updated lead document
       .addCase(addLeadFollowup.fulfilled, (state, action) => {
-        const { id, followup } = action.payload;
-        const lead = state.list.find(l => l._id === id);
-        if (lead) {
-          lead.lastFollowup = followup.createdAt;
-          lead.nextFollowup = followup.nextFollowup;
-          // Add to history array at the beginning (newest first)
-          if (!lead.history) lead.history = [];
-          lead.history.unshift({
-            _id: followup._id || Date.now(),
-            type: 'followup',
-            details: followup.details || 'Followup scheduled',
-            createdAt: followup.createdAt || new Date().toISOString(),
-            createdBy: followup.createdBy || 'System',
-            notes: `Next followup scheduled for ${followup.nextFollowup ? new Date(followup.nextFollowup).toLocaleDateString('en-IN', {
-              day: 'numeric',
-              month: 'short', 
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            }) : 'Not specified'}`
-          });
+        const updatedLead = action.payload;
+        if (!updatedLead || !updatedLead._id) return;
+
+        // Update in list
+        const idx = state.list.findIndex(l => l._id === updatedLead._id);
+        if (idx !== -1) {
+          state.list[idx] = { ...state.list[idx], nextFollowup: updatedLead.nextFollowup, lastFollowup: updatedLead.lastFollowup };
         }
-        if (state.currentLead?._id === id) {
-          state.currentLead.lastFollowup = followup.createdAt;
-          state.currentLead.nextFollowup = followup.nextFollowup;
-          // Add to history array at the beginning (newest first)
-          if (!state.currentLead.history) state.currentLead.history = [];
-          state.currentLead.history.unshift({
-            _id: followup._id || Date.now(),
-            type: 'followup',
-            details: followup.details || 'Followup scheduled',
-            createdAt: followup.createdAt || new Date().toISOString(),
-            createdBy: followup.createdBy || 'System',
-            notes: `Next followup scheduled for ${followup.nextFollowup ? new Date(followup.nextFollowup).toLocaleDateString('en-IN', {
-              day: 'numeric',
-              month: 'short', 
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            }) : 'Not specified'}`
-          });
+        // Update currentLead — preserve existing history, then re-fetch will give fresh history
+        if (state.currentLead?._id === updatedLead._id) {
+          state.currentLead.nextFollowup = updatedLead.nextFollowup;
+          state.currentLead.lastFollowup = updatedLead.lastFollowup;
         }
       })
       .addCase(addLeadFollowup.rejected, (state, action) => {
         state.error = action.payload;
       })
-      // Add interaction
+
+      // ── Add interaction ──
       .addCase(addLeadInteraction.fulfilled, (state, action) => {
         const { id, interaction } = action.payload;
-        const lead = state.list.find(l => l._id === id);
-        if (lead) {
-          // Add to history array at the beginning (newest first)
-          if (!lead.history) lead.history = [];
-          lead.history.unshift({
-            _id: interaction._id || Date.now(),
-            type: interaction.type || 'interaction',
-            details: interaction.details,
-            createdAt: interaction.createdAt || new Date().toISOString(),
-            createdBy: interaction.createdBy || 'System',
-            notes: interaction.details,
-            called: interaction.phoneCalled || false, // Use phoneCalled from backend response
-          });
-        }
+        const newEntry = {
+          _id: interaction._id || Date.now(),
+          type: interaction.type || 'interaction',
+          details: interaction.details,
+          phoneCalled: interaction.phoneCalled || false,
+          createdAt: interaction.createdAt || new Date().toISOString(),
+          createdBy: interaction.createdBy || null,
+        };
         if (state.currentLead?._id === id) {
-          // Add to history array at the beginning (newest first)
-          if (!state.currentLead.history) state.currentLead.history = [];
-          state.currentLead.history.unshift({
-            _id: interaction._id || Date.now(),
-            type: interaction.type || 'interaction',
-            details: interaction.details,
-            createdAt: interaction.createdAt || new Date().toISOString(),
-            createdBy: interaction.createdBy || 'System',
-            notes: interaction.details,
-            called: interaction.phoneCalled || false, // Use phoneCalled from backend response
-          });
+          prependHistoryEntry(state.currentLead, newEntry);
         }
       })
       .addCase(addLeadInteraction.rejected, (state, action) => {
         state.error = action.payload;
       })
-      // Assign lead
+
+      // ── Assign lead ──
+      // Backend returns the full populated lead document
       .addCase(assignLeadToAgent.fulfilled, (state, action) => {
-        const { id, assignment } = action.payload;
-        const lead = state.list.find(l => l._id === id);
-        if (lead) {
-          const previousAgent = lead.agent;
-          lead.agent = assignment.agent;
-          lead.agentId = assignment.agentId;
-          // Add to history array at the beginning (newest first)
-          if (!lead.history) lead.history = [];
-          lead.history.unshift({
-            _id: Date.now(),
-            type: 'assignment',
-            details: `Agent changed to ${assignment.agent || 'New Agent'}`,
-            createdAt: new Date().toISOString(),
-            createdBy: assignment.createdBy || 'System',
-            notes: `Previous agent: ${previousAgent || 'None'}`
-          });
+        const updatedLead = action.payload;
+        if (!updatedLead || !updatedLead._id) return;
+
+        const idx = state.list.findIndex(l => l._id === updatedLead._id);
+        if (idx !== -1) {
+          state.list[idx] = { ...state.list[idx], agent: updatedLead.agent };
         }
-        if (state.currentLead?._id === id) {
-          const previousAgent = state.currentLead.agent;
-          state.currentLead.agent = assignment.agent;
-          state.currentLead.agentId = assignment.agentId;
-          // Add to history array at the beginning (newest first)
-          if (!state.currentLead.history) state.currentLead.history = [];
-          state.currentLead.history.unshift({
-            _id: Date.now(),
-            type: 'assignment',
-            details: `Agent changed to ${assignment.agent || 'New Agent'}`,
-            createdAt: new Date().toISOString(),
-            createdBy: assignment.createdBy || 'System',
-            notes: `Previous agent: ${previousAgent || 'None'}`
-          });
+        if (state.currentLead?._id === updatedLead._id) {
+          state.currentLead.agent = updatedLead.agent;
         }
       })
       .addCase(assignLeadToAgent.rejected, (state, action) => {
         state.error = action.payload;
       })
-      // Convert lead
+
+      // ── Convert lead ──
       .addCase(convertLeadToCustomer.fulfilled, (state, action) => {
-        const { id, conversion } = action.payload;
-        const lead = state.list.find(l => l._id === id);
-        if (lead) {
-          lead.isCustomer = true;
-          lead.response = 'Converted';
-          // Add to history array at the beginning (newest first)
-          if (!lead.history) lead.history = [];
-          lead.history.unshift({
-            _id: Date.now(),
-            type: 'converted',
-            details: `Converted to customer`,
-            createdAt: new Date().toISOString(),
-            createdBy: conversion.createdBy || 'System',
-            notes: conversion.details || 'Conversion completed'
-          });
+        const { id } = action.payload;
+        const idx = state.list.findIndex(l => l._id === id);
+        if (idx !== -1) {
+          state.list[idx].isCustomer = true;
+          state.list[idx].response = 'Converted';
         }
         if (state.currentLead?._id === id) {
           state.currentLead.isCustomer = true;
           state.currentLead.response = 'Converted';
-          // Add to history array at the beginning (newest first)
-          if (!state.currentLead.history) state.currentLead.history = [];
-          state.currentLead.history.unshift({
-            _id: Date.now(),
-            type: 'converted',
-            details: `Converted to customer`,
-            createdAt: new Date().toISOString(),
-            createdBy: conversion.createdBy || 'System',
-            notes: conversion.details || 'Conversion completed'
-          });
         }
       })
       .addCase(convertLeadToCustomer.rejected, (state, action) => {
         state.error = action.payload;
       })
-      // Fetch emails
+
+      // ── Fetch emails ──
       .addCase(fetchLeadEmails.fulfilled, (state, action) => {
         const { id, emails } = action.payload;
-        const lead = state.list.find(l => l._id === id);
-        if (lead) {
-          lead.emails = emails;
-        }
+        state.emails = emails || [];
         if (state.currentLead?._id === id) {
-          state.currentLead.emails = emails;
+          state.currentLead.emails = emails || [];
         }
+        const idx = state.list.findIndex(l => l._id === id);
+        if (idx !== -1) state.list[idx].emails = emails || [];
       })
       .addCase(fetchLeadEmails.rejected, (state, action) => {
         state.error = action.payload;
       })
-      // Add email
-      .addCase(addEmailToLead.fulfilled, (state, action) => {
-        const { id, email } = action.payload;
-        const lead = state.list.find(l => l._id === id);
-        if (lead) {
-          if (!lead.emails) lead.emails = [];
-          lead.emails.push(email);
-        }
-        if (state.currentLead?._id === id) {
-          if (!state.currentLead.emails) state.currentLead.emails = [];
-          state.currentLead.emails.push(email);
-        }
-      })
-      .addCase(addEmailToLead.rejected, (state, action) => {
-        state.error = action.payload;
-      })
-      // Update emails
+
+      // ── Update emails ──
       .addCase(updateLeadEmailsThunk.fulfilled, (state, action) => {
         const { id, emails } = action.payload;
-        const lead = state.list.find(l => l._id === id);
-        if (lead) {
-          lead.emails = emails;
-          // Add to history array at the beginning (newest first)
-          if (!lead.history) lead.history = [];
-          lead.history.unshift({
-            _id: Date.now(),
-            type: 'email_update',
-            details: `Email addresses updated`,
-            createdAt: new Date().toISOString(),
-            createdBy: 'System',
-            notes: `Updated to: ${Array.isArray(emails) ? emails.join(', ') : 'No emails'}`
-          });
-        }
+        state.emails = emails || [];
         if (state.currentLead?._id === id) {
-          state.currentLead.emails = emails;
-          // Add to history array at the beginning (newest first)
-          if (!state.currentLead.history) state.currentLead.history = [];
-          state.currentLead.history.unshift({
-            _id: Date.now(),
-            type: 'email_update',
-            details: `Email addresses updated`,
-            createdAt: new Date().toISOString(),
-            createdBy: 'System',
-            notes: `Updated to: ${Array.isArray(emails) ? emails.join(', ') : 'No emails'}`
-          });
+          state.currentLead.emails = emails || [];
         }
+        const idx = state.list.findIndex(l => l._id === id);
+        if (idx !== -1) state.list[idx].emails = emails || [];
       })
       .addCase(updateLeadEmailsThunk.rejected, (state, action) => {
         state.error = action.payload;
       })
-      // Send email template
+
+      // ── Send email template ──
       .addCase(sendEmailTemplateToLead.fulfilled, (state, action) => {
-        // Template sent successfully - could update lead status if needed
+        const { id, entry } = action.payload;
+        if (state.currentLead?._id === id && entry?._id) {
+          prependHistoryEntry(state.currentLead, entry);
+        }
       })
       .addCase(sendEmailTemplateToLead.rejected, (state, action) => {
         state.error = action.payload;
       })
-      // Send WhatsApp template
+
+      // ── Send WhatsApp template ──
       .addCase(sendWhatsappTemplateToLead.fulfilled, (state, action) => {
-        // WhatsApp template sent successfully - could update lead status if needed
+        const { id, entry } = action.payload;
+        if (state.currentLead?._id === id && entry?._id) {
+          prependHistoryEntry(state.currentLead, entry);
+        }
       })
       .addCase(sendWhatsappTemplateToLead.rejected, (state, action) => {
         state.error = action.payload;

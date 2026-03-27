@@ -12,8 +12,13 @@ import DateRangePicker from './DateRangePicker'
 
 import { useAppSelector } from '../redux/hooks'
 
+import { isSidebarRoute } from '../utils/routeUtils'
+
 const Header = () => {
   const location = useLocation()
+  
+  const isSidebarPage = isSidebarRoute(location.pathname)
+
   const isDashboard = location.pathname === '/'
   const { user } = useAppSelector((state) => state.auth)
 
@@ -28,7 +33,7 @@ const Header = () => {
   }
 
   return (
-    <header className="h-20 bg-[var(--color-bg-secondary)] border-b border-[var(--color-bg-tertiary)] flex items-center justify-between px-4 md:px-6 lg:px-8 z-10 w-full mb-1 relative">
+    <header className={`h-20 bg-[var(--color-bg-secondary)] border-b border-[var(--color-bg-tertiary)] flex items-center justify-between px-4 md:px-6 lg:px-8 z-10 w-full relative ${isSidebarPage ? 'mb-0 pb-0' : 'mb-1'}`}>
       {/* Left side - Date Range Picker */}
       <div className="flex items-center sm:pr-10 pr-5">
         {isDashboard && <DateRangePicker />}

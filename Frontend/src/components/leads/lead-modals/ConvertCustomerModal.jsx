@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, UserCheck, AlertCircle } from "lucide-react";
-import { COMPANY_TYPES, STATES_AND_UTS } from "../../utils/constants";
+import { COMPANY_TYPES, STATES_AND_UTS } from "../../../utils/constants";
 
 const ConvertCustomerModal = ({ lead, onClose, onConvert }) => {
   const [formData, setFormData] = useState({
@@ -33,7 +33,6 @@ const ConvertCustomerModal = ({ lead, onClose, onConvert }) => {
     }
     
     onConvert(formData);
-    onClose();
   };
 
   // Disable conversion if no agent is assigned

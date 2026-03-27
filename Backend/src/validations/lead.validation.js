@@ -25,9 +25,11 @@ export const followupSchema = z.object({
   details: z.string().optional()
 });
 
+// Added `type` field so frontend can send "call" | "text" | "interaction"
 export const interactionSchema = z.object({
   details: z.string().min(1, "Interaction details are required"),
-  phoneCalled: z.boolean().optional().default(false)
+  phoneCalled: z.boolean().optional().default(false),
+  type: z.enum(["interaction", "call", "text"]).optional().default("interaction")
 });
 
 export const assignAgentSchema = z.object({
@@ -38,13 +40,34 @@ export const updateEmailsSchema = z.object({
   emails: z.array(z.string().email()).min(1, "At least one email is required")
 });
 
+// Aligned to match frontend COMPANY_TYPES constant
 export const convertToCustomerSchema = z.object({
   companyName: z.string().min(2),
   address: z.string().min(2),
   state: z.string().min(2),
   gst: z.string().optional(),
-  type: z.enum(["Sole Proprietorship", "Partnership", "LLP", "Private Limited Company", "Public Limited Company", "OPC", "Trust", "NGO", "Other"]),
+  type: z.enum([
+    "Private Limited Company",
+    "Proprietorship",
+    "Partnership",
+    "Public Limited Company",
+    "Section 8",
+    "LLP",
+    "FPC",
+    "Trust",
+    "Others",
+    // Also accept the old enum values for backward compatibility
+    "Sole Proprietorship",
+    "OPC",
+    "NGO",
+    "Other"
+  ]),
   incorporationDate: z.string().optional(),
   newlyIncorporated: z.boolean().optional().default(false),
   username: z.string().min(3)
+});
+
+export const templateLogSchema = z.object({
+  templateName: z.string().min(1, "Template name is required"),
+  details: z.string().optional()
 });

@@ -7,33 +7,47 @@ import {
   PRIORITIES, 
   RESPONSES,
   STATES_AND_UTS
-} from "../../utils/constants";
+} from "../../../utils/constants";
 
 const EditContactModal = ({ lead, onClose, onUpdate }) => {
   const { services } = useSelector((state) => state.services);
   
+  // Resolve the current service name for the dropdown display
+  const currentServiceName = lead.service?.name || "";
+
   const [formData, setFormData] = useState({
-    name: lead.name || lead.customerName || "",
-    phone: lead.phone || lead.customerPhone || "",
+    name: lead.name || "",
+    phone: lead.phone || "",
     companyName: lead.companyName || "",
-    service: lead.service || lead.type || "", // Use service field like AddLeadModal
+    serviceName: currentServiceName,  // display name for the dropdown
     source: lead.source || "",
-    type: lead.type || "", // Keep type for client type
+    type: lead.type || "",            // Hot/Cold/Warm — the actual lead type
     priority: lead.priority || "",
     response: lead.response || "",
     address: lead.address || "",
     state: lead.state || "",
   });
 
-  // Fetch services on component mount
-  useEffect(() => {
-    // Services should already be fetched from the Services page
-    // But we can add a fallback if needed
-  }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    onUpdate(formData);
+
+    // Look up serviceId by selected service name
+    const selectedService = services.find(s => s.name === formData.serviceName);
+
+    const payload = {
+      name: formData.name,
+      phone: formData.phone,
+      companyName: formData.companyName,
+      source: formData.source,
+      type: formData.type,
+      priority: formData.priority,
+      response: formData.response,
+      address: formData.address,
+      state: formData.state,
+      ...(selectedService && { serviceId: selectedService._id }),
+    };
+
+    onUpdate(payload);
     onClose();
   };
 
@@ -85,8 +99,8 @@ const EditContactModal = ({ lead, onClose, onUpdate }) => {
           <div>
             <label className="mb-1 block text-xs font-bold text-text-secondary uppercase">Service</label>
             <select
-              value={formData.service}
-              onChange={(e) => handleChange('service', e.target.value)}
+              value={formData.serviceName}
+              onChange={(e) => handleChange('serviceName', e.target.value)}
               className="w-full bg-transparent border border-bg-tertiary rounded-md p-3 text-text-primary outline-none focus:border-crm-orange transition-colors"
             >
               <option value="">Select Service</option>
@@ -111,10 +125,10 @@ const EditContactModal = ({ lead, onClose, onUpdate }) => {
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-bold text-text-secondary uppercase">Type</label>
+            <label className="mb-1 block text-xs font-bold text-text-secondary uppercase">Type (Hot / Cold / Warm)</label>
             <select
-              value={formData.leadType}
-              onChange={(e) => handleChange('leadType', e.target.value)}
+              value={formData.type}
+              onChange={(e) => handleChange('type', e.target.value)}
               className="w-full bg-transparent border border-bg-tertiary rounded-md p-3 text-text-primary outline-none focus:border-crm-orange transition-colors"
             >
               <option value="">Select Type</option>
