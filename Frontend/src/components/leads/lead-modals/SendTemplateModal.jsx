@@ -91,79 +91,80 @@ const SendTemplateModal = ({ lead, onClose, onSendTemplate, previewMode = false 
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-8 flex flex-col lg:flex-row gap-8">
+        <div className="flex-1 overflow-y-auto p-8 space-y-8">
           
-          {/* LEFT: FORM SECTION */}
-          <div className="flex-1 space-y-6">
-            {!previewMode && (
+          {/* TOP SECTION: CONTROLS & TIPS */}
+          <div className="flex flex-col lg:flex-row gap-8">
+            
+            {/* LEFT: FORM SECTION */}
+            <div className="flex-1 space-y-6">
+              {!previewMode && (
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-text-secondary ml-1">Select Email Template</label>
+                  <select
+                    value={selectedTemplateId}
+                    onChange={(e) => setSelectedTemplateId(e.target.value)}
+                    className="w-full bg-bg-primary border border-bg-tertiary rounded-xl px-4 py-3 text-sm font-bold text-text-primary outline-none focus:ring-2 focus:ring-crm-orange/20 focus:border-crm-orange transition-all appearance-none cursor-pointer"
+                  >
+                    <option value="">Choose a pre-defined template...</option>
+                    {templates.map((t) => (
+                      <option key={t._id} value={t._id}>{t.name}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-text-secondary ml-1">Select Email Template</label>
-                <select
-                  value={selectedTemplateId}
-                  onChange={(e) => setSelectedTemplateId(e.target.value)}
-                  className="w-full bg-bg-primary border border-bg-tertiary rounded-xl px-4 py-3 text-sm font-bold text-text-primary outline-none focus:ring-2 focus:ring-crm-orange/20 focus:border-crm-orange transition-all appearance-none cursor-pointer"
-                >
-                  <option value="">Choose a pre-defined template...</option>
-                  {templates.map((t) => (
-                    <option key={t._id} value={t._id}>{t.name}</option>
-                  ))}
-                </select>
+                <label className="text-[10px] font-black uppercase tracking-widest text-text-secondary ml-1">Email Subject</label>
+                <input
+                  type="text"
+                  value={formData.subject}
+                  onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
+                  placeholder="Subject will auto-populate from template"
+                  className="w-full bg-bg-primary border border-bg-tertiary rounded-xl px-4 py-3 text-sm font-bold text-text-primary outline-none focus:ring-2 focus:ring-crm-orange/20 focus:border-crm-orange transition-all"
+                />
               </div>
-            )}
 
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-text-secondary ml-1">Email Subject</label>
-              <input
-                type="text"
-                value={formData.subject}
-                onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
-                placeholder="Subject will auto-populate from template"
-                className="w-full bg-bg-primary border border-bg-tertiary rounded-xl px-4 py-3 text-sm font-bold text-text-primary outline-none focus:ring-2 focus:ring-crm-orange/20 focus:border-crm-orange transition-all"
-              />
+              <div className="flex flex-wrap gap-2 pt-2">
+                 <div className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-bg-tertiary/20 border border-bg-tertiary text-[10px] font-black text-text-secondary uppercase">
+                    <User size={10} /> {lead?.name || 'Name'}
+                 </div>
+                 <div className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-bg-tertiary/20 border border-bg-tertiary text-[10px] font-black text-text-secondary uppercase">
+                    <Briefcase size={10} /> {lead?.companyName || 'Company'}
+                 </div>
+                 <div className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-bg-tertiary/20 border border-bg-tertiary text-[10px] font-black text-text-secondary uppercase">
+                    <MapPin size={10} /> {lead?.address?.slice(0, 15) || 'Address'}...
+                 </div>
+              </div>
             </div>
 
-            <div className="flex flex-wrap gap-2 pt-2">
-               <div className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-bg-tertiary/20 border border-bg-tertiary text-[10px] font-black text-text-secondary uppercase">
-                  <User size={10} /> {lead?.name || 'Name'}
-               </div>
-               <div className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-bg-tertiary/20 border border-bg-tertiary text-[10px] font-black text-text-secondary uppercase">
-                  <Briefcase size={10} /> {lead?.companyName || 'Company'}
-               </div>
-               <div className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-bg-tertiary/20 border border-bg-tertiary text-[10px] font-black text-text-secondary uppercase">
-                  <MapPin size={10} /> {lead?.address?.slice(0, 15) || 'Address'}...
+            {/* RIGHT: PREVIEW / TIPS */}
+            <div className="lg:w-96 flex flex-col gap-6">
+               <div className="bg-gradient-to-br from-crm-orange to-orange-600 rounded-2xl p-6 text-white shadow-xl shadow-crm-orange/20">
+                  <h4 className="font-black uppercase tracking-widest text-xs mb-4 opacity-80 border-b border-white/20 pb-2">Pro Tip</h4>
+                  <p className="text-sm font-bold leading-relaxed mb-4">
+                    The system automatically injects lead data into variables like <code className="bg-white/20 px-1 rounded">{"{{name}}"}</code> and <code className="bg-white/20 px-1 rounded">{"{{companyName}}"}</code>.
+                  </p>
+                  <div className="space-y-3 pt-2 border-t border-white/10 mt-2">
+                     {lead?.emails?.map((email, i) => (
+                       <div key={i} className="flex items-center gap-2 text-[10px] font-black truncate bg-black/10 px-3 py-2 rounded-lg border border-white/10 uppercase tracking-tighter">
+                          <Mail size={12} /> {email}
+                       </div>
+                     ))}
+                  </div>
                </div>
             </div>
+          </div>
 
-            <div className="space-y-2 rounded-xl overflow-hidden border border-bg-tertiary bg-bg-primary min-h-[300px]">
+          {/* BOTTOM SECTION: EDITOR (Full Width) */}
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-text-secondary ml-1">Email Content</label>
+            <div className="rounded-xl overflow-hidden border border-bg-tertiary bg-bg-primary min-h-[400px]">
                 <RichTextEditor
                    value={formData.body}
                    onChange={(val) => setFormData(prev => ({ ...prev, body: val }))}
                 />
             </div>
-          </div>
-
-          {/* RIGHT: PREVIEW / TIPS */}
-          <div className="lg:w-80 flex flex-col gap-6">
-             <div className="bg-gradient-to-br from-crm-orange to-orange-600 rounded-2xl p-6 text-white shadow-xl shadow-crm-orange/20">
-                <h4 className="font-black uppercase tracking-widest text-xs mb-4 opacity-80 border-b border-white/20 pb-2">Pro Tip</h4>
-                <p className="text-sm font-bold leading-relaxed mb-4">
-                  The system automatically injects lead data into variables like <code className="bg-white/20 px-1 rounded">{"{{name}}"}</code> and <code className="bg-white/20 px-1 rounded">{"{{companyName}}"}</code>.
-                </p>
-                <div className="space-y-3 pt-2">
-                   {lead?.emails?.map((email, i) => (
-                     <div key={i} className="flex items-center gap-2 text-[10px] font-black truncate bg-black/10 px-3 py-2 rounded-lg border border-white/10 uppercase tracking-tighter">
-                        <Mail size={12} /> {email}
-                     </div>
-                   ))}
-                </div>
-             </div>
-
-             <div className="bg-bg-tertiary/5 rounded-2xl p-6 border-2 border-dashed border-bg-tertiary">
-                <h4 className="font-black uppercase tracking-widest text-xs text-text-secondary mb-4">Verification</h4>
-                <p className="text-[10px] font-bold text-text-secondary leading-normal italic">
-                  Ensure the calculated values in the editor match the lead's current profile before hitting send.
-                </p>
-             </div>
           </div>
         </div>
 

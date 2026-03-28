@@ -1,7 +1,7 @@
 import express from "express";
 import {
   getInvoices, createInvoice, getInvoiceById, deleteInvoice,
-  addPayment, deletePayment
+  addPayment, deletePayment, downloadInvoicePdf
 } from "../controllers/invoice.controller.js";
 import { auth } from "../middleware/auth.middleware.js";
 import { checkRole } from "../middleware/role.middleware.js";
@@ -15,6 +15,7 @@ router.use(auth);
 router.get("/", getInvoices);
 router.post("/", checkRole("admin", "agent"), validate(createInvoiceSchema), createInvoice);
 router.get("/:invoiceId", getInvoiceById);
+router.get("/:invoiceId/download", downloadInvoicePdf);
 router.delete("/:invoiceId", checkRole("admin"), deleteInvoice);
 
 // ── Payments on Invoice ───────────────────────────────────────────────────────

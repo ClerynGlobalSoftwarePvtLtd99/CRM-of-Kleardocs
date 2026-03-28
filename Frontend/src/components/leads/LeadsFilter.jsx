@@ -1,8 +1,8 @@
 import { Search, X, Calendar as CalendarIcon, Filter, RefreshCcw } from "lucide-react";
-import { 
-  SOURCES, 
-  CLIENT_TYPES, 
-  PRIORITIES, 
+import {
+  SOURCES,
+  CLIENT_TYPES,
+  PRIORITIES,
   RESPONSES,
   STATES_AND_UTS
 } from "../../utils/constants";
@@ -163,7 +163,7 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
         </div>
 
         {/* g) Type of client */}
-        <div className="md:col-span-1.5 flex flex-col gap-1.5">
+        <div className="md:col-span-2 flex flex-col gap-1.5">
           <label className="text-[10px] font-black uppercase tracking-widest text-text-secondary ml-1">Lead Type</label>
           <select
             name="type"
@@ -177,7 +177,7 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
         </div>
 
         {/* h) Priority */}
-        <div className="md:col-span-1.5 flex flex-col gap-1.5">
+        <div className="md:col-span-2 flex flex-col gap-1.5">
           <label className="text-[10px] font-black uppercase tracking-widest text-text-secondary ml-1">Priority</label>
           <select
             name="priority"
@@ -197,7 +197,7 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
             name="response"
             value={filters.response}
             onChange={handleChange}
-            className="w-full bg-bg-primary border border-bg-tertiary rounded-xl px-4 py-2 text-sm font-bold text-text-primary outline-none focus:ring-2 focus:ring-crm-orange/20 focus:border-crm-orange transition-all appearance-none cursor-pointer"
+            className="w-full bg-bg-primary border border-bg-tertiary rounded-xl px-8 py-2 text-sm font-bold text-text-primary outline-none focus:ring-2 focus:ring-crm-orange/20 focus:border-crm-orange transition-all appearance-none cursor-pointer"
           >
             <option value="">All responses</option>
             {RESPONSES.map(r => <option key={r} value={r}>{r}</option>)}
@@ -205,23 +205,26 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
         </div>
 
         {/* Action Buttons */}
-        <div className="md:col-span-3 flex items-center justify-end gap-3 pb-0.5">
-          <button
-            type="button"
-            onClick={handleClear}
-            className="flex items-center justify-center p-2.5 rounded-xl bg-bg-tertiary/30 hover:bg-red-500/10 text-text-secondary hover:text-red-500 border border-bg-tertiary transition-all group"
-            title="Reset all filters"
-          >
-            <RefreshCcw size={18} className="group-hover:rotate-180 transition-transform duration-500" />
-          </button>
-          
+        <div className="md:col-span-2 flex justify-end gap-3 pb-0.5 -mr-5">
+
           <button
             type="button"
             onClick={handleApplyFilters}
-            className="flex-1 flex items-center justify-center gap-2 bg-crm-orange hover:bg-orange-600 text-white px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest shadow-lg shadow-crm-orange/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="lg:flex-none px-4 py-2 bg-[var(--color-accent)] hover:bg-yellow-500 text-white rounded-lg transition-colors cursor-pointer flex items-center justify-end gap-1 font-bold text-[11px] uppercase tracking-tighter h-[38px]"
+            title="Apply Filter"
           >
             <Filter size={16} />
-            Filter Leads
+            <span className="lg:inline">Filter</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleClear}
+            className="lg:flex-none px-4 py-2 bg-[var(--color-bg-tertiary)] hover:bg-red-500 hover:text-white text-[var(--color-text-secondary)] rounded-lg transition-colors cursor-pointer flex items-center justify-end gap-1 font-bold text-[11px] uppercase tracking-tighter h-[38px]"
+            title="Clear Filters"
+          >
+            <X size={16} />
+            <span className="lg:inline">Clear</span>
           </button>
         </div>
       </div>

@@ -158,99 +158,88 @@ const Customers = () => {
         onClear={handleClearFilters}
       />
 
-      {/* LIST TABLE HEADER (Hidden on mobile) */}
-      <div className="hidden lg:grid grid-cols-[1fr_2fr_1.5fr_1.5fr_1.5fr_1.5fr_1fr] gap-4 px-8 py-4 bg-bg-tertiary/30 rounded-t-lg border-x border-t border-bg-tertiary text-xs font-bold text-text-secondary uppercase tracking-[0.2em]">
-        <span>Logo</span>
-        <span>Name</span>
-        <span>Phone</span>
-        <span>Type</span>
-        <span>Onboarding Date</span>
-        <span>Incorporation Date</span>
-        <span className="text-right">Action</span>
-      </div>
+      {/* LIST SECTION (Scrollable Table) */}
+      <div className="bg-bg-secondary border border-bg-tertiary rounded-xl overflow-hidden shadow-sm flex flex-col h-[65vh] min-h-[400px]">
+        <div className="overflow-auto scrollbar-thin scrollbar-thumb-bg-tertiary flex-1 px-4 text-text-primary">
+          <table className="w-full text-left relative" style={{ borderSpacing: '0 10px', borderCollapse: 'separate' }}>
+            <thead>
+              <tr className="text-text-secondary text-[10px] sm:text-xs uppercase tracking-wider font-black">
+                <th className="sticky top-0 z-20 bg-bg-secondary px-2 py-3 shadow-[0_1px_0_var(--color-bg-tertiary)]">Logo</th>
+                <th className="sticky top-0 z-20 bg-bg-secondary px-2 py-3 shadow-[0_1px_0_var(--color-bg-tertiary)]">Name</th>
+                <th className="sticky top-0 z-20 bg-bg-secondary px-2 py-3 shadow-[0_1px_0_var(--color-bg-tertiary)]">Phone</th>
+                <th className="sticky top-0 z-20 bg-bg-secondary px-2 py-3 shadow-[0_1px_0_var(--color-bg-tertiary)]">Type</th>
+                <th className="sticky top-0 z-20 bg-bg-secondary px-2 py-3 shadow-[0_1px_0_var(--color-bg-tertiary)] whitespace-nowrap">Onboarding Date</th>
+                <th className="sticky top-0 z-20 bg-bg-secondary px-2 py-3 shadow-[0_1px_0_var(--color-bg-tertiary)] whitespace-nowrap">Incorporation Date</th>
+                <th className="sticky top-0 z-20 bg-bg-secondary px-2 py-3 shadow-[0_1px_0_var(--color-bg-tertiary)] text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCustomers.length === 0 ? (
+                <tr>
+                  <td colSpan="7" className="px-4 py-20 text-center text-text-secondary italic bg-bg-primary rounded-lg border border-dashed border-bg-tertiary group">
+                    No customers found matching your filters.
+                  </td>
+                </tr>
+              ) : (
+                filteredCustomers.map((cust) => {
+                  const isMatch = filters.search && (
+                    (cust.name || cust.customerName || "").toLowerCase().includes(filters.search.toLowerCase()) ||
+                    (cust.phone || "").includes(filters.search) ||
+                    (cust.companyName || "").toLowerCase().includes(filters.search.toLowerCase())
+                  );
 
-      {/* LIST SECTION */}
-      <div className="space-y-4">
-        {filteredCustomers.length === 0 ? (
-          <div className="p-20 text-center bg-bg-secondary border border-bg-tertiary rounded-lg">
-            <p className="text-text-secondary italic">No customers found matching your filters.</p>
-          </div>
-        ) : (
-          filteredCustomers.map((cust) => {
-            const isMatch = filters.search && (
-              (cust.name || cust.customerName || "").toLowerCase().includes(filters.search.toLowerCase()) ||
-              (cust.phone || "").includes(filters.search) ||
-              (cust.companyName || "").toLowerCase().includes(filters.search.toLowerCase())
-            );
-
-            return (
-              <div
-                key={cust._id || cust.id}
-                onClick={() => navigate(`/customer/${cust._id || cust.id}`)}
-                className={`bg-bg-secondary border border-bg-tertiary lg:rounded-none rounded-lg p-6 lg:p-4 lg:grid lg:grid-cols-[1fr_2fr_1.5fr_1.5fr_1.5fr_1.5fr_1fr] items-center gap-4 hover:border-crm-orange/50 transition-all cursor-pointer group shadow-sm last:rounded-b-lg first:rounded-t-lg ${isMatch ? 'row-highlight' : ''}`}
-              >
-                {/* Logo */}
-                <div className="flex items-center justify-start lg:justify-center mb-4 lg:mb-0">
-                  <CompanyLogo name={cust.companyName || cust.name} size="w-12 h-12" />
-                </div>
-
-                {/* Name */}
-                <div className="mb-4 lg:mb-0">
-                  <span className="block lg:hidden text-[10px] font-bold text-text-secondary uppercase tracking-widest mb-1">Company Name</span>
-                  <h3 className="text-sm font-bold text-text-primary group-hover:text-crm-blue transition-colors">{cust.companyName || cust.name}</h3>
-                </div>
-
-                {/* Phone */}
-                <div className="mb-4 lg:mb-0 flex items-center gap-2">
-                  <Phone size={14} className="text-crm-blue lg:hidden" />
-                  <div>
-                    <span className="block lg:hidden text-[10px] font-bold text-text-secondary uppercase tracking-widest mb-1">Phone</span>
-                    <span className="text-sm text-text-primary">{cust.phone || 'N/A'}</span>
-                  </div>
-                </div>
-
-                {/* Type */}
-                <div className="mb-4 lg:mb-0">
-                  <span className="block lg:hidden text-[10px] font-bold text-text-secondary uppercase tracking-widest mb-1">Type</span>
-                  <span className="inline-block px-3 py-1 bg-crm-orange/10 text-crm-orange text-[10px] font-bold rounded border border-crm-orange/20 uppercase">
-                    {cust.type}
-                  </span>
-                </div>
-
-                {/* Dates */}
-                <div className="mb-4 lg:mb-0 flex flex-col gap-1">
-                  <span className="block lg:hidden text-[10px] font-bold text-text-secondary uppercase tracking-widest mb-1">Onboarding Date</span>
-                  <div className="flex items-center gap-2">
-                    <Calendar size={14} className="text-crm-green" />
-                    <span className="text-sm text-text-primary">
-                      {cust.onboardingDate ? new Date(cust.onboardingDate).toLocaleDateString('en-IN') : 'N/A'}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <span className="block lg:hidden text-[10px] font-bold text-text-secondary uppercase tracking-widest mb-1">Incorporation Date</span>
-                  <div className="flex items-center gap-2 text-blue-400">
-                    <Calendar size={14} />
-                    <span className="text-sm">
-                      {cust.incorporationDate ? new Date(cust.incorporationDate).toLocaleDateString('en-IN') : 'N/A'}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Details Button */}
-                <div className="mt-4 lg:mt-0 flex justify-end">
-                  <button 
-                    onClick={(e) => { e.stopPropagation(); navigate(`/customer/${cust._id || cust.id}`); }}
-                    className="btn-raised btn-raised-blue px-6 py-2 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all"
-                  >
-                    Details
-                  </button>
-                </div>
-              </div>
-            );
-          })
-        )}
+                  return (
+                    <tr 
+                      key={cust._id || cust.id}
+                      onClick={() => navigate(`/customer/${cust._id || cust.id}`)}
+                      className={`bg-bg-primary hover:bg-bg-tertiary/50 transition-colors group cursor-pointer shadow-sm relative z-10 ${isMatch ? 'ring-1 ring-crm-orange/50' : ''}`}
+                    >
+                      <td className="px-2 py-3 rounded-l-lg border-y border-l border-transparent group-hover:border-bg-tertiary">
+                        <CompanyLogo name={cust.companyName || cust.name} size="w-10 h-10" />
+                      </td>
+                      <td className="px-2 py-3 border-y border-transparent group-hover:border-bg-tertiary">
+                        <h3 className="text-sm font-bold text-text-primary group-hover:text-crm-blue transition-colors">
+                          {cust.companyName || cust.name}
+                        </h3>
+                      </td>
+                      <td className="px-2 py-3 text-sm text-text-primary whitespace-nowrap border-y border-transparent group-hover:border-bg-tertiary flex items-center gap-2 h-full min-h-[64px]">
+                        <Phone size={14} className="text-crm-blue lg:hidden" />
+                        {cust.phone || 'N/A'}
+                      </td>
+                      <td className="px-2 py-3 border-y border-transparent group-hover:border-bg-tertiary">
+                        <span className="inline-block px-2 py-1 bg-crm-orange/10 text-crm-orange text-[10px] font-bold rounded border border-crm-orange/20 uppercase whitespace-nowrap">
+                          {cust.type}
+                        </span>
+                      </td>
+                      <td className="px-2 py-3 text-sm text-text-primary border-y border-transparent group-hover:border-bg-tertiary whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <Calendar size={14} className="text-crm-green" />
+                          <span>{cust.onboardingDate ? new Date(cust.onboardingDate).toLocaleDateString('en-IN') : 'N/A'}</span>
+                        </div>
+                      </td>
+                      <td className="px-2 py-3 text-sm border-y border-transparent group-hover:border-bg-tertiary whitespace-nowrap">
+                        <div className="flex items-center gap-2 text-blue-400">
+                          <Calendar size={14} />
+                          <span>{cust.incorporationDate ? new Date(cust.incorporationDate).toLocaleDateString('en-IN') : 'N/A'}</span>
+                        </div>
+                      </td>
+                      <td className="px-2 py-3 text-right rounded-r-lg border-y border-r border-transparent group-hover:border-bg-tertiary">
+                        <div className="flex justify-end">
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); navigate(`/customer/${cust._id || cust.id}`); }}
+                            className="btn-raised btn-raised-blue px-4 py-1.5 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all relative z-20"
+                          >
+                            Details
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {showNewCustomerModal && (

@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { X, UserPlus } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { addCustomerDirector } from "../../redux/slices/customersSlice";
+import toast from "react-hot-toast";
 
 const AddDirectorModal = ({ onClose, onAdd }) => {
   const [formData, setFormData] = useState({
@@ -9,17 +12,33 @@ const AddDirectorModal = ({ onClose, onAdd }) => {
     din: "",
   });
 
-  const handleSubmit = (e) => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onAdd(formData);
-    onClose();
+    try {
+      await dispatch(addCustomerDirector({
+        customerId: customer._id,
+        directorData: formData
+      })).unwrap();
+      
+      toast.success("Director added successfully");
+      if (onAdd) onAdd();
+      onClose();
+    } catch (err) {
+      toast.error(err || "Failed to add director");
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-text-primary">
       <div className="w-full max-w-md bg-bg-secondary border border-bg-tertiary rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between px-6 py-4 border-b border-bg-tertiary">
-          <h3 className="text-xl font-bold">Add New Director</h3>
+          <h3 className="text-xl font-bold flex flex-col">
+            <span>Add</span>
+            <span>New</span>
+            <span>Director</span>
+          </h3>
           <button onClick={onClose} className="p-2 rounded-lg hover:bg-bg-tertiary transition-colors">
             <X size={20} />
           </button>

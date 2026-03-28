@@ -166,7 +166,7 @@ const CompliancesFilter = ({ filters, setFilters, onView }) => {
         </div>
 
         {/* Buttons */}
-        <div className="flex gap-2 shrink-0">
+        <div className="flex gap-2 shrink-0 ml-auto">
           <button
             type="button"
             onClick={handleApplyFilters}

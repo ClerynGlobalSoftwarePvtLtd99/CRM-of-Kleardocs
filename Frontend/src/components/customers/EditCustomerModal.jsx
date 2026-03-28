@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { X, Save, Eye, EyeOff } from "lucide-react";
 import { STATES_AND_UTS, COMPANY_TYPES, AGENTS } from "../../utils/constants";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { updateCustomer } from "../../redux/slices/customersSlice";
 
 const EditCustomerModal = ({ customer, onClose, onUpdate }) => {
   // Convert ISO dates to yyyy-MM-dd format for HTML date inputs
@@ -25,18 +27,32 @@ const EditCustomerModal = ({ customer, onClose, onUpdate }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onUpdate(formData);
-    toast.success("Customer updated successfully");
-    onClose();
+    try {
+      await dispatch(updateCustomer({
+        customerId: customer._id,
+        customerData: formData
+      })).unwrap();
+      
+      toast.success("Customer updated successfully");
+      if (onUpdate) onUpdate();
+      onClose();
+    } catch (err) {
+      toast.error(err || "Failed to update customer");
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="w-full max-w-2xl rounded-lg border border-bg-tertiary bg-bg-secondary text-text-primary shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between border-b border-bg-tertiary px-6 py-4">
-          <h2 className="text-xl font-normal">Edit Customer</h2>
+          <h2 className="text-xl font-normal flex flex-col">
+            <span>Edit</span>
+            <span>Customer</span>
+          </h2>
           <button onClick={onClose} className="p-2 transition-colors text-text-secondary hover:text-white">
             <X size={20} />
           </button>

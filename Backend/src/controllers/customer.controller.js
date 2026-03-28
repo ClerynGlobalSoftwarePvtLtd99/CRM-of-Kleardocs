@@ -1,4 +1,6 @@
 import * as customerService from "../services/customer.service.js";
+import * as pdfService from "../services/pdf.service.js";
+import * as communicationService from "../services/communication.service.js";
 import { ApiResponse } from "../utils/response.js";
 import ExcelJS from "exceljs";
 
@@ -143,4 +145,73 @@ export const updateCompliance = async (req, res) => {
     req.body
   );
   res.status(200).json(new ApiResponse(200, compliance, "Compliance updated successfully"));
+};
+
+// ─── ACTION PANEL CONTROLLERS ─────────────────────────────────────────────────
+
+export const getDirectorReport = async (req, res) => {
+  const customer = await customerService.getCustomerById(req.params.customerId);
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', `attachment; filename=DirectorReport_${req.params.customerId}.pdf`);
+  pdfService.generateDirectorReport(customer, req.query, res);
+};
+
+export const getBoardResolution = async (req, res) => {
+  const customer = await customerService.getCustomerById(req.params.customerId);
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', `attachment; filename=BoardResolution_${req.params.customerId}.pdf`);
+  pdfService.generateBoardResolution(customer, req.query, res);
+};
+
+export const getConsentLetter = async (req, res) => {
+  const customer = await customerService.getCustomerById(req.params.customerId);
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', `attachment; filename=ConsentLetter_${req.params.customerId}.pdf`);
+  pdfService.generateConsentLetter(customer, req.query, res);
+};
+
+export const getAuditorsReport = async (req, res) => {
+  const customer = await customerService.getCustomerById(req.params.customerId);
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', `attachment; filename=AuditorsReport_${req.params.customerId}.pdf`);
+  pdfService.generateAuditorsReport(customer, req.query, res);
+};
+
+export const sendCustomerEmail = async (req, res) => {
+  const { customerId } = req.params;
+  const { templateId, templateName, data } = req.body;
+  const customer = await customerService.getCustomerById(customerId);
+  
+  if (!customer.emails || customer.emails.length === 0) {
+    throw new ApiError(400, "Customer has no registered emails");
+  }
+
+  await communicationService.sendEmail({
+    to: customer.emails[0], // Send to primary email
+    subject: data.subject,
+    html: data.content,
+    customerId,
+    templateId,
+    templateName,
+    userId: req.user.id
+  });
+
+  res.status(200).json(new ApiResponse(200, null, "Email sent successfully"));
+};
+
+export const sendCustomerWhatsapp = async (req, res) => {
+  const { customerId } = req.params;
+  const { templateId, templateName, data } = req.body;
+  const customer = await customerService.getCustomerById(customerId);
+
+  await communicationService.sendWhatsapp({
+    phone: customer.phone,
+    content: data.content,
+    customerId,
+    templateId,
+    templateName,
+    userId: req.user.id
+  });
+
+  res.status(200).json(new ApiResponse(200, null, "WhatsApp message sent successfully"));
 };
