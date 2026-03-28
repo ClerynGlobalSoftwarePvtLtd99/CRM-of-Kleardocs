@@ -1,6 +1,6 @@
 import Invoice, { InvoicePayment } from "../models/Invoice.model.js";
 import RecurringInvoice from "../models/RecurringInvoice.model.js";
-import Customer from "../models/Customer.model.js";
+import Customer, { CustomerCompliance } from "../models/Customer.model.js";
 import { ApiError } from "../utils/response.js";
 
 // ─── State code lookup (for placeOfSupply) ───────────────────────────────────
@@ -44,6 +44,15 @@ const recalcDue = async (invoiceId) => {
   invoice.paid = payments.reduce((sum, p) => sum + p.amount, 0);
   invoice.due = Math.max(0, invoice.total - invoice.paid);
   await invoice.save();
+
+  // ─── Auto-update compliance status if fully paid ──────────────────────────
+  if (invoice.compliance && invoice.due < 0.01) {
+    await CustomerCompliance.findByIdAndUpdate(invoice.compliance, {
+      status: "Done",
+      completedOn: new Date()
+    });
+  }
+
   return invoice;
 };
 
@@ -146,6 +155,7 @@ export const createInvoice = async (data, userId) => {
     paid: 0,
     due: total,
     isRecurring: data.recurring || false,
+    compliance: data.complianceId || undefined,
     createdBy: userId
   });
 

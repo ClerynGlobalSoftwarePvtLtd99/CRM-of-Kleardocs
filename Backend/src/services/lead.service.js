@@ -320,5 +320,48 @@ export const convertToCustomer = async (leadId, data, userId) => {
     createdBy: userId
   });
 
+  // ─── Post-Conversion Setup ──────────────────────────────────────────────────
+  try {
+      const { CustomerService, CustomerCompliance } = await import("../models/Customer.model.js");
+      const { default: Service } = await import("../models/Service.model.js");
+      const { default: ComplianceSetting } = await import("../models/ComplianceSetting.model.js");
+
+      // 1. Initial Service setup
+      if (lead.service) {
+        const srv = await Service.findById(lead.service);
+        if (srv) {
+          await CustomerService.create({
+            customer: customer._id,
+            service: lead.service,
+            professionalFees: srv.professionalFees || 0,
+            govtFees: srv.govtFees || 0,
+            status: "Active"
+          });
+        }
+      }
+
+      // 2. Initial Compliance setup (New Company Standard)
+      const settings = await ComplianceSetting.find({ 
+        $or: [{ forNewCompany: true }, { isNewCompany: true }] 
+      });
+      for (const s of settings) {
+        let expiry = s.expiryDate;
+        if (s.hasExpiry && s.daysOfExpiry) {
+          expiry = new Date(customer.incorporationDate || customer.onboardingDate);
+          expiry.setDate(expiry.getDate() + s.daysOfExpiry);
+        }
+        await CustomerCompliance.create({
+          customer: customer._id,
+          financialYear: s.financialYear,
+          name: s.name,
+          expiryDate: expiry,
+          status: "To Be Done"
+        });
+      }
+  } catch (err) {
+      console.error("Post-conversion setup failed:", err);
+      // We don't throw here to avoid failing the conversion itself
+  }
+
   return customer;
 };

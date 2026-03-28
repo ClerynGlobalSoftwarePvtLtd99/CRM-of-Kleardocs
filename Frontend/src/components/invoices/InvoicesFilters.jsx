@@ -88,7 +88,7 @@ const InvoicesFilters = ({
         </div>
 
         {/* Buttons */}
-        <div className="flex gap-2 w-full xl:w-auto shrink-0">
+        <div className="flex gap-2 w-full xl:w-auto shrink-0 xl:ml-auto justify-end">
           <button
             onClick={onFilter}
             className="px-4 py-2 bg-[var(--color-accent)] hover:bg-yellow-500 text-white rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2 font-medium text-sm"

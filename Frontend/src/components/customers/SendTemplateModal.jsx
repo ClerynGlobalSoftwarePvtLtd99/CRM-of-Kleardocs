@@ -3,6 +3,8 @@ import { X, Send } from "lucide-react";
 import { EMAIL_TEMPLATES } from "../../utils/constants";
 import RichTextEditor from "../RichTextEditor";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { sendCustomerEmail, fetchCustomerById } from "../../redux/slices/customersSlice";
 
 const SendTemplateModal = ({ customer, onClose }) => {
   const [selectedTemplate, setSelectedTemplate] = useState("");
@@ -14,26 +16,43 @@ const SendTemplateModal = ({ customer, onClose }) => {
     setSelectedTemplate(templateName);
     const template = EMAIL_TEMPLATES.find((t) => t.name === templateName);
     if (template) {
-      setSubject(template.subject.replace("{company}", customer.companyName));
-      setContent(template.body.replace("{company}", customer.companyName));
+      setSubject(template.subject.replace("{company}", customer?.companyName || "Company"));
+      setContent(template.body.replace("{company}", customer?.companyName || "Company"));
     }
   };
 
-  const handleSend = () => {
+  const dispatch = useDispatch();
+
+  const handleSend = async () => {
     if (!selectedTemplate || !subject || !content) {
       toast.error("Please fill all fields");
       return;
     }
-    // Mock API call
-    toast.success(`Template ${selectedTemplate} sent to ${customer.emails[0]}`);
-    onClose();
+
+    try {
+      const template = EMAIL_TEMPLATES.find(t => t.name === selectedTemplate);
+      await dispatch(sendCustomerEmail({
+        customerId: customer._id,
+        templateId: template?.id || selectedTemplate,
+        data: { subject, content }
+      })).unwrap();
+
+      toast.success(`Email template "${selectedTemplate}" sent successfully`);
+      dispatch(fetchCustomerById(customer._id));
+      onClose();
+    } catch (err) {
+      toast.error(err || "Failed to send email");
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="w-full max-w-4xl rounded-lg border border-bg-tertiary bg-bg-secondary text-text-primary shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between border-b border-bg-tertiary px-6 py-4">
-          <h2 className="text-xl font-normal">Send Template</h2>
+          <h2 className="text-xl font-normal flex flex-col">
+            <span>Send</span>
+            <span>Template</span>
+          </h2>
           <button onClick={onClose} className="p-2 transition-colors text-text-secondary hover:text-white">
             <X size={20} />
           </button>
@@ -43,7 +62,7 @@ const SendTemplateModal = ({ customer, onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="fieldset-input">
               <span className="fieldset-label">Select Template *</span>
-              <select value={selectedTemplate} onChange={handleTemplateChange}>
+              <select value={selectedTemplate || ""} onChange={handleTemplateChange}>
                 <option value="">-- Choose Template --</option>
                 {EMAIL_TEMPLATES.map((t) => (
                   <option key={t.name} value={t.name}>{t.name}</option>
@@ -67,7 +86,7 @@ const SendTemplateModal = ({ customer, onClose }) => {
             <p className="text-xs text-text-secondary leading-relaxed">
               <span className="font-bold text-yellow-500 mr-2">Tip:</span> 
               The selected template will be sent to the primary email: 
-              <span className="text-text-primary ml-1 underline">{customer.emails[0]}</span>
+              <span className="text-text-primary ml-1 underline">{customer?.emails?.[0] || 'No email provided'}</span>
             </p>
           </div>
         </div>

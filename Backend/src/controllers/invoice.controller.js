@@ -1,4 +1,5 @@
 import * as invoiceService from "../services/invoice.service.js";
+import * as pdfService from "../services/pdf.service.js";
 import { ApiResponse } from "../utils/response.js";
 import ExcelJS from "exceljs";
 
@@ -116,4 +117,12 @@ export const exportRecurringInvoices = async (req, res) => {
 export const disableRecurringInvoice = async (req, res) => {
   const ri = await invoiceService.disableRecurringInvoice(req.params.riId);
   res.status(200).json(new ApiResponse(200, ri, "Recurring invoice status toggled"));
+};
+
+// GET /api/v1/invoices/:invoiceId/download
+export const downloadInvoicePdf = async (req, res) => {
+  const invoice = await invoiceService.getInvoiceById(req.params.invoiceId);
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', `attachment; filename=Invoice_${invoice.invoiceNo}.pdf`);
+  pdfService.generateInvoicePdf(invoice, invoice.customer, res);
 };
