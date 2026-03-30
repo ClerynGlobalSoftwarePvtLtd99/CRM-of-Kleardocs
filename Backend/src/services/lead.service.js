@@ -103,16 +103,48 @@ export const updateLead = async (leadId, data, userId) => {
   const lead = await Lead.findById(leadId);
   if (!lead) throw new ApiError(404, "Lead not found");
 
+  // Determine what changed for the history log
+  const changes = [];
+  
+  if (data.name && data.name !== lead.name) changes.push(`name from '${lead.name}' to '${data.name}'`);
+  if (data.phone && data.phone !== lead.phone) changes.push(`phone from '${lead.phone}' to '${data.phone}'`);
+  if (data.companyName && data.companyName !== lead.companyName) changes.push(`company name from '${lead.companyName}' to '${data.companyName}'`);
+  if (data.address && data.address !== lead.address) changes.push(`address from '${lead.address}' to '${data.address}'`);
+  if (data.state && data.state !== lead.state) changes.push(`state from '${lead.state}' to '${data.state}'`);
+  if (data.source && data.source !== lead.source) changes.push(`source from '${lead.source}' to '${data.source}'`);
+  if (data.type && data.type !== lead.type) changes.push(`type from '${lead.type}' to '${data.type}'`);
+  if (data.priority && data.priority !== lead.priority) changes.push(`priority from '${lead.priority}' to '${data.priority}'`);
+  if (data.response && data.response !== lead.response) changes.push(`response from '${lead.response}' to '${data.response}'`);
+
+  if (data.emails) {
+      const oldArray = lead.emails || [];
+      const newArray = Array.isArray(data.emails) ? data.emails : [data.emails];
+      const added = newArray.filter(e => !oldArray.includes(e));
+      const removed = oldArray.filter(e => !newArray.includes(e));
+
+      if (added.length > 0 && removed.length > 0) {
+        changes.push(`email from '${removed.join(", ")}' to '${added.join(", ")}'`);
+      } else if (added.length > 0) {
+        changes.push(`email from '${oldArray.join(", ") || "None"}' to '${added.join(", ")}'`);
+      } else if (removed.length > 0) {
+        changes.push(`email '${removed.join(", ")}' removed`);
+      }
+  }
+
   const updated = await Lead.findByIdAndUpdate(
     leadId,
     { ...data, service: data.serviceId || lead.service, agent: data.agentId || lead.agent },
     { new: true }
   ).populate("service", "name").populate("agent", "name email");
 
+  const detailsMsg = changes.length > 0 
+    ? `Lead details updated: ${changes.join(", ")}` 
+    : `Lead details updated by user`;
+
   await LeadHistory.create({
     lead: leadId,
     type: "updated",
-    details: `Lead updated by user`,
+    details: detailsMsg,
     createdBy: userId
   });
 
@@ -193,7 +225,10 @@ export const getLeadEmails = async (leadId) => {
 // ─── UPDATE EMAILS ────────────────────────────────────────────────────────────
 export const updateEmails = async (leadId, emails, userId) => {
   const lead = await Lead.findById(leadId);
-  if (!lead) throw new ApiError(404, "Lead not found");
+  if (!lead) throw new ApiError(404, "Lead not found");  const oldArray = lead.emails || [];
+  const newArray = Array.isArray(emails) ? emails : [emails];
+  const added = newArray.filter(e => !oldArray.includes(e));
+  const removed = oldArray.filter(e => !newArray.includes(e));
 
   if (typeof emails === "string") {
     lead.emails = [emails];
@@ -202,12 +237,21 @@ export const updateEmails = async (leadId, emails, userId) => {
   }
   await lead.save();
 
+  let detailMsg = "Email addresses updated";
+  if (added.length > 0 && removed.length > 0) {
+    detailMsg = `Email addresses updated from '${removed.join(", ")}' to '${added.join(", ")}'`;
+  } else if (added.length > 0) {
+    detailMsg = `Email addresses updated from '${oldArray.join(", ") || "None"}' to '${added.join(", ")}'`;
+  } else if (removed.length > 0) {
+    detailMsg = `Email '${removed.join(", ")}' removed`;
+  }
+
   // Add history entry for email update
   await LeadHistory.create({
     lead: leadId,
     type: "email_update",
-    details: `Email addresses updated`,
-    notes: `Updated to: ${Array.isArray(emails) ? emails.join(", ") : emails}`,
+    details: detailMsg,
+    notes: `Current emails: ${newArray.join(", ")}`,
     createdBy: userId
   });
 

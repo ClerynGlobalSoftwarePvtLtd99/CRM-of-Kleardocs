@@ -263,7 +263,12 @@ const LeadDetailsPage = () => {
           </div>
 
           {/* Row 2: Secondary Actions (Right Aligned) */}
-          <div className="flex justify-end gap-3 pt-2">
+          <div className="flex flex-wrap items-center justify-end gap-3 pt-2">
+            <div className="flex items-center gap-2 mr-2 bg-bg-tertiary/20 px-4 py-2 rounded-xl border border-bg-tertiary">
+              <span className="text-[10px] font-black uppercase text-text-secondary opacity-60">Agent:</span>
+              <span className="text-sm font-black text-crm-orange">{lead.agent?.name || 'Unassigned'}</span>
+            </div>
+
             <button
               onClick={() => setShowAssignModal(true)}
               className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2.5 rounded-xl text-xs font-black shadow-lg transition-all active:scale-95 uppercase tracking-widest"
@@ -305,11 +310,6 @@ const LeadDetailsPage = () => {
               <span className="px-3 py-1 rounded bg-orange-100 text-orange-700 border border-orange-200 text-[10px] font-black uppercase tracking-widest">
                 {(lead.response || 'Interested').toUpperCase()}
               </span>
-              
-              <div className="flex items-center gap-2 ml-4">
-                <span className="text-[10px] font-black uppercase text-text-secondary opacity-60">Agent:</span>
-                <span className="text-sm font-black text-crm-orange">{lead.agent?.name || 'Unassigned'}</span>
-              </div>
             </div>
           </div>
 

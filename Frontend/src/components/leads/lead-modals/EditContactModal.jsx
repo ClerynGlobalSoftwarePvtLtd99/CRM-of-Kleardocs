@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { X, Save } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchServices } from "../../../redux/slices/servicesSlice";
 import { 
   SOURCES, 
   CLIENT_TYPES, 
@@ -10,8 +11,15 @@ import {
 } from "../../../utils/constants";
 
 const EditContactModal = ({ lead, onClose, onUpdate }) => {
+  const dispatch = useDispatch();
   const { services } = useSelector((state) => state.services);
-  
+
+  useEffect(() => {
+    if (services.length === 0) {
+      dispatch(fetchServices());
+    }
+  }, [dispatch, services.length]);
+
   // Resolve the current service name for the dropdown display
   const currentServiceName = lead.service?.name || "";
 

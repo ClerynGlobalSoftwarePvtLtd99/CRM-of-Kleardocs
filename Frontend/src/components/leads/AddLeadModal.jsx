@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../../redux/slices/usersSlice";
+import { fetchServices } from "../../redux/slices/servicesSlice";
 
 import { 
   SOURCES, 
@@ -196,7 +197,10 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
 
   useEffect(() => {
     dispatch(fetchUsers({ role: 'agent' }));
-  }, [dispatch]);
+    if (services.length === 0) {
+      dispatch(fetchServices());
+    }
+  }, [dispatch, services.length]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
