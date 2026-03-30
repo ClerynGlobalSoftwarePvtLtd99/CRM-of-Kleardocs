@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { X, FileText } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { downloadCustomerReport } from "../../redux/slices/customersSlice";
+import { toast } from "react-hot-toast";
 
 const AuditorsReportModal = ({ customer, onClose }) => {
   const [formData, setFormData] = useState({
@@ -10,18 +13,31 @@ const AuditorsReportModal = ({ customer, onClose }) => {
     udin: "",
   });
 
-  const handleGeneratePDF = () => {
-    const baseUrl = `https://crm.startupstation.in/api/v1/customers/auditors-report/${customer.id}`;
-    const params = new URLSearchParams(formData);
-    window.open(`${baseUrl}?${params.toString()}`, "_blank");
-    onClose();
+  const dispatch = useDispatch();
+
+  const handleGeneratePDF = async () => {
+    try {
+      await dispatch(downloadCustomerReport({
+        customerId: customer._id,
+        type: 'auditorsReport',
+        params: formData
+      })).unwrap();
+      
+      toast.success("Auditor's Report generated successfully");
+      onClose();
+    } catch (err) {
+      toast.error(err || "Failed to generate report");
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="w-full max-w-lg rounded-lg border border-bg-tertiary bg-bg-secondary text-text-primary shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between border-b border-bg-tertiary px-6 py-4">
-          <h2 className="text-xl font-normal">Auditor's Report</h2>
+          <h2 className="text-xl font-normal flex flex-col">
+            <span>Auditor’s</span>
+            <span>Report</span>
+          </h2>
           <button onClick={onClose} className="p-2 transition-colors text-text-secondary hover:text-white">
             <X size={20} />
           </button>

@@ -7,10 +7,10 @@ import {
   deleteInvoice,
   addPayment,
   deletePayment,
-  clearSelectedInvoice
+  clearSelectedInvoice,
+  downloadInvoicePdf
 } from '../redux/slices/invoicesSlice'
 import RichTextEditor from '../components/RichTextEditor'
-import { generateInvoicePdf } from '../utils/invoicePdfGenerator'
 import ContentLoader from '../components/common/ContentLoader'
 import ConfirmationModal from '../components/common/ConfirmationModal'
 import { toast } from 'react-hot-toast'
@@ -80,33 +80,10 @@ const InvoiceDetails = () => {
 
   const handleGeneratePdf = (action) => {
     if (!inv) return;
-    const invoicePayload = {
-      number: inv.invoiceNo,
-      date: formatDate(inv.invoiceDate),
-      items: inv.items.map(i => ({
-        product: { name: i.service?.name || i.description },
-        hsn: i.hsn,
-        price: i.price,
-        amount: i.amount,
-        gstPercent: i.gstPercent,
-        gstAmount: i.gstAmount
-      })),
-      totals: {
-        subTotal: inv.subTotal,
-        gst: inv.totalGst,
-        total: inv.total,
-        paid: inv.paid,
-        due: inv.due
-      }
-    };
-    const customerPayload = {
-      companyName: inv.customer?.companyName || inv.customer?.name,
-      customerName: inv.customer?.name,
-      phone: inv.customer?.phone,
-      address: inv.customer?.address,
-      state: inv.customer?.state
-    };
-    generateInvoicePdf(invoicePayload, customerPayload, action);
+    dispatch(downloadInvoicePdf({ 
+        invoiceId: inv._id, 
+        invoiceNo: inv.invoiceNo 
+    }));
   };
 
   const handleConfirmDelete = async () => {

@@ -13,7 +13,13 @@ import {
   endService,
   getCompliances,
   addFinancialYear,
-  updateCompliance
+  updateCompliance,
+  getDirectorReport,
+  getBoardResolution,
+  getConsentLetter,
+  getAuditorsReport,
+  sendCustomerEmail,
+  sendCustomerWhatsapp
 } from "../controllers/customer.controller.js";
 import { auth } from "../middleware/auth.middleware.js";
 import { checkRole } from "../middleware/role.middleware.js";
@@ -58,5 +64,13 @@ router.put("/:customerId/services/:serviceId/end", checkRole("admin", "agent"), 
 router.get("/:customerId/compliances", getCompliances);
 router.post("/:customerId/financial-year", checkRole("admin"), validate(addFinancialYearSchema), addFinancialYear);
 router.put("/:customerId/compliances/:complianceId", checkRole("admin", "accountant"), validate(updateComplianceSchema), updateCompliance);
+
+// ─── ACTION PANEL (Reports & Messaging) ───────────────────────────────────────
+router.get("/:customerId/director-report", getDirectorReport);
+router.get("/:customerId/board-resolution", getBoardResolution);
+router.get("/:customerId/consent-letter", getConsentLetter);
+router.get("/:customerId/auditors-report", getAuditorsReport);
+router.post("/:customerId/send-email", checkRole("admin", "agent"), sendCustomerEmail);
+router.post("/:customerId/send-whatsapp", checkRole("admin", "agent"), sendCustomerWhatsapp);
 
 export default router;

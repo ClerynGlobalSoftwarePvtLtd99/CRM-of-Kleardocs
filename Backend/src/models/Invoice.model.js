@@ -34,6 +34,9 @@ const invoiceSchema = new mongoose.Schema(
     recurringInvoice: { type: mongoose.Schema.Types.ObjectId, ref: "RecurringInvoice" },
     isRecurring: { type: Boolean, default: false },
 
+    // Compliance link (for auto-status update)
+    compliance: { type: mongoose.Schema.Types.ObjectId, ref: "CustomerCompliance" },
+
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
   },
   { timestamps: true }

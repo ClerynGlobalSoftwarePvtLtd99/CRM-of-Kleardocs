@@ -60,6 +60,18 @@ export const fetchCustomerById = createAsyncThunk(
   }
 );
 
+export const updateCustomer = createAsyncThunk(
+  'customers/update',
+  async ({ customerId, customerData }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.put(`/customers/${customerId}`, customerData);
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to update customer');
+    }
+  }
+);
+
 export const updateCustomerEmails = createAsyncThunk(
   'customers/updateEmails',
   async ({ customerId, emails }, { rejectWithValue }) => {
@@ -116,6 +128,60 @@ export const endCustomerService = createAsyncThunk(
       return { customerId, serviceId };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to end service');
+    }
+  }
+);
+
+export const downloadCustomerReport = createAsyncThunk(
+  'customers/downloadReport',
+  async ({ customerId, type, params }, { rejectWithValue }) => {
+    try {
+      const endpointMap = {
+        directorReport: 'director-report',
+        boardResolution: 'board-resolution',
+        consentLetter: 'consent-letter',
+        auditorsReport: 'auditors-report'
+      };
+      
+      const response = await axiosInstance.get(`/customers/${customerId}/${endpointMap[type]}`, {
+        params,
+        responseType: 'blob'
+      });
+      
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${type}_${customerId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      return true;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to download report');
+    }
+  }
+);
+
+export const sendCustomerEmail = createAsyncThunk(
+  'customers/sendEmail',
+  async ({ customerId, templateId, data }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(`/customers/${customerId}/send-email`, { templateId, ...data });
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to send email');
+    }
+  }
+);
+
+export const sendCustomerWhatsapp = createAsyncThunk(
+  'customers/sendWhatsapp',
+  async ({ customerId, data }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(`/customers/${customerId}/send-whatsapp`, data);
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to send WhatsApp message');
     }
   }
 );
@@ -181,6 +247,24 @@ const customersSlice = createSlice({
         state.currentCustomer = action.payload;
       })
       .addCase(fetchCustomerById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Update customer
+      .addCase(updateCustomer.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCustomer.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentCustomer = action.payload;
+        // Update customer in list if it exists
+        const index = state.list.findIndex(c => c._id === action.payload._id);
+        if (index !== -1) {
+          state.list[index] = action.payload;
+        }
+      })
+      .addCase(updateCustomer.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

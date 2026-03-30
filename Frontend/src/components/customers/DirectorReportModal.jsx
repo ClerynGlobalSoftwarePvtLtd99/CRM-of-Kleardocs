@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { X, Plus, Trash2, Download } from "lucide-react";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { useDispatch } from "react-redux";
+import { downloadCustomerReport } from "../../redux/slices/customersSlice";
+import toast from "react-hot-toast";
 
 const DirectorReportModal = ({ customer, onClose }) => {
   const [reportData, setReportData] = useState({
@@ -235,16 +236,37 @@ const DirectorReportModal = ({ customer, onClose }) => {
     doc.save(`Director_Report_${customer?.name || 'Company'}_${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
-  const handleGeneratePDF = () => {
-    generatePDF();
-    onClose();
+  const dispatch = useDispatch();
+
+  const handleGeneratePDF = async () => {
+    try {
+      // Flatten profit table for query params
+      const params = {
+        ...reportData,
+        ...profitTable
+      };
+      
+      await dispatch(downloadCustomerReport({
+        customerId: customer._id,
+        type: 'directorReport',
+        params
+      })).unwrap();
+      
+      toast.success("Director Report generated successfully");
+      onClose();
+    } catch (err) {
+      toast.error(err || "Failed to generate report");
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="w-full max-w-5xl rounded-lg border border-bg-tertiary bg-bg-secondary text-text-primary shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between border-b border-bg-tertiary px-8 py-5">
-          <h2 className="text-2xl font-normal text-text-primary">Director Report</h2>
+          <h2 className="text-2xl font-normal text-text-primary flex flex-col">
+            <span>Director's</span>
+            <span>Report</span>
+          </h2>
           <button onClick={onClose} className="p-2 transition-colors text-text-secondary hover:text-white">
             <X size={24} />
           </button>
