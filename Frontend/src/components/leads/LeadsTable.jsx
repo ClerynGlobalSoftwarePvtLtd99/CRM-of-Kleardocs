@@ -48,12 +48,12 @@ const LeadsTable = ({ leads, loading, onLeadClick }) => {
       <div className="overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-bg-tertiary">
         <table className="w-full text-left border-separate border-spacing-y-3">
           <thead className="sticky top-0 z-10 bg-bg-primary">
-            <tr className="text-[10px] uppercase tracking-[0.2em] text-text-secondary font-black">
-              <th className="px-4 py-3 first:rounded-l-xl">Identity</th>
-              <th className="px-4 py-3">Engagement</th>
-              <th className="px-4 py-3">Timeline</th>
-              <th className="px-4 py-3">Operation</th>
-              <th className="px-4 py-3">Rating</th>
+            <tr className="text-xs uppercase tracking-[0.2em] text-text-secondary font-black align-middle">
+              <th className="px-4 py-3 first:rounded-l-xl text-left">Company Name</th>
+              <th className="px-4 py-3 text-left">Engagement</th>
+              <th className="px-4 py-3 text-left">Timeline</th>
+              <th className="px-4 py-3 text-left">Operation</th>
+              <th className="px-4 py-3 text-left">Rating</th>
               <th className="px-4 py-3 last:rounded-r-xl text-center">Action</th>
             </tr>
           </thead>
@@ -61,38 +61,40 @@ const LeadsTable = ({ leads, loading, onLeadClick }) => {
             {leads.map((lead) => (
               <tr
                 key={lead._id || lead.id}
-                className="bg-bg-secondary hover:bg-bg-tertiary/20 transition-all cursor-pointer group shadow-sm border border-bg-tertiary/10"
+                className="bg-bg-secondary hover:bg-bg-tertiary/20 transition-all cursor-pointer group shadow-sm border border-bg-tertiary/10 block sm:table-row mb-4 sm:mb-0"
                 onClick={() => onLeadClick && onLeadClick(lead._id || lead.id)}
               >
                 {/* 1. IDENTITY: Logo + Name + Phone */}
-                <td className="px-4 py-4 rounded-l-2xl border-y border-l border-bg-tertiary/20 group-hover:border-crm-orange/30 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-crm-orange to-orange-600 flex items-center justify-center text-white font-black text-sm shadow-lg ring-2 ring-bg-tertiary group-hover:ring-crm-orange transition-all shrink-0">
+                <td className="px-4 py-4 rounded-l-2xl border-y border-l border-bg-tertiary/20 group-hover:border-crm-orange/30 transition-colors align-middle block sm:table-cell">
+                  <div className="flex items-center gap-4 w-auto sm:w-56">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-crm-orange to-orange-600 flex items-center justify-center text-white font-black text-lg shadow-lg ring-2 ring-bg-tertiary group-hover:ring-crm-orange transition-all shrink-0">
                       {getInitials(lead.name)}
                     </div>
                     <div className="flex flex-col min-w-0">
-                      <span className="font-black text-sm text-text-primary tracking-tight truncate uppercase italic">{lead.name}</span>
-                      <span className="text-[10px] text-text-secondary font-bold mt-0.5 tracking-wider">{lead.phone}</span>
+                      <span className="font-black text-base text-text-primary tracking-tight truncate uppercase italic">{lead.name}</span>
+                      <span className="text-xs text-text-secondary font-bold mt-1 tracking-wider">{lead.phone}</span>
                     </div>
                   </div>
                 </td>
 
                 {/* 2. ENGAGEMENT: Company + Service + Status */}
-                <td className="px-4 py-4 border-y border-bg-tertiary/20 group-hover:border-crm-orange/30 transition-colors">
-                  <div className="flex flex-col gap-1">
-                    <span className="font-black text-[11px] text-text-primary truncate max-w-[150px] uppercase tracking-tighter">
-                      {lead.companyName || "No Company"}
+                <td className="px-4 py-4 border-y border-bg-tertiary/20 group-hover:border-crm-orange/30 transition-colors align-middle block sm:table-cell">
+                  <div className="flex flex-col gap-1 w-auto sm:w-48">
+                    <span className="font-black text-sm text-text-primary uppercase tracking-tighter" title={lead.companyName}>
+                      {lead.companyName
+                        ? (lead.companyName.length > 10 ? lead.companyName.substring(0, 10) + "..." : lead.companyName)
+                        : "No Company"}
                     </span>
-                    <span className="text-[10px] text-crm-orange font-black italic uppercase leading-none">
+                    <span className="text-sm text-crm-orange font-black italic uppercase leading-none mt-1 truncate">
                       {lead.service?.name || "No Service"}
                     </span>
-                    <div className="mt-1">
+                    <div className="mt-2">
                       {lead.isCustomer ? (
-                        <span className="px-1.5 py-0.5 rounded-md bg-green-500 text-white text-[8px] font-black uppercase tracking-widest whitespace-nowrap">
+                        <span className="px-2 py-1 rounded-md bg-green-500 text-white text-[10px] font-black uppercase tracking-widest whitespace-nowrap">
                           CUSTOMER
                         </span>
                       ) : (
-                        <span className="px-1.5 py-0.5 rounded-md bg-blue-500/10 text-blue-500 border border-blue-500/20 text-[8px] font-black uppercase tracking-widest whitespace-nowrap">
+                        <span className="px-2 py-1 rounded-md bg-blue-500/10 text-blue-500 border border-blue-500/20 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">
                           LEAD
                         </span>
                       )}
@@ -101,36 +103,35 @@ const LeadsTable = ({ leads, loading, onLeadClick }) => {
                 </td>
 
                 {/* 3. TIMELINE: Created + Next + Last */}
-                <td className="px-4 py-4 border-y border-bg-tertiary/20 group-hover:border-crm-orange/30 transition-colors">
-                  <div className="flex flex-col gap-1 font-bold">
-                    <div className="flex items-center gap-1">
-                      <span className="text-[9px] text-text-secondary uppercase">Created:</span>
-                      <span className="text-[9px] text-text-primary">{formatDateLong(lead.createdAt)}</span>
+                <td className="px-4 py-4 border-y border-bg-tertiary/20 group-hover:border-crm-orange/30 transition-colors align-middle block sm:table-cell">
+                  <div className="flex flex-col gap-2 font-bold w-auto sm:w-48">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[12px] text-text-secondary uppercase w-14">Created:</span>
+                      <span className="text-sm text-text-primary">{formatDateLong(lead.createdAt)}</span>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-[9px] text-crm-orange uppercase">Next:</span>
-                      <span className="text-[9px] text-text-primary">{formatDateLong(lead.nextFollowup, false)}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[12px] text-crm-orange uppercase w-14">Next:</span>
+                      <span className="text-sm text-text-primary">{formatDateLong(lead.nextFollowup, false)}</span>
                     </div>
-                    <div className="flex items-center gap-1 opacity-60">
-                      <span className="text-[9px] uppercase">Last:</span>
-                      <span className="text-[9px]">{formatDateLong(lead.lastFollowup)}</span>
+                    <div className="flex items-center gap-2 opacity-60">
+                      <span className="text-[12px] uppercase w-14">Last:</span>
+                      <span className="text-sm">{formatDateLong(lead.lastFollowup)}</span>
                     </div>
                   </div>
                 </td>
 
                 {/* 4. OPERATION: Agent + Source + Response */}
-                <td className="px-4 py-4 border-y border-bg-tertiary/20 group-hover:border-crm-orange/30 transition-colors">
-                  <div className="flex flex-col gap-1.5">
-                    <span className="text-[11px] font-black text-text-primary tracking-tight uppercase italic">{lead.agent?.name || "Unassigned"}</span>
-                    <span className={`px-1.5 py-0.5 rounded-md border text-[8px] font-black uppercase tracking-widest whitespace-nowrap shadow-sm transition-all ${getSourceColor(lead.source)}`}>
+                <td className="px-4 py-4 border-y border-bg-tertiary/20 group-hover:border-crm-orange/30 transition-colors align-middle block sm:table-cell">
+                  <div className="flex flex-col gap-2 w-auto sm:w-36">
+                    <span className="text-sm font-black text-text-primary tracking-tight uppercase italic truncate">{lead.agent?.name || "Unassigned"}</span>
+                    <span className={`px-2 py-1 rounded-md border text-[10px] font-black uppercase tracking-widest whitespace-nowrap shadow-sm transition-all w-max ${getSourceColor(lead.source)}`}>
                       {lead.source || "Other Source"}
                     </span>
-                    <div className="flex">
-                      <span className={`px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter ${
-                        lead.response === 'Interested' ? 'bg-green-500 text-white' :
-                        lead.response === 'Not Interested' ? 'bg-red-500 text-white' :
-                        'bg-blue-500 text-white'
-                      }`}>
+                    <div className="flex mt-1">
+                      <span className={`px-2 py-1 rounded text-[10px] font-black uppercase tracking-tighter ${lead.response === 'Interested' ? 'bg-green-500 text-white' :
+                          lead.response === 'Not Interested' ? 'bg-red-500 text-white' :
+                            'bg-blue-500 text-white'
+                        }`}>
                         {lead.response || "No Resp."}
                       </span>
                     </div>
@@ -138,22 +139,20 @@ const LeadsTable = ({ leads, loading, onLeadClick }) => {
                 </td>
 
                 {/* 5. RATING: Type + Priority */}
-                <td className="px-4 py-4 border-y border-bg-tertiary/20 group-hover:border-crm-orange/30 transition-colors">
-                  <div className="flex flex-col gap-2">
+                <td className="px-4 py-4 border-y border-bg-tertiary/20 group-hover:border-crm-orange/30 transition-colors align-middle block sm:table-cell">
+                  <div className="flex flex-col gap-3 w-auto sm:w-28">
                     <div className="flex">
-                      <span className={`px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest shadow-sm ${
-                        lead.type === 'Hot' ? 'bg-red-600 text-white' :
-                        'bg-blue-600 text-white shadow-blue-500/20'
-                      }`}>
+                      <span className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm ${lead.type === 'Hot' ? 'bg-red-600 text-white' :
+                          'bg-blue-600 text-white shadow-blue-500/20'
+                        }`}>
                         {lead.type || "Cold"}
                       </span>
                     </div>
                     <div className="flex">
-                      <span className={`px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest shadow-sm ${
-                        lead.priority === 'High' ? 'bg-red-500 text-white shadow-red-500/20' :
-                        lead.priority === 'Medium' ? 'bg-yellow-500 text-black' :
-                        'bg-green-500 text-white shadow-green-500/20'
-                      }`}>
+                      <span className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm ${lead.priority === 'High' ? 'bg-red-500 text-white shadow-red-500/20' :
+                          lead.priority === 'Medium' ? 'bg-yellow-500 text-black' :
+                            'bg-green-500 text-white shadow-green-500/20'
+                        }`}>
                         {lead.priority || "Low"}
                       </span>
                     </div>
@@ -161,13 +160,13 @@ const LeadsTable = ({ leads, loading, onLeadClick }) => {
                 </td>
 
                 {/* 6. ACTION: Details Button */}
-                <td className="px-4 py-4 rounded-r-2xl border-y border-r border-bg-tertiary/20 group-hover:border-crm-orange/30 transition-colors text-center">
+                <td className="px-4 py-4 rounded-r-2xl border-y border-r border-bg-tertiary/20 group-hover:border-crm-orange/30 transition-colors align-middle text-center block sm:table-cell">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       onLeadClick && onLeadClick(lead._id || lead.id);
                     }}
-                    className="bg-bg-primary hover:bg-crm-orange group-hover:bg-crm-orange text-text-primary group-hover:text-white px-4 py-2 rounded-xl text-[10px] font-black shadow-sm transition-all uppercase tracking-widest border border-bg-tertiary hover:border-crm-orange group-hover:shadow-crm-orange/30"
+                    className="bg-bg-primary hover:bg-crm-orange group-hover:bg-crm-orange text-text-primary group-hover:text-white px-5 py-2.5 rounded-xl text-xs font-black shadow-sm transition-all uppercase tracking-widest border border-bg-tertiary hover:border-crm-orange group-hover:shadow-crm-orange/30 w-full sm:w-auto mt-2 sm:mt-0"
                   >
                     Details
                   </button>
@@ -178,16 +177,16 @@ const LeadsTable = ({ leads, loading, onLeadClick }) => {
         </table>
         {loading && leads.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
-             <div className="relative w-10 h-10">
-                <div className="absolute inset-0 rounded-full border-4 border-bg-tertiary"></div>
-                <div className="absolute inset-0 rounded-full border-4 border-crm-orange border-t-transparent animate-spin"></div>
-             </div>
-             <p className="text-[10px] font-black text-text-secondary uppercase tracking-[0.2em] animate-pulse">Syncing Database...</p>
+            <div className="relative w-10 h-10">
+              <div className="absolute inset-0 rounded-full border-4 border-bg-tertiary"></div>
+              <div className="absolute inset-0 rounded-full border-4 border-crm-orange border-t-transparent animate-spin"></div>
+            </div>
+            <p className="text-[10px] font-black text-text-secondary uppercase tracking-[0.2em] animate-pulse">Syncing Database...</p>
           </div>
         ) : leads.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-text-secondary">
             <div className="w-12 h-12 rounded-full bg-bg-tertiary/20 flex items-center justify-center mb-4 opacity-30">
-               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
             <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">No opportunities found</p>
           </div>
