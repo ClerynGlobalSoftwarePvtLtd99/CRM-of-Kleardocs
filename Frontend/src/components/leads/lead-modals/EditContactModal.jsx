@@ -55,11 +55,21 @@ const EditContactModal = ({ lead, onClose, onUpdate }) => {
       ...(selectedService && { serviceId: selectedService._id }),
     };
 
+    if (formData.phone.length !== 10) {
+      toast.error("Phone number must be exactly 10 digits");
+      return;
+    }
+
     onUpdate(payload);
     onClose();
   };
 
   const handleChange = (field, value) => {
+    if (field === 'phone') {
+      const onlyDigits = value.replace(/\D/g, "").substring(0, 10);
+      setFormData(prev => ({ ...prev, [field]: onlyDigits }));
+      return;
+    }
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -90,6 +100,8 @@ const EditContactModal = ({ lead, onClose, onUpdate }) => {
               type="text"
               value={formData.phone}
               onChange={(e) => handleChange('phone', e.target.value)}
+              maxLength={10}
+              placeholder="10-digit mobile number"
               className="w-full bg-transparent border border-bg-tertiary rounded-md p-3 text-text-primary outline-none focus:border-crm-orange transition-colors"
             />
           </div>

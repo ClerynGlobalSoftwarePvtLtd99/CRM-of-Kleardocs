@@ -12,7 +12,7 @@ const COMPANY_TYPES = [
 // ─── Create Customer ─────────────────────────────────────────────────────────
 export const createCustomerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
-  phone: z.string().min(10, "Phone must be at least 10 digits"),
+  phone: z.string().length(10, "Phone must be exactly 10 digits"),
   companyName: z.string().optional(),
   address: z.string().optional(),
   state: z.string().optional(),
@@ -37,7 +37,7 @@ export const updateEmailsSchema = z.object({
 // ─── Add Director ────────────────────────────────────────────────────────────
 export const addDirectorSchema = z.object({
   name: z.string().min(2, "Director name required"),
-  phone: z.string().optional()
+  phone: z.string().length(10, "Phone must be exactly 10 digits").optional().or(z.literal(""))
 });
 
 // ─── Add Service to Customer ─────────────────────────────────────────────────
@@ -60,7 +60,13 @@ export const addFinancialYearSchema = z.object({
 
 // ─── Update Compliance ───────────────────────────────────────────────────────
 export const updateComplianceSchema = z.object({
+  name: z.string().optional(),
   status: z.enum(["To Be Done", "Ongoing", "Done"]).optional(),
   accountant: z.string().optional(),
-  completedOn: z.string().optional()
+  completedOn: z.string().optional(),
+  hasExpiry: z.boolean().optional(),
+  isInc20: z.boolean().optional(),
+  daysAfterInc: z.number().optional(),
+  expiryTemplate: z.string().optional(),
+  completeTemplate: z.string().optional()
 });

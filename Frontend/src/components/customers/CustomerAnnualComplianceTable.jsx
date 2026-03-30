@@ -65,7 +65,7 @@ const CustomerAnnualComplianceTable = ({ compliances = [], onAction }) => {
               >
                 <div className="text-[13px] text-text-primary">
                   <span className="lg:hidden font-bold block mb-1">Compliance Name:</span>
-                  {c.name || c.complianceName}
+                  {c.name || c.complianceName || "Compliance Record"}
                 </div>
 
                 <div className={`text-[13px] ${showRedDate ? 'text-red-600' : 'text-text-secondary'}`}>
@@ -80,12 +80,12 @@ const CustomerAnnualComplianceTable = ({ compliances = [], onAction }) => {
 
                 <div className="text-[13px] text-text-secondary">
                   <span className="lg:hidden font-bold block mb-1 text-text-primary">Completed On:</span>
-                  {c.completedOn ? new Date(c.completedOn).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
+                  {c.completedOn ? new Date(c.completedOn).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}
                 </div>
 
                 <div className="text-[13px] text-text-secondary">
                   <span className="lg:hidden font-bold block mb-1 text-text-primary">Accountant:</span>
-                  {c.accountant || ''}
+                  {typeof c.accountant === 'object' ? c.accountant?.name : (c.accountant || '-')}
                 </div>
 
                 <div className="flex justify-end lg:block lg:text-center">

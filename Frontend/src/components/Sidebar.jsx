@@ -75,8 +75,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed md:relative inset-y-0 right-0 z-40 bg-[var(--color-bg-secondary)] transform transition-all duration-300 ease-in-out border-r border-[var(--color-bg-tertiary)] flex flex-col h-full
-        ${isOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}
+        className={`fixed md:relative inset-y-0 left-0 z-40 bg-[var(--color-bg-secondary)] transform transition-all duration-300 ease-in-out border-r border-[var(--color-bg-tertiary)] flex flex-col h-full
+        ${isOpen ? 'translate-x-0' : 'translate-x-0 md:translate-x-0'}
         ${isCollapsed ? 'md:w-20' : 'md:w-64'} w-64`}
       >
         {/* Logo Area */}

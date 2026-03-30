@@ -45,6 +45,11 @@ const Settings = () => {
     startupIndiaTemplate: '',
     isoTemplate: '',
     inc20Template: '',
+    firmName: '',
+    firmRegistrationNumber: '',
+    firmAddress: '',
+    proprietorName: '',
+    membershipNumber: '',
   })
 
   // Load settings from backend on mount
@@ -75,6 +80,11 @@ const Settings = () => {
         startupIndiaTemplate: settings.startupIndiaTemplate || '',
         isoTemplate: settings.isoTemplate || '',
         inc20Template: settings.inc20Template || '',
+        firmName: settings.firmName || '',
+        firmRegistrationNumber: settings.firmRegistrationNumber || '',
+        firmAddress: settings.firmAddress || '',
+        proprietorName: settings.proprietorName || '',
+        membershipNumber: settings.membershipNumber || '',
       })
     }
   }, [settings])

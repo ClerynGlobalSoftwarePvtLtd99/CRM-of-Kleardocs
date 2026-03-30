@@ -119,43 +119,117 @@ export const getCustomerList = async () => {
 };
 
 // ─── GET SINGLE CUSTOMER (full detail) ───────────────────────────────────────
-export const getCustomerById = async (customerId) => {
+/**
+ * Helper to get financial year start/end dates from string "2025-2026"
+ * April 1st to March 31st
+ */
+const getFinancialYearRange = (yearString) => {
+  if (!yearString || !yearString.includes('-')) return null;
+  try {
+    const [startYear, endYear] = yearString.split('-').map(Number);
+    const startDate = new Date(startYear, 3, 1, 0, 0, 0, 0); 
+    const endDate = new Date(endYear, 2, 31, 23, 59, 59, 999);
+    return { startDate, endDate };
+  } catch (e) {
+    return null;
+  }
+};
+
+// ─── GET SINGLE CUSTOMER (full detail) ───────────────────────────────────────
+export const getCustomerById = async (customerId, year) => {
   const customer = await Customer.findById(customerId)
     .populate("saleBy", "name")
     .lean();
 
   if (!customer) throw new ApiError(404, "Customer not found");
 
-  const [directors, services, compliances, emailHistory] = await Promise.all([
+  const dateRange = getFinancialYearRange(year);
+
+  // Filters
+  const complianceFilter = { customer: customerId };
+  if (year) complianceFilter.financialYear = year;
+
+  const serviceFilter = { customer: customerId };
+  if (dateRange) {
+    serviceFilter.$or = [
+      { startDate: { $lte: dateRange.endDate }, endDate: { $gte: dateRange.startDate } },
+      { startDate: { $lte: dateRange.endDate }, endDate: null }
+    ];
+  }
+
+  const historyFilter = { customer: customerId };
+  if (dateRange) {
+    historyFilter.date = { $gte: dateRange.startDate, $lte: dateRange.endDate };
+  }
+
+  const invoiceFilter = { customer: customerId };
+  if (dateRange) {
+    invoiceFilter.invoiceDate = { $gte: dateRange.startDate, $lte: dateRange.endDate };
+  }
+
+  const recurringFilter = { customer: customerId };
+  if (dateRange) {
+    recurringFilter.startDate = { $gte: dateRange.startDate, $lte: dateRange.endDate };
+  }
+
+  let [directors, services, compliances, emailHistory] = await Promise.all([
     Director.find({ customer: customerId }).lean(),
-    CustomerService.find({ customer: customerId })
+    CustomerService.find(serviceFilter)
       .populate("service", "name")
       .lean(),
-    CustomerCompliance.find({ customer: customerId })
+    CustomerCompliance.find(complianceFilter)
       .sort({ financialYear: -1, createdAt: 1 })
       .lean(),
-    EmailLog.find({ customer: customerId })
+    EmailLog.find(historyFilter)
       .populate("template", "name")
       .sort({ date: -1 })
       .lean()
   ]);
 
-  // Lazy-load Invoice & RecurringInvoice models if they exist
+  // AUTO-INITIALIZE: If requested year is empty, clone from settings
+  if (year && compliances.length === 0) {
+    try {
+      await addFinancialYear(customerId, year);
+      // Re-fetch compliances after init
+      compliances = await CustomerCompliance.find(complianceFilter).sort({ financialYear: -1, createdAt: 1 }).lean();
+    } catch (err) {
+      if (err.statusCode !== 400) console.error("Auto-init compliance error:", err);
+    }
+  }
+
+  // Lazy-load Invoice & RecurringInvoice models
   let invoices = [];
   let recurringInvoices = [];
   try {
     const { default: Invoice } = await import("../models/Invoice.model.js");
-    invoices = await Invoice.find({ customer: customerId })
-      .select("invoiceNo invoiceDate linkedService price gst total due")
+    const rawInvoices = await Invoice.find(invoiceFilter)
+      .populate("items.service", "name")
       .sort({ createdAt: -1 })
       .lean();
+    
+    invoices = rawInvoices.map(inv => ({
+      ...inv,
+      id: inv._id,
+      date: inv.invoiceDate, // Standardize naming for frontend
+      linkedService: inv.items?.[0]?.description || inv.items?.[0]?.service?.name || '-',
+      price: inv.subTotal || 0,
+      gstAmount: inv.totalGst || 0,
+      total: inv.total || 0,
+    }));
   } catch (_) {}
+
   try {
     const { default: RecurringInvoice } = await import("../models/RecurringInvoice.model.js");
-    recurringInvoices = await RecurringInvoice.find({ customer: customerId })
-      .select("startDate endDate linkedService interval intervalType nextDate status")
+    const rawRecurring = await RecurringInvoice.find(recurringFilter)
+      .populate("items.service", "name")
       .sort({ createdAt: -1 })
       .lean();
+    
+    recurringInvoices = rawRecurring.map(ri => ({
+      ...ri,
+      id: ri._id,
+      linkedService: ri.items?.[0]?.description || ri.items?.[0]?.service?.name || '-',
+    }));
   } catch (_) {}
 
   return {
@@ -164,7 +238,7 @@ export const getCustomerById = async (customerId) => {
     directors,
     services: services.map((cs) => ({
       id: cs._id,
-      name: cs.service?.name,
+      name: cs.service?.name || "Standard Service",
       startDate: cs.startDate,
       endDate: cs.endDate,
       status: cs.status,
@@ -202,7 +276,14 @@ export const updateCustomer = async (customerId, data) => {
   });
 
   await customer.save();
-  return customer;
+  
+  // Re-populate for frontend display
+  await customer.populate("saleBy", "name");
+  
+  const updatedCustomer = customer.toObject();
+  updatedCustomer.salesPerson = updatedCustomer.saleBy?.name || null;
+  
+  return updatedCustomer;
 };
 
 // ─── UPDATE EMAILS ────────────────────────────────────────────────────────────
@@ -229,24 +310,70 @@ export const deleteDirector = async (customerId, directorId) => {
   await director.deleteOne();
 };
 
-// ─── ADD SERVICE TO CUSTOMER ─────────────────────────────────────────────────
+// ─── ADD SERVICE TO CUSTOMER (with multi-module sync) ────────────────────────
 export const addService = async (customerId, data) => {
   const customer = await Customer.findById(customerId);
   if (!customer) throw new ApiError(404, "Customer not found");
 
+  // Fetch service master data (using dynamic import for flexibility)
+  const { default: Service } = await import("../models/Service.model.js");
+  const serviceMaster = await Service.findById(data.serviceId);
+  if (!serviceMaster) throw new ApiError(404, "Service master not found");
+
+  const startDate = data.startDate ? new Date(data.startDate) : new Date();
+
+  // 1. Create the Customer Service record
   const cs = await CustomerService.create({
     customer: customerId,
     service: data.serviceId,
-    startDate: data.startDate ? new Date(data.startDate) : undefined,
+    startDate,
     endDate: data.endDate ? new Date(data.endDate) : undefined,
     professionalFees: data.professionalFees || 0,
     govtFees: data.govtFees || 0,
     gst: data.gst ?? 18,
     recurring: data.recurring || false,
-    interval: data.interval,
-    intervalType: data.intervalType,
+    interval: data.interval || 1, 
+    intervalType: data.intervalType || "Month",
     status: "Active"
   });
+
+  // 2. If "Annual Compliance" → Add to Compliance History 
+  if (serviceMaster.name === "Annual Compliance") {
+    // Generate Financial Year (April-March logic)
+    const month = startDate.getMonth(); // 0-indexed, Jan=0, Mar=2, Apr=3
+    const year = startDate.getFullYear();
+    const financialYear = month >= 3 ? `${year}-${year+1}` : `${year-1}-${year}`;
+
+    // Call addFinancialYear to clone all tasks from ComplianceSetting master
+    try {
+      await addFinancialYear(customerId, financialYear);
+    } catch (error) {
+      // If already exists, we skip. Otherwise, we log it.
+      if (error.statusCode !== 400) {
+        console.error("Error cloning compliance tasks:", error);
+      }
+    }
+  }
+
+  // 3. If Recurring enabled → Create Recurring Invoice 
+  if (data.recurring) {
+    const { default: RecurringInvoice } = await import("../models/RecurringInvoice.model.js");
+    await RecurringInvoice.create({
+      customer: customerId,
+      items: [{
+        service: data.serviceId,
+        description: serviceMaster.name,
+        professionalFees: data.professionalFees || 0,
+        govtFees: data.govtFees || 0,
+        gstPercent: data.gst ?? 18,
+      }],
+      startDate,
+      nextDate: startDate, 
+      interval: data.interval || 1,
+      intervalType: data.intervalType || "Month",
+      status: "Active"
+    });
+  }
 
   return cs;
 };
@@ -291,9 +418,9 @@ export const addFinancialYear = async (customerId, financialYear) => {
   let templates = [];
   try {
     const { default: ComplianceSetting } = await import("../models/ComplianceSetting.model.js");
-    templates = await ComplianceSetting.find({ year: financialYear }).lean();
-  } catch (_) {
-    // ComplianceSetting model not yet built — start with empty set
+    templates = await ComplianceSetting.find({ financialYear }).lean();
+  } catch (error) {
+    console.error("Error fetching compliance templates:", error);
   }
 
   if (templates.length > 0) {
@@ -323,9 +450,17 @@ export const updateCompliance = async (customerId, complianceId, data) => {
     throw new ApiError(403, "Compliance does not belong to this customer");
   }
 
-  if (data.status) compliance.status = data.status;
+  if (data.name !== undefined) compliance.name = data.name;
+  if (data.status !== undefined) compliance.status = data.status;
   if (data.accountant !== undefined) compliance.accountant = data.accountant;
   if (data.completedOn) compliance.completedOn = new Date(data.completedOn);
+  
+  // Detailed configuration fields
+  if (data.hasExpiry !== undefined) compliance.hasExpiry = data.hasExpiry;
+  if (data.isInc20 !== undefined) compliance.isInc20 = data.isInc20;
+  if (data.daysAfterInc !== undefined) compliance.daysAfterInc = data.daysAfterInc;
+  if (data.expiryTemplate !== undefined) compliance.expiryTemplate = data.expiryTemplate;
+  if (data.completeTemplate !== undefined) compliance.completeTemplate = data.completeTemplate;
   else if (data.status === "Done" && !compliance.completedOn) {
     compliance.completedOn = new Date();
   }
