@@ -97,7 +97,12 @@ export const getSalesStats = async (startDate, endDate) => {
   const invoiceMatch = getDateMatch(startDate, endDate, "invoiceDate");
   const paymentMatch = getDateMatch(startDate, endDate, "paymentDate");
 
-  const totalInvoices = await Invoice.countDocuments(invoiceMatch);
+  const now = new Date();
+  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+  const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
+
+  // Current stats
+  const totalInvoicesCount = await Invoice.countDocuments(invoiceMatch);
   
   const invoicesAgg = await Invoice.aggregate([
     { $match: invoiceMatch },
@@ -116,13 +121,42 @@ export const getSalesStats = async (startDate, endDate) => {
   ]);
   const paymentReceived = paymentsAgg[0]?.paymentReceived || 0;
 
+  // Previous stats (for trends vs prior 30 days up to 30 days ago)
+  const prevDateMatch = (startDate || endDate) 
+    ? { invoiceDate: { $gte: new Date(0) } } 
+    : { invoiceDate: { $lt: thirtyDaysAgo } };
+
+  const prevPaymentDateMatch = (startDate || endDate) 
+    ? { paymentDate: { $gte: new Date(0) } } 
+    : { paymentDate: { $lt: thirtyDaysAgo } };
+  
+  const prevInvoicesAgg = await Invoice.aggregate([
+    { $match: prevDateMatch },
+    { $group: { _id: null, totalSales: { $sum: "$total" }, totalDues: { $sum: "$due" } } }
+  ]);
+  const prevTotalSales = prevInvoicesAgg[0]?.totalSales || 0;
+  const prevTotalDues = prevInvoicesAgg[0]?.totalDues || 0;
+
+  const prevUnpaidPartialInvoices = await Invoice.countDocuments({ ...prevDateMatch, due: { $gt: 0 } });
+
+  const prevPaymentsAgg = await InvoicePayment.aggregate([
+    { $match: prevPaymentDateMatch },
+    { $group: { _id: null, paymentReceived: { $sum: "$amount" } } }
+  ]);
+  const prevPaymentReceived = prevPaymentsAgg[0]?.paymentReceived || 0;
+
+  const trendTotalSales = getPercentChange(totalSales, prevTotalSales);
+  const trendTotalDues = getPercentChange(totalDues, prevTotalDues);
+  const trendUnpaid = getPercentChange(unpaidPartialInvoices, prevUnpaidPartialInvoices);
+  const trendPaymentReceived = getPercentChange(paymentReceived, prevPaymentReceived);
+
   return {
-    totalInvoices,
-    totalSales,
-    totalPayments: totalPaymentsCount,
-    paymentReceived,
-    unpaidPartialInvoices,
-    totalDues
+    totalInvoices: { value: totalInvoicesCount, trend: 'up', trendValue: null },
+    totalSales: { value: totalSales, trend: trendTotalSales >= 0 ? 'up' : 'down', trendValue: Math.abs(trendTotalSales) },
+    totalPayments: { value: totalPaymentsCount, trend: 'up', trendValue: null },
+    paymentReceived: { value: paymentReceived, trend: trendPaymentReceived >= 0 ? 'up' : 'down', trendValue: Math.abs(trendPaymentReceived) },
+    unpaidPartialInvoices: { value: unpaidPartialInvoices, trend: trendUnpaid >= 0 ? 'up' : 'down', trendValue: Math.abs(trendUnpaid) },
+    totalDues: { value: totalDues, trend: trendTotalDues >= 0 ? 'up' : 'down', trendValue: Math.abs(trendTotalDues) }
   };
 };
 
