@@ -3,8 +3,14 @@ import React from "react";
 const CustomerServicesTable = ({ services = [], onAction }) => {
   return (
     <div className="bg-bg-secondary rounded-sm shadow-sm border border-bg-tertiary overflow-hidden">
-      <div className="p-4 border-b border-bg-tertiary bg-bg-secondary">
+      <div className="p-4 border-b border-bg-tertiary bg-bg-secondary flex justify-between items-center">
         <h3 className="text-[17px] font-bold text-text-primary">Services</h3>
+        <button 
+          onClick={() => onAction && onAction('addService')}
+          className="bg-[#f08c3e] hover:bg-[#e67e22] text-white px-4 py-1.5 text-[11px] font-bold uppercase rounded-sm transition-colors custom-shadow-sm h-[34px]"
+        >
+          ADD SERVICE
+        </button>
       </div>
 
       <div className="bg-bg-primary p-4">

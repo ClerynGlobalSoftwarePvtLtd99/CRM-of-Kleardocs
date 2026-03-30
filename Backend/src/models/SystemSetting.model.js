@@ -14,7 +14,14 @@ const systemSettingSchema = new mongoose.Schema({
   recurringInvoiceTemplate: { type: String, default: "Next Quarter Payment" },
   serviceListTemplate: { type: String, default: "Startup India Registration" },
   websiteTemplate: { type: String, default: "Website" },
-  isoTemplate: { type: String, default: "Service List" }
+  isoTemplate: { type: String, default: "Service List" },
+  
+  // Firm Details (For Reports)
+  firmName: { type: String, default: "M/s. JAGJYOT SINGH AND ASSOCIATES" },
+  firmRegistrationNumber: { type: String, default: "333567E" },
+  firmAddress: { type: String, default: "PLOT 51, BLOCK BB – 102, SHANTIPALLY, SARAT PARK, KOLKATA – 700107" },
+  proprietorName: { type: String, default: "CA Jagjyot Singh" },
+  membershipNumber: { type: String, default: "319799" }
 }, { timestamps: true });
 
 export default mongoose.model("SystemSetting", systemSettingSchema);

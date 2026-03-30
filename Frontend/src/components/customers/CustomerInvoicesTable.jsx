@@ -53,7 +53,7 @@ const CustomerInvoicesTable = ({ invoices = [], onAction }) => {
 
                 <div className="text-[13px] text-text-secondary">
                   <span className="lg:hidden font-bold block mb-1 text-text-primary">Total:</span>
-                  ₹ {inv.total || (inv.price + (inv.gstAmount || 0))}
+                  ₹ {inv.total || 0}
                 </div>
 
                 <div className="text-[13px] text-[#dc3545]">

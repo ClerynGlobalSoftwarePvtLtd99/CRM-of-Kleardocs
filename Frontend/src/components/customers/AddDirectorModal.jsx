@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { addCustomerDirector } from "../../redux/slices/customersSlice";
 import toast from "react-hot-toast";
 
-const AddDirectorModal = ({ onClose, onAdd }) => {
+const AddDirectorModal = ({ customer, onClose, onAdd }) => {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -16,6 +16,10 @@ const AddDirectorModal = ({ onClose, onAdd }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.phone && formData.phone.length !== 10) {
+      toast.error("Phone number must be exactly 10 digits");
+      return;
+    }
     try {
       await dispatch(addCustomerDirector({
         customerId: customer._id,
@@ -28,6 +32,11 @@ const AddDirectorModal = ({ onClose, onAdd }) => {
     } catch (err) {
       toast.error(err || "Failed to add director");
     }
+  };
+
+  const handlePhoneChange = (value) => {
+    const onlyDigits = value.replace(/\D/g, "").substring(0, 10);
+    setFormData({ ...formData, phone: onlyDigits });
   };
 
   return (
@@ -62,8 +71,9 @@ const AddDirectorModal = ({ onClose, onAdd }) => {
               type="text" 
               required 
               value={formData.phone}
-              onChange={(e) => setFormData({...formData, phone: e.target.value})}
-              placeholder="Enter Phone"
+              onChange={(e) => handlePhoneChange(e.target.value)}
+              placeholder="10-digit number"
+              maxLength={10}
             />
           </div>
 

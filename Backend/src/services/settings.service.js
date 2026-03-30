@@ -47,7 +47,8 @@ export const updateSystemSettings = async (data) => {
     "invoicePrefix", "invoiceStartingNumber", "emailFromName", "fromEmail",
     "invoiceTemplate", "gstTemplate", "ptaxTemplate", "startupIndiaTemplate",
     "inc20Template", "recurringInvoiceTemplate", "serviceListTemplate",
-    "websiteTemplate", "isoTemplate"
+    "websiteTemplate", "isoTemplate", "firmName", "firmRegistrationNumber",
+    "firmAddress", "proprietorName", "membershipNumber"
   ];
 
   for (const f of fields) {

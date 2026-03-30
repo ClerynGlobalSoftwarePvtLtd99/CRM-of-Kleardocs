@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { X, Plus, Trash2, Download } from "lucide-react";
+import { X, Plus, Trash2, Eye, Download } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { downloadCustomerReport } from "../../redux/slices/customersSlice";
 import toast from "react-hot-toast";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import logo from "../../assets/logo.png";
 
 const DirectorReportModal = ({ customer, onClose }) => {
   const [reportData, setReportData] = useState({
@@ -36,10 +39,57 @@ const DirectorReportModal = ({ customer, onClose }) => {
   });
 
   const [directors, setDirectors] = useState([]);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const [signingDirectors, setSigningDirectors] = useState([
     { id: Date.now(), name: "", din: "" }
   ]);
+
+  const addLogoToPDF = async (doc) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.src = '/logo.svg';
+      
+      img.onload = function() {
+        try {
+          // Convert SVG to canvas first
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = 100;
+          canvas.height = 75;
+          
+          // Draw the SVG onto canvas
+          ctx.drawImage(img, 0, 0, 100, 75);
+          
+          // Convert to data URL and add to PDF
+          const imgData = canvas.toDataURL('image/png');
+          doc.addImage(imgData, 'PNG', 160, 10, 40, 30);
+          resolve();
+        } catch (error) {
+          // Fallback if canvas conversion fails
+          console.warn('Canvas conversion failed, using text fallback:', error);
+          doc.setFontSize(12);
+          doc.setTextColor(213, 179, 114); // #d5b372 color
+          doc.setFont("helvetica", "bold");
+          doc.text('KLEAR', 170, 25);
+          doc.text('DOCS', 170, 32);
+          resolve();
+        }
+      };
+      
+      img.onerror = function() {
+        // Fallback: draw a simple text logo if image fails to load
+        console.warn('Logo image failed to load, using text fallback');
+        doc.setFontSize(12);
+        doc.setTextColor(213, 179, 114); // #d5b372 color
+        doc.setFont("helvetica", "bold");
+        doc.text('KLEAR', 170, 25);
+        doc.text('DOCS', 170, 32);
+        resolve();
+      };
+    });
+  };
 
   const addDirector = () => {
     setDirectors([...directors, { id: Date.now(), name: "", designation: "", appointment: "", resignation: "" }]);
@@ -57,29 +107,7 @@ const DirectorReportModal = ({ customer, onClose }) => {
     setSigningDirectors(signingDirectors.filter(d => d.id !== id));
   };
 
-  const addLogoToPDF = (doc) => {
-    // Create a canvas to convert SVG to image
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = 100;
-    canvas.height = 75;
-    
-    // Draw a simple logo representation
-    ctx.fillStyle = '#d5b372';
-    ctx.fillRect(0, 0, 100, 75);
-    ctx.fillStyle = '#000000';
-    ctx.font = 'bold 12px Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('KLEAR', 50, 30);
-    ctx.fillText('DOCS', 50, 45);
-    
-    // Convert canvas to data URL and add to PDF
-    const imgData = canvas.toDataURL('image/png');
-    doc.addImage(imgData, 'PNG', 160, 10, 40, 30);
-  };
-
-  const generatePDF = () => {
+  const generatePDFBlob = async () => {
     const doc = new jsPDF();
     
     // Set font to support better text rendering
@@ -106,15 +134,15 @@ const DirectorReportModal = ({ customer, onClose }) => {
     doc.text(companyDetails.cin, 15, 38);
     doc.text(companyDetails.pan, 15, 42);
 
-    // Add logo
-    addLogoToPDF(doc);
+    // Add logo (async operation)
+    await addLogoToPDF(doc);
 
     // Title
     doc.setFontSize(16);
     doc.setFont("helvetica", "bold");
     doc.text("DIRECTOR'S REPORT", 105, 60, { align: "center" });
 
-    // Report opening
+    // Rest of the PDF content...
     doc.setFontSize(12);
     doc.setFont("helvetica", "normal");
     const openingText = `The Directors take pleasure in presenting the ${profitTable.header1 || 'Previous Year'} and ${profitTable.header2 || 'Current Year'} Audited Financial Statements of the Company, together with the Reports of the Statutory Auditors thereon.`;
@@ -232,8 +260,48 @@ const DirectorReportModal = ({ customer, onClose }) => {
     doc.text(`Place: ${reportData.place}`, 15, currentY);
     doc.text(`Date: ${reportData.date}`, 15, currentY + 5);
 
-    // Save the PDF
-    doc.save(`Director_Report_${customer?.name || 'Company'}_${new Date().toISOString().split('T')[0]}.pdf`);
+    // Return blob instead of saving
+    return doc.output('blob');
+  };
+
+  const previewPDF = async () => {
+    if (isGeneratingPDF) return;
+    
+    setIsGeneratingPDF(true);
+    try {
+      const pdfBlob = await generatePDFBlob();
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      window.open(pdfUrl, '_blank');
+      toast.success("PDF preview opened in new tab");
+    } catch (error) {
+      toast.error("Failed to generate PDF preview");
+      console.error("PDF generation error:", error);
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
+
+  const downloadPDF = async () => {
+    if (isGeneratingPDF) return;
+    
+    setIsGeneratingPDF(true);
+    try {
+      const pdfBlob = await generatePDFBlob();
+      const url = URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Director_Report_${customer?.name || 'Company'}_${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      toast.success("PDF downloaded successfully");
+    } catch (error) {
+      toast.error("Failed to download PDF");
+      console.error("PDF download error:", error);
+    } finally {
+      setIsGeneratingPDF(false);
+    }
   };
 
   const dispatch = useDispatch();
@@ -274,82 +342,6 @@ const DirectorReportModal = ({ customer, onClose }) => {
 
         <div className="p-8 space-y-4 max-h-[75vh] overflow-y-auto custom-scrollbar">
           
-          {/* ADD DIRECTOR SECTION */}
-          <div className="space-y-4">
-            {directors.map((director, i) => (
-              <div key={director.id} className="bg-bg-primary border border-bg-tertiary p-6 rounded-lg shadow-sm space-y-4">
-                <div className="flex justify-between items-center mb-2">
-                  <h4 className="text-lg font-semibold text-text-primary">Director {i + 1}</h4>
-                  <button 
-                    onClick={() => removeDirector(director.id)} 
-                    className="text-red-500 hover:bg-red-500/10 px-3 py-1 rounded-md text-sm font-medium transition-all flex items-center gap-2"
-                  >
-                    <Trash2 size={16} />
-                    Remove
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="fieldset-input">
-                    <span className="fieldset-label">Name *</span>
-                    <input 
-                      value={director.name} 
-                      onChange={(e) => {
-                        const newDirectors = [...directors];
-                        newDirectors[i].name = e.target.value;
-                        setDirectors(newDirectors);
-                      }} 
-                      placeholder="Enter director name"
-                      autoComplete="off"
-                      data-lp-ignore="true"
-                      className="w-full px-4 py-3 bg-bg-secondary border border-bg-tertiary rounded-md text-text-primary placeholder-text-secondary focus:border-t-accent focus:outline-none transition-colors"
-                    />
-                  </div>
-                  <div className="fieldset-input">
-                    <span className="fieldset-label">Designation *</span>
-                    <input 
-                      value={director.designation} 
-                      onChange={(e) => {
-                        const newDirectors = [...directors];
-                        newDirectors[i].designation = e.target.value;
-                        setDirectors(newDirectors);
-                      }} 
-                      placeholder="Enter designation"
-                      autoComplete="off"
-                      data-lp-ignore="true"
-                      className="w-full px-4 py-3 bg-bg-secondary border border-bg-tertiary rounded-md text-text-primary placeholder-text-secondary focus:border-t-accent focus:outline-none transition-colors"
-                    />
-                  </div>
-                  <div className="fieldset-input">
-                    <span className="fieldset-label">Date of Appointment</span>
-                    <input 
-                      type="date" 
-                      value={director.appointment} 
-                      onChange={(e) => {
-                        const newDirectors = [...directors];
-                        newDirectors[i].appointment = e.target.value;
-                        setDirectors(newDirectors);
-                      }} 
-                      className="w-full px-4 py-3 bg-bg-secondary border border-bg-tertiary rounded-md text-text-primary placeholder-text-secondary focus:border-t-accent focus:outline-none transition-colors"
-                    />
-                  </div>
-                  <div className="fieldset-input">
-                    <span className="fieldset-label">Date of Resignation</span>
-                    <input 
-                      type="date" 
-                      value={director.resignation} 
-                      onChange={(e) => {
-                        const newDirectors = [...directors];
-                        newDirectors[i].resignation = e.target.value;
-                        setDirectors(newDirectors);
-                      }} 
-                      className="w-full px-4 py-3 bg-bg-secondary border border-bg-tertiary rounded-md text-text-primary placeholder-text-secondary focus:border-t-accent focus:outline-none transition-colors"
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
           {/* PROFIT TABLE */}
           <div className="space-y-4">
             <div className="overflow-x-auto">
@@ -431,6 +423,85 @@ const DirectorReportModal = ({ customer, onClose }) => {
               </table>
             </div>
           </div>
+
+          {/* ADD DIRECTOR SECTION - Moved below the button */}
+          {directors.length > 0 && (
+            <div className="space-y-4 mt-6">
+              <h3 className="text-xl font-normal text-text-primary border-b border-bg-tertiary pb-2">Directors Information</h3>
+              {directors.map((director, i) => (
+                <div key={director.id} className="bg-bg-primary border border-bg-tertiary p-6 rounded-lg shadow-sm space-y-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <h4 className="text-lg font-semibold text-text-primary">Director {i + 1}</h4>
+                    <button 
+                      onClick={() => removeDirector(director.id)} 
+                      className="text-red-500 hover:bg-red-500/10 px-3 py-1 rounded-md text-sm font-medium transition-all flex items-center gap-2"
+                    >
+                      <Trash2 size={16} />
+                      Remove
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="fieldset-input">
+                      <span className="fieldset-label">Name *</span>
+                      <input 
+                        value={director.name} 
+                        onChange={(e) => {
+                          const newDirectors = [...directors];
+                          newDirectors[i].name = e.target.value;
+                          setDirectors(newDirectors);
+                        }} 
+                        placeholder="Enter director name"
+                        autoComplete="off"
+                        data-lp-ignore="true"
+                        className="w-full px-4 py-3 bg-bg-secondary border border-bg-tertiary rounded-md text-text-primary placeholder-text-secondary focus:border-t-accent focus:outline-none transition-colors"
+                      />
+                    </div>
+                    <div className="fieldset-input">
+                      <span className="fieldset-label">Designation *</span>
+                      <input 
+                        value={director.designation} 
+                        onChange={(e) => {
+                          const newDirectors = [...directors];
+                          newDirectors[i].designation = e.target.value;
+                          setDirectors(newDirectors);
+                        }} 
+                        placeholder="Enter designation"
+                        autoComplete="off"
+                        data-lp-ignore="true"
+                        className="w-full px-4 py-3 bg-bg-secondary border border-bg-tertiary rounded-md text-text-primary placeholder-text-secondary focus:border-t-accent focus:outline-none transition-colors"
+                      />
+                    </div>
+                    <div className="fieldset-input">
+                      <span className="fieldset-label">Date of Appointment</span>
+                      <input 
+                        type="date" 
+                        value={director.appointment} 
+                        onChange={(e) => {
+                          const newDirectors = [...directors];
+                          newDirectors[i].appointment = e.target.value;
+                          setDirectors(newDirectors);
+                        }} 
+                        className="w-full px-4 py-3 bg-bg-secondary border border-bg-tertiary rounded-md text-text-primary placeholder-text-secondary focus:border-t-accent focus:outline-none transition-colors"
+                      />
+                    </div>
+                    <div className="fieldset-input">
+                      <span className="fieldset-label">Date of Resignation</span>
+                      <input 
+                        type="date" 
+                        value={director.resignation} 
+                        onChange={(e) => {
+                          const newDirectors = [...directors];
+                          newDirectors[i].resignation = e.target.value;
+                          setDirectors(newDirectors);
+                        }} 
+                        className="w-full px-4 py-3 bg-bg-secondary border border-bg-tertiary rounded-md text-text-primary placeholder-text-secondary focus:border-t-accent focus:outline-none transition-colors"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           <hr className="border-bg-tertiary" />
 
@@ -523,12 +594,40 @@ const DirectorReportModal = ({ customer, onClose }) => {
 
         </div>
 
-        <div className="p-8 border-t border-bg-tertiary">
+        <div className="p-8 border-t border-bg-tertiary flex gap-4">
           <button
-            onClick={handleGeneratePDF}
-            className="w-full btn-raised btn-raised-orange text-white py-4 rounded-md text-sm font-bold uppercase tracking-widest shadow-lg"
+            onClick={previewPDF}
+            disabled={isGeneratingPDF}
+            className="flex-1 btn-raised btn-raised-blue text-white py-4 rounded-md text-sm font-bold uppercase tracking-widest shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Generate PDF
+            {isGeneratingPDF ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Generating...
+              </>
+            ) : (
+              <>
+                <Eye size={18} />
+                Preview PDF
+              </>
+            )}
+          </button>
+          <button
+            onClick={downloadPDF}
+            disabled={isGeneratingPDF}
+            className="flex-1 btn-raised btn-raised-green text-white py-4 rounded-md text-sm font-bold uppercase tracking-widest shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isGeneratingPDF ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Generating...
+              </>
+            ) : (
+              <>
+                <Download size={18} />
+                Download PDF
+              </>
+            )}
           </button>
         </div>
       </div>

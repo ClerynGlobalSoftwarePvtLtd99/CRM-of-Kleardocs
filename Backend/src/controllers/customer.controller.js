@@ -76,7 +76,7 @@ export const getCustomerList = async (req, res) => {
 
 // ─── GET /api/v1/customers/:customerId ────────────────────────────────────────
 export const getCustomerById = async (req, res) => {
-  const customer = await customerService.getCustomerById(req.params.customerId);
+  const customer = await customerService.getCustomerById(req.params.customerId, req.query.year);
   res.status(200).json(new ApiResponse(200, customer, "Customer fetched"));
 };
 

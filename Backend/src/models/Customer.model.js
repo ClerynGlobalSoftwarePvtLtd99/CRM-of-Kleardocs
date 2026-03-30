@@ -42,7 +42,13 @@ const customerComplianceSchema = new mongoose.Schema(
       default: "To Be Done"
     },
     completedOn: { type: Date },
-    accountant: { type: String } // name of accountant assigned
+    accountant: { type: String }, // name of accountant assigned
+    // Detailed configuration fields from template
+    hasExpiry: { type: Boolean, default: false },
+    isInc20: { type: Boolean, default: false },
+    daysAfterInc: { type: Number, default: 0 },
+    expiryTemplate: { type: String },
+    completeTemplate: { type: String }
   },
   { timestamps: true }
 );

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Save, Eye, EyeOff } from "lucide-react";
-import { STATES_AND_UTS, COMPANY_TYPES, AGENTS } from "../../utils/constants";
+import { STATES_AND_UTS, COMPANY_TYPES } from "../../utils/constants";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { updateCustomer } from "../../redux/slices/customersSlice";
+import axiosInstance from "../../api/axiosInstance";
 
 const EditCustomerModal = ({ customer, onClose, onUpdate }) => {
   // Convert ISO dates to yyyy-MM-dd format for HTML date inputs
@@ -14,27 +15,62 @@ const EditCustomerModal = ({ customer, onClose, onUpdate }) => {
 
   const [formData, setFormData] = useState({ 
     ...customer,
+    name: customer.name || '',
+    saleBy: customer.saleBy?._id || '', // Use ID for value mapping
     incorporationDate: formatDateString(customer.incorporationDate),
     onboardingDate: formatDateString(customer.onboardingDate)
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [agents, setAgents] = useState([]);
+  const [loadingAgents, setLoadingAgents] = useState(true);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchAgents = async () => {
+      try {
+        const response = await axiosInstance.get('/users');
+        const users = response.data.data || [];
+        // Filter for agents and admins only
+        const filteredAgents = users.filter(u => u.role === 'agent' || u.role === 'admin');
+        setAgents(filteredAgents);
+      } catch (error) {
+        console.error("Failed to fetch agents:", error);
+      } finally {
+        setLoadingAgents(false);
+      }
+    };
+    fetchAgents();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    if (name === 'phone') {
+      const onlyDigits = value.replace(/\D/g, "").substring(0, 10);
+      setFormData(prev => ({ ...prev, [name]: onlyDigits }));
+      return;
+    }
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  const dispatch = useDispatch();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (formData.phone.length !== 10) {
+      toast.error("Phone number must be exactly 10 digits");
+      return;
+    }
+
+    // Clean up unnecessary fields before sending to backend
+    const { customerName, salesPerson, ...dataToSend } = formData;
+    
     try {
       await dispatch(updateCustomer({
         customerId: customer._id,
-        customerData: formData
+        customerData: dataToSend
       })).unwrap();
       
       toast.success("Customer updated successfully");
@@ -62,11 +98,18 @@ const EditCustomerModal = ({ customer, onClose, onUpdate }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="fieldset-input">
               <span className="fieldset-label">Name *</span>
-              <input name="customerName" value={formData.customerName} onChange={handleChange} required />
+              <input name="name" value={formData.name} onChange={handleChange} required />
             </div>
             <div className="fieldset-input">
               <span className="fieldset-label">Phone *</span>
-              <input name="phone" value={formData.phone} onChange={handleChange} required />
+              <input 
+                name="phone" 
+                value={formData.phone} 
+                onChange={handleChange} 
+                maxLength={10}
+                placeholder="10-digit number"
+                required 
+              />
             </div>
             <div className="md:col-span-2 fieldset-input">
               <span className="fieldset-label">Company Name *</span>
@@ -98,11 +141,18 @@ const EditCustomerModal = ({ customer, onClose, onUpdate }) => {
             </div>
             <div className="fieldset-input">
                 <span className="fieldset-label">Sales Person</span>
-                <select name="salesPerson" value={formData.salesPerson} onChange={handleChange}>
-                  {AGENTS.map(agent => (
-                    <option key={agent} value={agent}>{agent}</option>
+                <select 
+                  name="saleBy" 
+                  value={formData.saleBy} 
+                  onChange={handleChange}
+                  disabled={loadingAgents}
+                >
+                  <option value="">Select Sales Person</option>
+                  {agents.map(agent => (
+                    <option key={agent._id} value={agent._id}>{agent.name}</option>
                   ))}
                 </select>
+                {loadingAgents && <p className="text-[10px] text-text-secondary mt-1">Loading agents...</p>}
             </div>
             <div className="fieldset-input">
               <span className="fieldset-label">Incorporation Date</span>

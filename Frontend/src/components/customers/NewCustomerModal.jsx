@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, UserPlus, Building2, Phone, MapPin, Calendar, Globe, FileText, Briefcase, Plus } from "lucide-react";
-import { STATES_AND_UTS, COMPANY_TYPES, AGENTS } from "../../utils/constants";
+import { STATES_AND_UTS, COMPANY_TYPES } from "../../utils/constants";
 import toast from "react-hot-toast";
+import axiosInstance from "../../api/axiosInstance";
 
 const NewCustomerModal = ({ onClose, onAdd }) => {
   const [formData, setFormData] = useState({
@@ -15,11 +16,38 @@ const NewCustomerModal = ({ onClose, onAdd }) => {
     incorporationDate: new Date().toISOString().split('T')[0],
     onboardingDate: new Date().toISOString().split('T')[0],
     newlyIncorporated: false,
-    salesBy: AGENTS[0],
+    saleBy: "",
   });
+
+  const [agents, setAgents] = useState([]);
+  const [loadingAgents, setLoadingAgents] = useState(true);
+
+  useEffect(() => {
+    const fetchAgents = async () => {
+      try {
+        const response = await axiosInstance.get('/users');
+        const users = response.data.data || [];
+        const filteredAgents = users.filter(u => u.role === 'agent' || u.role === 'admin');
+        setAgents(filteredAgents);
+        if (filteredAgents.length > 0) {
+          setFormData(prev => ({ ...prev, saleBy: filteredAgents[0]._id }));
+        }
+      } catch (error) {
+        console.error("Failed to fetch agents:", error);
+      } finally {
+        setLoadingAgents(false);
+      }
+    };
+    fetchAgents();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    if (name === 'phone') {
+      const onlyDigits = value.replace(/\D/g, "").substring(0, 10);
+      setFormData(prev => ({ ...prev, [name]: onlyDigits }));
+      return;
+    }
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -35,18 +63,14 @@ const NewCustomerModal = ({ onClose, onAdd }) => {
       return;
     }
 
+    if (formData.phone.length !== 10) {
+      toast.error("Phone number must be exactly 10 digits");
+      return;
+    }
+
     // Format data for backend API
     const customerData = {
-      name: formData.name,
-      phone: formData.phone,
-      companyName: formData.companyName,
-      address: formData.address,
-      state: formData.state,
-      gst: formData.gst,
-      type: formData.type,
-      incorporationDate: formData.incorporationDate,
-      onboardingDate: formData.onboardingDate,
-      newlyIncorporated: formData.newlyIncorporated,
+      ...formData,
       username: formData.companyName.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 12) + Math.floor(Math.random() * 1000).toString().padStart(3, '0')
     };
 
@@ -85,7 +109,8 @@ const NewCustomerModal = ({ onClose, onAdd }) => {
                 name="phone" 
                 value={formData.phone} 
                 onChange={handleChange} 
-                placeholder="Phone Number"
+                placeholder="10-digit number"
+                maxLength={10}
                 required 
               />
             </div>
@@ -140,9 +165,18 @@ const NewCustomerModal = ({ onClose, onAdd }) => {
             </div>
             <div className="fieldset-input">
               <span className="fieldset-label">Sale By</span>
-              <select name="salesBy" value={formData.salesBy} onChange={handleChange}>
-                {AGENTS.map((agent) => <option key={agent} value={agent}>{agent}</option>)}
+              <select 
+                name="saleBy" 
+                value={formData.saleBy} 
+                onChange={handleChange}
+                disabled={loadingAgents}
+              >
+                <option value="">Select Sales Person</option>
+                {agents.map((agent) => (
+                  <option key={agent._id} value={agent._id}>{agent.name}</option>
+                ))}
               </select>
+              {loadingAgents && <p className="text-[10px] text-text-secondary mt-1">Loading agents...</p>}
             </div>
 
             {/* DATES */}

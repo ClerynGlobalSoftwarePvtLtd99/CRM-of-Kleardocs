@@ -4,7 +4,7 @@ const mongoId = z.string().regex(/^[a-fA-F0-9]{24}$/, "Invalid ID format");
 
 export const createLeadSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
-  phone: z.string().min(10, "Phone must be at least 10 digits"),
+  phone: z.string().length(10, "Phone must be exactly 10 digits"),
   companyName: z.string().optional(),
   serviceId: mongoId.optional(),
   source: z.enum(["Instagram", "Facebook", "YouTube", "WhatsApp", "Referral", "Website", "Cold Call", "Other"]).optional(),
