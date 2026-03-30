@@ -3,11 +3,11 @@ import axiosInstance from '../../api/axiosInstance';
 
 const initialState = {
   kpis: {
-    totalLeads: 0,
-    newLeads: 0,
-    interactedLeads: 0,
-    hotLeads: 0,
-    coldLeads: 0,
+    totalLeads: { value: 0, trend: 'up', trendValue: 0 },
+    newLeads: { value: 0, trend: 'up', trendValue: 0 },
+    interactedLeads: { value: 0, trend: 'up', trendValue: 0 },
+    hotLeads: { value: 0, trend: 'up', trendValue: 0 },
+    coldLeads: { value: 0, trend: 'up', trendValue: 0 },
   },
   graphs: {
     dailyLeads: [],
@@ -23,8 +23,10 @@ export const fetchDashboardData = createAsyncThunk(
   'dashboard/fetchData',
   async (params, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get('/dashboard', { params });
-      return response.data;
+      // Currently just fetching leads summary. 
+      // If we need others in the same thunk we can use Promise.all.
+      const response = await axiosInstance.get('/dashboard/leads', { params });
+      return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch dashboard data');
     }
@@ -42,8 +44,7 @@ const dashboardSlice = createSlice({
       })
       .addCase(fetchDashboardData.fulfilled, (state, action) => {
         state.loading = false;
-        state.kpis = action.payload.kpis;
-        state.graphs = action.payload.graphs;
+        state.kpis = { ...state.kpis, ...action.payload };
       })
       .addCase(fetchDashboardData.rejected, (state, action) => {
         state.loading = false;

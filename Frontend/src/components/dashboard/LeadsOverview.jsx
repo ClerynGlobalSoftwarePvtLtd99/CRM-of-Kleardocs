@@ -1,8 +1,11 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { Users, UserPlus, UserCheck, Flame, Snowflake } from 'lucide-react'
 import StatCard from '../StatCard'
 
 const LeadsOverview = () => {
+  const { kpis } = useSelector((state) => state.dashboard);
+
   return (
     <section>
       <h2 className="text-xl font-bold text-[var(--color-text-primary)] mb-4 flex items-center gap-2">
@@ -12,38 +15,38 @@ const LeadsOverview = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         <StatCard
           title="Total Leads"
-          value="1,245"
+          value={kpis.totalLeads?.value || 0}
           icon={<Users size={24} />}
-          trend="up"
-          trendValue="12.5"
+          trend={kpis.totalLeads?.trend || 'up'}
+          trendValue={kpis.totalLeads?.trendValue || 0}
         />
         <StatCard
           title="New Leads"
-          value="384"
+          value={kpis.newLeads?.value || 0}
           icon={<UserPlus size={24} />}
-          trend="up"
-          trendValue="8.2"
+          trend={kpis.newLeads?.trend || 'up'}
+          trendValue={kpis.newLeads?.trendValue || 0}
         />
         <StatCard
           title="Interacted Leads"
-          value="482"
+          value={kpis.interactedLeads?.value || 0}
           icon={<UserCheck size={24} />}
-          trend="up"
-          trendValue="5.1"
+          trend={kpis.interactedLeads?.trend || 'up'}
+          trendValue={kpis.interactedLeads?.trendValue || 0}
         />
         <StatCard
           title="Hot Leads"
-          value="126"
+          value={kpis.hotLeads?.value || 0}
           icon={<Flame size={24} />}
-          trend="up"
-          trendValue="18.3"
+          trend={kpis.hotLeads?.trend || 'up'}
+          trendValue={kpis.hotLeads?.trendValue || 0}
         />
         <StatCard
           title="Cold Leads"
-          value="253"
+          value={kpis.coldLeads?.value || 0}
           icon={<Snowflake size={24} />}
-          trend="down"
-          trendValue="2.4"
+          trend={kpis.coldLeads?.trend || 'down'}
+          trendValue={kpis.coldLeads?.trendValue || 0}
         />
       </div>
     </section>

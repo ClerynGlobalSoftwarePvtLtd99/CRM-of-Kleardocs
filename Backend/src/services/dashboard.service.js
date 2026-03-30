@@ -13,25 +13,49 @@ const getDateMatch = (startDate, endDate, dateField = "createdAt") => {
   return match;
 };
 
+const getPercentChange = (current, previous) => {
+  if (previous === 0) return current > 0 ? 100 : 0;
+  return Number((((current - previous) / previous) * 100).toFixed(1));
+};
+
 export const getLeadStats = async (startDate, endDate) => {
   const dateMatch = getDateMatch(startDate, endDate);
 
-  const total = await Lead.countDocuments({ ...dateMatch, isCustomer: false });
-  // 'new' might simply be leads within recent x days or just total created in range if range is current month
-  // We'll use the total in the date range as 'new' plus checking some status if applicable. Let's just use all created in range as 'new'
-  const newLeads = await Lead.countDocuments({ ...dateMatch, isCustomer: false }); 
-  
-  const hot = await Lead.countDocuments({ ...dateMatch, isCustomer: false, type: "Hot" });
-  const cold = await Lead.countDocuments({ ...dateMatch, isCustomer: false, type: "Cold" });
+  const now = new Date();
+  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+  const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
 
-  const interacted = await LeadHistory.countDocuments({ ...dateMatch, type: "interaction" });
+  const periodMatch = (startDate || endDate) ? dateMatch : { createdAt: { $gte: thirtyDaysAgo } };
+  const prevPeriodMatch = (startDate || endDate) 
+    ? { createdAt: { $gte: new Date(0) } } // Fallback if dates are provided but we want to avoid complex math
+    : { createdAt: { $gte: sixtyDaysAgo, $lt: thirtyDaysAgo } };
+
+  // Current stats
+  const total = await Lead.countDocuments({ ...dateMatch, isCustomer: { $ne: true } });
+  const newLeads = await Lead.countDocuments({ ...periodMatch, isCustomer: { $ne: true } });
+  const interactedLeads = await LeadHistory.distinct("lead", { ...periodMatch, type: "interaction" }).then(res => res.length);
+  const hot = await Lead.countDocuments({ ...dateMatch, isCustomer: { $ne: true }, type: "Hot" });
+  const cold = await Lead.countDocuments({ ...dateMatch, isCustomer: { $ne: true }, type: "Cold" });
+
+  // Previous stats (for trends vs last 30 days)
+  const prevTotalAllTime = await Lead.countDocuments({ isCustomer: { $ne: true }, createdAt: { $lt: thirtyDaysAgo } });
+  const prevNewLeads = await Lead.countDocuments({ ...prevPeriodMatch, isCustomer: { $ne: true } });
+  const prevInteracted = await LeadHistory.distinct("lead", { ...prevPeriodMatch, type: "interaction" }).then(res => res.length);
+  const prevHot = await Lead.countDocuments({ isCustomer: { $ne: true }, type: "Hot", createdAt: { $lt: thirtyDaysAgo } });
+  const prevCold = await Lead.countDocuments({ isCustomer: { $ne: true }, type: "Cold", createdAt: { $lt: thirtyDaysAgo } });
+
+  const trendTotal = getPercentChange(total, prevTotalAllTime);
+  const trendNew = getPercentChange(newLeads, prevNewLeads);
+  const trendInteracted = getPercentChange(interactedLeads, prevInteracted);
+  const trendHot = getPercentChange(hot, prevHot);
+  const trendCold = getPercentChange(cold, prevCold);
 
   return {
-    total,
-    new: newLeads,
-    interacted,
-    hot,
-    cold
+    totalLeads: { value: total, trend: trendTotal >= 0 ? 'up' : 'down', trendValue: Math.abs(trendTotal) },
+    newLeads: { value: newLeads, trend: trendNew >= 0 ? 'up' : 'down', trendValue: Math.abs(trendNew) },
+    interactedLeads: { value: interactedLeads, trend: trendInteracted >= 0 ? 'up' : 'down', trendValue: Math.abs(trendInteracted) },
+    hotLeads: { value: hot, trend: trendHot >= 0 ? 'up' : 'down', trendValue: Math.abs(trendHot) },
+    coldLeads: { value: cold, trend: trendCold >= 0 ? 'up' : 'down', trendValue: Math.abs(trendCold) }
   };
 };
 
