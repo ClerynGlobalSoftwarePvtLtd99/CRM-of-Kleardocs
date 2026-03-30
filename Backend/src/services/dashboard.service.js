@@ -25,10 +25,27 @@ export const getLeadStats = async (startDate, endDate) => {
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
   const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
 
-  const periodMatch = (startDate || endDate) ? dateMatch : { createdAt: { $gte: thirtyDaysAgo } };
-  const prevPeriodMatch = (startDate || endDate) 
-    ? { createdAt: { $gte: new Date(0) } } // Fallback if dates are provided but we want to avoid complex math
-    : { createdAt: { $gte: sixtyDaysAgo, $lt: thirtyDaysAgo } };
+  let periodMatch, prevPeriodMatch;
+  let prevTotalDateMatch;
+
+  if (startDate && endDate) {
+    const sDate = new Date(startDate);
+    const eDate = new Date(`${endDate}T23:59:59.999Z`);
+    const duration = eDate.getTime() - sDate.getTime();
+    
+    periodMatch = dateMatch;
+    // Previous period of same duration
+    const pEndDate = new Date(sDate.getTime() - 1);
+    const pStartDate = new Date(sDate.getTime() - duration - 1);
+    prevPeriodMatch = { createdAt: { $gte: pStartDate, $lte: pEndDate } };
+    
+    // For "total" metrics, "previous" usually means up to the start of the current period
+    prevTotalDateMatch = { createdAt: { $lt: sDate } };
+  } else {
+    periodMatch = { createdAt: { $gte: thirtyDaysAgo } };
+    prevPeriodMatch = { createdAt: { $gte: sixtyDaysAgo, $lt: thirtyDaysAgo } };
+    prevTotalDateMatch = { createdAt: { $lt: thirtyDaysAgo } };
+  }
 
   // Current stats
   const total = await Lead.countDocuments({ ...dateMatch, isCustomer: { $ne: true } });
@@ -37,12 +54,12 @@ export const getLeadStats = async (startDate, endDate) => {
   const hot = await Lead.countDocuments({ ...dateMatch, isCustomer: { $ne: true }, type: "Hot" });
   const cold = await Lead.countDocuments({ ...dateMatch, isCustomer: { $ne: true }, type: "Cold" });
 
-  // Previous stats (for trends vs last 30 days)
-  const prevTotalAllTime = await Lead.countDocuments({ isCustomer: { $ne: true }, createdAt: { $lt: thirtyDaysAgo } });
+  // Previous stats for trends
+  const prevTotalAllTime = await Lead.countDocuments({ isCustomer: { $ne: true }, ...prevTotalDateMatch });
   const prevNewLeads = await Lead.countDocuments({ ...prevPeriodMatch, isCustomer: { $ne: true } });
   const prevInteracted = await LeadHistory.distinct("lead", { ...prevPeriodMatch, type: "interaction" }).then(res => res.length);
-  const prevHot = await Lead.countDocuments({ isCustomer: { $ne: true }, type: "Hot", createdAt: { $lt: thirtyDaysAgo } });
-  const prevCold = await Lead.countDocuments({ isCustomer: { $ne: true }, type: "Cold", createdAt: { $lt: thirtyDaysAgo } });
+  const prevHot = await Lead.countDocuments({ isCustomer: { $ne: true }, type: "Hot", ...prevTotalDateMatch });
+  const prevCold = await Lead.countDocuments({ isCustomer: { $ne: true }, type: "Cold", ...prevTotalDateMatch });
 
   const trendTotal = getPercentChange(total, prevTotalAllTime);
   const trendNew = getPercentChange(newLeads, prevNewLeads);
@@ -64,7 +81,6 @@ export const getCustomerStats = async (startDate, endDate) => {
 
   const now = new Date();
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-  const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
 
   // Current stats
   const total = await Customer.countDocuments({ ...dateMatch, active: true });
@@ -72,15 +88,26 @@ export const getCustomerStats = async (startDate, endDate) => {
   const withAnnualCompliance = customersWithCompliance.length;
 
   // Previous stats for trends
-  const prevDateMatch = (startDate || endDate) 
-    ? { onboardingDate: { $gte: new Date(0) } } 
-    : { onboardingDate: { $lt: thirtyDaysAgo } };
+  let prevDateMatch, prevComplianceMatch;
+
+  if (startDate && endDate) {
+    const sDate = new Date(startDate);
+    const eDate = new Date(`${endDate}T23:59:59.999Z`);
+    const duration = eDate.getTime() - sDate.getTime();
+
+    // Previous total: customers onboarded before current period
+    prevDateMatch = { onboardingDate: { $lt: sDate } };
+
+    // Previous compliance: compliances in the previous period of same duration
+    const pEndDate = new Date(sDate.getTime() - 1);
+    const pStartDate = new Date(sDate.getTime() - duration - 1);
+    prevComplianceMatch = { createdAt: { $gte: pStartDate, $lte: pEndDate } };
+  } else {
+    prevDateMatch = { onboardingDate: { $lt: thirtyDaysAgo } };
+    prevComplianceMatch = { createdAt: { $lt: thirtyDaysAgo } };
+  }
   
   const prevTotal = await Customer.countDocuments({ ...prevDateMatch, active: true });
-
-  const prevComplianceMatch = (startDate || endDate) 
-    ? { createdAt: { $gte: new Date(0) } } 
-    : { createdAt: { $lt: thirtyDaysAgo } };
   const prevCustomersWithCompliance = await CustomerCompliance.distinct("customer", prevComplianceMatch);
   const prevWithAnnualCompliance = prevCustomersWithCompliance.length;
 
@@ -99,7 +126,6 @@ export const getSalesStats = async (startDate, endDate) => {
 
   const now = new Date();
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-  const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
 
   // Current stats
   const totalInvoicesCount = await Invoice.countDocuments(invoiceMatch);
@@ -121,14 +147,23 @@ export const getSalesStats = async (startDate, endDate) => {
   ]);
   const paymentReceived = paymentsAgg[0]?.paymentReceived || 0;
 
-  // Previous stats (for trends vs prior 30 days up to 30 days ago)
-  const prevDateMatch = (startDate || endDate) 
-    ? { invoiceDate: { $gte: new Date(0) } } 
-    : { invoiceDate: { $lt: thirtyDaysAgo } };
+  // Previous stats for trends
+  let prevDateMatch, prevPaymentDateMatch;
 
-  const prevPaymentDateMatch = (startDate || endDate) 
-    ? { paymentDate: { $gte: new Date(0) } } 
-    : { paymentDate: { $lt: thirtyDaysAgo } };
+  if (startDate && endDate) {
+    const sDate = new Date(startDate);
+    const eDate = new Date(`${endDate}T23:59:59.999Z`);
+    const duration = eDate.getTime() - sDate.getTime();
+
+    const pEndDate = new Date(sDate.getTime() - 1);
+    const pStartDate = new Date(sDate.getTime() - duration - 1);
+
+    prevDateMatch = { invoiceDate: { $gte: pStartDate, $lte: pEndDate } };
+    prevPaymentDateMatch = { paymentDate: { $gte: pStartDate, $lte: pEndDate } };
+  } else {
+    prevDateMatch = { invoiceDate: { $lt: thirtyDaysAgo } };
+    prevPaymentDateMatch = { paymentDate: { $lt: thirtyDaysAgo } };
+  }
   
   const prevInvoicesAgg = await Invoice.aggregate([
     { $match: prevDateMatch },

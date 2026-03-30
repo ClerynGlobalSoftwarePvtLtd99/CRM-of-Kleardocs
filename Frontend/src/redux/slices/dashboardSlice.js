@@ -1,7 +1,25 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../api/axiosInstance';
 
+const now = new Date();
+const firstDayObj = new Date(now.getFullYear(), now.getMonth(), 1);
+const lastDayObj = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+const formatDateLocal = (date) => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+};
+
+const firstDay = formatDateLocal(firstDayObj);
+const lastDay = formatDateLocal(lastDayObj);
+
 const initialState = {
+  dateRange: {
+    startDate: firstDay,
+    endDate: lastDay,
+  },
   kpis: {
     totalLeads: { value: 0, trend: 'up', trendValue: 0 },
     newLeads: { value: 0, trend: 'up', trendValue: 0 },
@@ -62,7 +80,12 @@ export const fetchDashboardData = createAsyncThunk(
 const dashboardSlice = createSlice({
   name: 'dashboard',
   initialState,
-  reducers: {},
+  reducers: {
+    setDateRange: (state, action) => {
+      state.dateRange.startDate = action.payload.startDate;
+      state.dateRange.endDate = action.payload.endDate;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchDashboardData.pending, (state) => {
@@ -79,5 +102,7 @@ const dashboardSlice = createSlice({
       });
   },
 });
+
+export const { setDateRange } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;
