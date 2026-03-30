@@ -244,13 +244,35 @@ export const getComplianceJobStats = async (startDate, endDate) => {
   };
 };
 
+const fillDateGaps = (data, startDate, endDate, valueKey = "count", defaultValue = 0) => {
+  const result = [];
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const map = new Map(data.map(item => [item.date, item[valueKey]]));
+
+  const current = new Date(start);
+  while (current <= end) {
+    const dateStr = current.toISOString().split('T')[0];
+    result.push({
+      date: dateStr,
+      [valueKey]: map.has(dateStr) ? map.get(dateStr) : defaultValue
+    });
+    current.setDate(current.getDate() + 1);
+  }
+  return result;
+};
+
 export const getGraphStats = async (startDate, endDate) => {
-  const dateMatch = getDateMatch(startDate, endDate);
-  const interactionMatch = getDateMatch(startDate, endDate);
+  const now = new Date();
+  const sDate = startDate || new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+  const eDate = endDate || new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split('T')[0];
+
+  const dateMatch = getDateMatch(sDate, eDate);
+  const interactionMatch = getDateMatch(sDate, eDate);
   interactionMatch.type = "interaction";
 
   const dailyLeadsAgg = await Lead.aggregate([
-    { $match: { ...dateMatch, isCustomer: false } },
+    { $match: { ...dateMatch, isCustomer: { $ne: true } } },
     { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, count: { $sum: 1 } } },
     { $project: { _id: 0, date: "$_id", count: 1 } },
     { $sort: { date: 1 } }
@@ -264,16 +286,16 @@ export const getGraphStats = async (startDate, endDate) => {
   ]);
 
   const dailySalesAgg = await Invoice.aggregate([
-    { $match: getDateMatch(startDate, endDate, "invoiceDate") },
+    { $match: getDateMatch(sDate, eDate, "invoiceDate") },
     { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$invoiceDate" } }, amount: { $sum: "$total" }, count: { $sum: 1 } } },
     { $project: { _id: 0, date: "$_id", amount: 1, count: 1 } },
     { $sort: { date: 1 } }
   ]);
 
   return {
-    dailyLeads: dailyLeadsAgg,
-    dailyInteractions: dailyInteractionsAgg,
-    dailySales: dailySalesAgg.map(i => ({ date: i.date, amount: i.amount })),
-    dailySalesCount: dailySalesAgg.map(i => ({ date: i.date, count: i.count }))
+    dailyLeads: fillDateGaps(dailyLeadsAgg, sDate, eDate, "count"),
+    dailyInteractions: fillDateGaps(dailyInteractionsAgg, sDate, eDate, "count"),
+    dailySales: fillDateGaps(dailySalesAgg, sDate, eDate, "amount"),
+    dailySalesCount: fillDateGaps(dailySalesAgg, sDate, eDate, "count")
   };
 };
