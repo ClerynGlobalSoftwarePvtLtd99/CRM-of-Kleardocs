@@ -29,6 +29,7 @@ import AdminRoute from './components/AdminRoute'
 const App = () => {
   const dispatch = useAppDispatch()
   const { isAuthenticated, loading, token, user } = useAppSelector((state) => state.auth)
+  const { theme } = useAppSelector((state) => state.ui)
   const [initialLoading, setInitialLoading] = useState(true)
 
   useEffect(() => {
@@ -71,15 +72,15 @@ const App = () => {
 
   if (!isAuthenticated) {
     return (
-      <>
+      <div data-theme={theme}>
         <Toaster position="top-right" />
         <Login onLogin={handleLogin} />
-      </>
+      </div>
     )
   }
 
   return (
-    <>
+    <div data-theme={theme}>
       <Toaster
         position="top-right"
         toastOptions={{
@@ -119,7 +120,7 @@ const App = () => {
           </Routes>
         </AdminLayout>
       </BrowserRouter>
-    </>
+    </div>
   )
 }
 
