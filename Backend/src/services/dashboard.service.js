@@ -61,15 +61,35 @@ export const getLeadStats = async (startDate, endDate) => {
 
 export const getCustomerStats = async (startDate, endDate) => {
   const dateMatch = getDateMatch(startDate, endDate, "onboardingDate");
+
+  const now = new Date();
+  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+  const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
+
+  // Current stats
   const total = await Customer.countDocuments({ ...dateMatch, active: true });
-  
-  // Customers with annual compliance
-  // Assuming CustomerCompliance has a reference to Customer
   const customersWithCompliance = await CustomerCompliance.distinct("customer", { ...getDateMatch(startDate, endDate) });
+  const withAnnualCompliance = customersWithCompliance.length;
+
+  // Previous stats for trends
+  const prevDateMatch = (startDate || endDate) 
+    ? { onboardingDate: { $gte: new Date(0) } } 
+    : { onboardingDate: { $lt: thirtyDaysAgo } };
   
+  const prevTotal = await Customer.countDocuments({ ...prevDateMatch, active: true });
+
+  const prevComplianceMatch = (startDate || endDate) 
+    ? { createdAt: { $gte: new Date(0) } } 
+    : { createdAt: { $lt: thirtyDaysAgo } };
+  const prevCustomersWithCompliance = await CustomerCompliance.distinct("customer", prevComplianceMatch);
+  const prevWithAnnualCompliance = prevCustomersWithCompliance.length;
+
+  const trendTotal = getPercentChange(total, prevTotal);
+  const trendCompliance = getPercentChange(withAnnualCompliance, prevWithAnnualCompliance);
+
   return {
-    total,
-    withAnnualCompliance: customersWithCompliance.length
+    totalCustomers: { value: total, trend: trendTotal >= 0 ? 'up' : 'down', trendValue: Math.abs(trendTotal) },
+    withAnnualCompliance: { value: withAnnualCompliance, trend: trendCompliance >= 0 ? 'up' : 'down', trendValue: Math.abs(trendCompliance) }
   };
 };
 

@@ -8,6 +8,8 @@ const initialState = {
     interactedLeads: { value: 0, trend: 'up', trendValue: 0 },
     hotLeads: { value: 0, trend: 'up', trendValue: 0 },
     coldLeads: { value: 0, trend: 'up', trendValue: 0 },
+    totalCustomers: { value: 0, trend: 'up', trendValue: 0 },
+    withAnnualCompliance: { value: 0, trend: 'up', trendValue: 0 },
   },
   graphs: {
     dailyLeads: [],
@@ -23,10 +25,14 @@ export const fetchDashboardData = createAsyncThunk(
   'dashboard/fetchData',
   async (params, { rejectWithValue }) => {
     try {
-      // Currently just fetching leads summary. 
-      // If we need others in the same thunk we can use Promise.all.
-      const response = await axiosInstance.get('/dashboard/leads', { params });
-      return response.data.data;
+      const [leadsRes, customersRes] = await Promise.all([
+        axiosInstance.get('/dashboard/leads', { params }),
+        axiosInstance.get('/dashboard/customers', { params })
+      ]);
+      return {
+        ...leadsRes.data.data,
+        ...customersRes.data.data
+      };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch dashboard data');
     }
