@@ -50,3 +50,13 @@ export const getGraphsData = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getComparisonData = async (req, res, next) => {
+  try {
+    const { start1, end1, start2, end2 } = req.query;
+    const data = await dashboardService.getComparisonStats(start1, end1, start2, end2);
+    res.status(200).json(new ApiResponse(200, data, "Comparison data retrieved successfully"));
+  } catch (error) {
+    next(error);
+  }
+};

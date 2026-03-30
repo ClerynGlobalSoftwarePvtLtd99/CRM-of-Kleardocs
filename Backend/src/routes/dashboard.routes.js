@@ -9,4 +9,6 @@ router.get("/sales", dashboardController.getSalesSummary);
 router.get("/compliance-jobs", dashboardController.getComplianceJobsSummary);
 router.get("/graphs", dashboardController.getGraphsData);
 
+router.get("/comparison", dashboardController.getComparisonData);
+
 export default router;

@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import { fetchDashboardData } from '../redux/slices/dashboardSlice'
 import LeadsOverview from '../components/dashboard/LeadsOverview'
 import CustomersOverview from '../components/dashboard/CustomersOverview'
 import SalesFinance from '../components/dashboard/SalesFinance'
@@ -7,6 +9,13 @@ import CompareGraphs from '../components/dashboard/CompareGraphs'
 import DashboardCharts from '../components/dashboard/DashboardCharts'
 
 const Dashboard = () => {
+  const dispatch = useAppDispatch()
+  const { dateRange } = useAppSelector((state) => state.dashboard)
+
+  useEffect(() => {
+    dispatch(fetchDashboardData(dateRange))
+  }, [dispatch, dateRange])
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       <LeadsOverview />

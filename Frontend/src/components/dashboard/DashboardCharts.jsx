@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import {
   BarChart,
   Bar,
@@ -10,29 +11,33 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 
-const dummyData = [
-  { name: '1', leads: 400, interacted: 240, sales: 2400, salesCount: 15 },
-  { name: '5', leads: 300, interacted: 139, sales: 1398, salesCount: 8 },
-  { name: '10', leads: 200, interacted: 980, sales: 4800, salesCount: 30 },
-  { name: '15', leads: 278, interacted: 390, sales: 3908, salesCount: 24 },
-  { name: '20', leads: 189, interacted: 480, sales: 4800, salesCount: 35 },
-  { name: '25', leads: 239, interacted: 380, sales: 3800, salesCount: 22 },
-  { name: '30', leads: 349, interacted: 430, sales: 4300, salesCount: 28 },
-]
+const getOrdinal = (n) => {
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+};
+
+const formatDateToOrdinal = (dateStr) => {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  const day = date.getDate();
+  const month = date.toLocaleString('default', { month: 'short' });
+  return `${getOrdinal(day)} ${month}`;
+};
 
 // Custom Tooltip for dark theme
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload, label, isCurrency }) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] p-3 rounded-lg shadow-xl">
-        <p className="text-[var(--color-text-secondary)] text-sm mb-2">{`Day ${label}`}</p>
+        <p className="text-[var(--color-text-secondary)] text-xs mb-2">{formatDateToOrdinal(label)}</p>
         {payload.map((entry, index) => (
           <p
             key={index}
             className="text-sm font-medium"
             style={{ color: entry.color }}
           >
-            {entry.name}: {entry.value}
+            {entry.name}: {isCurrency ? `₹${entry.value.toLocaleString()}` : entry.value}
           </p>
         ))}
       </div>
@@ -41,16 +46,13 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null
 }
 
-const ChartCard = ({ title, dataKey, color }) => (
-  <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl p-5">
-    <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-6">
-      {title}
-    </h3>
-    <div className="h-[250px] w-full">
+const ChartCard = ({ title, data, dataKey, color, isCurrency }) => (
+  <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl p-5 shadow-sm">
+    <div className="h-[300px] w-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
-          data={dummyData}
-          margin={{ top: 5, right: 10, left: -20, bottom: 5 }}
+          data={data}
+          margin={{ top: 10, right: 10, left: -20, bottom: 20 }}
         >
           <CartesianGrid
             strokeDasharray="3 3"
@@ -58,30 +60,45 @@ const ChartCard = ({ title, dataKey, color }) => (
             vertical={false}
           />
           <XAxis
-            dataKey="name"
+            dataKey="date"
             stroke="var(--color-text-secondary)"
-            fontSize={12}
-            tickLine={false}
-            axisLine={false}
+            fontSize={11}
+            tickLine={true}
+            axisLine={true}
+            interval={(index) => (index + 1) % 2 === 0}
+            tickFormatter={(value) => {
+              if (!value) return '';
+              const date = new Date(value);
+              const day = date.getDate();
+              const month = date.toLocaleString('default', { month: 'short' });
+              return `${getOrdinal(day)} ${month}`;
+            }}
           />
           <YAxis
             stroke="var(--color-text-secondary)"
-            fontSize={12}
-            tickLine={false}
-            axisLine={false}
+            fontSize={11}
+            tickLine={true}
+            axisLine={true}
             tickFormatter={(value) =>
               value >= 1000 ? `${(value / 1000).toFixed(1)}k` : value
             }
           />
           <Tooltip
-            content={<CustomTooltip />}
-            cursor={{ fill: 'var(--color-bg-tertiary)', opacity: 0.4 }}
+            content={<CustomTooltip isCurrency={isCurrency} />}
+            cursor={{ fill: 'var(--color-bg-tertiary)', opacity: 0.2 }}
+          />
+          <Legend 
+            verticalAlign="top" 
+            align="center" 
+            iconType="rect"
+            wrapperStyle={{ paddingBottom: '20px', fontSize: '13px' }}
           />
           <Bar
             dataKey={dataKey}
+            name={title}
             fill={color}
-            radius={[4, 4, 0, 0]}
-            barSize={30}
+            radius={[2, 2, 0, 0]}
+            barSize={20}
           />
         </BarChart>
       </ResponsiveContainer>
@@ -90,27 +107,38 @@ const ChartCard = ({ title, dataKey, color }) => (
 )
 
 const DashboardCharts = () => {
+  const { graphs } = useSelector((state) => state.dashboard);
+
   return (
-    <div className="mt-8">
+    <div className="mt-8 pb-12">
       <h2 className="text-xl font-bold text-[var(--color-text-primary)] mb-6 flex items-center gap-2">
         <span className="w-2 h-6 bg-[var(--color-accent)] rounded-full"></span>
         Analytics Overview
       </h2>
-      <div className="grid grid-cols-1 gap-6">
-        <ChartCard title="Daily New Leads" dataKey="leads" color="#D9B24E" />
+      <div className="grid grid-cols-1 gap-8">
+        <ChartCard 
+          title="Daily New Leads" 
+          data={graphs.dailyLeads} 
+          dataKey="count" 
+          color="#D9B24E" 
+        />
         <ChartCard
           title="Daily Interacted Leads"
-          dataKey="interacted"
+          data={graphs.dailyInteractions}
+          dataKey="count"
           color="#8B7230"
         />
         <ChartCard
           title="Daily Sales (Amount)"
-          dataKey="sales"
+          data={graphs.dailySales}
+          dataKey="amount"
           color="#10B981"
+          isCurrency={true}
         />
         <ChartCard
           title="Daily Sales Count"
-          dataKey="salesCount"
+          data={graphs.dailySalesCount}
+          dataKey="count"
           color="#3B82F6"
         />
       </div>
