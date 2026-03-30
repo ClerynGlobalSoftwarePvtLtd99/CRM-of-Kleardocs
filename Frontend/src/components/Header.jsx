@@ -4,7 +4,30 @@ import { useDispatch } from 'react-redux'
 import DateRangePicker from './DateRangePicker'
 import { useAppSelector } from '../redux/hooks'
 import { setDateRange } from '../redux/slices/dashboardSlice'
+import { toggleTheme } from '../redux/slices/uiSlice'
 import { isSidebarRoute } from '../utils/routeUtils'
+
+const SunIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="5"/>
+    <line x1="12" y1="1" x2="12" y2="3"/>
+    <line x1="12" y1="21" x2="12" y2="23"/>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+    <line x1="1" y1="12" x2="3" y2="12"/>
+    <line x1="21" y1="12" x2="23" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </svg>
+)
+
+const MoonIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+)
 
 const Header = () => {
   const location = useLocation()
@@ -14,6 +37,8 @@ const Header = () => {
   const isDashboard = location.pathname === '/'
   const { user } = useAppSelector((state) => state.auth)
   const { dateRange } = useAppSelector((state) => state.dashboard)
+  const { theme } = useAppSelector((state) => state.ui)
+  const isDark = theme === 'dark'
 
   const getInitials = (name) => {
     if (!name) return '?'
@@ -53,18 +78,68 @@ const Header = () => {
         )}
       </div>
 
-      {/* Right side - User Identity */}
-      <div className="flex items-center gap-3 pr-8 md:pr-0 mr-5">
-        <div className="flex flex-col items-end hidden sm:flex">
-          <span className="text-xs text-[var(--color-text-secondary)]">
-            Welcome,
+      {/* Right side - Theme Toggle + User Identity */}
+      <div className="flex items-center gap-4 pr-8 md:pr-0 mr-5">
+
+        {/* ── Theme Toggle Button ── */}
+        <button
+          id="theme-toggle-btn"
+          onClick={() => dispatch(toggleTheme())}
+          title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '7px 14px',
+            borderRadius: '999px',
+            border: isDark
+              ? '1px solid rgba(255,255,255,0.12)'
+              : '1px solid rgba(0,0,0,0.12)',
+            background: isDark
+              ? 'rgba(255,255,255,0.06)'
+              : 'rgba(0,0,0,0.06)',
+            color: 'var(--color-text-secondary)',
+            cursor: 'pointer',
+            fontSize: '12px',
+            fontWeight: 600,
+            letterSpacing: '0.02em',
+            boxShadow: isDark
+              ? '0 1px 4px rgba(0,0,0,0.3)'
+              : '0 1px 4px rgba(0,0,0,0.08)',
+            transition: 'all 0.25s ease',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.color = 'var(--color-text-primary)'
+            e.currentTarget.style.background = isDark
+              ? 'rgba(255,255,255,0.12)'
+              : 'rgba(0,0,0,0.1)'
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.color = 'var(--color-text-secondary)'
+            e.currentTarget.style.background = isDark
+              ? 'rgba(255,255,255,0.06)'
+              : 'rgba(0,0,0,0.06)'
+          }}
+        >
+          {isDark ? <SunIcon /> : <MoonIcon />}
+          <span className="hidden sm:inline">
+            {isDark ? 'Light' : 'Dark'}
           </span>
-          <span className="text-sm font-semibold text-[var(--color-text-primary)]">
-            {user?.name || '...'}
-          </span>
-        </div>
-        <div className="w-10 h-10 rounded-full bg-[var(--color-accent)] flex items-center justify-center text-[var(--color-bg-primary)] font-bold shadow-lg ring-2 ring-[var(--color-bg-tertiary)] ring-offset-2 ring-offset-[var(--color-bg-secondary)]">
-          {getInitials(user?.name)}
+        </button>
+
+        {/* ── User Identity ── */}
+        <div className="flex items-center gap-3">
+          <div className="flex flex-col items-end hidden sm:flex">
+            <span className="text-xs text-[var(--color-text-secondary)]">
+              Welcome,
+            </span>
+            <span className="text-sm font-semibold text-[var(--color-text-primary)]">
+              {user?.name || '...'}
+            </span>
+          </div>
+          <div className="w-10 h-10 rounded-full bg-[var(--color-accent)] flex items-center justify-center text-[var(--color-bg-primary)] font-bold shadow-lg ring-2 ring-[var(--color-bg-tertiary)] ring-offset-2 ring-offset-[var(--color-bg-secondary)]">
+            {getInitials(user?.name)}
+          </div>
         </div>
       </div>
     </header>

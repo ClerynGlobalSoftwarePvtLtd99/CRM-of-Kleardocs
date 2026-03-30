@@ -15,6 +15,58 @@
   --color-crm-green-dark: #449D44;
 }
 
+/* ========================================
+   DARK THEME (default) 
+   ======================================== */
+:root,
+[data-theme="dark"] {
+  --color-bg-primary: #151729;
+  --color-bg-secondary: #262A40;
+  --color-bg-tertiary: #3E4153;
+  --color-text-primary: #FEFDFD;
+  --color-text-secondary: #93949D;
+  --color-accent: #D9B24E;
+  --color-crm-blue: #008CBA;
+  --color-crm-orange: #F0AD4E;
+  --color-crm-green: #5CB85C;
+  --color-crm-green-dark: #449D44;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-shadow: rgba(0, 0, 0, 0.4);
+  --color-input-bg: rgba(255, 255, 255, 0.04);
+  --color-hover-bg: rgba(255, 255, 255, 0.06);
+  --color-card-bg: #262A40;
+  --color-modal-overlay: rgba(0, 0, 0, 0.6);
+}
+
+/* ========================================
+   LIGHT THEME — Professional Standard
+   ======================================== */
+[data-theme="light"] {
+  --color-bg-primary: #F0F2F7;
+  --color-bg-secondary: #FFFFFF;
+  --color-bg-tertiary: #E2E8F0;
+  --color-text-primary: #1A202C;
+  --color-text-secondary: #64748B;
+  --color-accent: #C9983A;
+  --color-crm-blue: #0077A8;
+  --color-crm-orange: #D97706;
+  --color-crm-green: #16A34A;
+  --color-crm-green-dark: #15803D;
+  --color-border: rgba(0, 0, 0, 0.1);
+  --color-shadow: rgba(0, 0, 0, 0.1);
+  --color-input-bg: #F8FAFC;
+  --color-hover-bg: rgba(0, 0, 0, 0.04);
+  --color-card-bg: #FFFFFF;
+  --color-modal-overlay: rgba(0, 0, 0, 0.35);
+}
+
+/* ========================================
+   THEME TRANSITION — smooth switching
+   ======================================== */
+*, *::before, *::after {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.15s ease, box-shadow 0.25s ease;
+}
+
 body {
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
