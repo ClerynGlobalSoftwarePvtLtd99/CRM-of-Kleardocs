@@ -1,6 +1,7 @@
 import * as customerService from "../services/customer.service.js";
 import * as pdfService from "../services/pdf.service.js";
 import * as communicationService from "../services/communication.service.js";
+import * as templateService from "../services/template.service.js";
 import { ApiResponse } from "../utils/response.js";
 import ExcelJS from "exceljs";
 
@@ -186,6 +187,15 @@ export const sendCustomerEmail = async (req, res) => {
     throw new ApiError(400, "Customer has no registered emails");
   }
 
+  // Fetch template to get attachments
+  let attachments = [];
+  if (templateId) {
+    const template = await templateService.getTemplateById(templateId);
+    if (template && template.attachments) {
+      attachments = template.attachments;
+    }
+  }
+
   await communicationService.sendEmail({
     to: customer.emails[0], // Send to primary email
     subject: data.subject,
@@ -193,7 +203,8 @@ export const sendCustomerEmail = async (req, res) => {
     customerId,
     templateId,
     templateName,
-    userId: req.user.id
+    userId: req.user.id,
+    attachments // Pass attachments to the service
   });
 
   res.status(200).json(new ApiResponse(200, null, "Email sent successfully"));

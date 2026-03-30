@@ -6,9 +6,10 @@ import TemplatesFilters from '../components/templates/TemplatesFilters'
 import TemplatesTable from '../components/templates/TemplatesTable'
 import AddTemplateModal from '../components/templates/AddTemplateModal'
 import { TemplateFormFields, DEFAULT_FORM } from '../components/templates/AddTemplateModal'
-import { fetchTemplates, updateTemplate, deleteTemplate } from '../redux/slices/templatesSlice'
+import { fetchTemplates, updateTemplate, deleteTemplate, uploadTemplateAttachment, removeTemplateAttachment } from '../redux/slices/templatesSlice'
 import { injectTemplateData } from '../utils/templateEngine'
 import ContentLoader from '../components/common/ContentLoader'
+import toast from 'react-hot-toast'
 
 const PREVIEW_CONTEXT = {
   companyName: 'CLERYN GLOBAL SOFTWARE PVT LTD',
@@ -23,6 +24,18 @@ const PREVIEW_CONTEXT = {
   complianceDoneDate: '25 Mar 2026',
   complianceExpiryDate: '31 Mar 2026'
 };
+
+const getBackendUrl = () => {
+  const isLocalhost = window.location.hostname === 'localhost' || 
+                     window.location.hostname === '127.0.0.1' || 
+                     window.location.hostname.includes('localhost');
+  
+  return isLocalhost 
+      ? 'http://localhost:5000' 
+      : 'https://crm-of-kleardocs-backend.onrender.com';
+};
+
+const BACKEND_URL = getBackendUrl();
 
 
 
@@ -88,31 +101,35 @@ const Templates = () => {
     setIsEditModalOpen(false)
   }
 
-  const addAttachment = () => {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.onchange = (e) => {
-      const file = e.target.files[0]
-      if (file) {
-        const newAttachments = [...(selectedTemplate.attachments || []), file.name]
-        dispatch(updateTemplate({ 
+  const addAttachment = async (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      try {
+        const result = await dispatch(uploadTemplateAttachment({ 
           id: selectedTemplate._id, 
-          data: { attachments: newAttachments } 
-        }))
-        // Note: In real app, you'd upload the file first and store URL
-        setSelectedTemplate(prev => ({ ...prev, attachments: newAttachments }))
+          file 
+        })).unwrap()
+        setSelectedTemplate(result)
+        toast.success('Attachment uploaded successfully')
+      } catch (err) {
+        toast.error(err || 'Failed to upload attachment')
       }
     }
-    input.click()
   }
 
-  const removeAttachment = (fileName) => {
-    const newAttachments = (selectedTemplate.attachments || []).filter(a => a !== fileName)
-    dispatch(updateTemplate({ 
-      id: selectedTemplate._id, 
-      data: { attachments: newAttachments } 
-    }))
-    setSelectedTemplate(prev => ({ ...prev, attachments: newAttachments }))
+  const handleDeleteAttachment = async (filepath) => {
+    // filepath is like /uploads/templates/filename.pdf
+    const filename = filepath.split('/').pop()
+    try {
+      const result = await dispatch(removeTemplateAttachment({ 
+        id: selectedTemplate._id, 
+        filename 
+      })).unwrap()
+      setSelectedTemplate(result)
+      toast.success('Attachment removed successfully')
+    } catch (err) {
+      toast.error(err || 'Failed to remove attachment')
+    }
   }
 
   if (loading) {
@@ -150,11 +167,36 @@ const Templates = () => {
                 <X size={20} />
               </button>
             </div>
-            <div className="p-8 overflow-y-auto bg-gray-50 flex-1">
+            <div className="p-8 overflow-y-auto bg-gray-50 flex-1 text-gray-900 border-b border-[var(--color-bg-tertiary)]">
               <div 
-                className="bg-white shadow-lg p-10 mx-auto max-w-[800px] min-h-[600px] prose prose-blue max-w-none"
+                className="bg-white shadow-lg p-10 mx-auto max-w-[800px] min-h-[600px] prose prose-blue max-w-none text-gray-900"
                 dangerouslySetInnerHTML={{ __html: injectTemplateData(selectedTemplate.body, PREVIEW_CONTEXT) }}
               />
+              
+              {/* Preview Attachments */}
+              {(selectedTemplate.attachments || []).length > 0 && (
+                <div className="max-w-[800px] mx-auto mt-8 p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+                  <h4 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+                    <Paperclip size={16} /> Attached Files
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {selectedTemplate.attachments.map((att) => (
+                      <div key={att} className="flex items-center justify-between p-2 bg-gray-50 border border-gray-100 rounded-md text-sm">
+                        <span className="truncate flex-1 pr-2">{att.split('/').pop()}</span>
+                        <a 
+                          href={`${BACKEND_URL}${att}`} 
+                          target="_blank" 
+                          rel="noreferrer"
+                          className="p-1 hover:bg-gray-200 rounded text-blue-600"
+                          title="Open Attachment"
+                        >
+                          <ExternalLink size={14} />
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             <div className="p-5 border-t border-[var(--color-bg-tertiary)] flex justify-between items-center bg-[var(--color-bg-primary)] rounded-b-2xl">
               <p className="text-xs text-[var(--color-text-secondary)] italic">
@@ -248,24 +290,32 @@ const Templates = () => {
                           size={14}
                           className="text-[var(--color-text-secondary)]"
                         />
-                        <span className="text-sm">{att}</span>
+                        <span className="text-sm truncate max-w-[200px]">{att.split('/').pop()}</span>
                       </div>
-                      <Trash2
-                        size={14}
-                        className="text-red-400 hover:text-red-500 cursor-pointer transition-colors"
-                        onClick={() => removeAttachment(att)}
-                      />
+                      <div className="flex items-center gap-2">
+                         <a 
+                          href={`${BACKEND_URL}${att}`} 
+                          target="_blank" 
+                          rel="noreferrer"
+                          className="p-1 hover:bg-[var(--color-bg-tertiary)] rounded text-blue-400"
+                        >
+                          <ExternalLink size={14} />
+                        </a>
+                        <Trash2
+                          size={14}
+                          className="text-red-400 hover:text-red-500 cursor-pointer transition-colors"
+                          onClick={() => handleDeleteAttachment(att)}
+                        />
+                      </div>
                     </div>
                   ))
                 )}
               </div>
-              <button
-                onClick={addAttachment}
-                className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-[var(--color-bg-tertiary)] hover:border-[var(--color-accent)] rounded-lg py-3 text-sm font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors"
-              >
+              <label className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-[var(--color-bg-tertiary)] hover:border-[var(--color-accent)] rounded-lg py-3 text-sm font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors cursor-pointer">
                 <Plus size={16} />
                 Add new file
-              </button>
+                <input type="file" className="hidden" onChange={addAttachment} />
+              </label>
             </div>
             <div className="p-5 border-t border-[var(--color-bg-tertiary)]">
               <button

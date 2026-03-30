@@ -55,6 +55,34 @@ export const deleteTemplate = createAsyncThunk(
   }
 );
 
+export const uploadTemplateAttachment = createAsyncThunk(
+  'templates/uploadAttachment',
+  async ({ id, file }, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await axiosInstance.post(`/templates/${id}/attachments`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to upload attachment');
+    }
+  }
+);
+
+export const removeTemplateAttachment = createAsyncThunk(
+  'templates/removeAttachment',
+  async ({ id, filename }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.delete(`/templates/${id}/attachments/${filename}`);
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to remove attachment');
+    }
+  }
+);
+
 const templatesSlice = createSlice({
   name: 'templates',
   initialState,
@@ -83,6 +111,18 @@ const templatesSlice = createSlice({
       })
       .addCase(deleteTemplate.fulfilled, (state, action) => {
         state.list = state.list.filter(t => t._id !== action.payload);
+      })
+      .addCase(uploadTemplateAttachment.fulfilled, (state, action) => {
+        const index = state.list.findIndex(t => t._id === action.payload._id);
+        if (index !== -1) {
+          state.list[index] = action.payload;
+        }
+      })
+      .addCase(removeTemplateAttachment.fulfilled, (state, action) => {
+        const index = state.list.findIndex(t => t._id === action.payload._id);
+        if (index !== -1) {
+          state.list[index] = action.payload;
+        }
       });
   },
 });

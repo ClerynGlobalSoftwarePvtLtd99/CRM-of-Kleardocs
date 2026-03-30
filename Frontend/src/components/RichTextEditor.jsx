@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 
-const RichTextEditor = ({ value, onChange, placeholder = 'Start typing...' }) => {
+const RichTextEditor = ({ value, onChange, placeholder = 'Start typing...', height = 600 }) => {
   const editorRef = useRef(null);
 
   const handleEditorChange = (content) => {
@@ -19,7 +19,7 @@ const RichTextEditor = ({ value, onChange, placeholder = 'Start typing...' }) =>
         value={value}
         onEditorChange={handleEditorChange}
         init={{
-          height: 600,
+          height: height,
           menubar: 'file edit view insert format tools table help',
           license_key: 'gpl', // Acknowledging GPL license usage for self-hosted version
           plugins: [
@@ -47,7 +47,7 @@ const RichTextEditor = ({ value, onChange, placeholder = 'Start typing...' }) =>
               margin: 0 auto;
               background-color: #fff;
               box-shadow: 0 0 10px rgba(0,0,0,0.1);
-              min-height: 800px;
+              min-height: 100%;
             }
             /* A4 Paper Styling for previewing documents */
             @media print {
