@@ -1,5 +1,9 @@
 import EmailLog from "../models/EmailLog.model.js";
 import { LeadHistory } from "../models/Lead.model.js";
+import nodemailer from "nodemailer";
+import path from "path";
+import fs from "fs";
+import { ApiError } from "../utils/response.js";
 
 /**
  * Universal Template Parser
@@ -50,23 +54,71 @@ export const logCommunication = async ({ type, recipientId, recipientType, templ
 };
 
 /**
- * Mock Send Email (Standardized for future provider integration)
+ * Send Email with Attachment Support
  */
-export const sendEmail = async ({ to, subject, html, customerId, leadId, templateId, templateName, userId }) => {
-  console.log(`[MAILER] Sending email to ${to} with subject: ${subject}`);
-  // In a real app, integrate Nodemailer here
-  
-  await logCommunication({
-    type: "Email",
-    recipientId: customerId || leadId,
-    recipientType: customerId ? "Customer" : "Lead",
-    templateId,
-    templateName,
-    content: html,
-    userId
-  });
+export const sendEmail = async ({ to, subject, html, customerId, leadId, templateId, templateName, userId, attachments = [] }) => {
+  try {
+    // Configure Transporter (Fallback to JSON for logging if no SMTP)
+    let transporter;
+    if (process.env.SMTP_HOST && process.env.SMTP_USER) {
+      transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT || 587,
+        secure: process.env.SMTP_PORT == 465,
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      });
+    } else {
+      // Dummy logger transport if no SMTP set
+      transporter = nodemailer.createTransport({
+        jsonTransport: true
+      });
+      console.log("[MAILER] SMTP not configured. Using JSON logger.");
+    }
 
-  return true;
+    // Format attachments for Nodemailer
+    const formattedAttachments = attachments.map(filepath => {
+      // filepath is like /uploads/templates/filename.pdf
+      const fullPath = path.join(process.cwd(), "public", filepath);
+      return {
+        filename: path.basename(filepath),
+        path: fullPath
+      };
+    });
+
+    const mailOptions = {
+      from: process.env.SMTP_FROM || '"KlearDocs" <kleardocssolutions@gmail.com>',
+      to,
+      subject,
+      html,
+      attachments: formattedAttachments
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    
+    if (!process.env.SMTP_HOST) {
+      console.log("[MAILER] PREVIEW:", JSON.stringify(info.message, null, 2));
+    } else {
+      console.log(`[MAILER] Email sent: ${info.messageId}`);
+    }
+
+    await logCommunication({
+      type: "Email",
+      recipientId: customerId || leadId,
+      recipientType: customerId ? "Customer" : "Lead",
+      templateId,
+      templateName,
+      content: html,
+      userId
+    });
+
+    return true;
+  } catch (error) {
+    console.error("[MAILER ERROR]", error);
+    throw new ApiError(500, `Email failed to send: ${error.message}`);
+  }
 };
 
 /**

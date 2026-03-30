@@ -7,6 +7,7 @@ import rateLimit from "express-rate-limit";
 import mongoSanitize from "express-mongo-sanitize";
 import { securityMiddleware } from "./middleware/xss.middleware.js";
 import { errorHandler } from "./middleware/error.middleware.js";
+import path from "path";
 
 // Routes
 import AuthRoutes from "./routes/auth.routes.js";
@@ -58,8 +59,12 @@ app.use(cors(corsOptions));
 // Explicitly handle preflight for every route if necessary, but app.use(cors()) usually handles it.
 // If you encounter preflight issues, use app.use(cors(corsOptions)) which is already below.
 
-// Standard Security Headers
-app.use(helmet());
+// Standard Security Headers - Configured to allow cross-origin resource sharing for attachments
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginOpenerPolicy: { policy: "unsafe-none" },
+  contentSecurityPolicy: false, // Disable CSP for local dev to prevent blocking previews/attachments
+}));
 
 // DDoS & Brute Force Protection (Max 100 requests per 15 mins per IP)
 const limiter = rateLimit({
@@ -79,7 +84,8 @@ app.use(cookieParser());
 // app.use(hpp()); // Prevent HTTP Parameter Pollution - Temporarily disabled for Express 5 debug
 app.use(securityMiddleware); // Custom XSS Payload Scrubber
 
-// Serve static files to client
+// Serve static files to client with explicit CORS
+app.use("/uploads", cors(corsOptions), express.static(path.join(process.cwd(), "public/uploads")));
 app.use(express.static("public"));
 
 // API Routes
