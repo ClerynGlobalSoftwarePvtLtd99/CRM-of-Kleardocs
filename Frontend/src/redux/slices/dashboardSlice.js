@@ -16,6 +16,12 @@ const initialState = {
     paymentReceived: { value: 0, trend: 'up', trendValue: 0 },
     unpaidPartialInvoices: { value: 0, trend: 'up', trendValue: 0 },
     totalDues: { value: 0, trend: 'up', trendValue: 0 },
+    expiredNotDoneCompliances: { value: 0 },
+    notDoneCompliances: { value: 0 },
+    ongoingCompliances: { value: 0 },
+    expiredNotDoneJobs: { value: 0 },
+    notDoneJobs: { value: 0 },
+    ongoingJobs: { value: 0 },
   },
   graphs: {
     dailyLeads: [],
@@ -31,15 +37,21 @@ export const fetchDashboardData = createAsyncThunk(
   'dashboard/fetchData',
   async (params, { rejectWithValue }) => {
     try {
-      const [leadsRes, customersRes, salesRes] = await Promise.all([
+      const [leadsRes, customersRes, salesRes, complianceRes, graphsRes] = await Promise.all([
         axiosInstance.get('/dashboard/leads', { params }),
         axiosInstance.get('/dashboard/customers', { params }),
-        axiosInstance.get('/dashboard/sales', { params })
+        axiosInstance.get('/dashboard/sales', { params }),
+        axiosInstance.get('/dashboard/compliance-jobs', { params }),
+        axiosInstance.get('/dashboard/graphs', { params })
       ]);
       return {
-        ...leadsRes.data.data,
-        ...customersRes.data.data,
-        ...salesRes.data.data
+        kpis: {
+          ...leadsRes.data.data,
+          ...customersRes.data.data,
+          ...salesRes.data.data,
+          ...complianceRes.data.data
+        },
+        graphs: graphsRes.data.data
       };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch dashboard data');
@@ -58,7 +70,8 @@ const dashboardSlice = createSlice({
       })
       .addCase(fetchDashboardData.fulfilled, (state, action) => {
         state.loading = false;
-        state.kpis = { ...state.kpis, ...action.payload };
+        state.kpis = { ...state.kpis, ...action.payload.kpis };
+        state.graphs = { ...state.graphs, ...action.payload.graphs };
       })
       .addCase(fetchDashboardData.rejected, (state, action) => {
         state.loading = false;

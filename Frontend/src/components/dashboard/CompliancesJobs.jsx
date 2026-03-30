@@ -1,8 +1,11 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { Clock, Briefcase, AlertTriangle } from 'lucide-react'
 import StatCard from '../StatCard'
 
 const CompliancesJobs = () => {
+  const { kpis } = useSelector((state) => state.dashboard);
+
   return (
     <section>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -16,18 +19,18 @@ const CompliancesJobs = () => {
             <div className="sm:col-span-2">
               <StatCard
                 title="Ongoing Compliances"
-                value="84"
+                value={kpis.ongoingCompliances?.value || 0}
                 icon={<Clock size={24} />}
               />
             </div>
             <StatCard
               title="Not Done Compliances"
-              value="45"
+              value={kpis.notDoneCompliances?.value || 0}
               icon={<AlertTriangle size={24} />}
             />
             <StatCard
               title="Expired Not Done"
-              value="12"
+              value={kpis.expiredNotDoneCompliances?.value || 0}
               icon={<AlertTriangle size={24} className="text-red-500" />}
             />
           </div>
@@ -43,18 +46,18 @@ const CompliancesJobs = () => {
             <div className="sm:col-span-2">
               <StatCard
                 title="Ongoing Jobs"
-                value="126"
+                value={kpis.ongoingJobs?.value || 0}
                 icon={<Briefcase size={24} />}
               />
             </div>
             <StatCard
               title="Not Done Jobs"
-              value="58"
+              value={kpis.notDoneJobs?.value || 0}
               icon={<AlertTriangle size={24} />}
             />
             <StatCard
               title="Expired Not Done Jobs"
-              value="18"
+              value={kpis.expiredNotDoneJobs?.value || 0}
               icon={<AlertTriangle size={24} className="text-red-500" />}
             />
           </div>

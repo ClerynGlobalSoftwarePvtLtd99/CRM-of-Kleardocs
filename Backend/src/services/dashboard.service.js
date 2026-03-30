@@ -184,14 +184,14 @@ export const getComplianceJobStats = async (startDate, endDate) => {
 
   const expiredNotDoneJobs = await Job.countDocuments({ 
     ...jobMatch, 
-    status: { $in: ["To Be Done", "Ongoing"] },
+    status: { $in: ["To be done", "Ongoing"] },
     hasExpiry: true,
     expiryDate: { $lt: now }
   });
 
   const notDoneJobs = await Job.countDocuments({ 
     ...jobMatch, 
-    status: "To Be Done" 
+    status: "To be done" 
   });
 
   const ongoingJobs = await Job.countDocuments({ 
@@ -200,12 +200,12 @@ export const getComplianceJobStats = async (startDate, endDate) => {
   });
 
   return {
-    expiredNotDoneCompliances,
-    notDoneCompliances,
-    ongoingCompliances,
-    expiredNotDoneJobs,
-    notDoneJobs,
-    ongoingJobs
+    expiredNotDoneCompliances: { value: expiredNotDoneCompliances },
+    notDoneCompliances: { value: notDoneCompliances },
+    ongoingCompliances: { value: ongoingCompliances },
+    expiredNotDoneJobs: { value: expiredNotDoneJobs },
+    notDoneJobs: { value: notDoneJobs },
+    ongoingJobs: { value: ongoingJobs }
   };
 };
 
