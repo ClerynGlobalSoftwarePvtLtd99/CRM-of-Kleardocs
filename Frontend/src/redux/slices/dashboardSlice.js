@@ -15,6 +15,20 @@ const formatDateLocal = (date) => {
 const firstDay = formatDateLocal(firstDayObj);
 const lastDay = formatDateLocal(lastDayObj);
 
+export const fetchComparisonData = createAsyncThunk(
+  'dashboard/fetchComparisonData',
+  async ({ start1, end1, start2, end2 }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get('/dashboard/comparison', {
+        params: { start1, end1, start2, end2 }
+      });
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch comparison data');
+    }
+  }
+);
+
 const initialState = {
   dateRange: {
     startDate: firstDay,
@@ -46,6 +60,14 @@ const initialState = {
     dailyInteractions: [],
     dailySales: [],
     dailySalesCount: [],
+  },
+  comparison: {
+    leads: [],
+    interactions: [],
+    sales: [],
+    salesCount: [],
+    loading: false,
+    error: null,
   },
   loading: false,
   error: null,
@@ -99,6 +121,21 @@ const dashboardSlice = createSlice({
       .addCase(fetchDashboardData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(fetchComparisonData.pending, (state) => {
+        state.comparison.loading = true;
+        state.comparison.error = null;
+      })
+      .addCase(fetchComparisonData.fulfilled, (state, action) => {
+        state.comparison.loading = false;
+        state.comparison.leads = action.payload.leads;
+        state.comparison.interactions = action.payload.interactions;
+        state.comparison.sales = action.payload.sales;
+        state.comparison.salesCount = action.payload.salesCount;
+      })
+      .addCase(fetchComparisonData.rejected, (state, action) => {
+        state.comparison.loading = false;
+        state.comparison.error = action.payload;
       });
   },
 });

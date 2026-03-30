@@ -53,6 +53,7 @@ const DatePickerMonth = ({
   startDate,
   endDate,
   onDateClick,
+  disableFuture,
 }) => {
   const daysInMonth = getDaysInMonth(year, month)
   const firstDay = getFirstDayOfMonth(year, month)
@@ -120,12 +121,18 @@ const DatePickerMonth = ({
           const selected = isSelected(d)
           const inRange = isInRange(d)
           const isStartOrEnd = selected
+          
+          const today = new Date();
+          today.setHours(0,0,0,0);
+          const isFuture = disableFuture && d > today;
 
           return (
             <button
               key={i}
-              onClick={() => onDateClick(d)}
+              onClick={() => !isFuture && onDateClick(d)}
+              disabled={isFuture}
               className={`w-7 h-7 flex items-center justify-center rounded-full transition-colors text-xs
+                ${isFuture ? 'date-disabled-cross' : ''}
                 ${isStartOrEnd
                   ? 'bg-[var(--color-accent)] text-[var(--color-bg-primary)] font-medium'
                   : inRange
@@ -147,7 +154,9 @@ const DateRangePicker = ({
   startDate,
   endDate,
   onRangeChange,
-  placeholder = 'Select Date Range'
+  placeholder = 'Select Date Range',
+  disableFuture = false,
+  fixedDuration = null, // in days
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const popoverRef = useRef(null)
@@ -163,12 +172,11 @@ const DateRangePicker = ({
   }
   const [leftMonth, setLeftMonth] = useState(initialLeft)
   const getInitialRight = () => {
-    if (endDate) {
-      const endM = endDate.getMonth()
-      const endY = endDate.getFullYear()
-      if (endY > initialLeft.year || (endY === initialLeft.year && endM > initialLeft.month)) {
-        return { year: endY, month: endM }
-      }
+    const d = endDate || new Date()
+    const endM = d.getMonth()
+    const endY = d.getFullYear()
+    if (endY > initialLeft.year || (endY === initialLeft.year && endM > initialLeft.month)) {
+      return { year: endY, month: endM }
     }
     return nextMonth(initialLeft)
   }
@@ -199,11 +207,8 @@ const DateRangePicker = ({
       setLeftMonth(left)
       
       const next = nextMonth(left)
-      // Only set right to next if it's not already the correct month
       if (endY > startY || (endY === startY && endM > startM)) {
          setRightMonth({ year: endY, month: endM })
-         // If they are not adjacent, it's fine, but user usually wants them together?
-         // For now, if they are the same, make them next.
          if (startY === endY && startM === endM) {
            setRightMonth(next)
          }
@@ -230,6 +235,30 @@ const DateRangePicker = ({
   }, [isOpen, startDate, endDate])
 
   const handleDateClick = (d) => {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    if (disableFuture && d > today) return;
+
+    if (fixedDuration) {
+      // One click sets both. 
+      // Calculate end date based on duration.
+      const end = new Date(d);
+      end.setDate(d.getDate() + fixedDuration - 1);
+      
+      // If end date is in future and disableFuture is true, we might block this start date
+      if (disableFuture && end > today) {
+        // Technically we should only allow dates where the WHOLE range fits in past
+        return; 
+      }
+
+      setTempRange({ start: d, end: end });
+      if (onRangeChange) {
+        onRangeChange(d, end);
+      }
+      setIsOpen(false);
+      return;
+    }
+
     if (!tempRange.start || (tempRange.start && tempRange.end)) {
       setTempRange({ start: d, end: null })
     } else {
@@ -348,6 +377,7 @@ const DateRangePicker = ({
                 startDate={tempRange.start}
                 endDate={tempRange.end}
                 onDateClick={handleDateClick}
+                disableFuture={disableFuture}
               />
               <div className="hidden lg:block w-px bg-[var(--color-bg-tertiary)] self-stretch"></div>
               <DatePickerMonth
@@ -358,6 +388,7 @@ const DateRangePicker = ({
                 startDate={tempRange.start}
                 endDate={tempRange.end}
                 onDateClick={handleDateClick}
+                disableFuture={disableFuture}
               />
             </div>
 

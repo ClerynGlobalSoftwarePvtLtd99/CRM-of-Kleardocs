@@ -299,3 +299,28 @@ export const getGraphStats = async (startDate, endDate) => {
     dailySalesCount: fillDateGaps(dailySalesAgg, sDate, eDate, "count")
   };
 };
+
+export const getComparisonStats = async (start1, end1, start2, end2) => {
+  const data1 = await getGraphStats(start1, end1);
+  const data2 = await getGraphStats(start2, end2);
+
+  const format = (d1, d2, key) => {
+    const maxLength = Math.max(d1.length, d2.length);
+    const combined = [];
+    for (let i = 0; i < maxLength; i++) {
+        combined.push({
+            day: `Day ${i + 1}`,
+            range1: d1[i] ? d1[i][key] : 0,
+            range2: d2[i] ? d2[i][key] : 0
+        });
+    }
+    return combined;
+  };
+
+  return {
+    leads: format(data1.dailyLeads, data2.dailyLeads, 'count'),
+    interactions: format(data1.dailyInteractions, data2.dailyInteractions, 'count'),
+    sales: format(data1.dailySales, data2.dailySales, 'amount'),
+    salesCount: format(data1.dailySalesCount, data2.dailySalesCount, 'count')
+  };
+};

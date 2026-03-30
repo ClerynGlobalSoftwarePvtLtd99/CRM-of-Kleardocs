@@ -142,9 +142,6 @@ const DashboardCharts = () => {
           color="#3B82F6"
         />
       </div>
-      <div className="text-center mt-6">
-        <span className="text-[var(--color-text-secondary)] text-sm font-medium">Daily New Leads</span>
-      </div>
     </div>
   )
 }
