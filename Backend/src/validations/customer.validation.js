@@ -61,12 +61,8 @@ export const addFinancialYearSchema = z.object({
 // ─── Update Compliance ───────────────────────────────────────────────────────
 export const updateComplianceSchema = z.object({
   name: z.string().optional(),
-  status: z.enum(["To Be Done", "Ongoing", "Done"]).optional(),
+  status: z.enum(["Ongoing", "To Be Done", "Done"]).optional(),
   accountant: z.string().optional(),
   completedOn: z.string().optional(),
-  hasExpiry: z.boolean().optional(),
-  isInc20: z.boolean().optional(),
-  daysAfterInc: z.number().optional(),
-  expiryTemplate: z.string().optional(),
-  completeTemplate: z.string().optional()
+  hasExpiry: z.boolean().optional()
 });

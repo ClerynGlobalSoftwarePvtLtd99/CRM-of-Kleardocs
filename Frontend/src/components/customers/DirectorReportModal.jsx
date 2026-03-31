@@ -328,19 +328,18 @@ const DirectorReportModal = ({ customer, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-6 md:p-12 lg:p-16">
       <div className="w-full max-w-5xl rounded-lg border border-bg-tertiary bg-bg-secondary text-text-primary shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between border-b border-bg-tertiary px-8 py-5">
-          <h2 className="text-2xl font-normal text-text-primary flex flex-col">
-            <span>Director's</span>
-            <span>Report</span>
+          <h2 className="text-2xl font-normal text-text-primary flex flex-col uppercase tracking-wider">
+            <span className="text-crm-orange font-bold text-xs mb-1">Director's Report</span>
           </h2>
           <button onClick={onClose} className="p-2 transition-colors text-text-secondary hover:text-white">
             <X size={24} />
           </button>
         </div>
 
-        <div className="p-8 space-y-4 max-h-[75vh] overflow-y-auto custom-scrollbar">
+        <div className="p-8 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
           
           {/* PROFIT TABLE */}
           <div className="space-y-4">

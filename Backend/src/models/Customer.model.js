@@ -44,11 +44,7 @@ const customerComplianceSchema = new mongoose.Schema(
     completedOn: { type: Date },
     accountant: { type: String }, // name of accountant assigned
     // Detailed configuration fields from template
-    hasExpiry: { type: Boolean, default: false },
-    isInc20: { type: Boolean, default: false },
-    daysAfterInc: { type: Number, default: 0 },
-    expiryTemplate: { type: String },
-    completeTemplate: { type: String }
+    hasExpiry: { type: Boolean, default: false }
   },
   { timestamps: true }
 );
