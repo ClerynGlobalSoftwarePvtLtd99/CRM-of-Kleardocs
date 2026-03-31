@@ -1,37 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { X, Check, Loader2 } from "lucide-react";
-import { EMAIL_TEMPLATES, AGENTS } from "../../utils/constants";
 import { useDispatch } from "react-redux";
 import { updateCustomerCompliance } from "../../redux/slices/customersSlice";
 import { toast } from "react-hot-toast";
 import { useParams } from "react-router";
+import axiosInstance from "../../api/axiosInstance";
 
 const ModifyComplianceModal = ({ customerId, compliance, onClose }) => {
   const { id: urlId } = useParams();
   const actualCustomerId = customerId || urlId;
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [agents, setAgents] = useState([]);
+  const [loadingAgents, setLoadingAgents] = useState(true);
 
   const [formData, setFormData] = useState({
     name: "",
     hasExpiry: false,
-    isInc20: false,
-    daysAfterInc: 0,
-    expiryTemplate: "None",
-    completeTemplate: "Compliance Update",
     status: "To Be Done",
     accountant: "None",
   });
+
+  useEffect(() => {
+    const fetchAgents = async () => {
+      try {
+        const response = await axiosInstance.get('/users');
+        const users = response.data.data || [];
+        // Filter for agents and admins who can be assigned as accountants
+        const filteredAgents = users.filter(u => u.role === 'agent' || u.role === 'admin' || u.role === 'accountant');
+        setAgents(filteredAgents);
+      } catch (error) {
+        console.error("Failed to fetch agents:", error);
+      } finally {
+        setLoadingAgents(false);
+      }
+    };
+    fetchAgents();
+  }, []);
 
   useEffect(() => {
     if (compliance) {
       setFormData({
         name: compliance.name || "",
         hasExpiry: compliance.hasExpiry || false,
-        isInc20: compliance.isInc20 || false,
-        daysAfterInc: compliance.daysAfterInc || 0,
-        expiryTemplate: compliance.expiryTemplate || "None",
-        completeTemplate: compliance.completeTemplate || "Compliance Update",
         status: compliance.status || "To Be Done",
         accountant: compliance.accountant || "None",
       });
@@ -104,85 +115,33 @@ const ModifyComplianceModal = ({ customerId, compliance, onClose }) => {
             <span className="text-text-secondary font-medium">Has Expiry?</span>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            {/* Inc20 Dropdown */}
-            <div className="fieldset-input">
-              <label className="fieldset-label bg-bg-secondary">Inc20? *</label>
-              <select
-                value={formData.isInc20 ? "Yes" : "No"}
-                onChange={(e) => setFormData({ ...formData, isInc20: e.target.value === "Yes" })}
-              >
-                <option value="No">No</option>
-                <option value="Yes">Yes</option>
-              </select>
-            </div>
-
-            {/* Days of Expiry */}
-            <div className="fieldset-input">
-              <label className="fieldset-label bg-bg-secondary">Days After INC *</label>
-              <input
-                type="number"
-                value={formData.daysAfterInc}
-                onChange={(e) => setFormData({ ...formData, daysAfterInc: parseInt(e.target.value) || 0 })}
-                required
-              />
-            </div>
+          {/* Status Dropdown */}
+          <div className="fieldset-input">
+            <label className="fieldset-label bg-bg-secondary">Status *</label>
+            <select
+              value={formData.status}
+              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+            >
+              <option value="Ongoing">Ongoing</option>
+              <option value="To Be Done">To Be Done</option>
+              <option value="Done">Done</option>
+            </select>
           </div>
 
-          {/* Expiry Template */}
+          {/* Accountant Dropdown */}
           <div className="fieldset-input">
-            <label className="fieldset-label bg-bg-secondary">Expiry Template *</label>
+            <label className="fieldset-label bg-bg-secondary">Accountant</label>
             <select
-              value={formData.expiryTemplate}
-              onChange={(e) => setFormData({ ...formData, expiryTemplate: e.target.value })}
+              value={formData.accountant}
+              onChange={(e) => setFormData({ ...formData, accountant: e.target.value })}
+              disabled={loadingAgents}
             >
               <option value="None">None</option>
-              {EMAIL_TEMPLATES.map(t => (
-                <option key={t.id} value={t.name}>{t.name}</option>
+              {agents.map(agent => (
+                <option key={agent._id} value={agent.name}>{agent.name}</option>
               ))}
             </select>
-          </div>
-
-          {/* Complete Template */}
-          <div className="fieldset-input">
-            <label className="fieldset-label bg-bg-secondary">Complete Template *</label>
-            <select
-              value={formData.completeTemplate}
-              onChange={(e) => setFormData({ ...formData, completeTemplate: e.target.value })}
-            >
-              {EMAIL_TEMPLATES.map(t => (
-                <option key={t.id} value={t.name}>{t.name}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            {/* Status */}
-            <div className="fieldset-input">
-              <label className="fieldset-label bg-bg-secondary">Status *</label>
-              <select
-                value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-              >
-                <option value="To Be Done">To Be Done</option>
-                <option value="Ongoing">Ongoing</option>
-                <option value="Done">Done</option>
-              </select>
-            </div>
-
-            {/* Accountant */}
-            <div className="fieldset-input">
-              <label className="fieldset-label bg-bg-secondary">Accountant</label>
-              <select
-                value={formData.accountant}
-                onChange={(e) => setFormData({ ...formData, accountant: e.target.value })}
-              >
-                <option value="None">None</option>
-                {AGENTS.map(agent => (
-                  <option key={agent} value={agent}>{agent}</option>
-                ))}
-              </select>
-            </div>
+            {loadingAgents && <p className="text-[10px] text-text-secondary mt-1">Loading accountants...</p>}
           </div>
 
           {/* Update Button */}
