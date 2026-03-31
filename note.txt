@@ -3,7 +3,7 @@
   "password": "securepassword123"
 }
 ========================================
-Frontend:- https://crm-of-kleardocs.vercel.app
+Frontend:- https://crm.kleardocs.com
 Backend:- https://crm-of-kleardocs-backend.onrender.com
 =====================================================
 ClerynGlobalSoftwarePvtLtd99
