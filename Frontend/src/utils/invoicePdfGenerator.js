@@ -5,7 +5,7 @@ import autoTable from "jspdf-autotable";
 function numberToWords(num) {
   const a = ['', 'ONE ', 'TWO ', 'THREE ', 'FOUR ', 'FIVE ', 'SIX ', 'SEVEN ', 'EIGHT ', 'NINE ', 'TEN ', 'ELEVEN ', 'TWELVE ', 'THIRTEEN ', 'FOURTEEN ', 'FIFTEEN ', 'SIXTEEN ', 'SEVENTEEN ', 'EIGHTEEN ', 'NINETEEN '];
   const b = ['', '', 'TWENTY', 'THIRTY', 'FORTY', 'FIFTY', 'SIXTY', 'SEVENTY', 'EIGHTY', 'NINETY'];
-  
+
   if ((num = num.toString()).length > 9) return 'overflow';
   let n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
   if (!n) return;
@@ -15,7 +15,7 @@ function numberToWords(num) {
   str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'THOUSAND ' : '';
   str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'HUNDRED ' : '';
   str += (n[5] != 0) ? ((str != '') ? 'AND ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
-  
+
   str = str.trim();
   return str === '' ? 'ZERO RUPEES ONLY' : str + ' RUPEES ONLY';
 }
@@ -46,16 +46,16 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   // Backend returns flat fields (subTotal, totalGst, total, paid, due).
   // Frontend AddInvoice may pass a nested `.totals` object. Handle both.
   const t = {
-    subTotal : invoice.subTotal  ?? invoice.totals?.price    ?? invoice.totals?.subTotal ?? 0,
-    gst      : invoice.totalGst  ?? invoice.totals?.gstAmount ?? invoice.totals?.gst    ?? 0,
-    total    : invoice.total     ?? invoice.totals?.amount   ?? invoice.totals?.total    ?? 0,
-    paid     : invoice.paid      ?? invoice.totals?.paid     ?? 0,
-    due      : invoice.due       ?? invoice.totals?.due      ?? 0,
+    subTotal: invoice.subTotal ?? invoice.totals?.price ?? invoice.totals?.subTotal ?? 0,
+    gst: invoice.totalGst ?? invoice.totals?.gstAmount ?? invoice.totals?.gst ?? 0,
+    total: invoice.total ?? invoice.totals?.amount ?? invoice.totals?.total ?? 0,
+    paid: invoice.paid ?? invoice.totals?.paid ?? 0,
+    due: invoice.due ?? invoice.totals?.due ?? 0,
   };
 
   // Normalize invoice number / date
   const invoiceNumber = invoice.invoiceNo || invoice.number || '—';
-  const invoiceDate   = invoice.invoiceDate
+  const invoiceDate = invoice.invoiceDate
     ? new Date(invoice.invoiceDate).toLocaleDateString('en-IN')
     : invoice.date || '—';
 
@@ -74,9 +74,9 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   // Logo Area (Black Box)
   doc.setFillColor(0, 0, 0);
   doc.rect(20, 30, 150, 110, 'F');
-  
+
   try {
-    const logoData = await getBase64ImageFromUrl('https://crm-of-kleardocs.vercel.app/logo.svg');
+    const logoData = await getBase64ImageFromUrl('https://crm.kleardocs.com/logo.svg');
     if (logoData) {
       doc.addImage(logoData, 'SVG', 35, 45, 120, 80);
     }
@@ -91,13 +91,13 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   doc.setFontSize(14);
   doc.setFont("helvetica", "bold");
   doc.text("Kleardocs Solutions", pageWidth - 25, 50, { align: "right" });
-  
+
   doc.setFontSize(8);
   doc.setFont("helvetica", "normal");
   const detailsX = pageWidth - 25;
   let curY = 65;
   const lineH = 11;
-  
+
   doc.text("Phone no.: +91 98755 15290, Email: info@kleardocs.com", detailsX, curY, { align: "right" });
   curY += lineH;
   doc.text("366, Amritalal Mukherjee Road, p.o- Thakurpukur,", detailsX, curY, { align: "right" });
@@ -134,8 +134,8 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
 
   // Items Table
   const hasGst = (invoice.items || []).some(item => (parseFloat(item.gstAmount || 0) > 0 || parseFloat(item.gstPercent || item.gstPercentage || 0) > 0));
-  
-  const tableHeaders = hasGst 
+
+  const tableHeaders = hasGst
     ? [['#', 'HSN/SAC', 'Item Name', 'Price', 'IGST', 'Amount']]
     : [['#', 'HSN/SAC', 'Item Name', 'Price', 'Amount']];
 
@@ -151,27 +151,27 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
       item.product?.name || item.name || item.description,
       formatMoney(price)
     ];
-    
+
     if (hasGst) {
       row.push(`${formatMoney(gstAmount)}\n(${formatPercent(rate)})`);
     }
-    
+
     row.push(formatMoney(totalAmount));
     return row;
   });
 
   const totalRow = hasGst
     ? [
-        { content: 'Total', colSpan: 3, styles: { fontStyle: 'bold', halign: 'right' } }, 
-        formatMoney(t.subTotal),
-        formatMoney(t.gst),
-        formatMoney(t.total)
-      ]
+      { content: 'Total', colSpan: 3, styles: { fontStyle: 'bold', halign: 'right' } },
+      formatMoney(t.subTotal),
+      formatMoney(t.gst),
+      formatMoney(t.total)
+    ]
     : [
-        { content: 'Total', colSpan: 3, styles: { fontStyle: 'bold', halign: 'right' } }, 
-        formatMoney(t.subTotal),
-        formatMoney(t.total)
-      ];
+      { content: 'Total', colSpan: 3, styles: { fontStyle: 'bold', halign: 'right' } },
+      formatMoney(t.subTotal),
+      formatMoney(t.total)
+    ];
 
   autoTable(doc, {
     startY: doc.lastAutoTable.finalY,
@@ -202,7 +202,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
 
   // Tax Breakdown & Summary
   const nextY = doc.lastAutoTable.finalY + 10;
-  
+
   // Tax Table (Left)
   const taxRows = (invoice.items || [])
     .filter(item => (parseFloat(item.gstAmount || 0) > 0 || parseFloat(item.gstPercent || item.gstPercentage || 0) > 0))
@@ -220,7 +220,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9, halign: 'center' },
     bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, minCellHeight: 15, charSpace: 0, cellPadding: 3, font: 'helvetica' },
     head: [['Tax Type', 'Taxable amount', 'Rate', 'Tax amount']],
-    body: taxRows.length > 0 
+    body: taxRows.length > 0
       ? [...taxRows, [{ content: 'Total', styles: { fontStyle: 'bold' } }, '', '', { content: formatMoney(t.gst), styles: { fontStyle: 'bold' } }]]
       : [['IGST', formatMoney(0), '0%', formatMoney(0)]],
     columnStyles: {
@@ -235,11 +235,11 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   const summaryBody = [
     ['Sub Total', formatMoney(t.subTotal)]
   ];
-  
+
   if (hasGst) {
     summaryBody.push(['GST', formatMoney(t.gst)]);
   }
-  
+
   summaryBody.push(
     ['Total', formatMoney(t.total)],
     ['Received Balance', formatMoney(t.paid)],
@@ -276,7 +276,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
 
   // Terms & Conditions and Signature
   const footerY = doc.lastAutoTable.finalY;
-  
+
   // Terms (Left)
   autoTable(doc, {
     startY: footerY,
@@ -292,7 +292,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   const sigX = pageWidth / 2;
   const sigWidth = pageWidth / 2 - 20;
   doc.rect(sigX, footerY, sigWidth, 137); // Border for signature box
-  
+
   doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
   doc.text("For Kleardocs Solutions", sigX + sigWidth / 2, footerY + 15, { align: "center" });
@@ -309,12 +309,12 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
   doc.setFont("helvetica", "bold");
   doc.text("KLEARDOCS SOLUTIONS", centerX, centerY - 5, { align: "center" });
-  
+
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(10);
   doc.setFont("cursive", "italic");
   doc.text("Authorized Signatory", centerX, centerY + 15, { align: "center" });
-  
+
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9);
   doc.text("Authorized Signatory", centerX, centerY + 50, { align: "center" });

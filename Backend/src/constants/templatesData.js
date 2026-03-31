@@ -10,7 +10,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center;">
-        <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="Startup Station Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://crm.kleardocs.com/logo.svg" alt="Startup Station Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -61,7 +61,7 @@ export const SEED_TEMPLATES = [
   <tbody>
     <tr>
       <td style="padding: 20px; text-align: center; background-color: #000000;">
-        <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="KlearDocs Logo" width="180" style="display: block; margin: 0 auto;">
+        <img src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="180" style="display: block; margin: 0 auto;">
       </td>
     </tr>
     <tr>
@@ -105,7 +105,7 @@ export const SEED_TEMPLATES = [
     name: 'Package plus payment details',
     subject: 'Annual Compliance Package by Startup Station',
     type: 'Email',
-    body: `<tbody><tr><td style="text-align: center;" data-mce-style="text-align: center;"><img style="margin-bottom: 10px; margin:0 auto;" src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="Startup Station Logo" width="150" data-mce-style="margin-bottom: 10px;" data-mce-src="https://crm-of-kleardocs.vercel.app/logo.svg"><h2 style="color: #333;" data-mce-style="color: #333;">Annual Compliance Package</h2><p style="font-size: 16px; color: #555;" data-mce-style="font-size: 16px; color: #555;">Dear Sir,</p><p style="font-size: 14px; color: #555;" data-mce-style="font-size: 14px; color: #555;">We are excited to serve you in the upcoming year and ensure smooth compliance for your company.</p><p style="font-size: 14px; color: #555;" data-mce-style="font-size: 14px; color: #555;">Please find below our <strong>Annual Compliance Package</strong>, which covers all necessary Annual ROC Compliances and Income Tax Return filing services.</p><hr style="border: 0; height: 1px; background: #ddd; margin: 20px 0;" data-mce-style="border: 0; height: 1px; background: #ddd; margin: 20px 0;"><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Package Details:</h3><ul style="text-align: left; color: #444; font-size: 14px; line-height: 1.6;" data-mce-style="text-align: left; color: #444; font-size: 14px; line-height: 1.6;"><li>Preparation &amp; Filing of Form ADT-01 (Auditor Appointment)</li><li>Preparation &amp; Filing of Form INC-20A (Commencement of Business)</li><li>Issuance of Share Certificates (for all Shareholders)</li><li>Preparation of Board Meeting &amp; AGM/EGM Minutes</li><li>Filing of Form AOC-04 (Financial Annual Return)</li><li>Filing of Form MGT-07 (Management Annual Return)</li><li>Preparation of Statutory Registers</li><li>Filing of Balance Sheet, P&amp;L, and Audit Reports</li><li>Income Tax Return Filing</li><li>Filing of DPT-3, MGT-14, DIR-3 E-KYC</li><li><strong>Free legal &amp; compliance consultation</strong></li></ul><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Pricing:</h3><ul style="text-align: left; color: #444; font-size: 14px;" data-mce-style="text-align: left; color: #444; font-size: 14px;"><li><strong>Annual ROC Compliances:</strong> ₹7,999 plus government fees (Approx ₹1500) payable quarterly</li><li><strong>GST Filings:</strong> ₹300 for NIL return, ₹500 for normal filings per month</li></ul><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Required Documents:</h3><ul style="text-align: left; color: #444; font-size: 14px;" data-mce-style="text-align: left; color: #444; font-size: 14px;"><li>MOA and AOA</li><li>Certificate of Incorporation</li><li>PAN of any 1 director</li></ul><hr style="border: 0; height: 1px; background: #ddd; margin: 20px 0;" data-mce-style="border: 0; height: 1px; background: #ddd; margin: 20px 0;"><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Payment Details:</h3><p style="color: #555; font-size: 14px;" data-mce-style="color: #555; font-size: 14px;">We accept UPI, Card, and Bank Transfers. Please find our payment details below:</p><p style="color: #222; font-size: 16px; font-weight: bold;" data-mce-style="color: #222; font-size: 16px; font-weight: bold;">UPI ID: startupstation@axl</p><p><strong>Alternatively, you can transfer directly to our bank account:</strong></p><p style="color: #222; font-size: 14px; font-weight: bold;" data-mce-style="color: #222; font-size: 14px; font-weight: bold;">Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED<br>Account Number: 50200094441194<br>IFSC Code: HDFC0005385</p><p style="text-align: center; font-weight: bold; color: #333;" data-mce-style="text-align: center; font-weight: bold; color: #333;">Scan to Pay:</p><p style="text-align: center;" data-mce-style="text-align: center;"><img style="border: 2px solid #007bff; border-radius: 8px;" src="https://startupstation.in/images/ssupi.jpg" alt="QR Code" width="150" data-mce-style="border: 2px solid #007bff; border-radius: 8px;" data-mce-src="https://startupstation.in/images/ssupi.jpg"></p><p style="text-align: center; font-size: 14px; color: #555;" data-mce-style="text-align: center; font-size: 14px; color: #555;">Please let us know if you need any assistance. We look forward to working with you!</p></td></tr></tbody>`,
+    body: `<tbody><tr><td style="text-align: center;" data-mce-style="text-align: center;"><img style="margin-bottom: 10px; margin:0 auto;" src="https://crm.kleardocs.com/logo.svg" alt="Startup Station Logo" width="150" data-mce-style="margin-bottom: 10px;" data-mce-src="https://crm.kleardocs.com/logo.svg"><h2 style="color: #333;" data-mce-style="color: #333;">Annual Compliance Package</h2><p style="font-size: 16px; color: #555;" data-mce-style="font-size: 16px; color: #555;">Dear Sir,</p><p style="font-size: 14px; color: #555;" data-mce-style="font-size: 14px; color: #555;">We are excited to serve you in the upcoming year and ensure smooth compliance for your company.</p><p style="font-size: 14px; color: #555;" data-mce-style="font-size: 14px; color: #555;">Please find below our <strong>Annual Compliance Package</strong>, which covers all necessary Annual ROC Compliances and Income Tax Return filing services.</p><hr style="border: 0; height: 1px; background: #ddd; margin: 20px 0;" data-mce-style="border: 0; height: 1px; background: #ddd; margin: 20px 0;"><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Package Details:</h3><ul style="text-align: left; color: #444; font-size: 14px; line-height: 1.6;" data-mce-style="text-align: left; color: #444; font-size: 14px; line-height: 1.6;"><li>Preparation &amp; Filing of Form ADT-01 (Auditor Appointment)</li><li>Preparation &amp; Filing of Form INC-20A (Commencement of Business)</li><li>Issuance of Share Certificates (for all Shareholders)</li><li>Preparation of Board Meeting &amp; AGM/EGM Minutes</li><li>Filing of Form AOC-04 (Financial Annual Return)</li><li>Filing of Form MGT-07 (Management Annual Return)</li><li>Preparation of Statutory Registers</li><li>Filing of Balance Sheet, P&amp;L, and Audit Reports</li><li>Income Tax Return Filing</li><li>Filing of DPT-3, MGT-14, DIR-3 E-KYC</li><li><strong>Free legal &amp; compliance consultation</strong></li></ul><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Pricing:</h3><ul style="text-align: left; color: #444; font-size: 14px;" data-mce-style="text-align: left; color: #444; font-size: 14px;"><li><strong>Annual ROC Compliances:</strong> ₹7,999 plus government fees (Approx ₹1500) payable quarterly</li><li><strong>GST Filings:</strong> ₹300 for NIL return, ₹500 for normal filings per month</li></ul><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Required Documents:</h3><ul style="text-align: left; color: #444; font-size: 14px;" data-mce-style="text-align: left; color: #444; font-size: 14px;"><li>MOA and AOA</li><li>Certificate of Incorporation</li><li>PAN of any 1 director</li></ul><hr style="border: 0; height: 1px; background: #ddd; margin: 20px 0;" data-mce-style="border: 0; height: 1px; background: #ddd; margin: 20px 0;"><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Payment Details:</h3><p style="color: #555; font-size: 14px;" data-mce-style="color: #555; font-size: 14px;">We accept UPI, Card, and Bank Transfers. Please find our payment details below:</p><p style="color: #222; font-size: 16px; font-weight: bold;" data-mce-style="color: #222; font-size: 16px; font-weight: bold;">UPI ID: startupstation@axl</p><p><strong>Alternatively, you can transfer directly to our bank account:</strong></p><p style="color: #222; font-size: 14px; font-weight: bold;" data-mce-style="color: #222; font-size: 14px; font-weight: bold;">Bank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED<br>Account Number: 50200094441194<br>IFSC Code: HDFC0005385</p><p style="text-align: center; font-weight: bold; color: #333;" data-mce-style="text-align: center; font-weight: bold; color: #333;">Scan to Pay:</p><p style="text-align: center;" data-mce-style="text-align: center;"><img style="border: 2px solid #007bff; border-radius: 8px;" src="https://startupstation.in/images/ssupi.jpg" alt="QR Code" width="150" data-mce-style="border: 2px solid #007bff; border-radius: 8px;" data-mce-src="https://startupstation.in/images/ssupi.jpg"></p><p style="text-align: center; font-size: 14px; color: #555;" data-mce-style="text-align: center; font-size: 14px; color: #555;">Please let us know if you need any assistance. We look forward to working with you!</p></td></tr></tbody>`,
   },
   {
     name: 'ROC plus GST plus ESI plus TDS',
@@ -115,7 +115,7 @@ export const SEED_TEMPLATES = [
   <tbody>
     <tr>
       <td style="padding: 20px; text-align: center; background-color: #000000;">
-        <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="KlearDocs Logo" width="180px" style="display: block; margin: 0 auto;">
+        <img src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="180px" style="display: block; margin: 0 auto;">
       </td>
     </tr>
     <tr>
@@ -173,7 +173,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center; background-color: #000000;">
-        <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -218,7 +218,7 @@ export const SEED_TEMPLATES = [
     name: 'Next Quarter Payment',
     subject: "Reminder: Upcoming Quarter's Payment \u2013 Complete Within 5 Days",
     type: 'Email',
-    body: `<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#f4f4f4" class="mce-item-table"><tbody><tr><td align="center"><table style="border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); overflow: hidden;" width="600" cellspacing="0" cellpadding="20" bgcolor="#ffffff" data-mce-style="border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); overflow: hidden;" class="mce-item-table"><tbody><tr><td style="background-color: #1abc9c; padding: 30px;" align="center" data-mce-style="background-color: #1abc9c; padding: 30px;"><img style="margin-bottom: 20px;" src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="Startup Station Logo" width="170" data-mce-style="margin-bottom: 20px;" data-mce-src="https://crm-of-kleardocs.vercel.app/logo.svg"><h1 style="color: #fff; margin: 0; font-size: 28px; letter-spacing: 1px;" data-mce-style="color: #fff; margin: 0; font-size: 28px; letter-spacing: 1px;">Upcoming Quarter's Payment Notification</h1></td></tr><tr><td style="font-size: 16px; color: #34495e; padding: 20px; line-height: 1.8;" data-mce-style="font-size: 16px; color: #34495e; padding: 20px; line-height: 1.8;">Dear Valued Client,<br><br>This is a reminder for your <strong>upcoming quarter's payment</strong>. Kindly make the payment within <strong>5 days from the due date</strong> to continue enjoying our services seamlessly. <br><br><a style="display: inline-block; padding: 14px 32px; background-color: #3498db; color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: bold; margin-top: 20px;" href="https://compliances.startupstation.in/" data-mce-style="display: inline-block; padding: 14px 32px; background-color: #3498db; color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: bold; margin-top: 20px;" data-mce-href="https://compliances.startupstation.in/">Track Compliances &amp; Payment</a> <br><br><strong>Payment Details:</strong><br>UPI ID: <strong>startupstation@axl</strong><br><br>Alternatively, transfer directly to our bank account:<br><strong>Bank Name:</strong> STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED<br><strong>Account Number:</strong> 50200094441194<br><strong>IFSC Code:</strong> HDFC0005385</td></tr><tr><td align="center"><img style="margin: 25px 0; border: 4px solid #1abc9c; border-radius: 10px;" src="https://startupstation.in/images/ssupi.jpg" alt="QR Code for Payment" width="200" data-mce-style="margin: 25px 0; border: 4px solid #1abc9c; border-radius: 10px;" data-mce-src="https://startupstation.in/images/ssupi.jpg"></td></tr><tr><td style="font-size: 15px; color: #34495e; background-color: #ecf0f1; padding: 20px; line-height: 1.7;" data-mce-style="font-size: 15px; color: #34495e; background-color: #ecf0f1; padding: 20px; line-height: 1.7;"><strong>Contact Us:</strong><br>Phone: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="tel:+919875515290">+91 98755 15290</a><br>WhatsApp: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="https://wa.me/919875515290">+91 98755 15290</a><br>Email 1: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="mailto:info@kleardocs.com">info@kleardocs.com</a><br>Email 2: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="mailto:kleardocssolutions@gmail.com">kleardocssolutions@gmail.com</a></td></tr><tr><td style="font-size: 12px; color: #ffffff; padding: 20px; background-color: #000000;" align="center" data-mce-style="font-size: 12px; color: #ffffff; padding: 20px; background-color: #000000;">© 2025 Startup Station Financial Services Private Limited. All rights reserved.</td></tr></tbody></table></td></tr></tbody></table>`,
+    body: `<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#f4f4f4" class="mce-item-table"><tbody><tr><td align="center"><table style="border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); overflow: hidden;" width="600" cellspacing="0" cellpadding="20" bgcolor="#ffffff" data-mce-style="border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); overflow: hidden;" class="mce-item-table"><tbody><tr><td style="background-color: #1abc9c; padding: 30px;" align="center" data-mce-style="background-color: #1abc9c; padding: 30px;"><img style="margin-bottom: 20px;" src="https://crm.kleardocs.com/logo.svg" alt="Startup Station Logo" width="170" data-mce-style="margin-bottom: 20px;" data-mce-src="https://crm.kleardocs.com/logo.svg"><h1 style="color: #fff; margin: 0; font-size: 28px; letter-spacing: 1px;" data-mce-style="color: #fff; margin: 0; font-size: 28px; letter-spacing: 1px;">Upcoming Quarter's Payment Notification</h1></td></tr><tr><td style="font-size: 16px; color: #34495e; padding: 20px; line-height: 1.8;" data-mce-style="font-size: 16px; color: #34495e; padding: 20px; line-height: 1.8;">Dear Valued Client,<br><br>This is a reminder for your <strong>upcoming quarter's payment</strong>. Kindly make the payment within <strong>5 days from the due date</strong> to continue enjoying our services seamlessly. <br><br><a style="display: inline-block; padding: 14px 32px; background-color: #3498db; color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: bold; margin-top: 20px;" href="https://compliances.startupstation.in/" data-mce-style="display: inline-block; padding: 14px 32px; background-color: #3498db; color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: bold; margin-top: 20px;" data-mce-href="https://compliances.startupstation.in/">Track Compliances &amp; Payment</a> <br><br><strong>Payment Details:</strong><br>UPI ID: <strong>startupstation@axl</strong><br><br>Alternatively, transfer directly to our bank account:<br><strong>Bank Name:</strong> STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED<br><strong>Account Number:</strong> 50200094441194<br><strong>IFSC Code:</strong> HDFC0005385</td></tr><tr><td align="center"><img style="margin: 25px 0; border: 4px solid #1abc9c; border-radius: 10px;" src="https://startupstation.in/images/ssupi.jpg" alt="QR Code for Payment" width="200" data-mce-style="margin: 25px 0; border: 4px solid #1abc9c; border-radius: 10px;" data-mce-src="https://startupstation.in/images/ssupi.jpg"></td></tr><tr><td style="font-size: 15px; color: #34495e; background-color: #ecf0f1; padding: 20px; line-height: 1.7;" data-mce-style="font-size: 15px; color: #34495e; background-color: #ecf0f1; padding: 20px; line-height: 1.7;"><strong>Contact Us:</strong><br>Phone: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="tel:+919875515290">+91 98755 15290</a><br>WhatsApp: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="https://wa.me/919875515290">+91 98755 15290</a><br>Email 1: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="mailto:info@kleardocs.com">info@kleardocs.com</a><br>Email 2: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="mailto:kleardocssolutions@gmail.com">kleardocssolutions@gmail.com</a></td></tr><tr><td style="font-size: 12px; color: #ffffff; padding: 20px; background-color: #000000;" align="center" data-mce-style="font-size: 12px; color: #ffffff; padding: 20px; background-color: #000000;">© 2025 Startup Station Financial Services Private Limited. All rights reserved.</td></tr></tbody></table></td></tr></tbody></table>`,
   },
   {
     name: 'Service List',
@@ -228,7 +228,7 @@ export const SEED_TEMPLATES = [
   <tbody>
     <tr>
       <td style="background-color: #000000; padding: 20px;" align="center" data-mce-style="background-color: #000000; padding: 20px;">
-        <img style="margin-bottom: 15px;" src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="KlearDocs Logo" width="160" data-mce-style="margin-bottom: 15px;" data-mce-src="https://crm-of-kleardocs.vercel.app/logo.svg">
+        <img style="margin-bottom: 15px;" src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="160" data-mce-style="margin-bottom: 15px;" data-mce-src="https://crm.kleardocs.com/logo.svg">
         <h1 style="color: #f1c40f; margin: 0; font-size: 28px;" data-mce-style="color: #f1c40f; margin: 0; font-size: 28px;">Explore Our Key Services</h1>
       </td>
     </tr>
@@ -272,7 +272,7 @@ export const SEED_TEMPLATES = [
   <tbody>
     <tr>
       <td align="center" style="background-color: #000000;">
-        <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="KlearDocs Logo" width="150" data-mce-src="https://crm-of-kleardocs.vercel.app/logo.svg">
+        <img src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" data-mce-src="https://crm.kleardocs.com/logo.svg">
       </td>
     </tr>
     <tr>
@@ -309,7 +309,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center; background-color: #000000;">
-        <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -378,7 +378,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center; background-color: #000000;">
-        <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -442,7 +442,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center;">
-        <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="Startup Station Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://crm.kleardocs.com/logo.svg" alt="Startup Station Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -506,7 +506,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center; background-color: #000000;">
-        <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -570,7 +570,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center;">
-        <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="Startup Station Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://crm.kleardocs.com/logo.svg" alt="Startup Station Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -616,7 +616,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center;">
-        <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="Startup Station Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://crm.kleardocs.com/logo.svg" alt="Startup Station Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -662,7 +662,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center;">
-        <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="Startup Station Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://crm.kleardocs.com/logo.svg" alt="Startup Station Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -708,7 +708,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center;">
-        <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="Startup Station Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://crm.kleardocs.com/logo.svg" alt="Startup Station Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -754,7 +754,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center;">
-        <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="Startup Station Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://crm.kleardocs.com/logo.svg" alt="Startup Station Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
