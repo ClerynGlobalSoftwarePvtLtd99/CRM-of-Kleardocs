@@ -5,12 +5,6 @@ const CustomerServicesTable = ({ services = [], onAction }) => {
     <div className="bg-bg-secondary rounded-sm shadow-sm border border-bg-tertiary overflow-hidden">
       <div className="p-4 border-b border-bg-tertiary bg-bg-secondary flex justify-between items-center">
         <h3 className="text-[17px] font-bold text-text-primary">Services</h3>
-        <button 
-          onClick={() => onAction && onAction('addService')}
-          className="bg-[#f08c3e] hover:bg-[#e67e22] text-white px-4 py-1.5 text-[11px] font-bold uppercase rounded-sm transition-colors custom-shadow-sm h-[34px]"
-        >
-          ADD SERVICE
-        </button>
       </div>
 
       <div className="bg-bg-primary p-4">
@@ -57,21 +51,25 @@ const CustomerServicesTable = ({ services = [], onAction }) => {
                 </div>
 
                 <div className="flex justify-end lg:justify-center">
-                  <button 
-                    onClick={() => onAction && onAction('addInvoice', s)}
-                    className="bg-[#f08c3e] hover:bg-[#e67e22] text-white px-3 py-1 font-bold text-[11px] uppercase rounded-[3px] transition-colors shadow-sm"
-                  >
-                    ADD INVOICE
-                  </button>
+                  {isActive ? (
+                    <button 
+                      onClick={() => onAction && onAction('addInvoice', s)}
+                      className="bg-[#f08c3e] hover:bg-[#e67e22] text-white px-3 py-1 font-bold text-[11px] uppercase rounded-[3px] transition-colors shadow-sm"
+                    >
+                      ADD INVOICE
+                    </button>
+                  ) : null}
                 </div>
 
                 <div className="flex justify-end lg:justify-center">
-                  <button 
-                    onClick={() => onAction && onAction('endService', s)}
-                    className="bg-[#dc3545] hover:bg-[#c82333] text-white px-3 py-1 font-bold text-[11px] uppercase rounded-[3px] transition-colors shadow-sm"
-                  >
-                    END SERVICE
-                  </button>
+                  {isActive ? (
+                    <button 
+                      onClick={() => onAction && onAction('endService', s)}
+                      className="bg-[#dc3545] hover:bg-[#c82333] text-white px-3 py-1 font-bold text-[11px] uppercase rounded-[3px] transition-colors shadow-sm"
+                    >
+                      END SERVICE
+                    </button>
+                  ) : null}
                 </div>
               </div>
             )})

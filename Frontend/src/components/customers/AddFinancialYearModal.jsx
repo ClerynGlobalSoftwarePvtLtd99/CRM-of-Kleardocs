@@ -25,7 +25,7 @@ const AddFinancialYearModal = ({ customer, onClose, onSuccess }) => {
       })).unwrap()
       
       toast.success('Financial year added successfully')
-      onSuccess && onSuccess()
+      onSuccess && onSuccess(financialYear.trim())
       onClose()
     } catch (error) {
       toast.error(error || 'Failed to add financial year')

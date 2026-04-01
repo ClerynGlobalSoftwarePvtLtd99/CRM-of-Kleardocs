@@ -2,6 +2,14 @@ import React from "react";
 import { X, Mail } from "lucide-react";
 
 const EmailTemplateDetailsModal = ({ emailTemplate, onClose }) => {
+  const templateName = emailTemplate?.template?.name || emailTemplate?.name || emailTemplate?.templateName || "N/A";
+  const templateSubject = emailTemplate?.template?.subject || "";
+  const templateBody =
+    emailTemplate?.template?.body ||
+    emailTemplate?.template?.content ||
+    emailTemplate?.template?.html ||
+    "";
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
       <div className="w-full max-w-4xl bg-bg-secondary border border-bg-tertiary rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-300">
@@ -32,7 +40,11 @@ const EmailTemplateDetailsModal = ({ emailTemplate, onClose }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <span className="text-sm font-semibold text-text-secondary block mb-1">Template Name</span>
-                  <p className="text-text-primary">{emailTemplate?.name || emailTemplate?.templateName || 'N/A'}</p>
+                  <p className="text-text-primary">{templateName}</p>
+                </div>
+                <div>
+                  <span className="text-sm font-semibold text-text-secondary block mb-1">Subject</span>
+                  <p className="text-text-primary">{templateSubject || "N/A"}</p>
                 </div>
                 <div>
                   <span className="text-sm font-semibold text-text-secondary block mb-1">Sent Date</span>
@@ -47,9 +59,16 @@ const EmailTemplateDetailsModal = ({ emailTemplate, onClose }) => {
             <div className="bg-bg-primary p-6 rounded-xl border border-bg-tertiary">
               <h4 className="text-lg font-bold text-text-primary mb-4">Email Preview</h4>
               <div className="bg-bg-secondary p-4 rounded-lg border border-bg-tertiary">
-                <div className="text-sm text-text-secondary italic">
-                  Email content would be displayed here...
-                </div>
+                {templateBody ? (
+                  <div
+                    className="text-sm text-text-primary prose prose-invert max-w-none"
+                    dangerouslySetInnerHTML={{ __html: templateBody }}
+                  />
+                ) : (
+                  <div className="text-sm text-text-secondary italic">
+                    No template preview found for this email history item.
+                  </div>
+                )}
               </div>
             </div>
 

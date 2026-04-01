@@ -33,6 +33,7 @@ import EmailTemplateDetailsModal from "../components/customers/EmailTemplateDeta
 // Modals
 import ModifyComplianceModal from "../components/customers/ModifyComplianceModal";
 import AddInvoiceModal from "../components/customers/AddInvoiceModal";
+import EndServiceModal from "../components/customers/EndServiceModal";
 
 // History Tables
 import CustomerAnnualComplianceTable from "../components/customers/CustomerAnnualComplianceTable";
@@ -49,7 +50,7 @@ const CustomerDetailsPage = () => {
   const { currentCustomer: customer, loading, error } = useSelector((state) => state.customers);
   
   const [activeTab, setActiveTab] = useState("overview");
-  const [selectedYear, setSelectedYear] = useState("2025-2026");
+  const [selectedYear, setSelectedYear] = useState("");
   const [showModals, setShowModals] = useState({
     directorReport: false,
     boardResolution: false,
@@ -63,13 +64,14 @@ const CustomerDetailsPage = () => {
     generic: false,
     auditorAppointment: false,
     modifyCompliance: false,
-    addInvoice: false
+    addInvoice: false,
+    endService: false
   });
   const [genericTitle, setGenericTitle] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
-    if (id) dispatch(fetchCustomerById({ customerId: id, year: selectedYear }));
+    if (id) dispatch(fetchCustomerById({ customerId: id, year: selectedYear || undefined }));
   }, [dispatch, id, selectedYear]);
 
   const toggleModal = (name, show, title = "") => {
@@ -102,9 +104,8 @@ const CustomerDetailsPage = () => {
         toggleModal('addInvoice', true);
         break;
       case 'endService':
-        dispatch(endCustomerService({ customerId: id, serviceId: payload._id || payload.id }));
-        toast.success("Service ended successfully");
-        dispatch(fetchCustomerById({ customerId: id, year: selectedYear })); // Refresh customer data
+        setSelectedItem(payload);
+        toggleModal('endService', true);
         break;
       case 'viewInvoice':
         navigate(`/invoice/${payload._id || payload.id}`);
@@ -124,7 +125,7 @@ const CustomerDetailsPage = () => {
         toggleModal('addService', true);
         break;
       case 'viewComplianceYear':
-        // Filter compliances by selected year
+        // Load compliances for selected financial year
         setSelectedYear(payload);
         dispatch(fetchCustomerById({ customerId: id, year: payload }));
         toast.success(`Showing records for financial year: ${payload}`);
@@ -132,6 +133,17 @@ const CustomerDetailsPage = () => {
       default:
         console.log("Unhandled action:", action, payload);
         toast.error(`Action ${action} not implemented yet`);
+    }
+  };
+
+  const handleConfirmEndService = async () => {
+    if (!selectedItem) return;
+    try {
+      await dispatch(endCustomerService({ customerId: id, serviceId: selectedItem._id || selectedItem.id })).unwrap();
+      toast.success("Service ended successfully");
+      dispatch(fetchCustomerById({ customerId: id, year: selectedYear || undefined }));
+    } catch (err) {
+      toast.error(String(err || "Failed to end service"));
     }
   };
 
@@ -246,7 +258,12 @@ const CustomerDetailsPage = () => {
 
         {/* HISTORY TABLES */}
         <div className="space-y-6 pb-12">
-          <CustomerAnnualComplianceTable compliances={customer.compliances || []} onAction={handleTableAction} />
+          <CustomerAnnualComplianceTable 
+            compliances={customer.compliances || []}
+            financialYears={customer.financialYears || []}
+            selectedYear={selectedYear}
+            onAction={handleTableAction}
+          />
           <CustomerServicesTable services={customer.services || []} onAction={handleTableAction} />
           <CustomerInvoicesTable invoices={customer.invoices || []} onAction={handleTableAction} />
           <CustomerRecurringInvoicesTable recurringInvoices={customer.recurringInvoices || []} onAction={handleTableAction} />
@@ -265,7 +282,16 @@ const CustomerDetailsPage = () => {
           dispatch(fetchCustomerById(id));
       }} />}
       {showModals.addAccountantJob && <AddAccountantJobModal customer={customer} onClose={() => toggleModal('addAccountantJob', false)} onSuccess={() => dispatch(fetchCustomerById(id))} />}
-      {showModals.addFinancialYear && <AddFinancialYearModal customer={customer} onClose={() => toggleModal('addFinancialYear', false)} onSuccess={() => dispatch(fetchCustomerById(id))} />}
+      {showModals.addFinancialYear && (
+        <AddFinancialYearModal 
+          customer={customer} 
+          onClose={() => toggleModal('addFinancialYear', false)} 
+          onSuccess={() => {
+            setSelectedYear("");
+            dispatch(fetchCustomerById({ customerId: id, year: undefined }));
+          }} 
+        />
+      )}
       {showModals.emailTemplateDetails && <EmailTemplateDetailsModal emailTemplate={selectedItem} onClose={() => toggleModal('emailTemplateDetails', false)} />}
       {showModals.generic && <GenericDocumentModal customer={customer} title={genericTitle} onClose={() => toggleModal('generic', false)} />}
       {showModals.addDirector && <AddDirectorModal customer={customer} onClose={() => toggleModal('addDirector', false)} onAdd={() => dispatch(fetchCustomerById(id))} />}
@@ -301,6 +327,13 @@ const CustomerDetailsPage = () => {
             })).then(() => dispatch(fetchCustomerById(id)));
         }} 
       />}
+      {showModals.endService && (
+        <EndServiceModal
+          service={selectedItem}
+          onClose={() => toggleModal('endService', false)}
+          onConfirm={handleConfirmEndService}
+        />
+      )}
 
     </div>
   );

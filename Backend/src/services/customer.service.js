@@ -135,6 +135,94 @@ const getFinancialYearRange = (yearString) => {
   }
 };
 
+const escapeRegex = (str = "") => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const normalizeName = (str = "") =>
+  String(str)
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+
+const TEMPLATE_ALIAS_MAP = {
+  "compliance update": ["ROC Compliance Service", "Annual Compliance plus Bookkeeping", "Service List"],
+  "tds return": ["TDS Return Service"],
+  "professional tax registration services": ["Professional Tax Service"],
+  "startup india registration": ["Startup India Service"],
+  "gst registration": ["GST Registration"],
+  "msme": ["MSME Registration"],
+  "director resignation": ["Director Resignation"],
+  "gst filing": ["GST Filing"]
+};
+
+const resolveTemplateByName = async (name) => {
+  if (!name || !name.trim()) return null;
+  const { default: EmailTemplate } = await import("../models/EmailTemplate.model.js");
+  const raw = name.trim();
+  const normalized = normalizeName(raw);
+  const aliases = TEMPLATE_ALIAS_MAP[normalized] || [];
+  const candidates = [raw, ...aliases];
+
+  const templates = await EmailTemplate.find({
+    $or: candidates.map((n) => ({ name: { $regex: `^${escapeRegex(n)}$`, $options: "i" } }))
+  })
+    .select("name subject body content html type status updatedAt")
+    .lean();
+
+  if (!templates.length) return null;
+
+  const score = (x) =>
+    (x?.status === "Active" ? 2 : 0) +
+    ((x?.body || x?.content || x?.html) ? 2 : 0) +
+    (x?.subject ? 1 : 0);
+
+  templates.sort((a, b) => score(b) - score(a));
+  return templates[0] || null;
+};
+
+const cloneComplianceSettingsToCustomerYear = async (customerId, financialYear) => {
+  let templates = [];
+  try {
+    const { default: ComplianceSetting } = await import("../models/ComplianceSetting.model.js");
+    templates = await ComplianceSetting.find({ financialYear }).lean();
+  } catch (error) {
+    console.error("Error fetching compliance templates:", error);
+  }
+
+  if (templates.length === 0) return { inserted: 0 };
+
+  // Insert only missing records (do not stop when 1 record already exists).
+  // Uniqueness key uses name+expiryDate to allow same name with different dates.
+  const existingCompliances = await CustomerCompliance.find({
+    customer: customerId,
+    financialYear
+  })
+    .select("name expiryDate")
+    .lean();
+
+  const toDateKey = (d) => (d ? new Date(d).toISOString().split("T")[0] : "");
+  const existingKeySet = new Set(
+    existingCompliances.map((c) => `${c.name}__${toDateKey(c.expiryDate)}`)
+  );
+
+  const customerObjId = new mongoose.Types.ObjectId(customerId);
+  const complianceDocs = templates
+    .filter((t) => !existingKeySet.has(`${t.name}__${toDateKey(t.expiryDate)}`))
+    .map((t) => ({
+      customer: customerObjId,
+      financialYear,
+      name: t.name,
+      expiryDate: t.expiryDate || undefined,
+      status: "To Be Done",
+      hasExpiry: !!t.hasExpiry
+    }));
+
+  if (complianceDocs.length > 0) {
+    await CustomerCompliance.insertMany(complianceDocs);
+  }
+
+  return { inserted: complianceDocs.length };
+};
+
 // ─── GET SINGLE CUSTOMER (full detail) ───────────────────────────────────────
 export const getCustomerById = async (customerId, year) => {
   const customer = await Customer.findById(customerId)
@@ -146,8 +234,9 @@ export const getCustomerById = async (customerId, year) => {
   const dateRange = getFinancialYearRange(year);
 
   // Filters
-  const complianceFilter = { customer: customerId };
-  if (year) complianceFilter.financialYear = year;
+  const complianceFilter = year
+    ? { customer: customerId, financialYear: year }
+    : null;
 
   const serviceFilter = { customer: customerId };
   if (dateRange) {
@@ -172,28 +261,56 @@ export const getCustomerById = async (customerId, year) => {
     recurringFilter.startDate = { $gte: dateRange.startDate, $lte: dateRange.endDate };
   }
 
+  const attachedFinancialYears = Array.isArray(customer.financialYears) ? customer.financialYears : [];
+
   let [directors, services, compliances, emailHistory] = await Promise.all([
     Director.find({ customer: customerId }).lean(),
     CustomerService.find(serviceFilter)
       .populate("service", "name")
       .lean(),
-    CustomerCompliance.find(complianceFilter)
-      .sort({ financialYear: -1, createdAt: 1 })
-      .lean(),
+    complianceFilter
+      ? CustomerCompliance.find(complianceFilter)
+          .sort({ financialYear: -1, createdAt: 1 })
+          .lean()
+      : Promise.resolve([]),
     EmailLog.find(historyFilter)
-      .populate("template", "name")
+      .populate("template", "name subject body content html type status")
       .sort({ date: -1 })
       .lean()
   ]);
 
-  // AUTO-INITIALIZE: If requested year is empty, clone from settings
-  if (year && compliances.length === 0) {
+  // Fallback: for legacy logs where template ref is missing,
+  // resolve template details from templateName for preview rendering.
+  try {
+    const missingTemplateLogs = emailHistory.filter(
+      (log) => !log.template && typeof log.templateName === "string" && log.templateName.trim()
+    );
+    if (missingTemplateLogs.length > 0) {
+      const uniqueNames = [...new Set(missingTemplateLogs.map((l) => l.templateName.trim()))];
+      const templateMap = new Map();
+      for (const name of uniqueNames) {
+        const resolved = await resolveTemplateByName(name);
+        if (resolved) templateMap.set(normalizeName(name), resolved);
+      }
+
+      emailHistory = emailHistory.map((log) => {
+        if (log.template) return log;
+        const fallback = templateMap.get(normalizeName(log.templateName || ""));
+        return fallback ? { ...log, template: fallback } : log;
+      });
+    }
+  } catch (err) {
+    console.error("Email template fallback resolution failed:", err);
+  }
+
+  // Initialize/backfill compliances when an attached FY is explicitly loaded.
+  // This ensures missing rows are inserted even if 1-2 rows already exist.
+  if (year && attachedFinancialYears.includes(year)) {
     try {
-      await addFinancialYear(customerId, year);
-      // Re-fetch compliances after init
+      await cloneComplianceSettingsToCustomerYear(customerId, year);
       compliances = await CustomerCompliance.find(complianceFilter).sort({ financialYear: -1, createdAt: 1 }).lean();
     } catch (err) {
-      if (err.statusCode !== 400) console.error("Auto-init compliance error:", err);
+      console.error("Auto-init compliance error:", err);
     }
   }
 
@@ -247,6 +364,7 @@ export const getCustomerById = async (customerId, year) => {
       gst: cs.gst,
       recurring: cs.recurring
     })),
+    financialYears: [...attachedFinancialYears].sort((a, b) => (a > b ? -1 : a < b ? 1 : 0)),
     compliances,
     invoices,
     recurringInvoices,
@@ -311,7 +429,7 @@ export const deleteDirector = async (customerId, directorId) => {
 };
 
 // ─── ADD SERVICE TO CUSTOMER (with multi-module sync) ────────────────────────
-export const addService = async (customerId, data) => {
+export const addService = async (customerId, data, userId) => {
   const customer = await Customer.findById(customerId);
   if (!customer) throw new ApiError(404, "Customer not found");
 
@@ -336,6 +454,47 @@ export const addService = async (customerId, data) => {
     intervalType: data.intervalType || "Month",
     status: "Active"
   });
+
+  // 1.1 Create an invoice for this service (for Invoice History)
+  try {
+    const { createInvoice } = await import("./invoice.service.js");
+    await createInvoice(
+      {
+        customerId,
+        invoiceDate: startDate,
+        items: [
+          {
+            serviceId: data.serviceId,
+            description: serviceMaster.name,
+            professionalFees: data.professionalFees || 0,
+            govtFees: data.govtFees || 0,
+            gstPercent: data.gst ?? 18,
+            hsn: serviceMaster.hsn || "998399"
+          }
+        ]
+      },
+      userId
+    );
+  } catch (err) {
+    // Non-blocking: service creation should not fail due to invoice generation
+    console.error("Auto-invoice creation failed:", err);
+  }
+
+  // 1.2 Add related email template to Email Template History
+  try {
+    const templateName = serviceMaster.template || serviceMaster.name;
+    const templateDoc = await resolveTemplateByName(templateName);
+
+    await EmailLog.create({
+      customer: customerId,
+      template: templateDoc?._id,
+      templateName: templateDoc?.name || templateName,
+      date: new Date()
+    });
+  } catch (err) {
+    // Non-blocking: service creation should not fail due to logging
+    console.error("Auto email-history log failed:", err);
+  }
 
   // 2. If "Annual Compliance" → Add to Compliance History 
   if (serviceMaster.name === "Annual Compliance") {
@@ -410,31 +569,13 @@ export const addFinancialYear = async (customerId, financialYear) => {
   const customer = await Customer.findById(customerId);
   if (!customer) throw new ApiError(404, "Customer not found");
 
-  // Check if already exists
-  const existing = await CustomerCompliance.findOne({ customer: customerId, financialYear });
-  if (existing) throw new ApiError(400, "Financial year already added for this customer");
-
-  // Try to clone from ComplianceSettings if that model exists
-  let templates = [];
-  try {
-    const { default: ComplianceSetting } = await import("../models/ComplianceSetting.model.js");
-    templates = await ComplianceSetting.find({ financialYear }).lean();
-  } catch (error) {
-    console.error("Error fetching compliance templates:", error);
+  const existingYears = Array.isArray(customer.financialYears) ? customer.financialYears : [];
+  if (existingYears.includes(financialYear)) {
+    throw new ApiError(400, "Financial year already added for this customer");
   }
 
-  if (templates.length > 0) {
-    // ⚠️ insertMany skips Mongoose casting — must explicitly cast to ObjectId
-    const customerObjId = new mongoose.Types.ObjectId(customerId);
-    const complianceDocs = templates.map((t) => ({
-      customer: customerObjId,
-      financialYear,
-      name: t.name,
-      expiryDate: t.expiryDate || undefined,
-      status: "To Be Done"
-    }));
-    await CustomerCompliance.insertMany(complianceDocs);
-  }
+  customer.financialYears = [...existingYears, financialYear];
+  await customer.save();
 
   return { financialYear };
 };

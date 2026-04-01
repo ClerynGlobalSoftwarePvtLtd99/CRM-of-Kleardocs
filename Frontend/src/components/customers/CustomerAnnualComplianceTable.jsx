@@ -1,7 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const CustomerAnnualComplianceTable = ({ compliances = [], onAction }) => {
-  const [financialYear, setFinancialYear] = useState("2025-2026");
+const CustomerAnnualComplianceTable = ({ compliances = [], financialYears = [], selectedYear, onAction }) => {
+  const defaultYear = selectedYear || financialYears?.[0] || "";
+
+  const [financialYear, setFinancialYear] = useState(defaultYear);
+  
+  useEffect(() => {
+    if (selectedYear !== undefined) setFinancialYear(selectedYear || financialYears?.[0] || "");
+  }, [selectedYear]);
+  
+  useEffect(() => {
+    if (!selectedYear && financialYears?.length > 0) {
+      setFinancialYear(financialYears[0]);
+    }
+  }, [financialYears, selectedYear]);
 
   return (
     <div className="bg-bg-secondary rounded-sm shadow-sm border border-bg-tertiary overflow-hidden">
@@ -11,26 +23,28 @@ const CustomerAnnualComplianceTable = ({ compliances = [], onAction }) => {
         <h3 className="text-[17px] font-bold text-text-primary">Annual Compliance</h3>
         
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <div className="flex items-center gap-2">
-            <div className="relative">
-              <span className="absolute -top-2 left-2 bg-bg-secondary px-1 text-[10px] text-text-secondary">Select Financial Year</span>
-              <select 
-                value={financialYear}
-                onChange={(e) => setFinancialYear(e.target.value)}
-                className="bg-bg-secondary border border-bg-tertiary rounded-sm px-3 py-1.5 text-sm text-text-primary focus:outline-none focus:border-crm-orange min-w-[160px]"
+          {financialYears?.length > 0 && (
+            <div className="flex items-center gap-2">
+              <div className="relative">
+                <span className="absolute -top-2 left-2 bg-bg-secondary px-1 text-[10px] text-text-secondary">Select Financial Year</span>
+                <select 
+                  value={financialYear}
+                  onChange={(e) => setFinancialYear(e.target.value)}
+                  className="bg-bg-secondary border border-bg-tertiary rounded-sm px-3 py-1.5 text-sm text-text-primary focus:outline-none focus:border-crm-orange min-w-[160px]"
+                >
+                  {financialYears.map((fy) => (
+                    <option key={fy} value={fy}>{fy}</option>
+                  ))}
+                </select>
+              </div>
+              <button 
+                onClick={() => onAction && financialYear && onAction('viewComplianceYear', financialYear)}
+                className="bg-[#298835] hover:bg-[#216d2b] text-white px-4 py-1.5 text-[11px] font-bold uppercase rounded-sm transition-colors custom-shadow-sm h-[34px]"
               >
-                <option value="2024-2025">2024-2025</option>
-                <option value="2025-2026">2025-2026</option>
-                <option value="2026-2027">2026-2027</option>
-              </select>
+                LOAD
+              </button>
             </div>
-            <button 
-              onClick={() => onAction && onAction('viewComplianceYear', financialYear)}
-              className="bg-[#298835] hover:bg-[#216d2b] text-white px-4 py-1.5 text-[11px] font-bold uppercase rounded-sm transition-colors custom-shadow-sm h-[34px]"
-            >
-              VIEW
-            </button>
-          </div>
+          )}
           <button 
             onClick={() => onAction && onAction('addFinancialYear')}
             className="bg-[#f08c3e] hover:bg-[#e67e22] text-white px-4 py-1.5 text-[11px] font-bold uppercase rounded-sm transition-colors custom-shadow-sm h-[34px]"
@@ -100,7 +114,9 @@ const CustomerAnnualComplianceTable = ({ compliances = [], onAction }) => {
             )})
           ) : (
             <div className="bg-bg-secondary p-4 rounded-sm border border-bg-tertiary text-center text-sm text-text-secondary italic">
-              No compliances found for the selected year.
+              {financialYears?.length === 0
+                ? "No financial year attached yet. Click ADD FINANCIAL YEAR."
+                : "No compliances found for the selected year."}
             </div>
           )}
         </div>
