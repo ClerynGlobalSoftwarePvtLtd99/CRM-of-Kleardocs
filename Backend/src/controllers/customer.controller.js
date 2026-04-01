@@ -107,7 +107,7 @@ export const deleteDirector = async (req, res) => {
 
 // ─── POST /api/v1/customers/:customerId/services ──────────────────────────────
 export const addService = async (req, res) => {
-  const cs = await customerService.addService(req.params.customerId, req.body);
+  const cs = await customerService.addService(req.params.customerId, req.body, req.user?.id);
   res.status(201).json(new ApiResponse(201, cs, "Service added successfully"));
 };
 

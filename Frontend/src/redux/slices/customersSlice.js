@@ -103,7 +103,8 @@ export const addCustomerFinancialYear = createAsyncThunk(
   async ({ customerId, financialYear }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post(`/customers/${customerId}/financial-year`, { financialYear });
-      return { customerId, financialYear: response.data.data };
+      const returnedYear = response?.data?.data?.financialYear || response?.data?.data || financialYear;
+      return { customerId, financialYear: returnedYear };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to add financial year');
     }
@@ -162,7 +163,7 @@ export const endCustomerService = createAsyncThunk(
   'customers/endService',
   async ({ customerId, serviceId }, { rejectWithValue }) => {
     try {
-      await axiosInstance.delete(`/customers/${customerId}/services/${serviceId}`);
+      await axiosInstance.put(`/customers/${customerId}/services/${serviceId}/end`);
       return { customerId, serviceId };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to end service');
@@ -379,13 +380,17 @@ const customersSlice = createSlice({
       .addCase(addCustomerFinancialYear.fulfilled, (state, action) => {
         state.loading = false;
         const { customerId, financialYear } = action.payload;
+        const normalizedYear = typeof financialYear === 'string' ? financialYear : financialYear?.financialYear;
+        if (!normalizedYear) return;
         
         // Update current customer if it matches
         if (state.currentCustomer && state.currentCustomer._id === customerId) {
           if (!state.currentCustomer.financialYears) {
             state.currentCustomer.financialYears = [];
           }
-          state.currentCustomer.financialYears.push(financialYear);
+          if (!state.currentCustomer.financialYears.includes(normalizedYear)) {
+            state.currentCustomer.financialYears.push(normalizedYear);
+          }
         }
         
         // Update customer in list if it matches
@@ -394,7 +399,9 @@ const customersSlice = createSlice({
           if (!state.list[customerIndex].financialYears) {
             state.list[customerIndex].financialYears = [];
           }
-          state.list[customerIndex].financialYears.push(financialYear);
+          if (!state.list[customerIndex].financialYears.includes(normalizedYear)) {
+            state.list[customerIndex].financialYears.push(normalizedYear);
+          }
         }
       })
       .addCase(addCustomerFinancialYear.rejected, (state, action) => {
