@@ -5,7 +5,9 @@ const directorSchema = new mongoose.Schema(
   {
     customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer", required: true },
     name: { type: String, required: true },
-    phone: { type: String }
+    phone: { type: String },
+    din: { type: String },
+    designation: { type: String, default: "Director" }
   },
   { timestamps: true }
 );
