@@ -149,7 +149,7 @@ const TEMPLATE_ALIAS_MAP = {
   "professional tax registration services": ["Professional Tax Service"],
   "startup india registration": ["Startup India Service"],
   "gst registration": ["GST Registration"],
-  "msme": ["MSME Registration"],
+  "msme certification": ["MSME Certification"],
   "director resignation": ["Director Resignation"],
   "gst filing": ["GST Filing"]
 };

@@ -453,7 +453,7 @@ export const generateInvoicePdf = (invoice, customer, res) => {
   doc.rect(20, tableTop, 550, 450).stroke(); // Main table border
   
   // Table Header
-  doc.rect(20, tableTop, 550, 25).fill('#FCBF49'); // Yellow header color (approx)
+  doc.rect(20, tableTop, 550, 25).fill('#956127'); // Brown/gold header color
   doc.fillColor('black').font('Helvetica-Bold').fontSize(9);
   doc.text('#', 30, tableTop + 8);
   doc.text('Description', 60, tableTop + 8);
@@ -506,9 +506,31 @@ export const generateInvoicePdf = (invoice, customer, res) => {
   doc.fontSize(8).font('Helvetica-Bold').text('Notes / Terms:', 30, lastY);
   doc.font('Helvetica').text('1. All disputes subject to Kolkata jurisdiction.\n2. Payment due within 7 days of invoice date.', 30, lastY + 12);
 
-  doc.fontSize(10).font('Helvetica-Bold').text('For Kleardocs Solutions', 400, lastY, { align: 'center', width: 150 });
-  doc.moveDown(3);
-  doc.text('Authorized Signatory', 400, doc.y + 40, { align: 'center', width: 150 });
+  // Authorized Signatory with Stamp
+  const signatoryX = 400;
+  const signatoryY = lastY;
+  const signatoryWidth = 150;
+
+  doc.fontSize(10).font('Helvetica-Bold').text('For Kleardocs Solutions', signatoryX, signatoryY, { align: 'center', width: signatoryWidth });
+
+  // Add stamp image
+  try {
+    const stampPath = new URL('../../../Frontend/src/assets/AuthStamp2.png', import.meta.url).pathname;
+    doc.image(stampPath, signatoryX + signatoryWidth / 2 - 50, signatoryY + 20, { width: 100, height: 80 });
+  } catch (e) {
+    // Fallback: draw placeholder circles if image fails
+    const centerX = signatoryX + signatoryWidth / 2;
+    const centerY = signatoryY + 60;
+    doc.lineWidth(1);
+    doc.strokeColor('#b4b4b4');
+    doc.circle(centerX, centerY, 45);
+    doc.circle(centerX, centerY, 40);
+    doc.stroke();
+    doc.fillColor(primaryColor).fontSize(7).font('Helvetica-Bold').text('KLEARDOCS SOLUTIONS', centerX, centerY - 5, { align: 'center' });
+    doc.fillColor('black');
+  }
+
+  doc.fontSize(10).font('Helvetica-Bold').text('Authorized Signatory', signatoryX, signatoryY + 120, { align: 'center', width: signatoryWidth });
 
   doc.end();
 };

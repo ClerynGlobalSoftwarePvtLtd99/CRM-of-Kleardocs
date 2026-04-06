@@ -59,7 +59,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     ? new Date(invoice.invoiceDate).toLocaleDateString('en-IN')
     : invoice.date || '—';
 
-  const primaryColor = [252, 191, 73]; // Golden yellow accent
+  const primaryColor = [149, 97, 39]; // Brown/gold accent #956127
   const borderColor = [0, 0, 0];
 
   // Title
@@ -71,19 +71,19 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   doc.setLineWidth(0.5);
   doc.rect(20, 30, pageWidth - 40, 785);
 
-  // Logo Area (Black Box)
+  // Logo Area (Black Box) - Square shape
   doc.setFillColor(0, 0, 0);
-  doc.rect(20, 30, 150, 110, 'F');
+  doc.rect(20, 30, 110, 110, 'F');
 
   try {
     const logoData = await getBase64ImageFromUrl('https://crm.kleardocs.com/logo.svg');
     if (logoData) {
-      doc.addImage(logoData, 'SVG', 35, 45, 120, 80);
+      doc.addImage(logoData, 'SVG', 30, 40, 90, 90);
     }
   } catch (e) {
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(16);
-    doc.text("KLEARDOCS", 95, 80, { align: 'center' });
+    doc.text("KLEARDOCS", 75, 85, { align: 'center' });
     doc.setTextColor(0, 0, 0);
   }
 
@@ -106,7 +106,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   curY += lineH;
   doc.text("CIN: U69200WB2025PTC278630 | PAN: AALCK7855M", detailsX, curY, { align: "right" });
   curY += lineH;
-  doc.text("Bank A/C No: 50200108344630, IFSC: HDFC0000014, Bank: HDFC Bank", detailsX, curY, { align: "right" });
+  doc.text("Bank A/C No: 925020025764619, IFSC: UTIB0004234, Bank: HDFC Bank", detailsX, curY, { align: "right" });
 
   // Section Header 1 (Bill To, Transport, Details)
   autoTable(doc, {
@@ -295,29 +295,37 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
 
   doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
-  doc.text("For Kleardocs Solutions", sigX + sigWidth / 2, footerY + 15, { align: "center" });
+  doc.text("For Kleardocs Solutions Private Limited", sigX + sigWidth / 2, footerY + 15, { align: "center" });
 
-  // Stamp Placeholder (Simplified Circle style)
-  const centerX = sigX + sigWidth / 2;
-  const centerY = footerY + 75;
-  doc.setLineWidth(1);
-  doc.setDrawColor(180, 180, 180);
-  doc.circle(centerX, centerY, 45, 'S');
-  doc.circle(centerX, centerY, 40, 'S');
+  // Add Authorized Signatory Stamp Image
+  try {
+    const stampData = await getBase64ImageFromUrl('/src/assets/AuthStamp2.png');
+    if (stampData) {
+      const stampWidth = 100;
+      const stampHeight = 100;
+      const centerX = sigX + sigWidth / 2;
+      const centerY = footerY + 75;
+      doc.addImage(stampData, 'PNG', centerX - stampWidth / 2, centerY - stampHeight / 2, stampWidth, stampHeight);
+    }
+  } catch (e) {
+    console.error('Failed to load stamp image:', e);
+    // Fallback to placeholder if image fails
+    const centerX = sigX + sigWidth / 2;
+    const centerY = footerY + 75;
+    doc.setLineWidth(1);
+    doc.setDrawColor(180, 180, 180);
+    doc.circle(centerX, centerY, 45, 'S');
+    doc.circle(centerX, centerY, 40, 'S');
+    doc.setFontSize(7);
+    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.setFont("helvetica", "bold");
+    doc.text("KLEARDOCS SOLUTIONS", centerX, centerY - 5, { align: "center" });
+    doc.setTextColor(0, 0, 0);
+  }
 
-  doc.setFontSize(7);
-  doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-  doc.setFont("helvetica", "bold");
-  doc.text("KLEARDOCS SOLUTIONS", centerX, centerY - 5, { align: "center" });
-
-  doc.setTextColor(0, 0, 0);
   doc.setFontSize(10);
-  doc.setFont("cursive", "italic");
-  doc.text("Authorized Signatory", centerX, centerY + 15, { align: "center" });
-
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(9);
-  doc.text("Authorized Signatory", centerX, centerY + 50, { align: "center" });
+  doc.text("Authorized Signatory", sigX + sigWidth / 2, footerY + 135, { align: "center" });
 
   if (action === 'download') {
     doc.save(`Invoice_${invoiceNumber}.pdf`);
