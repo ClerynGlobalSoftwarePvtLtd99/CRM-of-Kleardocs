@@ -10,6 +10,7 @@ import {
   clearSelectedInvoice,
   downloadInvoicePdf
 } from '../redux/slices/invoicesSlice'
+import { generateInvoicePdf } from '../utils/invoicePdfGenerator'
 import RichTextEditor from '../components/RichTextEditor'
 import ContentLoader from '../components/common/ContentLoader'
 import ConfirmationModal from '../components/common/ConfirmationModal'
@@ -78,12 +79,10 @@ const InvoiceDetails = () => {
     }
   }, [inv])
 
-  const handleGeneratePdf = (action) => {
+  const handleGeneratePdf = async (action) => {
     if (!inv) return;
-    dispatch(downloadInvoicePdf({
-      invoiceId: inv._id,
-      invoiceNo: inv.invoiceNo
-    }));
+    // Use frontend PDF generator with existing invoice data from invoices section
+    await generateInvoicePdf(inv, inv.customer, action);
   };
 
   const handleConfirmDelete = async () => {

@@ -412,6 +412,7 @@ function numberToWords(num) {
 
 export const generateInvoicePdf = (invoice, customer, res) => {
   const doc = new PDFDocument({ margin: 50, size: 'A4' });
+  const primaryColor = '#956127'; // Define the brown/gold color for fallback stamp
   doc.pipe(res);
 
   // Logo box (Black)
