@@ -1,6 +1,4 @@
-import PDFDocument from 'pdfkit';
-
-/**
+import PDFDocument from 'pdfkit';/**
  * Helper to draw a table-like structure in PDFKit
  */
 const drawTable = (doc, headers, rows, startY) => {
@@ -64,29 +62,90 @@ export const generateDirectorReport = (customer, data, res) => {
   doc.end();
 };
 
-export const generateBoardResolution = (customer, data, res) => {
+export const generateBoardResolution = async (customer, data, res) => {
+  const companyName = customer.companyName?.toUpperCase() || customer.name?.toUpperCase() || 'COMPANY NAME';
+  
+  // Format Address (Address + State)
+  const cleanAddress = (customer.address || 'ADDRESS NOT PROVIDED').trim().replace(/,\\s*$/, '');
+  const stateStr = customer.state ? `, ${customer.state.trim().toUpperCase()}` : '';
+  const companyAddress = `${cleanAddress.toUpperCase()}${stateStr}`.replace(/\\s+/g, ' ');
+  
+  const director = (customer.directors && customer.directors.length > 0) ? customer.directors[0] : {};
+  const directorName = (director.name || 'DIRECTOR NAME').toUpperCase();
+  const directorDin = (director.din || 'DIN NOT PROVIDED');
+
+  const dateObj = data.date ? new Date(data.date) : new Date();
+  const day = dateObj.getDate();
+  const monthIdx = dateObj.getMonth();
+  const year = dateObj.getFullYear();
+  
+  const paddedDay = day.toString().padStart(2, '0');
+  const paddedMonth = (monthIdx + 1).toString().padStart(2, '0');
+  const formattedDate = `${paddedDay}/${paddedMonth}/${year}`;
+
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const s = ["th", "st", "nd", "rd"];
+  const v = day % 100;
+  const ord = (s[(v - 20) % 10] || s[v] || s[0]);
+  const formattedDateWithSuffix = `${paddedDay}${ord} ${months[monthIdx]}, ${year}`;
+
   const doc = new PDFDocument({ margin: 50 });
   doc.pipe(res);
 
-  doc.fontSize(18).font('Helvetica-Bold').text("BOARD RESOLUTION", { align: 'center' });
-  doc.moveDown();
+  const blackColor = '#000000';
+  const lightBlueColor = '#2F5597';
 
-  doc.fontSize(11).font('Helvetica-Bold').text("CERTIFIED TRUE COPY OF THE RESOLUTION PASSED AT THE MEETING OF THE BOARD OF DIRECTORS");
-  doc.moveDown();
-
-  doc.fontSize(10).font('Helvetica').text(`Company Name: ${customer.companyName || customer.name}`);
-  doc.text(`Date of Resolution: ${data.date || new Date().toLocaleDateString()}`);
-  doc.text(`CIN: ${customer.cin || 'N/A'}`);
-  doc.moveDown();
-
-  doc.font('Helvetica-Bold').text("RESOLUTION:");
-  doc.font('Helvetica').text(`"RESOLVED THAT the Company shall be authorized to operate and carry on its business activities as per the objects and provisions mentioned in the Memorandum of Association and Articles of Association of the Company."`);
+  // --- Header ---
+  doc.font('Times-Bold').fontSize(16).fillColor(lightBlueColor)
+     .text(companyName, { align: 'center' });
   
-  doc.moveDown(3);
-  doc.text("For and on behalf of the Board,", { align: 'right' });
+  doc.font('Times-Roman').fontSize(12).fillColor(lightBlueColor)
+     .text(companyAddress, { align: 'center' });
+  
+  doc.moveDown(0.2);
+  doc.font('Times-Roman').fillColor(blackColor).text('|', { align: 'center' });
+  doc.moveDown(0.2);
+
+  const certText = `CERTIFIED TRUE COPY OF THE RESOLUTION PASSED AT THE MEETING OF THE BOARD OF DIRECTORS OF ${companyName} HELD AT ${companyAddress}.`;
+  doc.font('Times-Bold').fontSize(12).text(certText, { align: 'justify' });
+
   doc.moveDown(2);
-  doc.text("__________________________", { align: 'right' });
-  doc.text("Director", { align: 'right' });
+
+  // --- Title ---
+  doc.font('Times-Roman').fontSize(12).text(`Board Resolution for appointment of first auditor of ${companyName}`, { align: 'justify' });
+
+  doc.moveDown(1.5);
+
+  // --- Date ---
+  doc.text(`Date: ${formattedDate}`, { align: 'justify' });
+
+  doc.moveDown(1.5);
+
+  // --- Intro ---
+  doc.text(`At a meeting of the Board of Directors of ${companyName} held on ${formattedDateWithSuffix}, it was:`, { align: 'justify' });
+
+  doc.moveDown(1.5);
+
+  // --- Body Paragraph 1 ---
+  const para1 = `RESOLVED THAT Pursuant to the provisions of section 139 and 142 of the companies Act, 2013 read with Rule 3 of the companies (Audit and Auditors) Rules, 2014 and other applicable provisions of the companies Act, 2013 read with rules made thereunder (including any statutory modification(s) or re-enactment there of for the time being in force) , consent of the Board be and is hereby accorded to appoint Mr. Susanta Kumar Swain, Membership Number - 065257 Firm M/s. DDCA AND ASSOCIATES (Firm Registration No- 0330380E) as First Auditors of the company to hold office till the conclusion of the First Annual General Meeting of the company, to examine and audit the accounts of the company, on such remuneration as may be mutually agreed upon between ${directorName}, Director of the company and the Auditors.`;
+  doc.text(para1, { align: 'justify' });
+
+  doc.moveDown(1.5);
+
+  // --- Body Paragraph 2 ---
+  const para2 = `RESOLVED FURTHER THAT ${directorName} - Director of the company be and is hereby authorized to do all such acts, deeds and things and execute such other documents as may be necessary for the purpose of giving effect to this resolution.`;
+  doc.text(para2, { align: 'justify' });
+
+  doc.moveDown(2);
+
+  // --- Footer / Signatory ---
+  doc.font('Times-Bold').text(directorName, { align: 'left' });
+  
+  // Big gap for handwritten signature
+  doc.moveDown(4);
+  
+  doc.font('Times-Roman').text('DIRECTOR', { align: 'left' });
+  doc.text(`DIN: ${directorDin}`, { align: 'left' });
 
   doc.end();
 };
