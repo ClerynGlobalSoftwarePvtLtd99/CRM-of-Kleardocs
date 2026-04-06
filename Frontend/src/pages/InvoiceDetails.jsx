@@ -355,7 +355,7 @@ const InvoiceDetails = () => {
 
               {/* Variable Chips */}
               <div className="space-y-2">
-                <label className="flex text-[11px] font-black uppercase tracking-widest text-text-secondary px-1 flex items-center gap-2">
+                <label className="flex text-[11px] font-black uppercase tracking-widest text-text-secondary px-1 items-center gap-2">
                   Quick Tags <span className="text-[9px] font-bold text-yellow-600 bg-yellow-600/10 px-1.5 py-0.5 rounded">CLICK TO COPY</span>
                 </label>
                 <div className="flex flex-wrap gap-2">

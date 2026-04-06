@@ -71,18 +71,18 @@ const CompliancesFilter = ({ filters, setFilters, onView }) => {
   };
 
   return (
-    <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] p-4 rounded-xl mb-6 shadow-sm">
+    <div className="bg-bg-secondary border border-bg-tertiary p-4 rounded-xl mb-6 shadow-sm">
       <div className="flex items-center gap-4 w-full overflow-x-auto scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] pb-1">
 
         {/* Search */}
         <div className="relative min-w-[200px] flex-1 max-w-[400px] shrink-0">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]" size={18} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" size={18} />
           <input
             type="text"
             placeholder="Name, phone, company name"
             value={localFilters.search}
             onChange={(e) => update("search", e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-text-primary)] text-sm"
+            className="w-full pl-10 pr-4 py-2 bg-bg-primary border border-bg-tertiary rounded-lg focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-text-primary)] text-sm"
           />
         </div>
 
@@ -123,8 +123,8 @@ const CompliancesFilter = ({ filters, setFilters, onView }) => {
                   <li
                     key={name}
                     onClick={() => { update("compliance", name); setIsCompOpen(false); }}
-                    className={`px-4 py-2.5 text-sm cursor-pointer transition-colors hover:bg-[var(--color-bg-tertiary)] ${
-                      localFilters.compliance === name ? 'text-[var(--color-accent)] font-medium bg-[var(--color-accent)]/5' : 'text-[var(--color-text-primary)]'
+                    className={`px-4 py-2.5 text-sm cursor-pointer transition-colors hover:bg-bg-tertiary ${
+                      localFilters.compliance === name ? 'text-accent font-medium bg-accent/5' : 'text-text-primary'
                     }`}
                   >
                     {name}
@@ -140,14 +140,14 @@ const CompliancesFilter = ({ filters, setFilters, onView }) => {
           <select
             value={localFilters.status}
             onChange={(e) => update("status", e.target.value)}
-            className="appearance-none pl-4 pr-10 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-text-primary)] cursor-pointer min-w-[120px] text-sm"
+            className="appearance-none pl-4 pr-10 py-2 bg-bg-primary border border-bg-tertiary rounded-lg focus:outline-none focus:border-accent transition-colors text-text-primary cursor-pointer min-w-[120px] text-sm"
           >
             <option value="">Status</option>
             <option value="To Be Done">To Be Done</option>
             <option value="Ongoing">Ongoing</option>
             <option value="Done">Done</option>
           </select>
-          <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" />
+          <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
         </div>
 
         {/* Accountant */}
@@ -155,14 +155,14 @@ const CompliancesFilter = ({ filters, setFilters, onView }) => {
           <select
             value={localFilters.accountant}
             onChange={(e) => update("accountant", e.target.value)}
-            className="appearance-none pl-4 pr-10 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] transition-colors text-[var(--color-text-primary)] cursor-pointer min-w-[120px] text-sm"
+            className="appearance-none pl-4 pr-10 py-2 bg-bg-primary border border-bg-tertiary rounded-lg focus:outline-none focus:border-accent transition-colors text-text-primary cursor-pointer min-w-[120px] text-sm"
           >
             <option value="">Accountant</option>
             {accountants.map(acc => (
               <option key={acc._id} value={acc.name}>{acc.name}</option>
             ))}
           </select>
-          <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" />
+          <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
         </div>
 
         {/* Buttons */}
@@ -170,7 +170,7 @@ const CompliancesFilter = ({ filters, setFilters, onView }) => {
           <button
             type="button"
             onClick={handleApplyFilters}
-            className="px-4 py-2 bg-[var(--color-accent)] hover:bg-yellow-500 text-white rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2 font-medium text-sm"
+            className="px-4 py-2 bg-accent hover:bg-yellow-500 text-white rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2 font-medium text-sm"
             title="Apply Filter"
           >
             <Filter size={18} />
@@ -179,7 +179,7 @@ const CompliancesFilter = ({ filters, setFilters, onView }) => {
           <button
             type="button"
             onClick={clearFilters}
-            className="px-4 py-2 bg-[var(--color-bg-tertiary)] hover:bg-red-500 hover:text-white text-[var(--color-text-secondary)] rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2 font-medium text-sm"
+            className="px-4 py-2 bg-bg-tertiary hover:bg-red-500 hover:text-white text-text-secondary rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2 font-medium text-sm"
             title="Clear Filters"
           >
             <X size={18} />

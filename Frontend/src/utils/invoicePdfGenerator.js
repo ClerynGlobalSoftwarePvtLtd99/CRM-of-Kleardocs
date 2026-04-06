@@ -59,7 +59,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     ? new Date(invoice.invoiceDate).toLocaleDateString('en-IN')
     : invoice.date || '—';
 
-  const primaryColor = [149, 97, 39]; // Brown/gold accent #956127
+  const primaryColor = [212, 175, 107]; // Lighter brown/gold #D4A96B
   const borderColor = [0, 0, 0];
 
   // Check if invoice has GST charges
@@ -117,7 +117,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     startY: 140,
     margin: { left: 20, right: 20 },
     theme: 'grid',
-    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 10 },
+    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'normal', lineWidth: 0.5, lineColor: borderColor, fontSize: 10 },
     bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, minCellHeight: 80 },
     head: [['Bill To', 'Transportation Details', 'Invoice Details']],
     body: [[
@@ -180,7 +180,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     startY: doc.lastAutoTable.finalY,
     margin: { left: 20, right: 20 },
     theme: 'grid',
-    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9, halign: 'center' },
+    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'normal', lineWidth: 0.5, lineColor: borderColor, fontSize: 9, halign: 'center' },
     bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, charSpace: 0, cellPadding: 4, font: 'helvetica' },
     head: tableHeaders,
     body: [
@@ -220,7 +220,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     startY: nextY,
     margin: { left: 20, right: pageWidth / 2 + 5 },
     theme: 'grid',
-    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9, halign: 'center' },
+    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'normal', lineWidth: 0.5, lineColor: borderColor, fontSize: 9, halign: 'center' },
     bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, minCellHeight: 15, charSpace: 0, cellPadding: 3, font: 'helvetica' },
     head: [['Tax Type', 'Taxable amount', 'Rate', 'Tax amount']],
     body: taxRows.length > 0
@@ -253,7 +253,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     startY: nextY,
     margin: { left: pageWidth / 2 + 5, right: 20 },
     theme: 'grid',
-    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
+    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'normal', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
     bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, charSpace: 0, cellPadding: 3, font: 'helvetica' },
     head: [['Amounts', '']],
     body: summaryBody,
@@ -268,7 +268,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     startY: doc.lastAutoTable.finalY,
     margin: { left: 20, right: 20 },
     theme: 'grid',
-    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
+    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'normal', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
     bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 9, halign: 'center' },
     head: [['Invoice Amount In Words', 'Description']],
     body: [[
@@ -285,7 +285,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     startY: footerY,
     margin: { left: 20, right: pageWidth / 2 },
     theme: 'grid',
-    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
+    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'normal', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
     bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, minCellHeight: 120 },
     head: [['Terms and Conditions']],
     body: [['Thanks for buying']]

@@ -412,7 +412,7 @@ function numberToWords(num) {
 
 export const generateInvoicePdf = (invoice, customer, res) => {
   const doc = new PDFDocument({ margin: 50, size: 'A4' });
-  const primaryColor = '#956127'; // Define the brown/gold color for fallback stamp
+  const primaryColor = '#D4A96B'; // Define the brown/gold color for fallback stamp
   doc.pipe(res);
 
   // Logo box (Black)
@@ -454,8 +454,8 @@ export const generateInvoicePdf = (invoice, customer, res) => {
   doc.rect(20, tableTop, 550, 450).stroke(); // Main table border
   
   // Table Header
-  doc.rect(20, tableTop, 550, 25).fill('#956127'); // Brown/gold header color
-  doc.fillColor('black').font('Helvetica-Bold').fontSize(9);
+  doc.rect(20, tableTop, 550, 25).fill('#D4A96B'); // Lighter brown/gold header color
+  doc.fillColor('black').font('Helvetica').fontSize(9);
   doc.text('#', 30, tableTop + 8);
   doc.text('Description', 60, tableTop + 8);
   doc.text('HSN/SAC', 320, tableTop + 8);

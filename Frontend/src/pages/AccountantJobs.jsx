@@ -178,7 +178,7 @@ const AccountantJobs = () => {
   }
 
   return (
-    <div className="flex-1 p-4 md:p-8 w-full text-[var(--color-text-primary)]">
+    <div className="flex-1 p-4 md:p-8 w-full text-text-primary">
       
       <AccountantJobsHeader 
         jobsCount={jobs.length} 
@@ -213,41 +213,41 @@ const AccountantJobs = () => {
       {/* Add Job Modal */}
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-2xl shadow-xl w-full max-w-md flex flex-col max-h-[90vh]">
-            <div className="flex justify-between items-center p-4 border-b border-[var(--color-bg-tertiary)]">
+          <div className="bg-bg-secondary border border-bg-tertiary rounded-2xl shadow-xl w-full max-w-md flex flex-col max-h-[90vh]">
+            <div className="flex justify-between items-center p-4 border-b border-bg-tertiary">
               <h2 className="text-lg font-bold">Add New Job</h2>
-              <button onClick={() => setIsAddModalOpen(false)} className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">
+              <button onClick={() => setIsAddModalOpen(false)} className="text-text-secondary hover:text-text-primary">
                 <X size={20} />
               </button>
             </div>
             <div className="p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)]">
               <form id="add-job-form" onSubmit={handleAddSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Job Title</label>
+                  <label className="block text-sm text-text-secondary mb-1">Job Title</label>
                   <input 
                     type="text" 
                     required
                     value={formData.jobTitle}
                     onChange={(e) => setFormData({...formData, jobTitle: e.target.value})}
-                    className="w-full px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)]"
+                    className="w-full px-3 py-2 bg-bg-primary border border-bg-tertiary rounded-lg focus:outline-none focus:border-accent"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Select Customer</label>
+                  <label className="block text-sm text-text-secondary mb-1">Select Customer</label>
                   <div className="relative">
                     <select 
                       value={formData.customer}
                       onChange={(e) => setFormData({...formData, customer: e.target.value})}
-                      className="w-full appearance-none px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] max-h-40 overflow-y-auto"
+                      className="w-full appearance-none px-3 py-2 bg-bg-primary border border-bg-tertiary rounded-lg focus:outline-none focus:border-accent scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] max-h-40 overflow-y-auto"
                     >
                       <option value="">Select Customer</option>
                       {customers.map(c => <option key={c._id} value={c._id}>{c.name} - {c.companyName}</option>)}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" size={16} />
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" size={16} />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Status</label>
+                  <label className="block text-sm text-text-secondary mb-1">Status</label>
                   <div className="relative">
                     <select 
                       value={formData.status}
@@ -259,43 +259,43 @@ const AccountantJobs = () => {
                           completedOn: newStatus === 'Done' ? formatForDateTimeLocal(new Date().toISOString()) : ''
                         }))
                       }}
-                      className="w-full appearance-none px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)]"
+                      className="w-full appearance-none px-3 py-2 bg-bg-primary border border-bg-tertiary rounded-lg focus:outline-none focus:border-accent"
                     >
                       {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" size={16} />
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" size={16} />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Accountant</label>
+                  <label className="block text-sm text-text-secondary mb-1">Accountant</label>
                   <div className="relative">
                     <select 
                       value={formData.accountant}
                       onChange={(e) => setFormData({...formData, accountant: e.target.value})}
-                      className="w-full appearance-none px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)]"
+                      className="w-full appearance-none px-3 py-2 bg-bg-primary border border-bg-tertiary rounded-lg focus:outline-none focus:border-accent"
                     >
                       <option value="">Select Accountant</option>
                       {accountants.map(a => <option key={a._id} value={a.name}>{a.name}</option>)}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" size={16} />
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" size={16} />
                   </div>
                 </div>
                 
                 {formData.status === 'Done' && (
                   <div>
-                    <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Completed Date & Time</label>
+                    <label className="block text-sm text-text-secondary mb-1">Completed Date & Time</label>
                     <div className="relative">
                       <input 
                         type="datetime-local"
                         value={formData.completedOn}
                         onChange={(e) => setFormData({...formData, completedOn: e.target.value})}
-                        className="w-full px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] color-scheme-dark"
+                        className="w-full px-3 py-2 bg-bg-primary border border-bg-tertiary rounded-lg focus:outline-none focus:border-accent color-scheme-dark"
                       />
                     </div>
                   </div>
                 )}
                 
-                <div className="flex items-center justify-between border-t border-[var(--color-bg-tertiary)] pt-4 mt-4">
+                <div className="flex items-center justify-between border-t border-bg-tertiary pt-4 mt-4">
                   <span className="text-sm font-medium">Has Expiry Date?</span>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input 
@@ -304,30 +304,30 @@ const AccountantJobs = () => {
                       checked={formData.hasExpiryDate}
                       onChange={(e) => setFormData({...formData, hasExpiryDate: e.target.checked})}
                     />
-                    <div className="w-11 h-6 bg-[var(--color-bg-tertiary)] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--color-accent)]"></div>
+                    <div className="w-11 h-6 bg-bg-tertiary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
                   </label>
                 </div>
 
                 {formData.hasExpiryDate && (
                   <div>
-                    <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Expiry Date & Time</label>
+                    <label className="block text-sm text-text-secondary mb-1">Expiry Date & Time</label>
                     <div className="relative">
                       <input 
                         type="datetime-local"
                         value={formData.expiryDate}
                         onChange={(e) => setFormData({...formData, expiryDate: e.target.value})}
-                        className="w-full px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] color-scheme-dark"
+                        className="w-full px-3 py-2 bg-bg-primary border border-bg-tertiary rounded-lg focus:outline-none focus:border-accent color-scheme-dark"
                       />
                     </div>
                   </div>
                 )}
               </form>
             </div>
-            <div className="p-4 border-t border-[var(--color-bg-tertiary)]">
+            <div className="p-4 border-t border-bg-tertiary">
               <button 
                 type="submit" 
                 form="add-job-form"
-                className="w-full bg-[var(--color-accent)] hover:bg-yellow-500 text-white py-2 rounded-lg font-bold transition-colors"
+                className="w-full bg-accent hover:bg-yellow-500 text-white py-2 rounded-lg font-bold transition-colors"
                 disabled={jobsLoading}
               >
                 {jobsLoading ? 'ADDING...' : 'ADD NEW JOB'}
@@ -340,41 +340,41 @@ const AccountantJobs = () => {
       {/* Edit Job Modal */}
       {isEditModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-2xl shadow-xl w-full max-w-md flex flex-col max-h-[90vh]">
-            <div className="flex justify-between items-center p-4 border-b border-[var(--color-bg-tertiary)]">
+          <div className="bg-bg-secondary border border-bg-tertiary rounded-2xl shadow-xl w-full max-w-md flex flex-col max-h-[90vh]">
+            <div className="flex justify-between items-center p-4 border-b border-bg-tertiary">
               <h2 className="text-lg font-bold">Edit Job</h2>
-              <button onClick={() => setIsEditModalOpen(false)} className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">
+              <button onClick={() => setIsEditModalOpen(false)} className="text-text-secondary hover:text-text-primary">
                 <X size={20} />
               </button>
             </div>
             <div className="p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)]">
               <form id="edit-job-form" onSubmit={handleEditSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Job Title</label>
+                  <label className="block text-sm text-text-secondary mb-1">Job Title</label>
                   <input 
                     type="text" 
                     required
                     value={formData.jobTitle}
                     onChange={(e) => setFormData({...formData, jobTitle: e.target.value})}
-                    className="w-full px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)]"
+                    className="w-full px-3 py-2 bg-bg-primary border border-bg-tertiary rounded-lg focus:outline-none focus:border-accent"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Select Customer</label>
+                  <label className="block text-sm text-text-secondary mb-1">Select Customer</label>
                   <div className="relative">
                     <select 
                       value={formData.customer}
                       onChange={(e) => setFormData({...formData, customer: e.target.value})}
-                      className="w-full appearance-none px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] max-h-40 overflow-y-auto"
+                      className="w-full appearance-none px-3 py-2 bg-bg-primary border border-bg-tertiary rounded-lg focus:outline-none focus:border-accent scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] max-h-40 overflow-y-auto"
                     >
                       <option value="">Select Customer</option>
                       {customers.map(c => <option key={c._id} value={c._id}>{c.name} - {c.companyName}</option>)}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" size={16} />
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" size={16} />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Status</label>
+                  <label className="block text-sm text-text-secondary mb-1">Status</label>
                   <div className="relative">
                     <select 
                       value={formData.status}
@@ -386,43 +386,43 @@ const AccountantJobs = () => {
                           completedOn: newStatus === 'Done' ? (prev.completedOn || formatForDateTimeLocal(new Date().toISOString())) : ''
                         }))
                       }}
-                      className="w-full appearance-none px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)]"
+                      className="w-full appearance-none px-3 py-2 bg-bg-primary border border-bg-tertiary rounded-lg focus:outline-none focus:border-accent"
                     >
                       {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" size={16} />
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" size={16} />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Accountant</label>
+                  <label className="block text-sm text-text-secondary mb-1">Accountant</label>
                   <div className="relative">
                     <select 
                       value={formData.accountant}
                       onChange={(e) => setFormData({...formData, accountant: e.target.value})}
-                      className="w-full appearance-none px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)]"
+                      className="w-full appearance-none px-3 py-2 bg-bg-primary border border-bg-tertiary rounded-lg focus:outline-none focus:border-accent"
                     >
                       <option value="">Select Accountant</option>
                       {accountants.map(a => <option key={a._id} value={a.name}>{a.name}</option>)}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" size={16} />
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" size={16} />
                   </div>
                 </div>
                 
                 {formData.status === 'Done' && (
                   <div>
-                    <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Completed Date & Time</label>
+                    <label className="block text-sm text-text-secondary mb-1">Completed Date & Time</label>
                     <div className="relative">
                       <input 
                         type="datetime-local"
                         value={formData.completedOn}
                         onChange={(e) => setFormData({...formData, completedOn: e.target.value})}
-                        className="w-full px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] color-scheme-dark"
+                        className="w-full px-3 py-2 bg-bg-primary border border-bg-tertiary rounded-lg focus:outline-none focus:border-accent color-scheme-dark"
                       />
                     </div>
                   </div>
                 )}
                 
-                <div className="flex items-center justify-between border-t border-[var(--color-bg-tertiary)] pt-4 mt-4">
+                <div className="flex items-center justify-between border-t border-bg-tertiary pt-4 mt-4">
                   <span className="text-sm font-medium">Has Expiry Date?</span>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input 
@@ -431,30 +431,30 @@ const AccountantJobs = () => {
                       checked={formData.hasExpiryDate}
                       onChange={(e) => setFormData({...formData, hasExpiryDate: e.target.checked})}
                     />
-                    <div className="w-11 h-6 bg-[var(--color-bg-tertiary)] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[var(--color-accent)]"></div>
+                    <div className="w-11 h-6 bg-bg-tertiary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
                   </label>
                 </div>
 
                 {formData.hasExpiryDate && (
                   <div>
-                    <label className="block text-sm text-[var(--color-text-secondary)] mb-1">Expiry Date & Time</label>
+                    <label className="block text-sm text-text-secondary mb-1">Expiry Date & Time</label>
                     <div className="relative">
                       <input 
                         type="datetime-local"
                         value={formData.expiryDate}
                         onChange={(e) => setFormData({...formData, expiryDate: e.target.value})}
-                        className="w-full px-3 py-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg focus:outline-none focus:border-[var(--color-accent)] color-scheme-dark"
+                        className="w-full px-3 py-2 bg-bg-primary border border-bg-tertiary rounded-lg focus:outline-none focus:border-accent color-scheme-dark"
                       />
                     </div>
                   </div>
                 )}
               </form>
             </div>
-            <div className="p-4 border-t border-[var(--color-bg-tertiary)]">
+            <div className="p-4 border-t border-bg-tertiary">
               <button 
                 type="submit" 
                 form="edit-job-form"
-                className="w-full bg-[var(--color-accent)] hover:bg-yellow-500 text-white py-2 rounded-lg font-bold transition-colors"
+                className="w-full bg-accent hover:bg-yellow-500 text-white py-2 rounded-lg font-bold transition-colors"
                 disabled={jobsLoading}
               >
                 {jobsLoading ? 'UPDATING...' : 'Update Job'}
@@ -467,22 +467,22 @@ const AccountantJobs = () => {
       {/* Delete Job Modal */}
       {isDeleteModalOpen && selectedJob && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 transition-all duration-300">
-          <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-2xl shadow-2xl p-6 w-full max-w-md flex flex-col items-center justify-center text-center animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-bg-secondary border border-bg-tertiary rounded-2xl shadow-2xl p-6 w-full max-w-md flex flex-col items-center justify-center text-center animate-in fade-in zoom-in-95 duration-200">
             <div className="w-14 h-14 bg-red-100/10 text-red-500 rounded-full flex items-center justify-center mb-5 ring-4 ring-red-500/20">
               <Trash2 size={28} />
             </div>
 
-            <h2 className="text-xl font-bold text-[var(--color-text-primary)] mb-2">
+            <h2 className="text-xl font-bold text-text-primary mb-2">
               Delete this Job Permanently?
             </h2>
-            <p className="text-[var(--color-text-secondary)] mb-8 text-sm">
-              Job: <span className="font-semibold text-[var(--color-text-primary)]">{selectedJob.jobTitle}</span> for <span className="font-semibold text-[var(--color-text-primary)]">{selectedJob.accountant}</span>
+            <p className="text-text-secondary mb-8 text-sm">
+              Job: <span className="font-semibold text-text-primary">{selectedJob.jobTitle}</span> for <span className="font-semibold text-text-primary">{selectedJob.accountant}</span>
             </p>
 
             <div className="flex gap-3 w-full">
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
-                className="flex-1 px-4 py-2.5 border border-[var(--color-bg-tertiary)] cursor-pointer text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)] hover:text-white rounded-lg font-semibold transition-colors focus:ring-2 focus:ring-[var(--color-bg-tertiary)] focus:outline-none"
+                className="flex-1 px-4 py-2.5 border border-bg-tertiary cursor-pointer text-text-primary hover:bg-bg-tertiary hover:text-white rounded-lg font-semibold transition-colors focus:ring-2 focus:ring-[var(--color-bg-tertiary)] focus:outline-none"
                 disabled={jobsLoading}
               >
                 Cancel

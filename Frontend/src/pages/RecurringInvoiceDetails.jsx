@@ -46,7 +46,7 @@ const RecurringInvoiceDetails = () => {
   const total = subTotal + totalGst;
 
   return (
-    <div className="flex-1 p-4 md:p-8 w-full text-[var(--color-text-primary)]">
+    <div className="flex-1 p-4 md:p-8 w-full text-text-primary">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
@@ -100,7 +100,7 @@ const RecurringInvoiceDetails = () => {
       {loading ? (
         <ContentLoader message="Loading recurring invoice details..." />
       ) : !ri ? (
-        <div className="p-8 text-[var(--color-text-secondary)] bg-bg-secondary rounded-2xl border border-bg-tertiary">
+        <div className="p-8 text-text-secondary bg-bg-secondary rounded-2xl border border-bg-tertiary">
           Recurring invoice not found.
         </div>
       ) : (
@@ -140,7 +140,7 @@ const RecurringInvoiceDetails = () => {
               <div className="text-sm">
                 <span className="text-text-secondary">End:</span> {formatDate(ri.endDate)}
               </div>
-              <div className="text-sm font-semibold text-[var(--color-accent)]">
+              <div className="text-sm font-semibold text-accent">
                 <span className="text-text-secondary">Next Invoice:</span> {formatDate(ri.nextDate)}
               </div>
             </div>
@@ -225,7 +225,7 @@ const RecurringInvoiceDetails = () => {
                       <td className="px-4 py-3 text-center">
                         <button
                           onClick={() => handleViewInvoice(inv._id)}
-                          className="p-1.5 hover:bg-[var(--color-accent)] hover:text-white rounded-lg transition-colors text-[var(--color-accent)]"
+                          className="p-1.5 hover:bg-accent hover:text-white rounded-lg transition-colors text-accent"
                           title="View Details"
                         >
                           <Eye size={18} />

@@ -89,16 +89,16 @@ const SendTemplateModal = ({ customer, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-[var(--color-text-primary)]">
-      <div className="w-full max-w-4xl bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-2xl shadow-xl flex flex-col max-h-[90vh] overflow-hidden animate-in fade-in zoom-in duration-200">
-        <div className="flex items-center justify-between p-5 border-b border-[var(--color-bg-tertiary)]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-text-primary">
+      <div className="w-full max-w-4xl bg-bg-secondary border border-bg-tertiary rounded-2xl shadow-xl flex flex-col max-h-[90vh] overflow-hidden animate-in fade-in zoom-in duration-200">
+        <div className="flex items-center justify-between p-5 border-b border-bg-tertiary">
           <div className="flex-1" /> {/* Spacer for centered logo */}
           <div className="flex flex-col items-center gap-1">
              <img src={logo} alt="CRM Logo" className="h-8 object-contain" />
              <h2 className="text-lg font-bold">Send Email Template</h2>
           </div>
           <div className="flex-1 flex justify-end">
-            <button onClick={onClose} className="p-2 transition-colors text-[var(--color-text-secondary)] hover:text-white">
+            <button onClick={onClose} className="p-2 transition-colors text-text-secondary hover:text-white">
               <X size={20} />
             </button>
           </div>
@@ -107,11 +107,11 @@ const SendTemplateModal = ({ customer, onClose }) => {
         <div className="p-5 space-y-5 overflow-y-auto custom-scrollbar flex-1">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="fieldset-input">
-              <span className="fieldset-label bg-[var(--color-bg-secondary)]">Select Template *</span>
+              <span className="fieldset-label bg-bg-secondary">Select Template *</span>
               <select 
                 value={selectedTemplateId || ""} 
                 onChange={handleTemplateChange}
-                className="bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] text-[var(--color-text-primary)]"
+                className="bg-bg-primary border border-bg-tertiary text-text-primary"
               >
                 <option value="">-- Choose Template --</option>
                 {templates.map((t) => (
@@ -120,28 +120,28 @@ const SendTemplateModal = ({ customer, onClose }) => {
               </select>
             </div>
             <div className="fieldset-input">
-              <span className="fieldset-label bg-[var(--color-bg-secondary)]">Subject *</span>
+              <span className="fieldset-label bg-bg-secondary">Subject *</span>
               <input 
                 value={subject} 
                 onChange={(e) => setSubject(e.target.value)} 
                 placeholder="Email Subject"
-                className="bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] text-[var(--color-text-primary)]"
+                className="bg-bg-primary border border-bg-tertiary text-text-primary"
               />
             </div>
           </div>
 
-          <div className="bg-[var(--color-bg-tertiary)]/30 rounded-lg p-4 text-xs text-[var(--color-text-secondary)] space-y-3 border border-[var(--color-bg-tertiary)]">
-            <p className="font-bold text-[var(--color-crm-orange)] uppercase tracking-wider text-[10px]">Available Template Variables</p>
+          <div className="bg-gray-200 rounded-lg p-4 text-xs text-gray-600 space-y-3 border border-gray-300">
+            <p className="font-bold text-orange-500 uppercase tracking-wider text-[10px]">Available Template Variables</p>
             {TEMPLATE_VARIABLES.map((group) => (
-              <div key={group.title} className="space-y-1.5 border-b border-[var(--color-bg-tertiary)]/50 pb-2 last:border-0 last:pb-0">
-                <p className="font-semibold text-[var(--color-text-primary)]/80">
+              <div key={group.title} className="space-y-1.5 border-b border-gray-300/50 pb-2 last:border-0 last:pb-0">
+                <p className="font-semibold text-gray-700">
                   {group.title}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {group.vars.map((v) => (
                     <span
                       key={v}
-                      className="bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded px-2 py-0.5 font-mono text-[var(--color-crm-orange)] select-all cursor-pointer hover:border-[var(--color-crm-orange)]/50 transition-colors"
+                      className="bg-gray-100 border border-gray-300 rounded px-2 py-0.5 font-mono text-orange-500 select-all cursor-pointer hover:border-gray-100/50 transition-colors"
                       title="Click to copy usage"
                     >
                       {v}
@@ -153,30 +153,32 @@ const SendTemplateModal = ({ customer, onClose }) => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-[var(--color-text-secondary)] ml-1">Email Content</label>
-            <div className="rounded-xl overflow-hidden border border-[var(--color-bg-tertiary)] bg-[var(--color-bg-primary)]">
+            <label className="text-[10px] font-black uppercase tracking-widest text-gray-600 ml-1">Email Content</label>
+            <div className="rounded-xl overflow-hidden border border-gray-300 bg-gray-100">
                 <RichTextEditor value={content} onChange={setContent} height={450} />
             </div>
           </div>
           
-          <div className="bg-[var(--color-bg-primary)]/50 p-4 rounded-xl border border-[var(--color-bg-tertiary)] border-dashed space-y-3">
-            <p className="text-xs text-[var(--color-text-secondary)] font-medium flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-crm-orange)] animate-pulse" />
+          <div className="bg-gray-100/50 p-4 rounded-xl border border-gray-300 border-dashed space-y-3">
+            <p className="text-xs text-gray-600 font-medium flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
               Recipient: 
-              <span className="text-[var(--color-text-primary)] font-bold">{customer?.emails?.[0] || 'No email provided'}</span>
+              <span className="text-gray-700 font-bold">{customer?.emails?.[0] || 'No email provided'}</span>
             </p>
             
             {/* Attachments Section */}
             {selectedTemplate?.attachments?.length > 0 && (
-              <div className="pt-2 border-t border-[var(--color-bg-tertiary)]">
-                <p className="text-[10px] font-black uppercase tracking-wider text-[var(--color-text-secondary)] mb-2 flex items-center gap-1.5">
+              <div className="pt-2 border-t border-gray-300">
+                <p className="text-[10px] font-black uppercase tracking-wider text-gray-600 mb-2 flex items-center gap-1.5">
+              <div className="pt-2 border-t border-bg-tertiary">
+                <p className="text-[10px] font-black uppercase tracking-wider text-text-secondary mb-2 flex items-center gap-1.5">
                   <Paperclip size={12} /> {selectedTemplate.attachments.length} Attachments included:
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {selectedTemplate.attachments.map((att, idx) => (
                     <span 
                       key={idx} 
-                      className="px-2 py-1 bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded text-[10px] text-[var(--color-text-primary)] font-medium"
+                      className="px-2 py-1 bg-bg-secondary border border-bg-tertiary rounded text-[10px] text-text-primary font-medium"
                     >
                       {att.split('/').pop()}
                     </span>
@@ -187,7 +189,7 @@ const SendTemplateModal = ({ customer, onClose }) => {
           </div>
         </div>
 
-        <div className="p-5 border-t border-[var(--color-bg-tertiary)] bg-[var(--color-bg-tertiary)]/10">
+        <div className="p-5 border-t border-bg-tertiary bg-bg-tertiary/10">
           <button
             onClick={handleSend}
             disabled={!selectedTemplateId}
