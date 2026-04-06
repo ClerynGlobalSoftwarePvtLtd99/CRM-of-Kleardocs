@@ -26,6 +26,6 @@ export const updateCustomerService = async (customerId, serviceId, serviceData) 
 
 // End customer service
 export const endCustomerService = async (customerId, serviceId) => {
-  const response = await axiosInstance.delete(`/customers/${customerId}/services/${serviceId}`);
+  const response = await axiosInstance.put(`/customers/${customerId}/services/${serviceId}/end`);
   return response.data;
 };

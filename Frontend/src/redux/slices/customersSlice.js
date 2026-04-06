@@ -50,9 +50,11 @@ export const createCustomer = createAsyncThunk(
 
 export const fetchCustomerById = createAsyncThunk(
   'customers/fetchById',
-  async (customerId, { rejectWithValue }) => {
+  async ({ customerId, year }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/customers/${customerId}`);
+      const response = await axiosInstance.get(`/customers/${customerId}`, {
+        params: { year }
+      });
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch customer details');
@@ -96,6 +98,31 @@ export const addCustomerDirector = createAsyncThunk(
   }
 );
 
+export const addCustomerFinancialYear = createAsyncThunk(
+  'customers/addFinancialYear',
+  async ({ customerId, financialYear }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(`/customers/${customerId}/financial-year`, { financialYear });
+      const returnedYear = response?.data?.data?.financialYear || response?.data?.data || financialYear;
+      return { customerId, financialYear: returnedYear };
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to add financial year');
+    }
+  }
+);
+
+export const deleteDirector = createAsyncThunk(
+  'customers/deleteDirector',
+  async ({ customerId, directorId }, { rejectWithValue }) => {
+    try {
+      await axiosInstance.delete(`/customers/${customerId}/directors/${directorId}`);
+      return directorId;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to delete director');
+    }
+  }
+);
+
 export const addServiceToCustomer = createAsyncThunk(
   'customers/addService',
   async ({ customerId, serviceData }, { rejectWithValue }) => {
@@ -120,11 +147,23 @@ export const updateCustomerService = createAsyncThunk(
   }
 );
 
+export const updateCustomerCompliance = createAsyncThunk(
+  'customers/updateCompliance',
+  async ({ customerId, complianceId, data }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.put(`/customers/${customerId}/compliances/${complianceId}`, data);
+      return { customerId, compliance: response.data.data };
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to update compliance');
+    }
+  }
+);
+
 export const endCustomerService = createAsyncThunk(
   'customers/endService',
   async ({ customerId, serviceId }, { rejectWithValue }) => {
     try {
-      await axiosInstance.delete(`/customers/${customerId}/services/${serviceId}`);
+      await axiosInstance.put(`/customers/${customerId}/services/${serviceId}/end`);
       return { customerId, serviceId };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to end service');
@@ -316,6 +355,59 @@ const customersSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+      // Delete customer director
+      .addCase(deleteDirector.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteDirector.fulfilled, (state, action) => {
+        state.loading = false;
+        const directorId = action.payload;
+        // Remove director from current customer
+        if (state.currentCustomer && state.currentCustomer.directors) {
+          state.currentCustomer.directors = state.currentCustomer.directors.filter(d => d._id !== directorId && d.id !== directorId);
+        }
+      })
+      .addCase(deleteDirector.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Add customer financial year
+      .addCase(addCustomerFinancialYear.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addCustomerFinancialYear.fulfilled, (state, action) => {
+        state.loading = false;
+        const { customerId, financialYear } = action.payload;
+        const normalizedYear = typeof financialYear === 'string' ? financialYear : financialYear?.financialYear;
+        if (!normalizedYear) return;
+        
+        // Update current customer if it matches
+        if (state.currentCustomer && state.currentCustomer._id === customerId) {
+          if (!state.currentCustomer.financialYears) {
+            state.currentCustomer.financialYears = [];
+          }
+          if (!state.currentCustomer.financialYears.includes(normalizedYear)) {
+            state.currentCustomer.financialYears.push(normalizedYear);
+          }
+        }
+        
+        // Update customer in list if it matches
+        const customerIndex = state.list.findIndex(c => c._id === customerId);
+        if (customerIndex !== -1) {
+          if (!state.list[customerIndex].financialYears) {
+            state.list[customerIndex].financialYears = [];
+          }
+          if (!state.list[customerIndex].financialYears.includes(normalizedYear)) {
+            state.list[customerIndex].financialYears.push(normalizedYear);
+          }
+        }
+      })
+      .addCase(addCustomerFinancialYear.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
       // Add service to customer
       .addCase(addServiceToCustomer.pending, (state) => {
         state.loading = true;
@@ -373,6 +465,29 @@ const customersSlice = createSlice({
         }
       })
       .addCase(updateCustomerService.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Update customer compliance
+      .addCase(updateCustomerCompliance.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateCustomerCompliance.fulfilled, (state, action) => {
+        state.loading = false;
+        const { customerId, compliance } = action.payload;
+        
+        // Update current customer if it matches
+        if (state.currentCustomer && state.currentCustomer._id === customerId) {
+          if (state.currentCustomer.compliances) {
+            const index = state.currentCustomer.compliances.findIndex(c => c._id === compliance._id);
+            if (index !== -1) {
+              state.currentCustomer.compliances[index] = compliance;
+            }
+          }
+        }
+      })
+      .addCase(updateCustomerCompliance.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

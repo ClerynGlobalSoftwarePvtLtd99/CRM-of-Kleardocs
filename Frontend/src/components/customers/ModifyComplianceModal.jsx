@@ -1,84 +1,163 @@
-import React, { useState } from "react";
-import { X, Check } from "lucide-react";
-import { AGENTS } from "../../utils/constants";
-import { format } from "date-fns";
+import React, { useState, useEffect } from "react";
+import { X, Check, Loader2 } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { updateCustomerCompliance } from "../../redux/slices/customersSlice";
+import { toast } from "react-hot-toast";
+import { useParams } from "react-router";
+import axiosInstance from "../../api/axiosInstance";
 
-const ModifyComplianceModal = ({ compliance, onClose, onUpdate }) => {
+const ModifyComplianceModal = ({ customerId, compliance, onClose }) => {
+  const { id: urlId } = useParams();
+  const actualCustomerId = customerId || urlId;
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [agents, setAgents] = useState([]);
+  const [loadingAgents, setLoadingAgents] = useState(true);
+
   const [formData, setFormData] = useState({
-    status: compliance?.status || "To Be Done",
-    accountant: compliance?.accountant || "None",
+    name: "",
+    hasExpiry: false,
+    status: "To Be Done",
+    accountant: "None",
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const updatedComp = { ...compliance, ...formData };
-    
-    // Normalize status for comparisons
-    const currentStatus = formData.status;
-    const previousStatus = compliance?.status;
-    
-    const isFinished = currentStatus === 'Completed' || currentStatus === 'Done';
-    const wasFinished = previousStatus === 'Completed' || previousStatus === 'Done';
+  useEffect(() => {
+    const fetchAgents = async () => {
+      try {
+        const response = await axiosInstance.get('/users');
+        const users = response.data.data || [];
+        // Filter for agents and admins who can be assigned as accountants
+        const filteredAgents = users.filter(u => u.role === 'agent' || u.role === 'admin' || u.role === 'accountant');
+        setAgents(filteredAgents);
+      } catch (error) {
+        console.error("Failed to fetch agents:", error);
+      } finally {
+        setLoadingAgents(false);
+      }
+    };
+    fetchAgents();
+  }, []);
 
-    // Automatically set completion date if status is changed to a finished state
-    if (isFinished && !wasFinished) {
-      updatedComp.completedOn = format(new Date(), 'do MMM yyyy');
-    } 
-    // If it's already finished but date is missing, fill it in
-    else if (isFinished && (!updatedComp.completedOn || updatedComp.completedOn === '-')) {
-      updatedComp.completedOn = format(new Date(), 'do MMM yyyy');
+  useEffect(() => {
+    if (compliance) {
+      setFormData({
+        name: compliance.name || "",
+        hasExpiry: compliance.hasExpiry || false,
+        status: compliance.status || "To Be Done",
+        accountant: compliance.accountant || "None",
+      });
     }
-    // If we changed status away from finished, clear the date
-    else if (!isFinished && wasFinished) {
-      updatedComp.completedOn = "-";
+  }, [compliance]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const updateData = { ...formData };
+
+      // Automatically set completion date if status is changed to 'Done'
+      if (formData.status === "Done") {
+        updateData.completedOn = new Date().toISOString();
+      }
+
+      await dispatch(updateCustomerCompliance({
+        customerId: actualCustomerId,
+        complianceId: compliance._id,
+        data: updateData
+      })).unwrap();
+
+      toast.success("Compliance updated");
+      onClose();
+    } catch (err) {
+      toast.error(err || "Update failed");
+    } finally {
+      setLoading(false);
     }
-    
-    onUpdate(updatedComp);
-    onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-text-primary">
-      <div className="w-full max-w-md bg-bg-secondary border border-bg-tertiary rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-200">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-bg-tertiary">
-          <h3 className="text-lg font-bold truncate pr-4">{compliance?.name}</h3>
-          <button onClick={onClose} className="p-2 rounded-lg hover:bg-bg-tertiary transition-colors">
-            <X size={20} />
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+      <div className="w-full max-w-[500px] max-h-[90vh] bg-bg-secondary border border-bg-tertiary rounded-3xl shadow-2xl animate-in fade-in zoom-in duration-200 overflow-hidden flex flex-col">
+        {/* Header */}
+        <div className="px-8 py-6 flex items-center justify-between border-b border-bg-tertiary flex-shrink-0">
+          <h2 className="text-2xl font-bold text-text-primary">Edit Compliance</h2>
+          <button onClick={onClose} className="text-text-secondary hover:text-text-primary transition-colors">
+            <X size={24} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-8 space-y-6">
+        <form onSubmit={handleSubmit} className="px-8 py-6 space-y-6 overflow-y-auto custom-scrollbar flex-1">
+
+          {/* Compliance Name */}
           <div className="fieldset-input">
-            <span className="fieldset-label uppercase">Compliance Status</span>
-            <select 
+            <label className="fieldset-label bg-bg-secondary">Compliance Name *</label>
+            <textarea
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              required
+              rows={2}
+              className="resize-none"
+            />
+          </div>
+
+          {/* Has Expiry Toggle */}
+          <div className="flex items-center gap-4 py-1">
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                className="sr-only peer"
+                checked={formData.hasExpiry}
+                onChange={(e) => setFormData({ ...formData, hasExpiry: e.target.checked })}
+              />
+              <div className="w-11 h-6 bg-bg-tertiary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-crm-orange"></div>
+            </label>
+            <span className="text-text-secondary font-medium">Has Expiry?</span>
+          </div>
+
+          {/* Status Dropdown */}
+          <div className="fieldset-input">
+            <label className="fieldset-label bg-bg-secondary">Status *</label>
+            <select
               value={formData.status}
-              onChange={(e) => setFormData({...formData, status: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
             >
-              <option>To Be Done</option>
-              <option>Ongoing</option>
-              <option>Completed</option>
-              <option>Done</option>
+              <option value="Ongoing">Ongoing</option>
+              <option value="To Be Done">To Be Done</option>
+              <option value="Done">Done</option>
             </select>
           </div>
 
+          {/* Accountant Dropdown */}
           <div className="fieldset-input">
-            <span className="fieldset-label uppercase">Assigned Accountant</span>
-            <select 
+            <label className="fieldset-label bg-bg-secondary">Accountant</label>
+            <select
               value={formData.accountant}
-              onChange={(e) => setFormData({...formData, accountant: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, accountant: e.target.value })}
+              disabled={loadingAgents}
             >
-              <option>None</option>
-              {AGENTS.map(agent => (
-                <option key={agent} value={agent}>{agent}</option>
+              <option value="None">None</option>
+              {agents.map(agent => (
+                <option key={agent._id} value={agent.name}>{agent.name}</option>
               ))}
             </select>
+            {loadingAgents && <p className="text-[10px] text-text-secondary mt-1">Loading accountants...</p>}
           </div>
 
+          {/* Update Button */}
           <button
             type="submit"
-            className="w-full btn-raised btn-raised-green text-white py-4 rounded-xl font-bold uppercase tracking-widest flex items-center justify-center gap-2"
+            disabled={loading}
+            className="w-full btn-raised btn-raised-orange text-white py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:brightness-105 mt-2 flex-shrink-0"
           >
-            <Check size={18} /> Update Compliance
+            {loading ? (
+              <Loader2 size={24} className="animate-spin" />
+            ) : (
+              <>
+                <Check size={22} strokeWidth={3} />
+                <span className="uppercase font-bold tracking-wider">Update Compliance</span>
+              </>
+            )}
           </button>
         </form>
       </div>

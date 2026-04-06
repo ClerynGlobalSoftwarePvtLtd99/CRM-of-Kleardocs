@@ -1,7 +1,35 @@
-import React from 'react';
-import { Trash2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Trash2, AlertTriangle } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-hot-toast';
+import { deleteDirector } from '../../redux/slices/customersSlice';
 
-const CustomerDirectors = ({ directors = [] }) => {
+const CustomerDirectors = ({ directors = [], customerId }) => {
+  const dispatch = useDispatch();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [directorToDelete, setDirectorToDelete] = useState(null);
+
+  const handleDeleteClick = (directorId) => {
+    setDirectorToDelete(directorId);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!customerId || !directorToDelete) {
+      toast.error("Invalid deletion request");
+      return;
+    }
+
+    try {
+      await dispatch(deleteDirector({ customerId, directorId: directorToDelete })).unwrap();
+      toast.success("Director removed successfully");
+      setShowDeleteConfirm(false);
+      setDirectorToDelete(null);
+    } catch (err) {
+      toast.error(err || "Failed to remove director");
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6 mt-8 mb-6 text-text-primary">
       <h5 className="text-[1.5rem] font-normal leading-[1.334] m-0"><b className="font-bold">Directors</b></h5>
@@ -29,6 +57,7 @@ const CustomerDirectors = ({ directors = [] }) => {
                         size={18} 
                         className="text-[#f44336] cursor-pointer hover:opacity-80 transition-opacity" 
                         fill="currentColor"
+                        onClick={() => handleDeleteClick(d._id || d.id)}
                       />
                     </div>
                   </div>
@@ -42,6 +71,40 @@ const CustomerDirectors = ({ directors = [] }) => {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal - Styled like Logout */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm transition-all duration-300">
+          <div className="bg-bg-secondary border border-bg-tertiary rounded-2xl shadow-2xl p-8 w-full max-w-sm flex flex-col items-center justify-center text-center animate-in fade-in zoom-in-95 duration-200">
+            <div className="w-16 h-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mb-6 ring-4 ring-red-500/20">
+              <Trash2 size={32} />
+            </div>
+
+            <h2 className="text-2xl font-bold text-text-primary mb-3">
+              Remove Director?
+            </h2>
+            <p className="text-text-secondary mb-8 text-sm leading-relaxed">
+              Are you sure you want to remove this director? <br className="hidden sm:block" />
+              This action cannot be undone.
+            </p>
+
+            <div className="flex gap-4 w-full">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="flex-1 px-4 py-3 border border-bg-tertiary text-text-primary hover:bg-bg-tertiary rounded-xl font-bold uppercase text-[10px] tracking-widest transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmDelete}
+                className="flex-1 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold uppercase text-[10px] tracking-widest shadow-lg shadow-red-500/25 transition-all"
+              >
+                Confirm Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -139,6 +139,46 @@ const GeneralSettings = ({
           fullWidth
         />
 
+        {/* Firm Details Section */}
+        <div className="col-span-1 md:col-span-2 pt-6 border-t border-[var(--color-bg-tertiary)] mt-2">
+          <h3 className="text-lg font-bold text-[var(--color-text-primary)] mb-4">
+            Firm Details (For Reports)
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+            <InputGroup
+              label="Firm Name"
+              id="firmName"
+              value={formData.firmName}
+              onChange={handleChange}
+            />
+            <InputGroup
+              label="Firm Registration Number (FRN)"
+              id="firmRegistrationNumber"
+              value={formData.firmRegistrationNumber}
+              onChange={handleChange}
+            />
+            <InputGroup
+              label="Firm Address"
+              id="firmAddress"
+              value={formData.firmAddress}
+              onChange={handleChange}
+              fullWidth
+            />
+            <InputGroup
+              label="Proprietor/Partner Name"
+              id="proprietorName"
+              value={formData.proprietorName}
+              onChange={handleChange}
+            />
+            <InputGroup
+              label="Membership Number"
+              id="membershipNumber"
+              value={formData.membershipNumber}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
         {/* Save Button */}
         <div className="col-span-1 md:col-span-2 mt-4">
           <button

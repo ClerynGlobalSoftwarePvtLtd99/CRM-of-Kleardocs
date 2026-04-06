@@ -370,19 +370,8 @@ export const convertToCustomer = async (leadId, data, userId) => {
       const { default: Service } = await import("../models/Service.model.js");
       const { default: ComplianceSetting } = await import("../models/ComplianceSetting.model.js");
 
-      // 1. Initial Service setup
-      if (lead.service) {
-        const srv = await Service.findById(lead.service);
-        if (srv) {
-          await CustomerService.create({
-            customer: customer._id,
-            service: lead.service,
-            professionalFees: srv.professionalFees || 0,
-            govtFees: srv.govtFees || 0,
-            status: "Active"
-          });
-        }
-      }
+      // 1. Do not auto-attach service on conversion.
+      // Services should be added only from Customer Details -> Add Service.
 
       // 2. Initial Compliance setup (New Company Standard)
       const settings = await ComplianceSetting.find({ 

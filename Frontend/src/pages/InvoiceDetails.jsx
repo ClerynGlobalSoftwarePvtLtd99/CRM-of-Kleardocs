@@ -47,7 +47,7 @@ const InvoiceDetails = () => {
         <div style="background-color: #f9fafb; padding: 40px 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
           <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e5e7eb;">
             <div style="background-color: #fff3f3ff; padding: 30px; text-align: center;">
-              <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="Kleardocs" style="height: 80px; width: auto;" />
+              <img src="https://crm.kleardocs.com/logo.svg" alt="Kleardocs" style="height: 80px; width: auto;" />
             </div>
             <div style="padding: 40px; color: #1f2937;">
               <h1 style="font-size: 24px; font-weight: 800; margin-bottom: 24px; color: #111827;">Hello ${inv.customer?.companyName || inv.customer?.name},</h1>
@@ -80,9 +80,9 @@ const InvoiceDetails = () => {
 
   const handleGeneratePdf = (action) => {
     if (!inv) return;
-    dispatch(downloadInvoicePdf({ 
-        invoiceId: inv._id, 
-        invoiceNo: inv.invoiceNo 
+    dispatch(downloadInvoicePdf({
+      invoiceId: inv._id,
+      invoiceNo: inv.invoiceNo
     }));
   };
 
@@ -392,7 +392,7 @@ const InvoiceDetails = () => {
                       <div style="background-color: #f9fafb; padding: 40px 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
                         <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
                           <div style="background-color: #000000; padding: 30px; text-align: center;">
-                            <img src="https://crm-of-kleardocs.vercel.app/logo.svg" alt="Kleardocs" style="height: 60px; width: auto;" />
+                            <img src="https://crm.kleardocs.com/logo.svg" alt="Kleardocs" style="height: 60px; width: auto;" />
                           </div>
                           <div style="padding: 40px; color: #1f2937;">
                             <h1 style="font-size: 24px; font-weight: 800; margin-bottom: 24px; color: #111827;">Hello ${inv.customer?.companyName || inv.customer?.name},</h1>

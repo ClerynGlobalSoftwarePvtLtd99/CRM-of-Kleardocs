@@ -77,7 +77,7 @@ export const getCustomerList = async (req, res) => {
 
 // ─── GET /api/v1/customers/:customerId ────────────────────────────────────────
 export const getCustomerById = async (req, res) => {
-  const customer = await customerService.getCustomerById(req.params.customerId);
+  const customer = await customerService.getCustomerById(req.params.customerId, req.query.year);
   res.status(200).json(new ApiResponse(200, customer, "Customer fetched"));
 };
 
@@ -107,7 +107,7 @@ export const deleteDirector = async (req, res) => {
 
 // ─── POST /api/v1/customers/:customerId/services ──────────────────────────────
 export const addService = async (req, res) => {
-  const cs = await customerService.addService(req.params.customerId, req.body);
+  const cs = await customerService.addService(req.params.customerId, req.body, req.user?.id);
   res.status(201).json(new ApiResponse(201, cs, "Service added successfully"));
 };
 

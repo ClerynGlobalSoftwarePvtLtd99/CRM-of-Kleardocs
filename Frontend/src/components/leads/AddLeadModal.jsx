@@ -218,6 +218,12 @@ const AddLeadModal = ({ onClose, onSubmit }) => {
     e.preventDefault();
 
     if (!formData.name.trim() || !formData.phone.trim()) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (formData.phone.length !== 10) {
+      toast.error("Phone number must be exactly 10 digits");
       return;
     }
 

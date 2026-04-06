@@ -1,22 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Briefcase } from "lucide-react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { createJob } from "../../redux/slices/jobsSlice";
+import axiosInstance from "../../api/axiosInstance";
 
-const JOB_STATUSES = ["To Be Done", "Ongoing", "Done"];
-const ACCOUNTANTS = ["Samrat", "Tapas", "Jagjyot"];
+const JOB_STATUSES = ["To be done", "Ongoing", "Done"];
 
-const AddAccountantJobModal = ({ onClose, customer }) => {
+const AddAccountantJobModal = ({ onClose, customer, onSuccess }) => {
+  const [accountants, setAccountants] = useState([]);
+  const [loadingAccountants, setLoadingAccountants] = useState(true);
+
   const [formData, setFormData] = useState({
     jobTitle: "",
-    status: "To Be Done",
-    accountant: "Samrat",
+    status: "To be done",
+    accountant: "",
     hasExpiryDate: false,
     expiryDate: new Date().toISOString().split('T')[0]
   });
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchAccountants = async () => {
+      try {
+        const res = await axiosInstance.get('/users?role=accountant');
+        const fetchedAccountants = res.data.data || [];
+        setAccountants(fetchedAccountants);
+        if (fetchedAccountants.length > 0) {
+          setFormData(prev => ({ ...prev, accountant: fetchedAccountants[0].name }));
+        }
+      } catch (err) {
+        console.error("Failed to fetch accountants:", err);
+        // Fallback or silent error, don't crash the modal
+      } finally {
+        setLoadingAccountants(false);
+      }
+    };
+    
+    fetchAccountants();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -30,6 +53,10 @@ const AddAccountantJobModal = ({ onClose, customer }) => {
     e.preventDefault();
     if (!formData.jobTitle) {
       toast.error("Please enter a job title");
+      return;
+    }
+    if (!formData.accountant) {
+      toast.error("Please select an accountant");
       return;
     }
 
@@ -90,8 +117,20 @@ const AddAccountantJobModal = ({ onClose, customer }) => {
 
           <div className="fieldset-input">
             <span className="fieldset-label">Accountant *</span>
-            <select name="accountant" value={formData.accountant} onChange={handleChange} required>
-              {ACCOUNTANTS.map(a => <option key={a} value={a}>{a}</option>)}
+            <select 
+              name="accountant" 
+              value={formData.accountant} 
+              onChange={handleChange} 
+              required 
+              disabled={loadingAccountants || accountants.length === 0}
+            >
+              {loadingAccountants ? (
+                <option value="">Loading accountants...</option>
+              ) : accountants.length === 0 ? (
+                <option value="">No accountants found</option>
+              ) : (
+                accountants.map(a => <option key={a._id || a.name} value={a.name}>{a.name}</option>)
+              )}
             </select>
           </div>
 

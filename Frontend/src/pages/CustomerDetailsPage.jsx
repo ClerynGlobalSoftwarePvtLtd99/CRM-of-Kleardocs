@@ -9,7 +9,8 @@ import {
   Search, ChevronDown, IdCard, ShieldCheck
 } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { fetchCustomerById, updateCustomerEmails, addCustomerDirector, addServiceToCustomer, endCustomerService } from "../redux/slices/customersSlice";
+import { fetchCustomerById, updateCustomerEmails, addCustomerDirector, addServiceToCustomer, endCustomerService, sendCustomerWhatsapp, addCustomerFinancialYear } from "../redux/slices/customersSlice";
+import { createInvoice } from "../redux/slices/invoicesSlice";
 import ErrorBoundary from "../components/ErrorBoundary";
 import ContentLoader from "../components/common/ContentLoader";
 
@@ -26,10 +27,13 @@ import AddServiceModal from "../components/customers/AddServiceModal";
 import WhatsappTemplateModal from "../components/leads/lead-modals/WhatsappTemplateModal";
 import GenericDocumentModal from "../components/customers/GenericDocumentModal";
 import AddAccountantJobModal from "../components/customers/AddAccountantJobModal";
+import AddFinancialYearModal from "../components/customers/AddFinancialYearModal";
+import EmailTemplateDetailsModal from "../components/customers/EmailTemplateDetailsModal";
 
 // Modals
 import ModifyComplianceModal from "../components/customers/ModifyComplianceModal";
 import AddInvoiceModal from "../components/customers/AddInvoiceModal";
+import EndServiceModal from "../components/customers/EndServiceModal";
 
 // History Tables
 import CustomerAnnualComplianceTable from "../components/customers/CustomerAnnualComplianceTable";
@@ -46,7 +50,7 @@ const CustomerDetailsPage = () => {
   const { currentCustomer: customer, loading, error } = useSelector((state) => state.customers);
   
   const [activeTab, setActiveTab] = useState("overview");
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedYear, setSelectedYear] = useState("");
   const [showModals, setShowModals] = useState({
     directorReport: false,
     boardResolution: false,
@@ -60,13 +64,15 @@ const CustomerDetailsPage = () => {
     generic: false,
     auditorAppointment: false,
     modifyCompliance: false,
-    addInvoice: false
+    addInvoice: false,
+    endService: false
   });
   const [genericTitle, setGenericTitle] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
-    if (id) dispatch(fetchCustomerById(id));
-  }, [dispatch, id]);
+    if (id) dispatch(fetchCustomerById({ customerId: id, year: selectedYear || undefined }));
+  }, [dispatch, id, selectedYear]);
 
   const toggleModal = (name, show, title = "") => {
     if (title) setGenericTitle(title);
@@ -81,7 +87,7 @@ const CustomerDetailsPage = () => {
       await dispatch(updateCustomerEmails({ customerId: customer._id, emails: updatedData.emails })).unwrap();
       toast.success("Registry Updated");
       toggleModal('emails', false);
-      dispatch(fetchCustomerById(id));
+      dispatch(fetchCustomerById({ customerId: id, year: selectedYear }));
     } catch (err) {
       toast.error(String(err));
     }
@@ -98,8 +104,8 @@ const CustomerDetailsPage = () => {
         toggleModal('addInvoice', true);
         break;
       case 'endService':
-        dispatch(endCustomerService({ customerId: id, serviceId: payload._id }));
-        toast.success("Service ended");
+        setSelectedItem(payload);
+        toggleModal('endService', true);
         break;
       case 'viewInvoice':
         navigate(`/invoice/${payload._id || payload.id}`);
@@ -108,16 +114,36 @@ const CustomerDetailsPage = () => {
         navigate(`/recurring-invoice-details/${payload._id || payload.id}`);
         break;
       case 'viewEmail':
-        toast.success(`Viewing email: ${payload.name || payload.templateName}`);
+        // Show email template details in dedicated modal
+        setSelectedItem(payload);
+        toggleModal('emailTemplateDetails', true);
         break;
       case 'addFinancialYear':
-        toast.success("Add Financial Year modal not yet connected");
+        toggleModal('addFinancialYear', true);
+        break;
+      case 'addService':
+        toggleModal('addService', true);
         break;
       case 'viewComplianceYear':
-        toast.success(`Filtering by year: ${payload}`);
+        // Load compliances for selected financial year
+        setSelectedYear(payload);
+        dispatch(fetchCustomerById({ customerId: id, year: payload }));
+        toast.success(`Showing records for financial year: ${payload}`);
         break;
       default:
         console.log("Unhandled action:", action, payload);
+        toast.error(`Action ${action} not implemented yet`);
+    }
+  };
+
+  const handleConfirmEndService = async () => {
+    if (!selectedItem) return;
+    try {
+      await dispatch(endCustomerService({ customerId: id, serviceId: selectedItem._id || selectedItem.id })).unwrap();
+      toast.success("Service ended successfully");
+      dispatch(fetchCustomerById({ customerId: id, year: selectedYear || undefined }));
+    } catch (err) {
+      toast.error(String(err || "Failed to end service"));
     }
   };
 
@@ -203,7 +229,7 @@ const CustomerDetailsPage = () => {
                 <h6 className="text-[1.1rem] leading-[1.6]"><b className="font-bold">Type:</b> {customer.type}</h6>
                 <h6 className="text-[1.1rem] leading-[1.6]"><b className="font-bold">Onboarding Date:</b> {customer.onboardingDate ? new Date(customer.onboardingDate).toLocaleDateString('en-GB') : 'N/A'}</h6>
                 <h6 className="text-[1.1rem] leading-[1.6]"><b className="font-bold">Incorporation Date:</b> {customer.incorporationDate ? new Date(customer.incorporationDate).toLocaleDateString('en-GB') : 'N/A'}</h6>
-                <h6 className="text-[1.1rem] leading-[1.6]"><b className="font-bold">Sales Person:</b> {customer.agent?.name || 'Ritu Kaur'}</h6>
+                <h6 className="text-[1.1rem] leading-[1.6]"><b className="font-bold">Sales Person:</b> {customer.salesPerson || customer.saleBy?.name || 'N/A'}</h6>
              </div>
              
              {/* Right Column Stack */}
@@ -228,11 +254,16 @@ const CustomerDetailsPage = () => {
         </div>
 
         {/* ADDITIONAL SECTIONS (DIRECTORS, SERVICES, etc.) */}
-        <CustomerDirectors directors={customer.directors || []} />
+        <CustomerDirectors directors={customer.directors || []} customerId={customer._id} />
 
         {/* HISTORY TABLES */}
         <div className="space-y-6 pb-12">
-          <CustomerAnnualComplianceTable compliances={customer.annualCompliances || []} onAction={handleTableAction} />
+          <CustomerAnnualComplianceTable 
+            compliances={customer.compliances || []}
+            financialYears={customer.financialYears || []}
+            selectedYear={selectedYear}
+            onAction={handleTableAction}
+          />
           <CustomerServicesTable services={customer.services || []} onAction={handleTableAction} />
           <CustomerInvoicesTable invoices={customer.invoices || []} onAction={handleTableAction} />
           <CustomerRecurringInvoicesTable recurringInvoices={customer.recurringInvoices || []} onAction={handleTableAction} />
@@ -251,14 +282,38 @@ const CustomerDetailsPage = () => {
           dispatch(fetchCustomerById(id));
       }} />}
       {showModals.addAccountantJob && <AddAccountantJobModal customer={customer} onClose={() => toggleModal('addAccountantJob', false)} onSuccess={() => dispatch(fetchCustomerById(id))} />}
+      {showModals.addFinancialYear && (
+        <AddFinancialYearModal 
+          customer={customer} 
+          onClose={() => toggleModal('addFinancialYear', false)} 
+          onSuccess={() => {
+            setSelectedYear("");
+            dispatch(fetchCustomerById({ customerId: id, year: undefined }));
+          }} 
+        />
+      )}
+      {showModals.emailTemplateDetails && <EmailTemplateDetailsModal emailTemplate={selectedItem} onClose={() => toggleModal('emailTemplateDetails', false)} />}
       {showModals.generic && <GenericDocumentModal customer={customer} title={genericTitle} onClose={() => toggleModal('generic', false)} />}
       {showModals.addDirector && <AddDirectorModal customer={customer} onClose={() => toggleModal('addDirector', false)} onAdd={() => dispatch(fetchCustomerById(id))} />}
-      {showModals.addService && <AddServiceModal customer={customer} onClose={() => toggleModal('addService', false)} onAdd={(data) => {
-          dispatch(addServiceToCustomer({ customerId: id, serviceData: data }));
-          dispatch(fetchCustomerById(id));
-      }} />}
+      {showModals.addService && (
+        <AddServiceModal 
+          customerId={customer._id} 
+          onClose={() => toggleModal('addService', false)} 
+          selectedYear={selectedYear} 
+        />
+      )}
       {showModals.auditorAppointment && <AuditorsReportModal customer={customer} onClose={() => toggleModal('auditorAppointment', false)} />}
-      {showModals.modifyCompliance && <ModifyComplianceModal customer={customer} compliance={selectedItem} onClose={() => toggleModal('modifyCompliance', false)} onSuccess={() => dispatch(fetchCustomerById(id))} />}
+      {showModals.consentLetter && <ConsentLetterModal customer={customer} onClose={() => toggleModal('consentLetter', false)} />}
+      {showModals.edit && <EditCustomerModal customer={customer} onClose={() => toggleModal('edit', false)} onUpdate={() => {
+        dispatch(fetchCustomerById(id)); // Refresh customer data after update
+      }} />}
+      {showModals.modifyCompliance && (
+        <ModifyComplianceModal 
+          customerId={customer._id} 
+          compliance={selectedItem} 
+          onClose={() => toggleModal('modifyCompliance', false)} 
+        />
+      )}
       {showModals.addInvoice && <AddInvoiceModal 
         customer={customer} 
         service={selectedItem} 
@@ -272,6 +327,13 @@ const CustomerDetailsPage = () => {
             })).then(() => dispatch(fetchCustomerById(id)));
         }} 
       />}
+      {showModals.endService && (
+        <EndServiceModal
+          service={selectedItem}
+          onClose={() => toggleModal('endService', false)}
+          onConfirm={handleConfirmEndService}
+        />
+      )}
 
     </div>
   );

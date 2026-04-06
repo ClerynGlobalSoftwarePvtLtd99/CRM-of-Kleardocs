@@ -3,7 +3,7 @@
   "password": "securepassword123"
 }
 ========================================
-Frontend:- https://crm-of-kleardocs.vercel.app
+Frontend:- https://crm.kleardocs.com
 Backend:- https://crm-of-kleardocs-backend.onrender.com
 =====================================================
 ClerynGlobalSoftwarePvtLtd99
@@ -189,3 +189,24 @@ Here is exactly what I implemented across your files:
 
 
 feat: Implement core backend modules for authentication, users, jobs, services, compliance, templates, and settings, along with API testing documentation.
+
+
+Complete Service List
+Annual Compliance
+GST Filing
+Section 8 Company
+Startup India Registration
+Import Export Code
+FSSAI Central
+GST Registration
+FSSAI State Registration
+CA Certification
+Director Resignation
+MSME
+Trademark
+MOA Change
+Auditor Resignation
+TDS Return
+Board Meeting & Statutory Documentation Services
+Professional Tax Registration Services
+Private Limited Company

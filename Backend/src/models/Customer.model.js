@@ -42,7 +42,9 @@ const customerComplianceSchema = new mongoose.Schema(
       default: "To Be Done"
     },
     completedOn: { type: Date },
-    accountant: { type: String } // name of accountant assigned
+    accountant: { type: String }, // name of accountant assigned
+    // Detailed configuration fields from template
+    hasExpiry: { type: Boolean, default: false }
   },
   { timestamps: true }
 );
@@ -70,6 +72,7 @@ const customerSchema = new mongoose.Schema(
     username: { type: String, unique: true, sparse: true },
     password: { type: String }, // plain generated password for portal
     emails: [{ type: String }],
+    financialYears: [{ type: String }], // attached FYs, e.g. ["2025-2026"]
     saleBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     leadId: { type: mongoose.Schema.Types.ObjectId, ref: "Lead" },
     active: { type: Boolean, default: true }

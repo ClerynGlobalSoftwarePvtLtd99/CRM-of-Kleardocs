@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { X, FileText, Calendar as CalendarIcon, ChevronDown } from "lucide-react";
 
-const AddInvoiceModal = ({ service, onClose, onAdd }) => {
+const AddInvoiceModal = ({ customer, service, onClose, onAdd }) => {
   const [formData, setFormData] = useState({
     date: new Date().toLocaleDateString('en-GB'),
     price: 2000,
