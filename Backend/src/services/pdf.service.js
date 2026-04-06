@@ -423,7 +423,7 @@ export const generateInvoicePdf = (invoice, customer, res) => {
   doc.fillColor('black');
   
   // Company Info (Top Right)
-  doc.fontSize(14).font('Helvetica-Bold').text('Kleardocs Solutions', 300, 30, { align: 'right' });
+  doc.fontSize(14).font('Helvetica-Bold').text('Kleardocs Solutions Private Limited', 300, 30, { align: 'right' });
   doc.fontSize(8).font('Helvetica').text('Phone: +91 98755 15290 | Email: info@kleardocs.com', 300, 50, { align: 'right' });
   doc.text('366, Amritalal Mukherjee Road, Kolkata, 700063', 300, 62, { align: 'right' });
   doc.text('CIN: U69200WB2025PTC278630 | PAN: AALCK7855M', 300, 74, { align: 'right' });
@@ -512,7 +512,7 @@ export const generateInvoicePdf = (invoice, customer, res) => {
   const signatoryY = lastY;
   const signatoryWidth = 150;
 
-  doc.fontSize(10).font('Helvetica-Bold').text('For Kleardocs Solutions', signatoryX, signatoryY, { align: 'center', width: signatoryWidth });
+  doc.fontSize(10).font('Helvetica-Bold').text('For Kleardocs Solutions Private Limited', signatoryX, signatoryY, { align: 'center', width: signatoryWidth });
 
   // Add stamp image
   try {
