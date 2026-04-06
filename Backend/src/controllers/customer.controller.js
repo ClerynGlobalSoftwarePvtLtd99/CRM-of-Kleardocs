@@ -173,7 +173,7 @@ export const getBoardResolution = async (req, res) => {
 export const getConsentLetter = async (req, res) => {
   const customer = await customerService.getCustomerById(req.params.customerId);
   res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', `attachment; filename=ConsentLetter_${req.params.customerId}.pdf`);
+  res.setHeader('Content-Disposition', 'attachment; filename="CA SUSANTA KUMAR SWAIN.pdf"');
   pdfService.generateConsentLetter(customer, req.query, res);
 };
 
