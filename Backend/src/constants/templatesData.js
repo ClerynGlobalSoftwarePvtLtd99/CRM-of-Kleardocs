@@ -238,7 +238,7 @@ export const SEED_TEMPLATES = [
         <ul style="list-style: none; padding: 0;" data-mce-style="list-style: none; padding: 0;">
           <li>✔️ <strong>Startup India Registration</strong> at Rs. 2999 (including Organization DSC)</li>
           <li>✔️ <strong>GST Registration</strong> at Rs. 999</li>
-          <li>✔️ <strong>MSME Registration</strong> at Rs. 999</li>
+          <li>✔️ <strong>MSME Certification</strong> at Rs. 999</li>
           <li>✔️ <strong>Website Development</strong> starting at Rs. 4999</li>
           <li>✔️ <strong>Digital Marketing Services</strong> – Customized Pricing</li>
           <li>✔️ <strong>Logo Designing Services</strong></li>
@@ -432,13 +432,13 @@ export const SEED_TEMPLATES = [
 </table>`,
   },
   {
-    name: 'MSME Registration',
-    subject: 'MSME Registration - Documents Required',
+    name: 'MSME Certification',
+    subject: 'MSME Certification - Documents Required',
     type: 'Email',
     body: `<table style="background: #ffffff; border-collapse: collapse; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif; text-align: center; margin: 0 auto; width: 100%; max-width: 600px;" width="100%" align="center" class="mce-item-table">
   <tbody>
     <tr>
-      <td style="background-color: #03479fff; color: white; font-size: 20px; font-weight: bold; padding: 15px; text-align: center;">MSME Registration</td>
+      <td style="background-color: #03479fff; color: white; font-size: 20px; font-weight: bold; padding: 15px; text-align: center;">MSME Certification</td>
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center;">
@@ -447,7 +447,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; font-size: 16px; text-align: center; color: #004AAD;">
-        Thank you for choosing <strong>Startup Station</strong> for <br /><strong>MSME Registration</strong>.<br />To proceed, please provide the following documents:
+        Thank you for choosing <strong>Startup Station</strong> for <br /><strong>MSME Certification</strong>.<br />To proceed, please provide the following documents:
       </td>
     </tr>
     <tr>

@@ -1,7 +1,7 @@
 export const SERVICES = [
   "Startup India Registration",
   "GST Registration",
-  "MSME Registration",
+  "MSME Certification",
   "Website Development",
   "Digital Marketing Services",
   "Logo Designing Services",
