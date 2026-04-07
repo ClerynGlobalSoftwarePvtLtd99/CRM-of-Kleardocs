@@ -196,9 +196,17 @@ export const generateConsentLetter = async (customer, data, res) => {
 
   // Paths for Assets (Moved to Backend)
   const assetsPath = path.join(__dirname, '../assets/consent-letter/');
+  
+  console.log('Assets Path:', assetsPath);
+  console.log('Does assets folder exist?', fs.existsSync(assetsPath));
+  
   const headerImg64 = imageToBase64(path.join(assetsPath, 'CA-title image.png'));
   const signatureImg64 = imageToBase64(path.join(assetsPath, 'Signature.png'));
   const ddcaImg64 = imageToBase64(path.join(assetsPath, 'DDCA.png'));
+  
+  if (!headerImg64 || !signatureImg64 || !ddcaImg64) {
+    throw new Error('Failed to load required assets for consent letter');
+  }
 
   const html = `
     <!DOCTYPE html>
@@ -433,6 +441,10 @@ export const generateConsentLetter = async (customer, data, res) => {
   try {
     let executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
 
+    console.log('Environment:', process.env.NODE_ENV);
+    console.log('Platform:', process.platform);
+    console.log('PUPPETEER_EXECUTABLE_PATH:', process.env.PUPPETEER_EXECUTABLE_PATH);
+
     // Fallback search for local development if no env var is set
     if (!executablePath) {
       if (process.platform === 'win32') {
@@ -451,6 +463,12 @@ export const generateConsentLetter = async (customer, data, res) => {
         ];
         executablePath = linuxPaths.find(p => fs.existsSync(p));
       }
+    }
+    
+    console.log('Executable Path:', executablePath);
+    
+    if (!executablePath) {
+      throw new Error('Chrome/Chromium executable not found. Please install Chrome or set PUPPETEER_EXECUTABLE_PATH environment variable.');
     }
 
     const browser = await puppeteer.launch({
@@ -477,7 +495,9 @@ export const generateConsentLetter = async (customer, data, res) => {
     res.send(pdf);
   } catch (err) {
     console.error("Puppeteer PDF Error:", err);
-    res.status(500).send("Error generating PDF with Puppeteer. Ensure Chrome bin is available.");
+    console.error("Error details:", err.message);
+    console.error("Error stack:", err.stack);
+    throw new Error(`PDF generation failed: ${err.message}`);
   }
 };
 

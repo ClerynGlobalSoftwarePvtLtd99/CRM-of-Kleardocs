@@ -171,10 +171,19 @@ export const getBoardResolution = async (req, res) => {
 };
 
 export const getConsentLetter = async (req, res) => {
-  const customer = await customerService.getCustomerById(req.params.customerId);
-  res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', 'attachment; filename="CA SUSANTA KUMAR SWAIN.pdf"');
-  await pdfService.generateConsentLetter(customer, req.query, res);
+  try {
+    const customer = await customerService.getCustomerById(req.params.customerId);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="CA SUSANTA KUMAR SWAIN.pdf"');
+    await pdfService.generateConsentLetter(customer, req.query, res);
+  } catch (error) {
+    console.error('Consent Letter Error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Error generating consent letter',
+      error: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
+  }
 };
 
 export const getAuditorsReport = async (req, res) => {
