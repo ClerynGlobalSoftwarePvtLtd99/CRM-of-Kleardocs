@@ -283,9 +283,9 @@ const CustomerDetailsPage = () => {
       {showModals.sendTemplate && <SendTemplateModal customer={customer} onClose={() => toggleModal('sendTemplate', false)} />}
       {showModals.whatsapp && <WhatsappTemplateModal lead={customer} onClose={() => toggleModal('whatsapp', false)} onSend={(data) => {
           dispatch(sendCustomerWhatsapp({ customerId: id, data }));
-          dispatch(fetchCustomerById(id));
+          dispatch(fetchCustomerById({ customerId: id }));
       }} />}
-      {showModals.addAccountantJob && <AddAccountantJobModal customer={customer} onClose={() => toggleModal('addAccountantJob', false)} onSuccess={() => dispatch(fetchCustomerById(id))} />}
+      {showModals.addAccountantJob && <AddAccountantJobModal customer={customer} onClose={() => toggleModal('addAccountantJob', false)} onSuccess={() => dispatch(fetchCustomerById({ customerId: id }))} />}
       {showModals.addFinancialYear && (
         <AddFinancialYearModal 
           customer={customer} 
@@ -306,7 +306,7 @@ const CustomerDetailsPage = () => {
       )}
       {showModals.emailTemplateDetails && <EmailTemplateDetailsModal emailTemplate={selectedItem} onClose={() => toggleModal('emailTemplateDetails', false)} />}
       {showModals.generic && <GenericDocumentModal customer={customer} title={genericTitle} onClose={() => toggleModal('generic', false)} />}
-      {showModals.addDirector && <AddDirectorModal customer={customer} onClose={() => toggleModal('addDirector', false)} onAdd={() => dispatch(fetchCustomerById(id))} />}
+      {showModals.addDirector && <AddDirectorModal customer={customer} onClose={() => toggleModal('addDirector', false)} onAdd={() => dispatch(fetchCustomerById({ customerId: id }))} />}
       {showModals.addService && (
         <AddServiceModal 
           customerId={customer._id} 
@@ -317,7 +317,7 @@ const CustomerDetailsPage = () => {
       {showModals.auditorAppointment && <AuditorsReportModal customer={customer} onClose={() => toggleModal('auditorAppointment', false)} />}
       {showModals.consentLetter && <ConsentLetterModal customer={customer} onClose={() => toggleModal('consentLetter', false)} />}
       {showModals.edit && <EditCustomerModal customer={customer} onClose={() => toggleModal('edit', false)} onUpdate={() => {
-        dispatch(fetchCustomerById(id)); // Refresh customer data after update
+        dispatch(fetchCustomerById({ customerId: id })); // Refresh customer data after update
       }} />}
       {showModals.modifyCompliance && (
         <ModifyComplianceModal 
@@ -331,12 +331,29 @@ const CustomerDetailsPage = () => {
         service={selectedItem} 
         onClose={() => toggleModal('addInvoice', false)} 
         onAdd={(data) => {
-            dispatch(createInvoice({ 
-                ...data, 
-                customerId: id, 
-                serviceId: selectedItem?.service || undefined,
-                complianceId: selectedItem?.financialYear ? selectedItem?._id : undefined 
-            })).then(() => dispatch(fetchCustomerById(id)));
+            const payload = {
+                customerId: id,
+                invoiceDate: formatDateToISO(data.date),
+                recurring: data.isRecurring,
+                interval: data.isRecurring ? Number(data.interval) : undefined,
+                intervalType: data.isRecurring ? data.intervalType : undefined,
+                endDate: (data.isRecurring && data.endDate) ? formatDateToISO(data.endDate) : undefined,
+                description: data.description || undefined,
+                complianceId: selectedItem?.financialYear ? selectedItem?._id : undefined,
+                items: [{
+                    serviceId: selectedItem?.service || undefined,
+                    description: selectedItem?.name || "", 
+                    professionalFees: Number(data.price),
+                    govtFees: Number(data.governmentFees),
+                    gstPercent: Number(data.gst),
+                    hsn: selectedItem?.hsn || "998399"
+                }]
+            };
+
+            dispatch(createInvoice(payload)).then(() => {
+                dispatch(fetchCustomerById({ customerId: id }));
+                toast.success("Invoice created successfully");
+            });
         }} 
       />}
       {showModals.endService && (

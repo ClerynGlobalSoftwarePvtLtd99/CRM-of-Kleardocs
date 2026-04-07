@@ -59,7 +59,9 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     ? new Date(invoice.invoiceDate).toLocaleDateString('en-IN')
     : invoice.date || '—';
 
-  const primaryColor = [149, 97, 39]; // Brown/gold accent #956127
+  const docDescription = invoice.description || invoice.notes || invoice.remark || invoice.remarks || '—';
+
+  const primaryColor = [212, 175, 107]; // Lighter brown/gold #D4A96B
   const borderColor = [0, 0, 0];
 
   // Title
@@ -265,13 +267,17 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     startY: doc.lastAutoTable.finalY,
     margin: { left: 20, right: 20 },
     theme: 'grid',
-    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
-    bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 9, halign: 'center' },
+    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'normal', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
+    bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, halign: 'left' },
     head: [['Invoice Amount In Words', 'Description']],
     body: [[
       numberToWords(Math.round(t.total || 0)),
-      ''
-    ]]
+      docDescription
+    ]],
+    columnStyles: {
+      0: { cellWidth: 320 },
+      1: { cellWidth: 'auto' }
+    }
   });
 
   // Terms & Conditions and Signature

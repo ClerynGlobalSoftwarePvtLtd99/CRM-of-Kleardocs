@@ -21,7 +21,8 @@ export const createInvoiceSchema = z.object({
   recurring: z.boolean().optional().default(false),
   interval: z.number().optional(),
   intervalType: z.enum(["Day", "Month"]).optional(),
-  endDate: z.string().optional()
+  endDate: z.string().optional(),
+  description: z.string().optional()
 });
 
 // ─── Add Payment ──────────────────────────────────────────────────────────────
