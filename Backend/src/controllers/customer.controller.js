@@ -2,7 +2,7 @@ import * as customerService from "../services/customer.service.js";
 import * as pdfService from "../services/pdf.service.js";
 import * as communicationService from "../services/communication.service.js";
 import * as templateService from "../services/template.service.js";
-import { ApiResponse } from "../utils/response.js";
+import { ApiResponse, ApiError } from "../utils/response.js";
 import ExcelJS from "exceljs";
 
 // ─── GET /api/v1/customers ────────────────────────────────────────────────────
@@ -159,15 +159,21 @@ export const getDirectorReport = async (req, res) => {
 
 export const getBoardResolution = async (req, res) => {
   const customer = await customerService.getCustomerById(req.params.customerId);
+  
+  if (!customer.directors || customer.directors.length === 0) {
+    throw new ApiError(400, "No directors added for this customer");
+  }
+
+  const fileName = `Board Resolution - Auditor Appointment - ${customer.companyName || customer.name}.pdf`;
   res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', `attachment; filename=BoardResolution_${req.params.customerId}.pdf`);
-  pdfService.generateBoardResolution(customer, req.query, res);
+  res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+  await pdfService.generateBoardResolution(customer, req.query, res);
 };
 
 export const getConsentLetter = async (req, res) => {
   const customer = await customerService.getCustomerById(req.params.customerId);
   res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', `attachment; filename=ConsentLetter_${req.params.customerId}.pdf`);
+  res.setHeader('Content-Disposition', 'attachment; filename="CA SUSANTA KUMAR SWAIN.pdf"');
   pdfService.generateConsentLetter(customer, req.query, res);
 };
 
