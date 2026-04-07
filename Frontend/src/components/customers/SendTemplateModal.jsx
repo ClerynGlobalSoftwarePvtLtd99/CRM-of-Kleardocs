@@ -168,8 +168,6 @@ const SendTemplateModal = ({ customer, onClose }) => {
             
             {/* Attachments Section */}
             {selectedTemplate?.attachments?.length > 0 && (
-              <div className="pt-2 border-t border-gray-300">
-                <p className="text-[10px] font-black uppercase tracking-wider text-gray-600 mb-2 flex items-center gap-1.5">
               <div className="pt-2 border-t border-bg-tertiary">
                 <p className="text-[10px] font-black uppercase tracking-wider text-text-secondary mb-2 flex items-center gap-1.5">
                   <Paperclip size={12} /> {selectedTemplate.attachments.length} Attachments included:
