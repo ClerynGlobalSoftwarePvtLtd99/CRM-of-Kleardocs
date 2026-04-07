@@ -170,7 +170,6 @@ export const generateBoardResolution = async (customer, data, res) => {
 };
 
 export const generateConsentLetter = async (customer, data, res) => {
-  // Custom date formatting
   const getOrdinalDate = (dateStr) => {
     try {
       const d = new Date(dateStr);
@@ -195,8 +194,8 @@ export const generateConsentLetter = async (customer, data, res) => {
   const financialYearEndYear = currentDate.getMonth() >= 3 ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
   const financialYearEndLabel = `31st March ${financialYearEndYear}`;
 
-  // Paths for Assets
-  const assetsPath = path.join(__dirname, '../../../Frontend/src/assets/Consent Letter/');
+  // Paths for Assets (Moved to Backend)
+  const assetsPath = path.join(__dirname, '../assets/consent-letter/');
   const headerImg64 = imageToBase64(path.join(assetsPath, 'CA-title image.png'));
   const signatureImg64 = imageToBase64(path.join(assetsPath, 'Signature.png'));
   const ddcaImg64 = imageToBase64(path.join(assetsPath, 'DDCA.png'));
@@ -432,23 +431,38 @@ export const generateConsentLetter = async (customer, data, res) => {
   `;
 
   try {
-    const commonPaths = [
-      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-      'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
-      'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
-    ];
-    let executablePath = undefined;
-    for (const p of commonPaths) {
-      if (fs.existsSync(p)) {
-        executablePath = p;
-        break;
+    let executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+
+    // Fallback search for local development if no env var is set
+    if (!executablePath) {
+      if (process.platform === 'win32') {
+        const winPaths = [
+          'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+          'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+          'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+        ];
+        executablePath = winPaths.find(p => fs.existsSync(p));
+      } else if (process.platform === 'linux') {
+        const linuxPaths = [
+          '/usr/bin/google-chrome',
+          '/usr/bin/google-chrome-stable',
+          '/usr/bin/chromium-browser',
+          '/usr/bin/chromium'
+        ];
+        executablePath = linuxPaths.find(p => fs.existsSync(p));
       }
     }
 
     const browser = await puppeteer.launch({
       headless: "new",
       executablePath,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--disable-gpu'
+      ]
     });
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });

@@ -154,7 +154,7 @@ export const getDirectorReport = async (req, res) => {
   const customer = await customerService.getCustomerById(req.params.customerId);
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', `attachment; filename=DirectorReport_${req.params.customerId}.pdf`);
-  pdfService.generateDirectorReport(customer, req.query, res);
+  await pdfService.generateDirectorReport(customer, req.query, res);
 };
 
 export const getBoardResolution = async (req, res) => {
@@ -174,14 +174,14 @@ export const getConsentLetter = async (req, res) => {
   const customer = await customerService.getCustomerById(req.params.customerId);
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', 'attachment; filename="CA SUSANTA KUMAR SWAIN.pdf"');
-  pdfService.generateConsentLetter(customer, req.query, res);
+  await pdfService.generateConsentLetter(customer, req.query, res);
 };
 
 export const getAuditorsReport = async (req, res) => {
   const customer = await customerService.getCustomerById(req.params.customerId);
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', `attachment; filename=AuditorsReport_${req.params.customerId}.pdf`);
-  pdfService.generateAuditorsReport(customer, req.query, res);
+  await pdfService.generateAuditorsReport(customer, req.query, res);
 };
 
 export const sendCustomerEmail = async (req, res) => {
