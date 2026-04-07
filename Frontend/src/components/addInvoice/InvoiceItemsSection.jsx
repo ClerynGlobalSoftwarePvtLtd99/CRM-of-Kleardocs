@@ -71,16 +71,16 @@ const InvoiceItemsSection = ({ items, setItems, services = [] }) => {
   const totalAmount = items.reduce((acc, i) => acc + (i.amount || 0), 0)
 
   return (
-    <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl shadow-sm mb-6 overflow-hidden">
-      <div className="p-4 border-b border-[var(--color-bg-tertiary)] bg-[var(--color-bg-tertiary)]/30">
-        <h2 className="text-lg font-bold text-[var(--color-text-primary)]">Invoice Items</h2>
+    <div className="bg-bg-secondary border border-bg-tertiary rounded-xl shadow-sm mb-6 overflow-hidden">
+      <div className="p-4 border-b border-bg-tertiary bg-bg-tertiary/30">
+        <h2 className="text-lg font-bold text-text-primary">Invoice Items</h2>
       </div>
 
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="border-b border-[var(--color-bg-tertiary)] text-xs text-[var(--color-text-secondary)] uppercase tracking-wider bg-[var(--color-bg-tertiary)]/20">
+            <tr className="border-b border-bg-tertiary text-xs text-text-secondary uppercase tracking-wider bg-bg-tertiary/20">
               <th className="px-5 py-3 font-semibold">No</th>
               <th className="px-5 py-3 font-semibold w-full">Name</th>
               <th className="px-5 py-3 font-semibold text-right whitespace-nowrap">Price</th>
@@ -92,22 +92,22 @@ const InvoiceItemsSection = ({ items, setItems, services = [] }) => {
           <tbody>
             {items.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-5 py-8 text-center text-[var(--color-text-secondary)] text-sm">
+                <td colSpan={6} className="px-5 py-8 text-center text-text-secondary text-sm">
                   No items added yet. Select a product and click "Add Product".
                 </td>
               </tr>
             ) : (
               items.map((item) => (
-                <tr key={item.id} className="border-b border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-tertiary)]/30 transition-colors align-top">
-                  <td className="px-5 py-4 text-sm font-medium text-[var(--color-text-secondary)]">{item.no}</td>
+                <tr key={item.id} className="border-b border-bg-tertiary hover:bg-bg-tertiary/30 transition-colors align-top">
+                  <td className="px-5 py-4 text-sm font-medium text-text-secondary">{item.no}</td>
                   <td className="px-5 py-4">
-                    <div className="text-sm font-semibold text-[var(--color-text-primary)]">{item.product.name}</div>
+                    <div className="text-sm font-semibold text-text-primary">{item.product.name}</div>
                     <div className="text-xs text-right text-white font-bold mt-1">Professional Fees ₹ {item.price.toFixed(2)}</div>
                     <div className="text-[10px] text-right text-white font-bold mt-1">
                       Govt Fees: ₹{(item.govFee !== undefined ? item.govFee : (item.gst || 0)).toFixed(2)}
                     </div>
                   </td>
-                  <td className="px-5 py-4 text-sm text-right whitespace-nowrap font-medium text-[var(--color-text-primary)]">
+                  <td className="px-5 py-4 text-sm text-right whitespace-nowrap font-medium text-text-primary">
                     ₹{item.price.toFixed(2)}
                   </td>
                   <td className="px-5 py-4 text-sm text-right whitespace-nowrap">
@@ -118,16 +118,16 @@ const InvoiceItemsSection = ({ items, setItems, services = [] }) => {
                         max="100"
                         value={item.gstPercentage !== undefined ? item.gstPercentage : ''}
                         onChange={(e) => handleGstPercentageChange(item.id, e.target.value)}
-                        className="w-16 px-2 py-1 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded text-sm text-left focus:outline-none focus:border-[var(--color-accent)]"
+                        className="w-16 px-2 py-1 bg-bg-primary border border-bg-tertiary rounded text-sm text-left focus:outline-none focus:border-accent"
                         placeholder="0"
                       />
-                      <span className="text-[var(--color-text-secondary)]">%</span>
+                      <span className="text-text-secondary">%</span>
                     </div>
-                    <div className="text-xs font-medium text-[var(--color-text-primary)]">
+                    <div className="text-xs font-medium text-text-primary">
                       ₹{(item.gstAmount || 0).toFixed(2)}
                     </div>
                   </td>
-                  <td className="px-5 py-4 text-sm text-right whitespace-nowrap font-bold text-[var(--color-text-primary)]">
+                  <td className="px-5 py-4 text-sm text-right whitespace-nowrap font-bold text-text-primary">
                     ₹{item.amount.toFixed(2)}
                   </td>
                   <td className="px-5 py-4 text-center">
@@ -144,17 +144,17 @@ const InvoiceItemsSection = ({ items, setItems, services = [] }) => {
             )}
 
             {/* Totals Row */}
-            <tr className="bg-[var(--color-bg-tertiary)]/30 border-t border-[var(--color-bg-tertiary)]">
-              <td colSpan={2} className="px-5 py-4 text-sm font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">
+            <tr className="bg-bg-tertiary/30 border-t border-bg-tertiary">
+              <td colSpan={2} className="px-5 py-4 text-sm font-bold text-text-secondary uppercase tracking-wider">
                 Total
               </td>
-              <td className="px-5 py-4 text-right whitespace-nowrap font-bold text-[var(--color-text-primary)]">
+              <td className="px-5 py-4 text-right whitespace-nowrap font-bold text-text-primary">
                 ₹{totalPrice.toFixed(2)}
               </td>
-              <td className="px-5 py-4 text-right whitespace-nowrap font-bold text-[var(--color-text-secondary)]">
+              <td className="px-5 py-4 text-right whitespace-nowrap font-bold text-text-secondary">
                 ₹{totalGst.toFixed(2)}
               </td>
-              <td className="px-5 py-4 text-right whitespace-nowrap font-bold text-[var(--color-accent)]">
+              <td className="px-5 py-4 text-right whitespace-nowrap font-bold text-accent">
                 ₹{totalAmount.toFixed(2)}
               </td>
               <td />
@@ -164,54 +164,54 @@ const InvoiceItemsSection = ({ items, setItems, services = [] }) => {
       </div>
 
       {/* Product Selector */}
-      <div className="p-5 flex flex-col sm:flex-row items-start sm:items-center gap-3 border-t border-[var(--color-bg-tertiary)]">
-        <label className="text-sm font-semibold text-[var(--color-text-secondary)] whitespace-nowrap">Select Product</label>
+      <div className="p-5 flex flex-col sm:flex-row items-start sm:items-center gap-3 border-t border-bg-tertiary">
+        <label className="text-sm font-semibold text-text-secondary whitespace-nowrap">Select Product</label>
 
         <div className="flex-1 relative" ref={productRef}>
           <button
             type="button"
             onClick={() => setProductOpen((prev) => !prev)}
-            className="w-full flex items-center justify-between px-4 py-2.5 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg text-sm transition-colors hover:border-[var(--color-accent)] focus:outline-none focus:border-[var(--color-accent)] cursor-pointer"
+            className="w-full flex items-center justify-between px-4 py-2.5 bg-bg-primary border border-bg-tertiary rounded-lg text-sm transition-colors hover:border-accent focus:outline-none focus:border-accent cursor-pointer"
           >
-            <span className={selectedProduct ? 'text-[var(--color-text-primary)] font-medium' : 'text-[var(--color-text-secondary)]'}>
+            <span className={selectedProduct ? 'text-text-primary font-medium' : 'text-text-secondary'}>
               {selectedProduct
                 ? `${selectedProduct.name} – ₹${selectedProduct.professionalFees}`
                 : 'Select a product...'}
             </span>
             <ChevronDown
               size={15}
-              className={`text-[var(--color-text-secondary)] shrink-0 transition-transform ${productOpen ? 'rotate-180' : ''}`}
+              className={`text-text-secondary shrink-0 transition-transform ${productOpen ? 'rotate-180' : ''}`}
             />
           </button>
 
           {productOpen && (
-            <div className="absolute z-50 bottom-full left-0 right-0 mb-1 bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl shadow-2xl overflow-hidden">
-              <div className="p-2 border-b border-[var(--color-bg-tertiary)]">
+            <div className="absolute z-50 bottom-full left-0 right-0 mb-1 bg-bg-secondary border border-bg-tertiary rounded-xl shadow-2xl overflow-hidden">
+              <div className="p-2 border-b border-bg-tertiary">
                 <div className="relative">
-                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]" />
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
                   <input
                     type="text"
                     autoFocus
                     placeholder="Search products..."
                     value={productSearch}
                     onChange={(e) => setProductSearch(e.target.value)}
-                    className="w-full pl-8 pr-4 py-1.5 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg text-sm focus:outline-none focus:border-[var(--color-accent)] transition-colors"
+                    className="w-full pl-8 pr-4 py-1.5 bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-accent transition-colors"
                   />
                 </div>
               </div>
-              <ul className="max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)]">
+              <ul className="max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
                 {filteredProducts.length === 0 ? (
-                  <li className="px-4 py-3 text-sm text-[var(--color-text-secondary)] text-center">No products found</li>
+                  <li className="px-4 py-3 text-sm text-gray-500 text-center">No products found</li>
                 ) : (
                   filteredProducts.map((p) => (
                     <li
                       key={p._id}
                       onClick={() => { setSelectedProduct(p); setProductOpen(false); setProductSearch('') }}
-                      className={`px-4 py-2.5 text-sm cursor-pointer hover:bg-[var(--color-bg-tertiary)] transition-colors flex justify-between items-center ${selectedProduct?._id === p._id ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]' : 'text-[var(--color-text-primary)]'
+                      className={`px-4 py-2.5 text-sm cursor-pointer hover:bg-bg-tertiary transition-colors flex justify-between items-center ${selectedProduct?._id === p._id ? 'bg-accent/10 text-accent' : 'text-text-primary'
                         }`}
                     >
                       <span className="font-medium">{p.name}</span>
-                      <span className="text-xs text-[var(--color-text-secondary)] ml-4 whitespace-nowrap">₹{p.professionalFees}</span>
+                      <span className="text-xs text-text-secondary ml-4 whitespace-nowrap">₹{p.professionalFees}</span>
                     </li>
                   ))
                 )}
@@ -224,7 +224,7 @@ const InvoiceItemsSection = ({ items, setItems, services = [] }) => {
           type="button"
           onClick={handleAddProduct}
           disabled={!selectedProduct}
-          className="flex items-center gap-2 px-5 py-2.5 bg-[var(--color-accent)] hover:bg-yellow-500 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap shadow-sm"
+          className="flex items-center gap-2 px-5 py-2.5 bg-accent hover:bg-yellow-500 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap shadow-sm"
         >
           <Plus size={16} /> Add Product
         </button>

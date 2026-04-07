@@ -10,6 +10,7 @@ import {
   clearSelectedInvoice,
   downloadInvoicePdf
 } from '../redux/slices/invoicesSlice'
+import { generateInvoicePdf } from '../utils/invoicePdfGenerator'
 import RichTextEditor from '../components/RichTextEditor'
 import ContentLoader from '../components/common/ContentLoader'
 import ConfirmationModal from '../components/common/ConfirmationModal'
@@ -78,12 +79,10 @@ const InvoiceDetails = () => {
     }
   }, [inv])
 
-  const handleGeneratePdf = (action) => {
+  const handleGeneratePdf = async (action) => {
     if (!inv) return;
-    dispatch(downloadInvoicePdf({
-      invoiceId: inv._id,
-      invoiceNo: inv.invoiceNo
-    }));
+    // Use frontend PDF generator with existing invoice data from invoices section
+    await generateInvoicePdf(inv, inv.customer, action);
   };
 
   const handleConfirmDelete = async () => {
@@ -356,7 +355,7 @@ const InvoiceDetails = () => {
 
               {/* Variable Chips */}
               <div className="space-y-2">
-                <label className="block text-[11px] font-black uppercase tracking-widest text-text-secondary px-1 flex items-center gap-2">
+                <label className="flex text-[11px] font-black uppercase tracking-widest text-text-secondary px-1 items-center gap-2">
                   Quick Tags <span className="text-[9px] font-bold text-yellow-600 bg-yellow-600/10 px-1.5 py-0.5 rounded">CLICK TO COPY</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -475,7 +474,7 @@ const InvoiceDetails = () => {
                   <select value={paymentMode} onChange={(e) => setPaymentMode(e.target.value)} className="w-full px-4 py-2 bg-bg-primary border border-bg-tertiary rounded-xl focus:outline-none focus:border-accent transition-all cursor-pointer font-bold">
                     <option value="UPI">UPI</option>
                     <option value="Cash">Cash</option>
-                    <option value="Bank Transfer">Bank Transfer</option>
+                    <option value="Net Banking">Bank Transfer</option>
                     <option value="Card">Card</option>
                     <option value="Cheque">Cheque</option>
                   </select>

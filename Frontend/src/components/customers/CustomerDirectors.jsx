@@ -48,11 +48,9 @@ const CustomerDirectors = ({ directors = [], customerId }) => {
                       <h6 className="text-[1.25rem] font-medium leading-[1.6] m-0 tracking-[0.0075em]">
                         {d.name || d.directorName}
                       </h6>
-                      <div className="flex flex-col text-sm text-text-secondary">
-                        <span>{d.phone || '-'}</span>
-                        {d.din && <span>DIN: {d.din}</span>}
-                        {d.designation && <span className="italic text-xs mt-1 text-text-muted opacity-80">{d.designation}</span>}
-                      </div>
+                      <span className="text-[1rem] leading-[1.5] tracking-[0.00938em]">
+                        {d.phone || '-'}
+                      </span>
                     </div>
                     <div className="flex-shrink-0 mt-1 sm:mt-0">
                       <Trash2 

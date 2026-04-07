@@ -27,8 +27,7 @@ const ConsentLetterModal = ({ customer, onClose }) => {
       await dispatch(downloadCustomerReport({
         customerId: customer._id,
         type: 'consentLetter',
-        params: { date },
-        fileName: 'CA SUSANTA KUMAR SWAIN.pdf'
+        params: { date }
       })).unwrap();
       
       toast.success("Consent Letter PDF downloaded");
@@ -108,10 +107,16 @@ const ConsentLetterModal = ({ customer, onClose }) => {
 
               <div className="grid grid-cols-1 gap-4">
                 <button
-                  onClick={handleDownloadPDF}
-                  className="w-full bg-green-400 hover:bg-green-500 text-black py-4 rounded-xl text-sm font-bold uppercase tracking-widest transition-all border border-white/5 flex items-center justify-center gap-3 active:scale-[0.98]"
+                  onClick={() => setShowPreview(true)}
+                  className="w-full bg-yellow-500 hover:bg-yellow-400 text-black py-4 rounded-xl text-sm font-bold uppercase tracking-widest transition-all shadow-[0_0_20px_-5px_rgba(234,179,8,0.3)] flex items-center justify-center gap-3 active:scale-[0.98]"
                 >
-                  <Download size={18} />Download PDF
+                  <Eye size={18} /> Preview Letter
+                </button>
+                <button
+                  onClick={handleDownloadPDF}
+                  className="w-full bg-slate-800 hover:bg-slate-700 text-white py-4 rounded-xl text-sm font-bold uppercase tracking-widest transition-all border border-white/5 flex items-center justify-center gap-3 active:scale-[0.98]"
+                >
+                  <Download size={18} /> Fast Download PDF
                 </button>
               </div>
             </div>

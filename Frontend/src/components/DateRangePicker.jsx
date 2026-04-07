@@ -87,7 +87,7 @@ const DatePickerMonth = ({
         {onPrev ? (
           <button
             onClick={onPrev}
-            className="p-1 hover:bg-[var(--color-bg-tertiary)] rounded"
+            className="p-1 hover:bg-bg-tertiary rounded"
           >
             <ChevronLeft size={16} />
           </button>
@@ -100,7 +100,7 @@ const DatePickerMonth = ({
         {onNext ? (
           <button
             onClick={onNext}
-            className="p-1 hover:bg-[var(--color-bg-tertiary)] rounded"
+            className="p-1 hover:bg-bg-tertiary rounded"
           >
             <ChevronRight size={16} />
           </button>
@@ -110,7 +110,7 @@ const DatePickerMonth = ({
       </div>
       <div className="grid grid-cols-7 gap-1 text-center text-xs mb-2">
         {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((day) => (
-          <div key={day} className="text-[var(--color-text-secondary)]">
+          <div key={day} className="text-text-secondary">
             {day}
           </div>
         ))}
@@ -134,10 +134,10 @@ const DatePickerMonth = ({
               className={`w-7 h-7 flex items-center justify-center rounded-full transition-colors text-xs
                 ${isFuture ? 'date-disabled-cross' : ''}
                 ${isStartOrEnd
-                  ? 'bg-[var(--color-accent)] text-[var(--color-bg-primary)] font-medium'
+                  ? 'bg-bg-primary font-medium'
                   : inRange
-                    ? 'bg-[var(--color-bg-tertiary)] text-[var(--color-text-primary)] rounded-none'
-                    : 'hover:bg-[var(--color-bg-tertiary)] text-[var(--color-text-primary)] text-sm'
+                    ? 'bg-bg-text-text-primary rounded-none'
+                    : 'hover:bg-bg-text-text-primary text-sm'
                 }
               `}
             >
@@ -330,10 +330,10 @@ const DateRangePicker = ({
     <div className="relative w-full" ref={popoverRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full gap-2 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] px-4 py-[12px] rounded-lg text-sm text-[var(--color-text-primary)] hover:border-[var(--color-accent)] transition-colors min-h-[46px]"
+        className="flex items-center justify-between w-full gap-2 bg-bg-primary bg-bg-tertiary px-4 py-[12px] rounded-lg text-sm text-text-primary hover:bg-accent transition-colors min-h-[46px]"
       >
         <div className="flex items-center gap-2 overflow-hidden">
-          <Calendar size={18} className="text-[var(--color-accent)] shrink-0" />
+          <Calendar size={18} className="text-accent shrink-0" />
           <span className="font-medium truncate">
             {displayString}
           </span>
@@ -342,33 +342,33 @@ const DateRangePicker = ({
         {startDate && endDate ? (
           <X
             size={16}
-            className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors ml-1 shrink-0 cursor-pointer"
+            className="text-text-secondary hover:text-text-primary transition-colors ml-1 shrink-0 cursor-pointer"
             onClick={handleClear}
           />
         ) : (
           <ChevronDown
             size={16}
-            className="text-[var(--color-text-secondary)] ml-1 shrink-0"
+            className="text-text-secondary ml-1 shrink-0"
           />
         )}
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-2xl shadow-2xl p-6 max-w-4xl w-full flex flex-col gap-6 animate-in zoom-in-95 duration-200">
-            <div className="flex justify-between items-center border border-[var(--color-bg-tertiary)] px-4 bg-[var(--color-bg-secondary)] rounded-xl py-3">
-              <span className="text-base font-bold text-[var(--color-text-primary)]">
+        <div className="fixed inset-0 z-1000 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-bg-primary bg-bg-tertiary rounded-2xl shadow-2xl p-6 max-w-4xl w-full flex flex-col gap-6 animate-in zoom-in-95 duration-200">
+            <div className="flex justify-between items-center bg-bg-tertiary px-4 bg-bg-secondary rounded-xl py-3">
+              <span className="text-base font-bold text-text-primary">
                 {tempDisplayString}
               </span>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors p-1"
+                className="text-text-secondary hover:text-text-primary transition-colors p-1"
               >
                 <X size={20} strokeWidth={2.5} />
               </button>
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-8 border-b border-[var(--color-bg-tertiary)] pb-6 justify-center items-center lg:items-start">
+            <div className="flex flex-col lg:flex-row gap-8 border-b border-bg-tertiary pb-6 justify-center items-center lg:items-start">
               <DatePickerMonth
                 year={leftMonth.year}
                 month={leftMonth.month}
@@ -379,7 +379,7 @@ const DateRangePicker = ({
                 onDateClick={handleDateClick}
                 disableFuture={disableFuture}
               />
-              <div className="hidden lg:block w-px bg-[var(--color-bg-tertiary)] self-stretch"></div>
+              <div className="hidden lg:block w-px bg-bg-tertiary self-stretch"></div>
               <DatePickerMonth
                 year={rightMonth.year}
                 month={rightMonth.month}
@@ -399,7 +399,7 @@ const DateRangePicker = ({
                     key={preset}
                     type="button"
                     onClick={() => handlePreset(preset)}
-                    className="px-4 py-2 rounded-lg bg-[var(--color-bg-secondary)] font-bold text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] border border-[var(--color-bg-tertiary)] transition-all"
+                    className="px-4 py-2 rounded-lg bg-bg-secondary font-bold text-text-secondary hover:text-accent bg-bg-tertiary transition-all"
                   >
                     {preset}
                   </button>
@@ -409,7 +409,7 @@ const DateRangePicker = ({
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="px-6 py-2.5 rounded-lg font-bold text-[var(--color-text-primary)] border border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-secondary)] transition-all"
+                  className="px-6 py-2.5 rounded-lg font-bold text-text-primary bg-bg-tertiary hover:bg-bg-secondary transition-all"
                 >
                   Cancel
                 </button>
@@ -417,7 +417,7 @@ const DateRangePicker = ({
                   type="button"
                   onClick={handleConfirm}
                   disabled={!tempRange.start || !tempRange.end}
-                  className="bg-[var(--color-accent)] text-[var(--color-bg-primary)] px-10 py-2.5 rounded-lg font-bold hover:opacity-90 disabled:opacity-50 transition-all shadow-lg"
+                  className="bg-bg-primary px-10 py-2.5 rounded-lg font-bold hover:opacity-90 disabled:opacity-50 transition-all shadow-lg"
                 >
                   OK
                 </button>

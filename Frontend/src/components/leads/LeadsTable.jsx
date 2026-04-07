@@ -67,7 +67,7 @@ const LeadsTable = ({ leads, loading, onLeadClick }) => {
                 {/* 1. IDENTITY: Logo + Name + Phone */}
                 <td className="px-4 py-4 rounded-l-2xl border-y border-l border-bg-tertiary/20 group-hover:border-crm-orange/30 transition-colors align-middle block sm:table-cell">
                   <div className="flex items-center gap-4 w-auto sm:w-56">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-crm-orange to-orange-600 flex items-center justify-center text-white font-black text-lg shadow-lg ring-2 ring-bg-tertiary group-hover:ring-crm-orange transition-all shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-linear-to-br from-crm-orange to-orange-600 flex items-center justify-center text-white font-black text-lg shadow-lg ring-2 ring-bg-tertiary group-hover:ring-crm-orange transition-all shrink-0">
                       {getInitials(lead.name)}
                     </div>
                     <div className="flex flex-col min-w-0">
