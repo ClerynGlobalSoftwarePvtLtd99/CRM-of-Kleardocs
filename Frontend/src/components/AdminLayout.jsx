@@ -3,17 +3,20 @@ import { useLocation } from 'react-router'
 import Sidebar from './Sidebar'
 import Header from './Header'
 import { isSidebarRoute } from '../utils/routeUtils'
+import { useAppSelector } from '../redux/hooks'
 
 const AdminLayout = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const location = useLocation()
 
   const isSidebarPage = isSidebarRoute(location.pathname)
+  const { user } = useAppSelector((state) => state.auth)
+  const isCustomer = user?.role?.toLowerCase() === 'customer'
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-[var(--color-bg-primary)] text-[var(--color-text-primary)]">
-      {/* Sidebar */}
-      <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+      {/* Sidebar - Hide for customers */}
+      {!isCustomer && <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />}
 
       {/* Main Content Area */}
       <div className="flex flex-col flex-1 overflow-hidden transition-all duration-300">

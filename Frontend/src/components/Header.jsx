@@ -5,6 +5,7 @@ import DateRangePicker from './DateRangePicker'
 import { useAppSelector } from '../redux/hooks'
 import { setDateRange } from '../redux/slices/dashboardSlice'
 import { toggleTheme } from '../redux/slices/uiSlice'
+import { logoutUser } from '../redux/slices/authSlice'
 import { isSidebarRoute } from '../utils/routeUtils'
 
 const SunIcon = () => (
@@ -137,8 +138,19 @@ const Header = () => {
               {user?.name || '...'}
             </span>
           </div>
-          <div className="w-10 h-10 rounded-full bg-[var(--color-accent)] flex items-center justify-center text-[var(--color-bg-primary)] font-bold shadow-lg ring-2 ring-[var(--color-bg-tertiary)] ring-offset-2 ring-offset-[var(--color-bg-secondary)]">
+          <div className="w-10 h-10 rounded-full bg-[var(--color-accent)] flex items-center justify-center text-[var(--color-bg-primary)] font-bold shadow-lg ring-2 ring-[var(--color-bg-tertiary)] ring-offset-2 ring-offset-[var(--color-bg-secondary)] relative group">
             {getInitials(user?.name)}
+            
+            {/* Conditional Logout for Customers (since they have no sidebar) */}
+            {user?.role?.toLowerCase() === 'customer' && (
+              <button 
+                onClick={() => dispatch(logoutUser())} 
+                className="absolute -bottom-1 -right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white border-2 border-[var(--color-bg-secondary)] hover:bg-red-600 transition-colors cursor-pointer"
+                title="Logout"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              </button>
+            )}
           </div>
         </div>
       </div>

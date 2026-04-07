@@ -81,6 +81,12 @@ export const getCustomerById = async (req, res) => {
   res.status(200).json(new ApiResponse(200, customer, "Customer fetched"));
 };
 
+// ─── GET /api/v1/customers/me ──────────────────────────────────────────────────
+export const getMyData = async (req, res) => {
+  const customer = await customerService.getCustomerById(req.user.id, req.query.year);
+  res.status(200).json(new ApiResponse(200, customer, "Self data fetched"));
+};
+
 // ─── PUT /api/v1/customers/:customerId ────────────────────────────────────────
 export const updateCustomer = async (req, res) => {
   const customer = await customerService.updateCustomer(req.params.customerId, req.body);

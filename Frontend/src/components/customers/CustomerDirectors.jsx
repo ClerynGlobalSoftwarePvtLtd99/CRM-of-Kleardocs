@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { deleteDirector } from '../../redux/slices/customersSlice';
 
-const CustomerDirectors = ({ directors = [], customerId }) => {
+const CustomerDirectors = ({ directors = [], customerId, readOnly = false }) => {
   const dispatch = useDispatch();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [directorToDelete, setDirectorToDelete] = useState(null);
@@ -54,14 +54,16 @@ const CustomerDirectors = ({ directors = [], customerId }) => {
                         {d.designation && <span className="italic text-xs mt-1 text-text-muted opacity-80">{d.designation}</span>}
                       </div>
                     </div>
-                    <div className="flex-shrink-0 mt-1 sm:mt-0">
-                      <Trash2 
-                        size={18} 
-                        className="text-[#f44336] cursor-pointer hover:opacity-80 transition-opacity" 
-                        fill="currentColor"
-                        onClick={() => handleDeleteClick(d._id || d.id)}
-                      />
-                    </div>
+                    {!readOnly && (
+                      <div className="flex-shrink-0 mt-1 sm:mt-0">
+                        <Trash2 
+                          size={18} 
+                          className="text-[#f44336] cursor-pointer hover:opacity-80 transition-opacity" 
+                          fill="currentColor"
+                          onClick={() => handleDeleteClick(d._id || d.id)}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

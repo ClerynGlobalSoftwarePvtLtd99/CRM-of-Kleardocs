@@ -31,9 +31,10 @@ export const login = async (req, res) => {
 export const customerLogin = async (req, res) => {
   const result = await authService.loginCustomerAccount(req.body);
   
+  const options = getCookieOptions(req);
   res.status(200)
-     .cookie("refreshToken", result.refreshToken, { ...cookieOptions, expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), path: "/" })
-     .cookie("accessToken", result.accessToken, { ...cookieOptions, expires: new Date(Date.now() + 15 * 60 * 1000), path: "/" })
+     .cookie("refreshToken", result.refreshToken, { ...options, expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), path: "/" })
+     .cookie("accessToken", result.accessToken, { ...options, expires: new Date(Date.now() + 15 * 60 * 1000), path: "/" })
      .json(new ApiResponse(200, {
         customer: result.customer,
         accessToken: result.accessToken
@@ -95,14 +96,15 @@ export const logout = async (req, res) => {
 
 export const getMe = async (req, res) => {
   // Identify the class of logged in persona securely fetched from DB
-  // Identify the class of logged in persona securely fetched from DB
   let currentUser = null;
-  if (req.user.role === "Customer" || req.user.role === "customer") {
+  if (req.user.role?.toLowerCase() === "customer") {
       const Customer = (await import("../models/Customer.model.js")).default;
-      currentUser = await Customer.findById(req.user.id).select("-password -__v");
+      const customerDoc = await Customer.findById(req.user.id).select("-password -__v").lean();
+      if (customerDoc) currentUser = { ...customerDoc, role: "customer" };
   } else {
       const User = (await import("../models/User.model.js")).default;
-      currentUser = await User.findById(req.user.id).select("-password -__v");
+      const userDoc = await User.findById(req.user.id).select("-password -__v -refreshToken").lean();
+      if (userDoc) currentUser = userDoc;
   }
 
   if (!currentUser) throw new ApiError(404, "Account identity missing or revoked");
