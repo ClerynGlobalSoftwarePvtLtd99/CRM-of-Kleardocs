@@ -172,7 +172,27 @@ export const getBoardResolution = async (req, res) => {
 
 export const getConsentLetter = async (req, res) => {
   try {
+    console.log('\n\n========== CONSENT LETTER ENDPOINT HIT ==========');
+    console.log('Request params:', req.params);
+    console.log('Request query:', req.query);
+    console.log('Customer ID:', req.params.customerId);
+    
     const customer = await customerService.getCustomerById(req.params.customerId);
+    
+    // DEBUG: Log what the backend is sending to PDF generator
+    console.log('\n===== PASSING TO PDF GENERATOR =====');
+    console.log('Customer object type:', typeof customer);
+    console.log('Customer is null:', customer === null);
+    console.log('Customer keys:', customer ? Object.keys(customer) : 'NO KEYS');
+    console.log('customer._id:', customer?._id);
+    console.log('customer.companyName:', customer?.companyName);
+    console.log('customer.name:', customer?.name);
+    console.log('customer.incorporationDate:', customer?.incorporationDate);
+    console.log('customer.address:', customer?.address);
+    console.log('Full customer:', JSON.stringify(customer, null, 2));
+    console.log('Query params for PDF:', req.query);
+    console.log('====================================\n');
+    
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename="CA SUSANTA KUMAR SWAIN.pdf"');
     await pdfService.generateConsentLetter(customer, req.query, res);
