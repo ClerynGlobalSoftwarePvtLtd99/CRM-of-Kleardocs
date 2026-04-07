@@ -42,16 +42,12 @@ import CustomerInvoicesTable from "../components/customers/CustomerInvoicesTable
 import CustomerRecurringInvoicesTable from "../components/customers/CustomerRecurringInvoicesTable";
 import CustomerEmailHistoryTable from "../components/customers/CustomerEmailHistoryTable";
 import CustomerDirectors from "../components/customers/CustomerDirectors";
+import { getCurrentFinancialYear } from "../utils/dateUtils";
 
-const formatDateToISO = (dateString) => {
-  if (!dateString) return null;
-  const parts = dateString.split("/");
-  if (parts.length !== 3) return dateString;
-  const [day, month, year] = parts;
-  return `${year}-${month}-${day}`;
-};
+
 const CustomerDetailsPage = () => {
   const { id } = useParams();
+
   
   const navigate = useNavigate();
   const dispatch = useDispatch();
