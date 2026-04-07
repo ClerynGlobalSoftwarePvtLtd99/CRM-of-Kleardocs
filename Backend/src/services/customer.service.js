@@ -11,6 +11,15 @@ import EmailLog from "../models/EmailLog.model.js";
 // ─── Helper: generate 8-char random password ─────────────────────────────────
 const generatePassword = () => crypto.randomBytes(4).toString("hex");
 
+// ─── Utility: Get Current Financial Year (April–March rule) ──────────────────
+// Apr 1, 2026 – Mar 31, 2027  →  "2026-2027"
+const getCurrentFinancialYear = () => {
+  const now = new Date();
+  const month = now.getMonth(); // 0-indexed; April = 3
+  const year = now.getFullYear();
+  return month >= 3 ? `${year}-${year + 1}` : `${year - 1}-${year}`;
+};
+
 // ─── GET ALL CUSTOMERS (filters + pagination) ────────────────────────────────
 export const getCustomers = async (query) => {
   const {
@@ -231,12 +240,13 @@ export const getCustomerById = async (customerId, year) => {
 
   if (!customer) throw new ApiError(404, "Customer not found");
 
-  const dateRange = getFinancialYearRange(year);
+  // Auto-detect current financial year if none explicitly requested.
+  // This ensures compliances are always shown on initial page load.
+  const effectiveYear = year || getCurrentFinancialYear();
+  const dateRange = getFinancialYearRange(effectiveYear);
 
-  // Filters
-  const complianceFilter = year
-    ? { customer: customerId, financialYear: year }
-    : null;
+  // Always filter by the effective year — current FY when not specified.
+  const complianceFilter = { customer: customerId, financialYear: effectiveYear };
 
   const serviceFilter = { customer: customerId };
   if (dateRange) {
@@ -268,11 +278,9 @@ export const getCustomerById = async (customerId, year) => {
     CustomerService.find(serviceFilter)
       .populate("service", "name")
       .lean(),
-    complianceFilter
-      ? CustomerCompliance.find(complianceFilter)
-          .sort({ financialYear: -1, createdAt: 1 })
-          .lean()
-      : Promise.resolve([]),
+    CustomerCompliance.find(complianceFilter)
+      .sort({ financialYear: -1, createdAt: 1 })
+      .lean(),
     EmailLog.find(historyFilter)
       .populate("template", "name subject body content html type status")
       .sort({ date: -1 })
@@ -303,11 +311,12 @@ export const getCustomerById = async (customerId, year) => {
     console.error("Email template fallback resolution failed:", err);
   }
 
-  // Initialize/backfill compliances when an attached FY is explicitly loaded.
-  // This ensures missing rows are inserted even if 1-2 rows already exist.
-  if (year && attachedFinancialYears.includes(year)) {
+  // Auto-init: clone any missing compliance settings for the effective year.
+  // This is idempotent — already-existing records are skipped by cloneComplianceSettingsToCustomerYear.
+  // Runs on every page load so any newly added global settings are backfilled automatically.
+  if (attachedFinancialYears.includes(effectiveYear)) {
     try {
-      await cloneComplianceSettingsToCustomerYear(customerId, year);
+      await cloneComplianceSettingsToCustomerYear(customerId, effectiveYear);
       compliances = await CustomerCompliance.find(complianceFilter).sort({ financialYear: -1, createdAt: 1 }).lean();
     } catch (err) {
       console.error("Auto-init compliance error:", err);
@@ -554,8 +563,9 @@ export const endService = async (customerId, customerServiceId) => {
 
 // ─── GET COMPLIANCES BY FINANCIAL YEAR ───────────────────────────────────────
 export const getCompliances = async (customerId, year) => {
-  const filter = { customer: customerId };
-  if (year) filter.financialYear = year;
+  // Default to current financial year when none specified
+  const effectiveYear = year || getCurrentFinancialYear();
+  const filter = { customer: customerId, financialYear: effectiveYear };
 
   const compliances = await CustomerCompliance.find(filter)
     .sort({ createdAt: 1 })
@@ -570,14 +580,27 @@ export const addFinancialYear = async (customerId, financialYear) => {
   if (!customer) throw new ApiError(404, "Customer not found");
 
   const existingYears = Array.isArray(customer.financialYears) ? customer.financialYears : [];
-  if (existingYears.includes(financialYear)) {
-    throw new ApiError(400, "Financial year already added for this customer");
+
+  // Add the year to the customer record only if not already present.
+  // Do NOT throw 400 — we always want to clone any missing compliance records below.
+  if (!existingYears.includes(financialYear)) {
+    customer.financialYears = [...existingYears, financialYear];
+    await customer.save();
   }
 
-  customer.financialYears = [...existingYears, financialYear];
-  await customer.save();
+  // PERMANENTLY assign compliance records from global settings templates.
+  // This is idempotent: existing records are skipped, only missing ones are inserted.
+  await cloneComplianceSettingsToCustomerYear(customerId, financialYear);
 
-  return { financialYear };
+  // Return the assigned compliance records so the frontend can display them immediately.
+  const compliances = await CustomerCompliance.find({
+    customer: customerId,
+    financialYear
+  })
+    .sort({ createdAt: 1 })
+    .lean();
+
+  return { financialYear, compliances };
 };
 
 // ─── UPDATE SINGLE COMPLIANCE ─────────────────────────────────────────────────

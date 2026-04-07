@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { X, CheckCircle, Briefcase, Calendar, DollarSign, Percent, RefreshCw } from "lucide-react";
+import { X, CheckCircle, Briefcase, Calendar, DollarSign, Percent, ChevronDown, ChevronUp } from "lucide-react";
 import { fetchServices } from "../../redux/slices/servicesSlice";
 import { addServiceToCustomer, fetchCustomerById } from "../../redux/slices/customersSlice";
 import { toast } from "react-hot-toast";
@@ -17,6 +17,8 @@ const AddServiceModal = ({ customerId, onClose, selectedYear }) => {
     gst: 18,
     recurring: false
   });
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const [errors, setErrors] = useState({});
 
@@ -106,6 +108,8 @@ const AddServiceModal = ({ customerId, onClose, selectedYear }) => {
               <select
                 value={formData.serviceId}
                 onChange={handleServiceChange}
+                onFocus={() => setIsDropdownOpen(true)}
+                onBlur={() => setIsDropdownOpen(false)}
                 className={`w-full bg-bg-primary border ${errors.serviceId ? 'border-red-500' : 'border-bg-tertiary'} rounded-sm px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-crm-orange transition-all appearance-none cursor-pointer`}
                 disabled={servicesLoading}
               >
@@ -115,7 +119,11 @@ const AddServiceModal = ({ customerId, onClose, selectedYear }) => {
                 ))}
               </select>
               <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                <RefreshCw className={`w-3.5 h-3.5 text-text-secondary ${servicesLoading ? 'animate-spin' : ''}`} />
+                {isDropdownOpen ? (
+                  <ChevronUp className="w-4 h-4 text-text-secondary" />
+                ) : (
+                  <ChevronDown className="w-4 h-4 text-text-secondary" />
+                )}
               </div>
             </div>
             {errors.serviceId && <p className="text-[10px] text-red-500 font-medium">{errors.serviceId}</p>}
