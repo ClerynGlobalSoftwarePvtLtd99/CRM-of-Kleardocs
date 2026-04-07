@@ -37,6 +37,8 @@ const invoiceSchema = new mongoose.Schema(
     // Compliance link (for auto-status update)
     compliance: { type: mongoose.Schema.Types.ObjectId, ref: "CustomerCompliance" },
 
+    description: { type: String }, // Optional invoice description
+
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
   },
   { timestamps: true }
