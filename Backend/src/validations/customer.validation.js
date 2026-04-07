@@ -37,7 +37,9 @@ export const updateEmailsSchema = z.object({
 // ─── Add Director ────────────────────────────────────────────────────────────
 export const addDirectorSchema = z.object({
   name: z.string().min(2, "Director name required"),
-  phone: z.string().length(10, "Phone must be exactly 10 digits").optional().or(z.literal(""))
+  phone: z.string().length(10, "Phone must be exactly 10 digits").optional().or(z.literal("")),
+  din: z.string().optional(),
+  designation: z.string().optional()
 });
 
 // ─── Add Service to Customer ─────────────────────────────────────────────────

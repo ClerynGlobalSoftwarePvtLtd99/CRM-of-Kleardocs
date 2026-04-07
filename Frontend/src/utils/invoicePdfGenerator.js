@@ -64,15 +64,10 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   const primaryColor = [212, 175, 107]; // Lighter brown/gold #D4A96B
   const borderColor = [0, 0, 0];
 
-  // Check if invoice has GST charges
-  const hasGst = (invoice.items || []).some(item => (parseFloat(item.gstAmount || 0) > 0 || parseFloat(item.gstPercent || item.gstPercentage || 0) > 0));
-
-  // Title - only show Tax Invoice if GST is present
-  if (hasGst) {
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "bold");
-    doc.text("Tax Invoice", pageWidth / 2, 20, { align: "center" });
-  }
+  // Title
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "bold");
+  doc.text("Tax Invoice", pageWidth / 2, 20, { align: "center" });
 
   // Main Border
   doc.setLineWidth(0.5);
@@ -89,14 +84,15 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     }
   } catch (e) {
     doc.setTextColor(255, 255, 255);
-    doc.fontSize(14).font('Helvetica-Bold').text('Kleardocs Solutions Private Limited', 300, 30, { align: 'right' });
+    doc.setFontSize(16);
+    doc.text("KLEARDOCS", 75, 85, { align: 'center' });
     doc.setTextColor(0, 0, 0);
   }
 
   // Company Details (Top Right)
   doc.setFontSize(14);
   doc.setFont("helvetica", "bold");
-  doc.text("Kleardocs Solutions Private Limited", pageWidth - 25, 50, { align: "right" });
+  doc.text("Kleardocs Solutions", pageWidth - 25, 50, { align: "right" });
 
   doc.setFontSize(8);
   doc.setFont("helvetica", "normal");
@@ -112,14 +108,14 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   curY += lineH;
   doc.text("CIN: U69200WB2025PTC278630 | PAN: AALCK7855M", detailsX, curY, { align: "right" });
   curY += lineH;
-  doc.text("Bank A/C No: 925020025764619, IFSC: UTIB0004234, Bank: Axis Bank", detailsX, curY, { align: "right" });
+  doc.text("Bank A/C No: 925020025764619, IFSC: UTIB0004234, Bank: HDFC Bank", detailsX, curY, { align: "right" });
 
   // Section Header 1 (Bill To, Transport, Details)
   autoTable(doc, {
     startY: 140,
     margin: { left: 20, right: 20 },
     theme: 'grid',
-    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'normal', lineWidth: 0.5, lineColor: borderColor, fontSize: 10 },
+    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 10 },
     bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, minCellHeight: 80 },
     head: [['Bill To', 'Transportation Details', 'Invoice Details']],
     body: [[
@@ -139,6 +135,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   const formatPercent = (value) => `${parseFloat(value || 0)}%`;
 
   // Items Table
+  const hasGst = (invoice.items || []).some(item => (parseFloat(item.gstAmount || 0) > 0 || parseFloat(item.gstPercent || item.gstPercentage || 0) > 0));
 
   const tableHeaders = hasGst
     ? [['#', 'HSN/SAC', 'Item Name', 'Price', 'IGST', 'Amount']]
@@ -182,7 +179,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     startY: doc.lastAutoTable.finalY,
     margin: { left: 20, right: 20 },
     theme: 'grid',
-    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'normal', lineWidth: 0.5, lineColor: borderColor, fontSize: 9, halign: 'center' },
+    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9, halign: 'center' },
     bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, charSpace: 0, cellPadding: 4, font: 'helvetica' },
     head: tableHeaders,
     body: [
@@ -222,7 +219,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     startY: nextY,
     margin: { left: 20, right: pageWidth / 2 + 5 },
     theme: 'grid',
-    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'normal', lineWidth: 0.5, lineColor: borderColor, fontSize: 9, halign: 'center' },
+    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9, halign: 'center' },
     bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, minCellHeight: 15, charSpace: 0, cellPadding: 3, font: 'helvetica' },
     head: [['Tax Type', 'Taxable amount', 'Rate', 'Tax amount']],
     body: taxRows.length > 0
@@ -255,7 +252,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     startY: nextY,
     margin: { left: pageWidth / 2 + 5, right: 20 },
     theme: 'grid',
-    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'normal', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
+    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
     bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, charSpace: 0, cellPadding: 3, font: 'helvetica' },
     head: [['Amounts', '']],
     body: summaryBody,
@@ -291,7 +288,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     startY: footerY,
     margin: { left: 20, right: pageWidth / 2 },
     theme: 'grid',
-    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'normal', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
+    headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
     bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, minCellHeight: 120 },
     head: [['Terms and Conditions']],
     body: [['Thanks for buying']]
@@ -303,8 +300,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   doc.rect(sigX, footerY, sigWidth, 137); // Border for signature box
 
   doc.setFontSize(9);
-  doc.setFontSize(10);
-  doc.setFont("helvetica", "bold");
+  doc.setFont("helvetica", "normal");
   doc.text("For Kleardocs Solutions Private Limited", sigX + sigWidth / 2, footerY + 15, { align: "center" });
 
   // Add Authorized Signatory Stamp Image

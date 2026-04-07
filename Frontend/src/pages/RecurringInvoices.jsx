@@ -84,7 +84,7 @@ const RecurringInvoices = () => {
   }
 
   return (
-    <div className="flex-1 p-4 md:p-8 w-full text-text-primary">
+    <div className="flex-1 p-4 md:p-8 w-full text-[var(--color-text-primary)]">
       <RecurringInvoicesHeader counts={count} onExport={handleExport} />
 
       <RecurringInvoicesFilters

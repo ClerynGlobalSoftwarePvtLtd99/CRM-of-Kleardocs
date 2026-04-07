@@ -102,7 +102,7 @@ const AddInvoice = () => {
   }
 
   return (
-    <div className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-[100vw] text-text-primary">
+    <div className="flex-1 p-4 md:p-8 overflow-y-auto w-full max-w-[100vw] text-[var(--color-text-primary)]">
       {/* Section 1: Header */}
       <AddInvoiceHeader />
 

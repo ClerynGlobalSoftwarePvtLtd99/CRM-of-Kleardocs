@@ -16,30 +16,30 @@ const AccountantJobsTable = ({ jobs, onEditClick, onDeleteClick }) => {
     return (
       <div className="flex flex-col leading-tight">
         <span className="text-sm font-medium">{datePart}</span>
-        <span className="text-[10px] text-text-secondary">({timePart})</span>
+        <span className="text-[10px] text-[var(--color-text-secondary)]">({timePart})</span>
       </div>
     )
   }
 
   return (
-    <div className="bg-bg-secondary border border-bg-tertiary rounded-xl overflow-hidden shadow-sm flex flex-col h-[65vh] min-h-[400px]">
-      <div className="overflow-auto scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] flex-1 px-4 text-text-primary">
+    <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl overflow-hidden shadow-sm flex flex-col h-[65vh] min-h-[400px]">
+      <div className="overflow-auto scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] flex-1 px-4 text-[var(--color-text-primary)]">
         <table className="w-full text-left relative" style={{ borderSpacing: '0 10px', borderCollapse: 'separate' }}>
           <thead>
-            <tr className="text-text-secondary text-sm uppercase tracking-wider">
-              <th className="sticky top-0 z-20 bg-bg-secondary px-1.5 py-3 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">Created</th>
-              <th className="sticky top-0 z-20 bg-bg-secondary px-1.5 py-3 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)] uppercase">Job Name</th>
-              <th className="sticky top-0 z-20 bg-bg-secondary px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] uppercase whitespace-nowrap">Customer Info</th>
-              <th className="sticky top-0 z-20 bg-bg-secondary px-1.5 py-3 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">Expiry</th>
-              <th className="sticky top-0 z-20 bg-bg-secondary px-1.5 py-3 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">Status</th>
-              <th className="sticky top-0 z-20 bg-bg-secondary px-1.5 py-3 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">Completed</th>
-              <th className="sticky top-0 z-20 bg-bg-secondary px-1.5 py-3 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">Accountant</th>
-              <th className="sticky top-0 z-20 bg-bg-secondary px-1.5 py-3 font-medium whitespace-nowrap text-right shadow-[0_1px_0_var(--color-bg-tertiary)]">Modify</th>
+            <tr className="text-[var(--color-text-secondary)] text-sm uppercase tracking-wider">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">Created</th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)] uppercase">Job Name</th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] uppercase whitespace-nowrap">Customer Info</th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">Expiry</th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">Status</th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">Completed</th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">Accountant</th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium whitespace-nowrap text-right shadow-[0_1px_0_var(--color-bg-tertiary)]">Modify</th>
             </tr>
           </thead>
           <tbody>
             {jobs.map((job) => (
-              <tr key={job._id} className="bg-bg-primary hover:bg-bg-tertiary transition-colors group relative z-10 transition-colors">
+              <tr key={job._id} className="bg-[var(--color-bg-primary)] hover:bg-[var(--color-bg-tertiary)] transition-colors group relative z-10 transition-colors">
                 <td className="px-1.5 py-3 rounded-l-lg">
                   {formatJobDate(job.createdAt)}
                 </td>
@@ -49,8 +49,8 @@ const AccountantJobsTable = ({ jobs, onEditClick, onDeleteClick }) => {
                     <a href={`/customers/${job.customer?._id}`} className="text-blue-500 hover:underline text-sm font-medium">
                       {job.customer?.name}
                     </a>
-                    <span className="text-xs text-text-secondary">{job.customer?.phone}</span>
-                    <span className="text-xs text-text-secondary truncate max-w-[200px]">{job.customer?.companyName}</span>
+                    <span className="text-xs text-[var(--color-text-secondary)]">{job.customer?.phone}</span>
+                    <span className="text-xs text-[var(--color-text-secondary)] truncate max-w-[200px]">{job.customer?.companyName}</span>
                   </div>
                 </td>
                 <td className="px-1.5 py-3 whitespace-nowrap">
@@ -91,7 +91,7 @@ const AccountantJobsTable = ({ jobs, onEditClick, onDeleteClick }) => {
             ))}
             {jobs.length === 0 && (
               <tr>
-                <td colSpan="8" className="px-4 py-8 text-center text-text-secondary">
+                <td colSpan="8" className="px-4 py-8 text-center text-[var(--color-text-secondary)]">
                   No jobs found
                 </td>
               </tr>
