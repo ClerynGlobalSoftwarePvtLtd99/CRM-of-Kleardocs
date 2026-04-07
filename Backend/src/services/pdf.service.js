@@ -1,21 +1,4 @@
 import PDFDocument from 'pdfkit';
-import { fileURLToPath } from 'url';
-import path from 'path';
-import puppeteer from 'puppeteer';
-import fs from 'fs';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const imageToBase64 = (filePath) => {
-  try {
-    const bitmap = fs.readFileSync(filePath);
-    return `data:image/png;base64,${Buffer.from(bitmap).toString('base64')}`;
-  } catch (e) {
-    console.error(`Error converting ${filePath} to base64:`, e);
-    return '';
-  }
-};
 
 /**
  * Helper to draw a table-like structure in PDFKit
@@ -81,96 +64,63 @@ export const generateDirectorReport = (customer, data, res) => {
   doc.end();
 };
 
-export const generateBoardResolution = async (customer, data, res) => {
-  const companyName = customer.companyName?.toUpperCase() || customer.name?.toUpperCase() || 'COMPANY NAME';
-  
-  // Format Address (Address + State)
-  const cleanAddress = (customer.address || 'ADDRESS NOT PROVIDED').trim().replace(/,\\s*$/, '');
-  const stateStr = customer.state ? `, ${customer.state.trim().toUpperCase()}` : '';
-  const companyAddress = `${cleanAddress.toUpperCase()}${stateStr}`.replace(/\\s+/g, ' ');
-  
-  const director = (customer.directors && customer.directors.length > 0) ? customer.directors[0] : {};
-  const directorName = (director.name || 'DIRECTOR NAME').toUpperCase();
-  const directorDin = (director.din || 'DIN NOT PROVIDED');
-
-  const dateObj = data.date ? new Date(data.date) : new Date();
-  const day = dateObj.getDate();
-  const monthIdx = dateObj.getMonth();
-  const year = dateObj.getFullYear();
-  
-  const paddedDay = day.toString().padStart(2, '0');
-  const paddedMonth = (monthIdx + 1).toString().padStart(2, '0');
-  const formattedDate = `${paddedDay}/${paddedMonth}/${year}`;
-
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  const s = ["th", "st", "nd", "rd"];
-  const v = day % 100;
-  const ord = (s[(v - 20) % 10] || s[v] || s[0]);
-  const formattedDateWithSuffix = `${paddedDay}${ord} ${months[monthIdx]}, ${year}`;
-
+export const generateBoardResolution = (customer, data, res) => {
   const doc = new PDFDocument({ margin: 50 });
   doc.pipe(res);
 
-  const blackColor = '#000000';
-  const lightBlueColor = '#2F5597';
+  doc.fontSize(18).font('Helvetica-Bold').text("BOARD RESOLUTION", { align: 'center' });
+  doc.moveDown();
 
-  // --- Header ---
-  doc.font('Times-Bold').fontSize(16).fillColor(lightBlueColor)
-     .text(companyName, { align: 'center' });
+  doc.fontSize(11).font('Helvetica-Bold').text("CERTIFIED TRUE COPY OF THE RESOLUTION PASSED AT THE MEETING OF THE BOARD OF DIRECTORS");
+  doc.moveDown();
+
+  doc.fontSize(10).font('Helvetica').text(`Company Name: ${customer.companyName || customer.name}`);
+  doc.text(`Date of Resolution: ${data.date || new Date().toLocaleDateString()}`);
+  doc.text(`CIN: ${customer.cin || 'N/A'}`);
+  doc.moveDown();
+
+  doc.font('Helvetica-Bold').text("RESOLUTION:");
+  doc.font('Helvetica').text(`"RESOLVED THAT the Company shall be authorized to operate and carry on its business activities as per the objects and provisions mentioned in the Memorandum of Association and Articles of Association of the Company."`);
   
-  doc.font('Times-Roman').fontSize(12).fillColor(lightBlueColor)
-     .text(companyAddress, { align: 'center' });
-  
-  doc.moveDown(0.2);
-  doc.font('Times-Roman').fillColor(blackColor).text('|', { align: 'center' });
-  doc.moveDown(0.2);
-
-  const certText = `CERTIFIED TRUE COPY OF THE RESOLUTION PASSED AT THE MEETING OF THE BOARD OF DIRECTORS OF ${companyName} HELD AT ${companyAddress}.`;
-  doc.font('Times-Bold').fontSize(12).text(certText, { align: 'justify' });
-
+  doc.moveDown(3);
+  doc.text("For and on behalf of the Board,", { align: 'right' });
   doc.moveDown(2);
-
-  // --- Title ---
-  doc.font('Times-Roman').fontSize(12).text(`Board Resolution for appointment of first auditor of ${companyName}`, { align: 'justify' });
-
-  doc.moveDown(1.5);
-
-  // --- Date ---
-  doc.text(`Date: ${formattedDate}`, { align: 'justify' });
-
-  doc.moveDown(1.5);
-
-  // --- Intro ---
-  doc.text(`At a meeting of the Board of Directors of ${companyName} held on ${formattedDateWithSuffix}, it was:`, { align: 'justify' });
-
-  doc.moveDown(1.5);
-
-  // --- Body Paragraph 1 ---
-  const para1 = `RESOLVED THAT Pursuant to the provisions of section 139 and 142 of the companies Act, 2013 read with Rule 3 of the companies (Audit and Auditors) Rules, 2014 and other applicable provisions of the companies Act, 2013 read with rules made thereunder (including any statutory modification(s) or re-enactment there of for the time being in force) , consent of the Board be and is hereby accorded to appoint Mr. Susanta Kumar Swain, Membership Number - 065257 Firm M/s. DDCA AND ASSOCIATES (Firm Registration No- 0330380E) as First Auditors of the company to hold office till the conclusion of the First Annual General Meeting of the company, to examine and audit the accounts of the company, on such remuneration as may be mutually agreed upon between ${directorName}, Director of the company and the Auditors.`;
-  doc.text(para1, { align: 'justify' });
-
-  doc.moveDown(1.5);
-
-  // --- Body Paragraph 2 ---
-  const para2 = `RESOLVED FURTHER THAT ${directorName} - Director of the company be and is hereby authorized to do all such acts, deeds and things and execute such other documents as may be necessary for the purpose of giving effect to this resolution.`;
-  doc.text(para2, { align: 'justify' });
-
-  doc.moveDown(2);
-
-  // --- Footer / Signatory ---
-  doc.font('Times-Bold').text(directorName, { align: 'left' });
-  
-  // Big gap for handwritten signature
-  doc.moveDown(4);
-  
-  doc.font('Times-Roman').text('DIRECTOR', { align: 'left' });
-  doc.text(`DIN: ${directorDin}`, { align: 'left' });
+  doc.text("__________________________", { align: 'right' });
+  doc.text("Director", { align: 'right' });
 
   doc.end();
 };
 
 export const generateConsentLetter = async (customer, data, res) => {
-  // Custom date formatting
+  const doc = new PDFDocument({ margin: 50, size: 'A4' });
+  doc.pipe(res);
+
+  // Fetch Firm Details from SystemSetting
+  let firmDetails = {
+    firmName: "M/s. JAGJYOT SINGH AND ASSOCIATES.",
+    firmRegistrationNumber: "333567E",
+    firmAddress: "PLOT 51, BLOCK BB – 102, SHANTIPALLY, SARAT PARK, KOLKATA – 700107",
+    proprietorName: "CA Jagjyot Singh",
+    membershipNumber: "319799"
+  };
+
+  try {
+    const { default: SystemSetting } = await import("../models/SystemSetting.model.js");
+    const settings = await SystemSetting.findOne();
+    if (settings) {
+      firmDetails = {
+        firmName: settings.firmName || firmDetails.firmName,
+        firmRegistrationNumber: settings.firmRegistrationNumber || firmDetails.firmRegistrationNumber,
+        firmAddress: settings.firmAddress || firmDetails.firmAddress,
+        proprietorName: settings.proprietorName || firmDetails.proprietorName,
+        membershipNumber: settings.membershipNumber || firmDetails.membershipNumber
+      };
+    }
+  } catch (e) {
+    console.error("Error fetching firm settings:", e);
+  }
+
+  // Custom date formatting for Ordinal (30th, 27th)
   const getOrdinalDate = (dateStr) => {
     try {
       const d = new Date(dateStr);
@@ -190,281 +140,87 @@ export const generateConsentLetter = async (customer, data, res) => {
   const formattedIncDate = customer.incorporationDate ? getOrdinalDate(customer.incorporationDate) : "Date of Incorporation";
   const formattedToday = getOrdinalDate(data.date || new Date());
 
-  // Dynamic Year Logic
-  const currentDate = data.date ? new Date(data.date) : new Date();
-  const financialYearEndYear = currentDate.getMonth() >= 3 ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
-  const financialYearEndLabel = `31st March ${financialYearEndYear}`;
+  // --- HEADER SECTION ---
+  doc.fontSize(14).font('Helvetica-Bold').text(firmDetails.firmName, 50, 50);
+  doc.fontSize(12).font('Helvetica').text(`Firm Registration No. - ${firmDetails.firmRegistrationNumber}`, 50, 68);
+  doc.moveDown(2);
 
-  // Paths for Assets
-  const assetsPath = path.join(__dirname, '../../../Frontend/src/assets/Consent Letter/');
-  const headerImg64 = imageToBase64(path.join(assetsPath, 'CA-title image.png'));
-  const signatureImg64 = imageToBase64(path.join(assetsPath, 'Signature.png'));
-  const ddcaImg64 = imageToBase64(path.join(assetsPath, 'DDCA.png'));
+  // --- RECIPIENT BLOCK ---
+  doc.fontSize(10).font('Helvetica-Bold').text("TO,", 50, doc.y);
+  doc.text("THE BOARD OF DIRECTORS");
+  doc.text(customer.companyName?.toUpperCase() || customer.name?.toUpperCase());
+  doc.font('Helvetica').text(customer.address || "Address N/A", { width: 400 });
+  doc.moveDown();
 
-  const html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-      <style>
-        body {
-          font-family: "Times New Roman", Times, serif;
-          margin: 0;
-          padding: 40px;
-          color: #000;
-          line-height: 1.6;
-          font-size: 13px;
-          -webkit-print-color-adjust: exact;
-        }
+  doc.text(`Date: ${formattedToday}`);
+  doc.moveDown();
 
-        .header {
-          display: flex;
-          align-items: center;
-          margin-bottom: 25px;
-        }
+  // --- SUBJECT ---
+  doc.font('Helvetica-Bold').text("Subject: ", { continued: true });
+  doc.font('Helvetica').text("Consent to act as First Auditor and Certificate under Section 139(6) of the Companies Act, 2013.");
+  doc.moveDown();
 
-        .header-logo {
-          width: 80px;
-          height: auto;
-          margin-right: 20px;
-        }
+  // --- SALUTATION ---
+  doc.text("Dear Sir/Madam,");
+  doc.moveDown(0.5);
 
-        .header-details {
-          flex: 1;
-        }
+  // --- BODY 1 ---
+  doc.text("We, ", { continued: true });
+  doc.font('Helvetica-Bold').text(`${firmDetails.firmName}, Chartered Accountants`, { continued: true });
+  doc.font('Helvetica').text(", hereby give our consent to be appointed as the First Auditor ", { continued: true });
+  doc.font('Helvetica-Bold').text(customer.companyName?.toUpperCase() || customer.name?.toUpperCase(), { continued: true });
+  doc.font('Helvetica').text(" under Section 139(6) of the Companies Act, 2013, for the financial year commencing from ", { continued: true });
+  doc.font('Helvetica-Bold').text(`${formattedIncDate} (Date of Incorporation)`, { continued: true });
+  doc.font('Helvetica').text(" to ", { continued: true });
+  doc.font('Helvetica-Bold').text("31st March 2026");
+  doc.moveDown();
 
-        .header-details h1 {
-          margin: 0;
-          font-size: 18px;
-          font-weight: bold;
-          text-transform: uppercase;
-        }
+  // --- BODY 2 ---
+  doc.font('Helvetica').text("Further, pursuant to the provisions of ", { continued: true });
+  doc.font('Helvetica-Bold').text("Section 139(6) and Rule 4 of the Companies (Audit and Auditors) Rules, 2014", { continued: true });
+  doc.font('Helvetica').text(", we hereby certify that:");
+  doc.moveDown(0.5);
 
-        .header-details p {
-          margin: 0;
-          font-size: 14px;
-          font-weight: bold;
-          color: #555;
-        }
+  // --- DECLARATIONS ---
+  const declarations = [
+    "We satisfy the eligibility criteria as specified under Section 141 of the Companies Act, 2013;",
+    "We are not disqualified from being appointed as Auditor under the provisions of the Companies Act, 2013, the Chartered Accountants Act, 1949, and the rules or regulations made thereunder;",
+    "The proposed appointment is in accordance with the provisions of the Companies Act, 2013;",
+    "The proposed appointment is within the limits laid down under the Act;",
+    "There are no pending proceedings relating to professional misconduct against the firm or any of its partners under the Chartered Accountants Act, 1949."
+  ];
 
-        .recipient-block {
-          margin-bottom: 20px;
-        }
+  declarations.forEach((text, i) => {
+    const startY = doc.y;
+    doc.fontSize(10).text(`${i + 1}.`, 70, startY, { width: 20 });
+    doc.text(text, 90, startY, { width: 450 });
+    doc.moveDown(0.5);
+  });
 
-        .recipient-block b {
-          display: block;
-        }
+  doc.moveDown(0.5);
+  doc.text("We request you to kindly take the above on record and do the needful.", 50, doc.y);
+  doc.moveDown();
 
-        .subject-line {
-          margin-bottom: 20px;
-        }
+  doc.text("Thanking You,");
+  doc.text("Yours faithfully,");
+  doc.moveDown(0.5);
 
-        .subject-line b {
-          text-decoration: underline;
-        }
+  // --- SIGNATURE SECTION ---
+  doc.font('Helvetica-Bold').text(`For ${firmDetails.firmName}`);
+  doc.moveDown(3);
+  doc.font('Helvetica-Bold').text("Chartered Accountants");
+  doc.font('Helvetica').text(`FRN: ${firmDetails.firmRegistrationNumber}`);
+  doc.text(firmDetails.proprietorName);
+  doc.text("Proprietor");
+  doc.text(`Membership No: ${firmDetails.membershipNumber}`);
+  doc.text("Place: Kolkata");
 
-        .body-text {
-          text-align: justify;
-          margin-bottom: 15px;
-        }
+  // --- FOOTER ---
+  doc.fontSize(8).font('Helvetica').text(firmDetails.firmName, 50, 770, { align: 'center', width: 500 });
+  doc.text(`Firm Registration No. - ${firmDetails.firmRegistrationNumber}`, 50, 780, { align: 'center', width: 500 });
+  doc.text(firmDetails.firmAddress, 50, 790, { align: 'center', width: 500 });
 
-        .declarations {
-          margin-left: 20px;
-          margin-bottom: 20px;
-        }
-
-        .declaration-item {
-          display: flex;
-          gap: 15px;
-          margin-bottom: 8px;
-          text-align: justify;
-        }
-
-        .closing {
-          margin-bottom: 25px;
-        }
-
-        .signatory-section {
-          margin-bottom: 15px;
-        }
-
-        .signatory-header {
-          font-weight: bold;
-          margin-bottom: 40px;
-        }
-
-        .signatures-flex {
-          display: flex;
-          align-items: center;
-          gap: 60px;
-          margin-bottom: 15px;
-        }
-
-        .signature-img {
-          width: 140px;
-          height: auto;
-        }
-
-        .stamp-img {
-          width: 100px;
-          height: auto;
-        }
-
-        .partner-details {
-          font-size: 12px;
-          line-height: 1.4;
-        }
-
-        .partner-details b {
-          display: block;
-          margin-bottom: 2px;
-          text-transform: uppercase;
-        }
-
-        .footer {
-          position: fixed;
-          bottom: 40px;
-          left: 40px;
-          right: 40px;
-          text-align: center;
-        }
-
-        .footer-text {
-          color: #2F5597;
-          font-weight: bold;
-          font-size: 11px;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="header">
-        <img src="${headerImg64}" class="header-logo" alt="Logo">
-        <div class="header-details">
-          <h1>DDCA & ASSOCIATES</h1>
-          <p>Chartered Accountants</p>
-        </div>
-      </div>
-
-      <div class="recipient-block">
-        <b>TO,</b>
-        <b>THE BOARD OF DIRECTORS</b>
-        <b>${(customer.companyName || customer.name).toUpperCase()}</b>
-        <div style="text-transform: uppercase;">${customer.address || "Address N/A"}</div>
-      </div>
-
-      <div class="date-line">
-        Date: ${formattedToday}
-      </div>
-
-      <div class="subject-line">
-        <b>Subject:</b> <u>Consent to act as First Auditor and Certificate under Section 139(6) of the Companies Act, 2013</u>
-      </div>
-
-      <div class="salutation">
-        Dear Sir/Madam,
-      </div>
-
-      <div class="body-text">
-        We, <b>M/s. DDCA & ASSOCIATES</b>, Chartered Accountants, hereby give our consent to be appointed as the <b>First Auditor</b> of <b>${(customer.companyName || customer.name).toUpperCase()}</b> under Section 139(6) of the Companies Act, 2013, for the financial year commencing from <b>${formattedIncDate} (Date of Incorporation)</b> to <b>${financialYearEndLabel}.</b>
-      </div>
-
-      <div class="body-text">
-        Further, pursuant to the provisions of <b>Section 139(6) and Rule 4 of the Companies (Audit and Auditors) Rules, 2014</b>, we hereby certify that:
-      </div>
-
-      <div class="declarations">
-        <div class="declaration-item">
-          <span>1.</span>
-          <span>We satisfy the eligibility criteria as specified under Section 141 of the Companies Act, 2013;</span>
-        </div>
-        <div class="declaration-item">
-          <span>2.</span>
-          <span>We are not disqualified from being appointed as Auditor under the provisions of the Companies Act, 2013, the Chartered Accountants Act, 1949, and the rules or regulations made thereunder;</span>
-        </div>
-        <div class="declaration-item">
-          <span>3.</span>
-          <span>The proposed appointment is in accordance with the provisions of the Companies Act, 2013;</span>
-        </div>
-        <div class="declaration-item">
-          <span>4.</span>
-          <span>The proposed appointment is within the limits laid down under the Act;</span>
-        </div>
-        <div class="declaration-item">
-          <span>5.</span>
-          <span>There are no pending proceedings relating to professional misconduct against the firm or any of its partners under the Chartered Accountants Act, 1949.</span>
-        </div>
-      </div>
-
-      <div class="body-text">
-        We request you to kindly take the above on record and do the needful.
-      </div>
-
-      <div class="closing">
-        Thanking You,<br>
-        Yours faithfully,
-      </div>
-
-      <div class="signatory-section">
-        <div class="signatory-header">For DDCA & ASSOCIATES<br>Chartered Accountants</div>
-        
-        <div class="signatures-flex">
-          <img src="${signatureImg64}" class="signature-img" alt="Signature">
-          <img src="${ddcaImg64}" class="stamp-img" alt="Stamp">
-        </div>
-
-        <div class="partner-details">
-          <b>FRN: 0330380E</b>
-          <b>CA SUSANTA KUMAR SWAIN</b>
-          Partner<br>
-          Membership No: 065257<br>
-          Place: Bhubaneswar<br>
-          Date: ${formattedToday}
-        </div>
-      </div>
-
-      <div class="footer">
-        <span class="footer-text">PLOT NO. 119, MADHUSUDAN NAGAR, UNIT-IV, BHUBANESWAR – 751001, ODISHA</span>
-      </div>
-    </body>
-    </html>
-  `;
-
-  try {
-    const commonPaths = [
-      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-      'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
-      'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
-    ];
-    let executablePath = undefined;
-    for (const p of commonPaths) {
-      if (fs.existsSync(p)) {
-        executablePath = p;
-        break;
-      }
-    }
-
-    const browser = await puppeteer.launch({
-      headless: "new",
-      executablePath,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
-    const pdf = await page.pdf({ 
-      format: 'A4', 
-      margin: { top: '0', bottom: '0', left: '0', right: '0' }, // Margins are handled in HTML/CSS padding
-      printBackground: true 
-    });
-    await browser.close();
-
-    res.contentType("application/pdf");
-    res.send(pdf);
-  } catch (err) {
-    console.error("Puppeteer PDF Error:", err);
-    res.status(500).send("Error generating PDF with Puppeteer. Ensure Chrome bin is available.");
-  }
+  doc.end();
 };
 
 export const generateAuditorsReport = async (customer, data, res) => {
