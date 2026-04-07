@@ -5,6 +5,7 @@ import {
   exportCustomers,
   getCustomerList,
   getCustomerById,
+  getMyData,
   updateCustomer,
   updateEmails,
   addDirector,
@@ -42,6 +43,7 @@ router.use(auth);
 // ─── SPECIAL ROUTES (before :customerId to avoid conflicts) ──────────────────
 router.get("/export", exportCustomers);
 router.get("/list", getCustomerList);
+router.get("/me", getMyData);
 
 // ─── CUSTOMER CRUD ────────────────────────────────────────────────────────────
 router.get("/", getCustomers);

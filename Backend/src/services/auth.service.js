@@ -115,7 +115,7 @@ export const loginCustomerAccount = async (data) => {
   );
 
   // Return generated tokens back to controller
-  return { customer: { id: customer._id, name: customer.name, companyName: customer.companyName, username: customer.username }, accessToken, refreshToken };
+  return { customer: { id: customer._id, name: customer.name, companyName: customer.companyName, username: customer.username, role: "customer" }, accessToken, refreshToken };
 };
 
 export const logoutUser = async (userId, role) => {

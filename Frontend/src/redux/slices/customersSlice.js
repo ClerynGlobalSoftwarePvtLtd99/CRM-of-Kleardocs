@@ -62,6 +62,20 @@ export const fetchCustomerById = createAsyncThunk(
   }
 );
 
+export const fetchSelfData = createAsyncThunk(
+  'customers/fetchSelf',
+  async ({ year }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get('/customers/me', {
+        params: { year }
+      });
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch your profile');
+    }
+  }
+);
+
 export const updateCustomer = createAsyncThunk(
   'customers/update',
   async ({ customerId, customerData }, { rejectWithValue }) => {
@@ -299,6 +313,19 @@ const customersSlice = createSlice({
         state.currentCustomer = action.payload;
       })
       .addCase(fetchCustomerById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Fetch self data
+      .addCase(fetchSelfData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchSelfData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentCustomer = action.payload;
+      })
+      .addCase(fetchSelfData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

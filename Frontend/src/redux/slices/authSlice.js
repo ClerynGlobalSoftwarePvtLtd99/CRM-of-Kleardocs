@@ -33,6 +33,18 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const loginCustomer = createAsyncThunk(
+  'auth/customerLogin',
+  async (credentials, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post('/auth/customer-login', credentials);
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Customer login failed');
+    }
+  }
+);
+
 export const logoutUser = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
@@ -84,6 +96,22 @@ const authSlice = createSlice({
         }
       })
       .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(loginCustomer.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginCustomer.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.customer;
+        state.isAuthenticated = true;
+        localStorage.setItem('isAuthenticated', 'true');
+        if (action.payload.accessToken) localStorage.setItem('accessToken', action.payload.accessToken);
+        if (action.payload.refreshToken) localStorage.setItem('refreshToken', action.payload.refreshToken);
+      })
+      .addCase(loginCustomer.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
