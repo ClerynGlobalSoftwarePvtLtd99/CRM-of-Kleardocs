@@ -42,6 +42,16 @@ import CustomerInvoicesTable from "../components/customers/CustomerInvoicesTable
 import CustomerRecurringInvoicesTable from "../components/customers/CustomerRecurringInvoicesTable";
 import CustomerEmailHistoryTable from "../components/customers/CustomerEmailHistoryTable";
 import CustomerDirectors from "../components/customers/CustomerDirectors";
+
+// ─── Utility: Current Financial Year (Apr 1 – Mar 31 rule) ───────────────────────
+// Apr 1, 2026 – Mar 31, 2027  →  "2026-2027"
+const getCurrentFinancialYear = () => {
+  const now = new Date();
+  const month = now.getMonth(); // 0-indexed; April = 3
+  const year = now.getFullYear();
+  return month >= 3 ? `${year}-${year + 1}` : `${year - 1}-${year}`;
+};
+
 const CustomerDetailsPage = () => {
   const { id } = useParams();
   
@@ -50,7 +60,7 @@ const CustomerDetailsPage = () => {
   const { currentCustomer: customer, loading, error } = useSelector((state) => state.customers);
   
   const [activeTab, setActiveTab] = useState("overview");
-  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedYear, setSelectedYear] = useState(() => getCurrentFinancialYear());
   const [showModals, setShowModals] = useState({
     directorReport: false,
     boardResolution: false,
@@ -286,9 +296,17 @@ const CustomerDetailsPage = () => {
         <AddFinancialYearModal 
           customer={customer} 
           onClose={() => toggleModal('addFinancialYear', false)} 
-          onSuccess={() => {
-            setSelectedYear("");
-            dispatch(fetchCustomerById({ customerId: id, year: undefined }));
+          onSuccess={(addedYear) => {
+            // addedYear is the year string returned from the modal after successful creation.
+            // Set it as the selected year so the table shows that year's newly created records.
+            const yearToLoad = (typeof addedYear === 'string' && addedYear) 
+              ? addedYear 
+              : getCurrentFinancialYear();
+            toggleModal('addFinancialYear', false);
+            setSelectedYear(yearToLoad);
+            // fetchCustomerById will fire automatically via the selectedYear useEffect,
+            // but we dispatch manually here to ensure it runs even if year didn't change.
+            dispatch(fetchCustomerById({ customerId: id, year: yearToLoad }));
           }} 
         />
       )}
