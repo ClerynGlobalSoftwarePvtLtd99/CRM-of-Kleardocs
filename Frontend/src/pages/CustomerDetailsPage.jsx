@@ -42,18 +42,12 @@ import CustomerInvoicesTable from "../components/customers/CustomerInvoicesTable
 import CustomerRecurringInvoicesTable from "../components/customers/CustomerRecurringInvoicesTable";
 import CustomerEmailHistoryTable from "../components/customers/CustomerEmailHistoryTable";
 import CustomerDirectors from "../components/customers/CustomerDirectors";
+import { getCurrentFinancialYear } from "../utils/dateUtils";
 
-// ─── Utility: Current Financial Year (Apr 1 – Mar 31 rule) ───────────────────────
-// Apr 1, 2026 – Mar 31, 2027  →  "2026-2027"
-const getCurrentFinancialYear = () => {
-  const now = new Date();
-  const month = now.getMonth(); // 0-indexed; April = 3
-  const year = now.getFullYear();
-  return month >= 3 ? `${year}-${year + 1}` : `${year - 1}-${year}`;
-};
 
 const CustomerDetailsPage = () => {
   const { id } = useParams();
+
   
   const navigate = useNavigate();
   const dispatch = useDispatch();
