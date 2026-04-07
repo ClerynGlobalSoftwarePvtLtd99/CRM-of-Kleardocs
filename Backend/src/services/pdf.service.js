@@ -170,335 +170,548 @@ export const generateBoardResolution = async (customer, data, res) => {
 };
 
 export const generateConsentLetter = async (customer, data, res) => {
-  const getOrdinalDate = (dateStr) => {
+  // IMMEDIATE DEBUG LOGGING
+  console.log('\n\n========== generateConsentLetter CALLED ==========');
+  console.log('customer parameter:', customer);
+  console.log('customer type:', typeof customer);
+  console.log('customer is null:', customer === null);
+  console.log('customer is undefined:', customer === undefined);
+  console.log('customer keys:', customer ? Object.keys(customer) : 'NO KEYS - CUSTOMER IS NULL/UNDEFINED');
+  console.log('data parameter:', data);
+  console.log('====================================================\n\n');
+  
+  if (!customer) {
+    console.error('ERROR: Customer object is null or undefined!');
+    throw new Error('Customer data is missing');
+  }
+  
+  // ===== SAFE HELPERS FOR DYNAMIC DATA =====
+  
+  // Helper 1: Safe text with fallback
+  const safeText = (value, fallback = 'N/A') => {
+    if (value === null || value === undefined || value === '' || value === 'null' || value === 'undefined') {
+      return fallback;
+    }
+    return String(value).trim();
+  };
+
+  // Helper 2: Format date as "15th January, 2026" (with comma)
+  const formatDisplayDate = (dateStr) => {
     try {
-      const d = new Date(dateStr);
-      if (isNaN(d.getTime())) return "N/A";
+      if (!dateStr || dateStr === '' || dateStr === 'N/A' || dateStr === 'null' || dateStr === 'undefined') return null;
+      
+      let d;
+      // Handle Date objects (including MongoDB Date)
+      if (dateStr instanceof Date || (typeof dateStr === 'object' && typeof dateStr.getTime === 'function')) {
+        d = dateStr;
+      } else {
+        d = new Date(dateStr);
+      }
+      
+      if (isNaN(d.getTime())) return null;
       const day = d.getDate();
-      const month = d.toLocaleString('en-IN', { month: 'Long' });
+      const month = d.toLocaleString('en-IN', { month: 'long' });
       const year = d.getFullYear();
       const s = ["th", "st", "nd", "rd"];
       const v = day % 100;
       const ord = (s[(v - 20) % 10] || s[v] || s[0]);
       return `${day}${ord} ${month}, ${year}`;
     } catch (e) {
-      return "N/A";
+      console.error('Error in formatDisplayDate:', e);
+      return null;
     }
   };
 
-  const formattedIncDate = customer.incorporationDate ? getOrdinalDate(customer.incorporationDate) : "Date of Incorporation";
-  const formattedToday = getOrdinalDate(data.date || new Date());
+  // Helper 3: Format date as "15/01/2026" (slash format)
+  const formatSlashDate = (dateStr) => {
+    try {
+      if (!dateStr || dateStr === '' || dateStr === 'N/A' || dateStr === 'null' || dateStr === 'undefined') return null;
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return null;
+      const day = d.getDate().toString().padStart(2, '0');
+      const month = (d.getMonth() + 1).toString().padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}/${month}/${year}`;
+    } catch (e) {
+      return null;
+    }
+  };
 
-  // Dynamic Year Logic
-  const currentDate = data.date ? new Date(data.date) : new Date();
-  const financialYearEndYear = currentDate.getMonth() >= 3 ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
-  const financialYearEndLabel = `31st March ${financialYearEndYear}`;
-
-  // Paths for Assets (Moved to Backend)
-  const assetsPath = path.join(__dirname, '../assets/consent-letter/');
-  
-  console.log('Assets Path:', assetsPath);
-  console.log('Does assets folder exist?', fs.existsSync(assetsPath));
-  
-  const headerImg64 = imageToBase64(path.join(assetsPath, 'CA-title image.png'));
-  const signatureImg64 = imageToBase64(path.join(assetsPath, 'Signature.png'));
-  const ddcaImg64 = imageToBase64(path.join(assetsPath, 'DDCA.png'));
-  
-  if (!headerImg64 || !signatureImg64 || !ddcaImg64) {
-    throw new Error('Failed to load required assets for consent letter');
-  }
-
-  const html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-      <style>
-        body {
-          font-family: "Times New Roman", Times, serif;
-          margin: 0;
-          padding: 40px;
-          color: #000;
-          line-height: 1.6;
-          font-size: 13px;
-          -webkit-print-color-adjust: exact;
-        }
-
-        .header {
-          display: flex;
-          align-items: center;
-          margin-bottom: 25px;
-        }
-
-        .header-logo {
-          width: 80px;
-          height: auto;
-          margin-right: 20px;
-        }
-
-        .header-details {
-          flex: 1;
-        }
-
-        .header-details h1 {
-          margin: 0;
-          font-size: 18px;
-          font-weight: bold;
-          text-transform: uppercase;
-        }
-
-        .header-details p {
-          margin: 0;
-          font-size: 14px;
-          font-weight: bold;
-          color: #555;
-        }
-
-        .recipient-block {
-          margin-bottom: 20px;
-        }
-
-        .recipient-block b {
-          display: block;
-        }
-
-        .subject-line {
-          margin-bottom: 20px;
-        }
-
-        .subject-line b {
-          text-decoration: underline;
-        }
-
-        .body-text {
-          text-align: justify;
-          margin-bottom: 15px;
-        }
-
-        .declarations {
-          margin-left: 20px;
-          margin-bottom: 20px;
-        }
-
-        .declaration-item {
-          display: flex;
-          gap: 15px;
-          margin-bottom: 8px;
-          text-align: justify;
-        }
-
-        .closing {
-          margin-bottom: 25px;
-        }
-
-        .signatory-section {
-          margin-bottom: 15px;
-        }
-
-        .signatory-header {
-          font-weight: bold;
-          margin-bottom: 40px;
-        }
-
-        .signatures-flex {
-          display: flex;
-          align-items: center;
-          gap: 60px;
-          margin-bottom: 15px;
-        }
-
-        .signature-img {
-          width: 140px;
-          height: auto;
-        }
-
-        .stamp-img {
-          width: 100px;
-          height: auto;
-        }
-
-        .partner-details {
-          font-size: 12px;
-          line-height: 1.4;
-        }
-
-        .partner-details b {
-          display: block;
-          margin-bottom: 2px;
-          text-transform: uppercase;
-        }
-
-        .footer {
-          position: fixed;
-          bottom: 40px;
-          left: 40px;
-          right: 40px;
-          text-align: center;
-        }
-
-        .footer-text {
-          color: #2F5597;
-          font-weight: bold;
-          font-size: 11px;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="header">
-        <img src="${headerImg64}" class="header-logo" alt="Logo">
-        <div class="header-details">
-          <h1>DDCA & ASSOCIATES</h1>
-          <p>Chartered Accountants</p>
-        </div>
-      </div>
-
-      <div class="recipient-block">
-        <b>TO,</b>
-        <b>THE BOARD OF DIRECTORS</b>
-        <b>${(customer.companyName || customer.name).toUpperCase()}</b>
-        <div style="text-transform: uppercase;">${customer.address || "Address N/A"}</div>
-      </div>
-
-      <div class="date-line">
-        Date: ${formattedToday}
-      </div>
-
-      <div class="subject-line">
-        <b>Subject:</b> <u>Consent to act as First Auditor and Certificate under Section 139(6) of the Companies Act, 2013</u>
-      </div>
-
-      <div class="salutation">
-        Dear Sir/Madam,
-      </div>
-
-      <div class="body-text">
-        We, <b>M/s. DDCA & ASSOCIATES</b>, Chartered Accountants, hereby give our consent to be appointed as the <b>First Auditor</b> of <b>${(customer.companyName || customer.name).toUpperCase()}</b> under Section 139(6) of the Companies Act, 2013, for the financial year commencing from <b>${formattedIncDate} (Date of Incorporation)</b> to <b>${financialYearEndLabel}.</b>
-      </div>
-
-      <div class="body-text">
-        Further, pursuant to the provisions of <b>Section 139(6) and Rule 4 of the Companies (Audit and Auditors) Rules, 2014</b>, we hereby certify that:
-      </div>
-
-      <div class="declarations">
-        <div class="declaration-item">
-          <span>1.</span>
-          <span>We satisfy the eligibility criteria as specified under Section 141 of the Companies Act, 2013;</span>
-        </div>
-        <div class="declaration-item">
-          <span>2.</span>
-          <span>We are not disqualified from being appointed as Auditor under the provisions of the Companies Act, 2013, the Chartered Accountants Act, 1949, and the rules or regulations made thereunder;</span>
-        </div>
-        <div class="declaration-item">
-          <span>3.</span>
-          <span>The proposed appointment is in accordance with the provisions of the Companies Act, 2013;</span>
-        </div>
-        <div class="declaration-item">
-          <span>4.</span>
-          <span>The proposed appointment is within the limits laid down under the Act;</span>
-        </div>
-        <div class="declaration-item">
-          <span>5.</span>
-          <span>There are no pending proceedings relating to professional misconduct against the firm or any of its partners under the Chartered Accountants Act, 1949.</span>
-        </div>
-      </div>
-
-      <div class="body-text">
-        We request you to kindly take the above on record and do the needful.
-      </div>
-
-      <div class="closing">
-        Thanking You,<br>
-        Yours faithfully,
-      </div>
-
-      <div class="signatory-section">
-        <div class="signatory-header">For DDCA & ASSOCIATES<br>Chartered Accountants</div>
-        
-        <div class="signatures-flex">
-          <img src="${signatureImg64}" class="signature-img" alt="Signature">
-          <img src="${ddcaImg64}" class="stamp-img" alt="Stamp">
-        </div>
-
-        <div class="partner-details">
-          <b>FRN: 0330380E</b>
-          <b>CA SUSANTA KUMAR SWAIN</b>
-          Partner<br>
-          Membership No: 065257<br>
-          Place: Bhubaneswar<br>
-          Date: ${formattedToday}
-        </div>
-      </div>
-
-      <div class="footer">
-        <span class="footer-text">PLOT NO. 119, MADHUSUDAN NAGAR, UNIT-IV, BHUBANESWAR – 751001, ODISHA</span>
-      </div>
-    </body>
-    </html>
-  `;
-
-  try {
-    let executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
-
-    console.log('Environment:', process.env.NODE_ENV);
-    console.log('Platform:', process.platform);
-    console.log('PUPPETEER_EXECUTABLE_PATH:', process.env.PUPPETEER_EXECUTABLE_PATH);
-
-    // Fallback search for local development if no env var is set
-    if (!executablePath) {
-      if (process.platform === 'win32') {
-        const winPaths = [
-          'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-          'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
-          'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
-        ];
-        executablePath = winPaths.find(p => fs.existsSync(p));
-      } else if (process.platform === 'linux') {
-        const linuxPaths = [
-          '/usr/bin/google-chrome',
-          '/usr/bin/google-chrome-stable',
-          '/usr/bin/chromium-browser',
-          '/usr/bin/chromium'
-        ];
-        executablePath = linuxPaths.find(p => fs.existsSync(p));
+  // Helper 3: Parse DD/MM/YYYY format safely
+  const parseDDMMYYYY = (dateStr) => {
+    try {
+      if (!dateStr || typeof dateStr !== 'string') return null;
+      
+      const trimmed = dateStr.trim();
+      if (!trimmed.includes('/')) return null;
+      
+      const parts = trimmed.split('/');
+      if (parts.length !== 3) return null;
+      
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1; // 0-indexed
+      const year = parseInt(parts[2], 10);
+      
+      if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
+      if (month < 0 || month > 11) return null;
+      if (day < 1 || day > 31) return null;
+      if (year < 1900 || year > 2100) return null;
+      
+      const date = new Date(year, month, day);
+      
+      // Validate the date was created correctly
+      if (date.getDate() !== day || date.getMonth() !== month || date.getFullYear() !== year) {
+        return null;
       }
+      
+      return date;
+    } catch (e) {
+      return null;
     }
-    
-    console.log('Executable Path:', executablePath);
-    
-    if (!executablePath) {
-      throw new Error('Chrome/Chromium executable not found. Please install Chrome or set PUPPETEER_EXECUTABLE_PATH environment variable.');
+  };
+
+  // Helper 4: Format date as ordinal "01st January 2026" (no comma)
+  const formatOrdinalDate = (dateObj) => {
+    try {
+      // Check for valid Date object (including MongoDB Date)
+      if (!dateObj) return null;
+      
+      // Check if it's a Date-like object (has getTime method)
+      const isDateLike = dateObj instanceof Date || (typeof dateObj === 'object' && typeof dateObj.getTime === 'function');
+      if (!isDateLike) return null;
+      
+      // Check if the date is valid
+      if (isNaN(dateObj.getTime())) return null;
+      
+      const day = dateObj.getDate();
+      const month = dateObj.toLocaleString('en-IN', { month: 'long' });
+      const year = dateObj.getFullYear();
+      const s = ["th", "st", "nd", "rd"];
+      const v = day % 100;
+      const ord = (s[(v - 20) % 10] || s[v] || s[0]);
+      
+      // Format: "06th January 2026"
+      const paddedDay = day.toString().padStart(2, '0');
+      return `${paddedDay}${ord} ${month} ${year}`;
+    } catch (e) {
+      console.error('formatOrdinalDate - Error:', e);
+      return null;
     }
+  };
 
-    const browser = await puppeteer.launch({
-      headless: "new",
-      executablePath,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--disable-gpu'
-      ]
-    });
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
-    const pdf = await page.pdf({ 
-      format: 'A4', 
-      margin: { top: '0', bottom: '0', left: '0', right: '0' }, // Margins are handled in HTML/CSS padding
-      printBackground: true 
-    });
-    await browser.close();
+  // Helper 5: Format incorporation date for display
+  const formatIncorporationDisplay = (dateStr) => {
+    try {
+      console.log('formatIncorporationDisplay - Input:', dateStr, 'Type:', typeof dateStr);
+      console.log('formatIncorporationDisplay - Is Date?:', dateStr instanceof Date);
+      console.log('formatIncorporationDisplay - Has getTime?:', typeof dateStr?.getTime === 'function');
+      
+      if (!dateStr || dateStr === '' || dateStr === 'N/A' || dateStr === 'null' || dateStr === 'undefined') {
+        console.log('formatIncorporationDisplay - Empty/null value');
+        return null;
+      }
+      
+      let dateObj;
+      
+      // If it's already a Date object OR MongoDB Date object (has getTime method)
+      if (dateStr instanceof Date || (typeof dateStr === 'object' && typeof dateStr.getTime === 'function')) {
+        dateObj = dateStr;
+        console.log('formatIncorporationDisplay - Already a Date object (or MongoDB Date)');
+      }
+      // If it's a string in DD/MM/YYYY format
+      else if (typeof dateStr === 'string' && dateStr.includes('/')) {
+        dateObj = parseDDMMYYYY(dateStr);
+        console.log('formatIncorporationDisplay - Parsed DD/MM/YYYY');
+      }
+      // If it's an ISO string or timestamp
+      else {
+        dateObj = new Date(dateStr);
+        console.log('formatIncorporationDisplay - Parsed as generic date');
+      }
+      
+      console.log('formatIncorporationDisplay - Parsed dateObj:', dateObj);
+      console.log('formatIncorporationDisplay - dateObj.getTime():', dateObj?.getTime());
+      console.log('formatIncorporationDisplay - Is NaN?:', dateObj ? isNaN(dateObj.getTime()) : 'N/A');
+      
+      if (!dateObj || isNaN(dateObj.getTime())) {
+        console.log('formatIncorporationDisplay - Invalid date after parsing');
+        return null;
+      }
+      
+      const result = formatOrdinalDate(dateObj);
+      console.log('formatIncorporationDisplay - Result:', result);
+      return result;
+    } catch (e) {
+      console.error('formatIncorporationDisplay - Error:', e);
+      return null;
+    }
+  };
 
-    res.contentType("application/pdf");
-    res.send(pdf);
+  // Helper 6: Get incorporation date from customer object
+  const getCustomerIncorporationDate = (customer) => {
+    try {
+      console.log('\n--- getCustomerIncorporationDate DEBUG ---');
+      console.log('All customer keys:', Object.keys(customer));
+      console.log('Customer type:', typeof customer);
+      console.log('Is array:', Array.isArray(customer));
+      
+      // Try all possible field names in priority order
+      const possibleFields = [
+        'incorporationDate',
+        'dateOfIncorporation', 
+        'incorporation_date',
+        'date_of_incorporation',
+        'incorporatedOn',
+        'incorporation',
+        'companyIncorporationDate',
+        'incorporation_date_time',
+        'date_of_incorp'
+      ];
+      
+      for (const field of possibleFields) {
+        const value = customer[field];
+        console.log(`Checking field '${field}':`, value, 'Type:', typeof value);
+        
+        // Check if value is valid (not null, undefined, or empty string)
+        if (value !== undefined && value !== null && value !== '') {
+          console.log(`✓ FOUND incorporation date in field '${field}':`, value);
+          console.log('--- END DEBUG ---\n');
+          return value;
+        }
+      }
+      
+      // Check if it's nested in another object
+      if (customer.company && customer.company.incorporationDate) {
+        console.log('✓ FOUND in customer.company.incorporationDate:', customer.company.incorporationDate);
+        console.log('--- END DEBUG ---\n');
+        return customer.company.incorporationDate;
+      }
+      
+      if (customer.details && customer.details.incorporationDate) {
+        console.log('✓ FOUND in customer.details.incorporationDate:', customer.details.incorporationDate);
+        console.log('--- END DEBUG ---\n');
+        return customer.details.incorporationDate;
+      }
+      
+      console.log('✗ NO incorporation date found in ANY field');
+      console.log('Customer object summary:', {
+        _id: customer._id,
+        companyName: customer.companyName,
+        name: customer.name,
+        hasIncorporationDate: !!customer.incorporationDate,
+        incorporationDateValue: customer.incorporationDate
+      });
+      console.log('--- END DEBUG ---\n');
+      return null;
+    } catch (e) {
+      console.error('getCustomerIncorporationDate - Error:', e);
+      return null;
+    }
+  };
+
+  // Helper 7: Calculate financial year end from incorporation date
+  const getFinancialYearEndFromIncorporation = (dateStr) => {
+    try {
+      console.log('getFinancialYearEndFromIncorporation - Input:', dateStr);
+      
+      if (!dateStr) {
+        // Fallback to current date
+        const now = new Date();
+        const fyEndYear = now.getMonth() >= 3 ? now.getFullYear() + 1 : now.getFullYear();
+        const result = `31st March ${fyEndYear}`;
+        console.log('getFinancialYearEndFromIncorporation - Fallback result:', result);
+        return result;
+      }
+      
+      // Parse the date
+      let incDate;
+      if (dateStr instanceof Date || (typeof dateStr === 'object' && typeof dateStr.getTime === 'function')) {
+        incDate = dateStr;
+        console.log('getFinancialYearEndFromIncorporation - Using Date object directly');
+      } else if (typeof dateStr === 'string' && dateStr.includes('/')) {
+        incDate = parseDDMMYYYY(dateStr);
+        console.log('getFinancialYearEndFromIncorporation - Parsed DD/MM/YYYY');
+      } else {
+        incDate = new Date(dateStr);
+        console.log('getFinancialYearEndFromIncorporation - Parsed as generic date');
+      }
+      
+      if (!incDate || isNaN(incDate.getTime())) {
+        const now = new Date();
+        const fyEndYear = now.getMonth() >= 3 ? now.getFullYear() + 1 : now.getFullYear();
+        const result = `31st March ${fyEndYear}`;
+        console.log('getFinancialYearEndFromIncorporation - Invalid date, fallback:', result);
+        return result;
+      }
+      
+      const incYear = incDate.getFullYear();
+      const incMonth = incDate.getMonth(); // 0=Jan, 1=Feb, 2=Mar, 3=Apr
+      
+      let fyEndYear;
+      
+      if (incMonth >= 3) {
+        // April (3) to December (11): FY ends March 31 of NEXT year
+        fyEndYear = incYear + 1;
+      } else {
+        // January (0) to March (2): FY ends March 31 of SAME year
+        fyEndYear = incYear;
+      }
+      
+      const result = `31st March ${fyEndYear}`;
+      console.log('getFinancialYearEndFromIncorporation - Calculated result:', result, '(Incorporation month:', (incMonth + 1) + '/' + incDate.getFullYear() + ')');
+      return result;
+    } catch (e) {
+      console.error('getFinancialYearEndFromIncorporation - Error:', e);
+      const now = new Date();
+      const fyEndYear = now.getMonth() >= 3 ? now.getFullYear() + 1 : now.getFullYear();
+      return `31st March ${fyEndYear}`;
+    }
+  };
+
+  // ===== EXTRACT DYNAMIC COMPANY DATA =====
+  
+  // IMPORTANT: Use exact legal name without transformation
+  const companyName = safeText(
+    customer.companyName || 
+    customer.legalName || 
+    customer.name || 
+    customer.businessName || 
+    "COMPANY NAME"
+  );
+  
+  // IMPORTANT: Use full registered address without transformation
+  const companyAddress = safeText(
+    customer.address || 
+    customer.registeredAddress || 
+    customer.registeredOfficeAddress || 
+    customer.fullAddress || 
+    "Address N/A"
+  );
+  
+  // IMPORTANT: Get incorporation date using helper
+  const incorporationDateRaw = getCustomerIncorporationDate(customer);
+  
+  // Format incorporation date
+  const incorporationDateFormatted = formatIncorporationDisplay(incorporationDateRaw);
+  const incorporationDateDisplay = incorporationDateFormatted || "N/A";
+  
+  console.log('===== INCORPORATION DATE DEBUG =====');
+  console.log('Raw incorporation date:', incorporationDateRaw);
+  console.log('Formatted incorporation date:', incorporationDateFormatted);
+  console.log('Display incorporation date:', incorporationDateDisplay);
+  
+  // Calculate financial year end based on incorporation date
+  const financialYearEndLabel = getFinancialYearEndFromIncorporation(incorporationDateRaw);
+  
+  console.log('Financial year end:', financialYearEndLabel);
+  console.log('====================================');
+  
+  // Letter date is fixed as per requirement
+  const formattedLetterDate = "15th January, 2026";
+  
+  // FIXED SIGNATURE DATE - Always use the static date for CA details
+  const fixedSignDate = "15/01/2026"; // Fixed as per requirement
+
+  // Load images from assets folder
+  const assetsPath = path.join(__dirname, '../assets/consent-letter/');
+  const logoPath = path.join(assetsPath, 'CA-title image.png');
+  const signaturePath = path.join(assetsPath, 'Signature.png');
+  const stampPath = path.join(assetsPath, 'DDCA.png');
+
+  // Create PDF using PDFKit with images - Single Page Layout (Reference: Screenshot 1)
+  const doc = new PDFDocument({ margin: 50, size: 'A4' });
+  doc.pipe(res);
+
+  const blackColor = '#000000';
+  const footerColor = '#2F5597';
+  let currentY = 50;
+
+  // --- Header with Logo ---
+  try {
+    if (fs.existsSync(logoPath)) {
+      doc.image(logoPath, 50, currentY, { width: 60, height: 50 });
+      doc.font('Times-Bold').fontSize(14).fillColor(blackColor)
+         .text("DDCA & ASSOCIATES", 120, currentY + 8);
+      doc.font('Times-Bold').fontSize(11)
+         .text("CHARTERED ACCOUNTANTS", 120, currentY + 28);
+      currentY += 70;
+    } else {
+      doc.font('Times-Bold').fontSize(16).fillColor(blackColor)
+         .text("DDCA & ASSOCIATES", { align: 'center' });
+      doc.font('Times-Bold').fontSize(12)
+         .text("CHARTERED ACCOUNTANTS", { align: 'center' });
+      currentY = doc.y + 25;
+    }
   } catch (err) {
-    console.error("Puppeteer PDF Error:", err);
-    console.error("Error details:", err.message);
-    console.error("Error stack:", err.stack);
-    throw new Error(`PDF generation failed: ${err.message}`);
+    console.error('Error loading logo:', err);
+    doc.font('Times-Bold').fontSize(16).fillColor(blackColor)
+       .text("DDCA & ASSOCIATES", { align: 'center' });
+    doc.font('Times-Bold').fontSize(12)
+       .text("CHARTERED ACCOUNTANTS", { align: 'center' });
+    currentY = doc.y + 25;
   }
+
+  // --- Recipient Block ---
+  doc.font('Times-Bold').fontSize(10.5).fillColor(blackColor).text("TO,", 50, currentY);
+  doc.text("THE BOARD OF DIRECTORS", 50, doc.y);
+  doc.text(companyName, 50, doc.y);
+  doc.font('Times-Roman').text(companyAddress, 50, doc.y);
+  
+  // Separator Pipe line as seen in Screenshot 2
+  doc.moveDown(0.5);
+  doc.text("|", 50, doc.y);
+  doc.moveDown(0.2);
+  currentY = doc.y;
+
+  // --- Date Line ---
+  doc.font('Times-Roman').fontSize(10.5).text("Date: 15th January, 2026", 50, currentY);
+  currentY += 18;
+
+  // --- Subject Line ---
+  // Precise Bold for "Subject:"
+  doc.font('Times-Bold').text("Subject: ", 50, currentY, { continued: true });
+  doc.font('Times-Roman').text("Consent to act as First Auditor and Certificate under Section 139(6) of the Companies Act, 2013.", { align: 'justify' });
+  currentY = doc.y + 14;
+
+  // --- Salutation ---
+  doc.font('Times-Roman').text("Dear Sir/Madam,", 50, currentY);
+  currentY += 14;
+
+  // --- Body Paragraph 1 ---
+  doc.font('Times-Roman').lineGap(3);
+  doc.text("We, ", 50, currentY, { continued: true, width: 510 });
+  doc.font('Times-Bold').text("M/s. DDCA & ASSOCIATES", { continued: true });
+  doc.font('Times-Roman').text(", Chartered Accountants, hereby give our consent to be appointed as the ", { continued: true });
+  doc.font('Times-Bold').text("First Auditor", { continued: true });
+  doc.font('Times-Roman').text(" of ", { continued: true });
+  doc.font('Times-Bold').text(companyName, { continued: true });
+  doc.font('Times-Roman').text(" under ", { continued: true });
+  doc.font('Times-Bold').text("Section 139(6)", { continued: true });
+  doc.font('Times-Roman').text(" of the Companies Act, 2013, for the financial year commencing from ", { continued: true });
+  doc.font('Times-Bold').text(incorporationDateDisplay, { continued: true });
+  
+  if (incorporationDateFormatted) {
+    doc.font('Times-Roman').text(" (Date of Incorporation)", { continued: true });
+  }
+  
+  doc.font('Times-Roman').text(" to ", { continued: true });
+  doc.font('Times-Bold').text(financialYearEndLabel, { continued: true });
+  doc.font('Times-Roman').text(".", { align: 'justify', width: 510 });
+  currentY = doc.y + 18;
+
+  // --- Body Paragraph 2 ---
+  doc.font('Times-Roman').fontSize(10.5).text("Further, pursuant to the provisions of ", 50, currentY, { continued: true, width: 510 });
+  doc.font('Times-Bold').text("Section 139(6)", { continued: true });
+  doc.font('Times-Roman').text(" and ", { continued: true });
+  doc.font('Times-Bold').text("Rule 4", { continued: true });
+  doc.font('Times-Roman').text(" of the ", { continued: true });
+  doc.font('Times-Bold').text("Companies (Audit and Auditors) Rules, 2014", { continued: true });
+  doc.font('Times-Roman').text(", we hereby certify that:", { align: 'justify', width: 510 });
+  currentY = doc.y + 12;
+
+  // --- Declarations (Proper List Rendering with Indentation for Wraps) ---
+  const declarations = [
+    {
+      normal: "We satisfy the eligibility criteria as specified under ",
+      bold: "Section 141",
+      normalEnd: " of the Companies Act, 2013;"
+    },
+    {
+      normal: "We are not disqualified from being appointed as Auditor under the provisions of the ",
+      bold: "Companies Act, 2013",
+      normalMid: ", the ",
+      bold2: "Chartered Accountants Act, 1949",
+      normalEnd: ", and the rules or regulations made thereunder;"
+    },
+    {
+      normal: "The proposed appointment is in accordance with the provisions of the ",
+      bold: "Companies Act, 2013",
+      normalEnd: ";"
+    },
+    {
+      normal: "The proposed appointment is within the limits laid down under the Act;"
+    },
+    {
+      normal: "There are no pending proceedings relating to professional misconduct against the firm or any of its partners under the ",
+      bold: "Chartered Accountants Act, 1949",
+      normalEnd: "."
+    }
+  ];
+
+  declarations.forEach((decl, index) => {
+    const number = `${index + 1}. `;
+    const numWidth = 25;
+    const bodyWidth = 485;
+    
+    // Draw number at margin
+    doc.font('Times-Roman').text(number, 50, currentY, { width: numWidth });
+    
+    // Draw body text indented
+    const bodyX = 50 + numWidth;
+    let textY = currentY;
+    
+    doc.font('Times-Roman').text(decl.normal, bodyX, textY, { continued: !!decl.bold, width: bodyWidth, align: 'justify' });
+    if (decl.bold) {
+      doc.font('Times-Bold').text(decl.bold, { continued: true });
+      if (decl.normalMid) {
+        doc.font('Times-Roman').text(decl.normalMid, { continued: true });
+        doc.font('Times-Bold').text(decl.bold2, { continued: true });
+      }
+      doc.font('Times-Roman').text(decl.normalEnd, { align: 'justify' });
+    }
+    
+    // Update Y based on the rendered body height plus some spacing
+    currentY = doc.y + 8;
+  });
+  
+  currentY += 12;
+
+  // --- Closing Request ---
+  doc.font('Times-Roman').text("We request you to kindly take the above on record and do the needful.", 50, currentY, { align: 'justify', width: 510 });
+  currentY = doc.y + 18;
+
+  // --- Closing ---
+  doc.text("Thanking You,", 50, currentY);
+  doc.text("Yours faithfully,", 50, doc.y);
+  currentY = doc.y + 18;
+
+  // --- Signatory Section ---
+  doc.font('Times-Bold').fontSize(11).text("For DDCA & ASSOCIATES", 50, currentY);
+  doc.font('Times-Roman').text("Chartered Accountants", 50, doc.y);
+  currentY = doc.y + 8;
+
+  // --- Signature and Stamp Images - Larger sizes ---
+  const signatureY = currentY;
+  try {
+    if (fs.existsSync(signaturePath)) {
+      doc.image(signaturePath, 50, signatureY, { width: 100 });
+    }
+    
+    if (fs.existsSync(stampPath)) {
+      doc.image(stampPath, 170, signatureY - 5, { width: 80 });
+    }
+  } catch (err) {
+    console.error('Error loading signature/stamp:', err);
+  }
+  currentY += 60;
+
+  // --- Partner Details ---
+  // NORMAL: "FRN: 0330380E"
+  // BOLD: "CA SUSANTA KUMAR SWAIN"
+  // NORMAL: Rest of details
+  // FIXED DATE: Always "15/01/2026"
+  doc.font('Times-Roman').fontSize(10).text("FRN: 0330380E", 50, currentY);
+  doc.font('Times-Bold').text("CA SUSANTA KUMAR SWAIN", 50, doc.y);
+  doc.font('Times-Roman').text("Partner", 50, doc.y);
+  doc.text("Membership No: 065257", 50, doc.y);
+  doc.text(`Place: Bhubaneswar`, 50, doc.y);
+  doc.text(`Date: ${fixedSignDate}`, 50, doc.y);
+
+  // --- Footer (at bottom of page) - Larger font, centered ---
+  // NORMAL: All text (blue color)
+  doc.fontSize(10).fillColor(footerColor).text("PLOT NO. 119, MADHUSUDAN NAGAR, UNIT-IV, BHUBANESWAR – 751001, ODISHA", 50, 780, { align: 'center', width: 510 });
+
+  doc.end();
 };
 
 export const generateAuditorsReport = async (customer, data, res) => {

@@ -239,6 +239,18 @@ export const getCustomerById = async (customerId, year) => {
     .lean();
 
   if (!customer) throw new ApiError(404, "Customer not found");
+  
+  // DEBUG: Log raw customer data from database
+  console.log('\n===== getCustomerById DEBUG =====');
+  console.log('Customer ID:', customerId);
+  console.log('All fields in customer:', Object.keys(customer));
+  console.log('customer.incorporationDate:', customer.incorporationDate);
+  console.log('customer.companyName:', customer.companyName);
+  console.log('customer.name:', customer.name);
+  console.log('customer.address:', customer.address);
+  console.log('customer.type:', customer.type);
+  console.log('Full customer from DB:', JSON.stringify(customer, null, 2));
+  console.log('================================\n');
 
   // Auto-detect current financial year if none explicitly requested.
   // This ensures compliances are always shown on initial page load.

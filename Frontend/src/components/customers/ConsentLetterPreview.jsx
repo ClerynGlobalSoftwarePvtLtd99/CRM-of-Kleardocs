@@ -4,24 +4,27 @@ import signature from '../../assets/Consent Letter/Signature.png';
 import ddcaStamp from '../../assets/Consent Letter/DDCA.png';
 
 const ConsentLetterPreview = forwardRef(({ customer, firmDetails, date }, ref) => {
-  const getOrdinalDate = (dateStr) => {
+  const getOrdinalDate = (dateStr, hasComma = true) => {
     try {
       const d = new Date(dateStr);
-      if (isNaN(d.getTime())) return "N/A";
+      if (isNaN(d.getTime())) return null;
       const day = d.getDate();
-      const month = d.toLocaleString('en-IN', { month: 'Long' });
+      const month = d.toLocaleString('en-IN', { month: 'long' });
       const year = d.getFullYear();
       const s = ["th", "st", "nd", "rd"];
       const v = day % 100;
       const ord = (s[(v - 20) % 10] || s[v] || s[0]);
-      return `${day}${ord} ${month}, ${year}`;
+      
+      const paddedDay = day.toString().padStart(2, '0');
+      return `${paddedDay}${ord} ${month}${hasComma ? ',' : ''} ${year}`;
     } catch (e) {
-      return "N/A";
+      return null;
     }
   };
 
-  const formattedIncDate = customer.incorporationDate ? getOrdinalDate(customer.incorporationDate) : "N/A";
-  const formattedToday = getOrdinalDate(date || new Date());
+  const formattedIncDate = customer.incorporationDate ? getOrdinalDate(customer.incorporationDate, false) : "N/A";
+  const formattedToday = "15th January, 2026";
+  const fixedSignDate = "15/01/2026";
   
   // Dynamic Year Logic: "When next year 31 march 2027 cross this time automatically show '31 March 2028'"
   // If month >= 3 (April), the next March 31 is in the next year.
@@ -45,7 +48,7 @@ const ConsentLetterPreview = forwardRef(({ customer, firmDetails, date }, ref) =
         </div>
         <div className="flex-grow">
           <h1 className="text-2xl font-bold tracking-tight mb-0" style={{ color: '#000' }}>DDCA & ASSOCIATES</h1>
-          <p className="text-lg font-semibold" style={{ color: '#000' }}>Chartered Accountants</p>
+          <p className="text-lg font-bold uppercase" style={{ color: '#000' }}>CHARTERED ACCOUNTANTS</p>
         </div>
       </div>
 
@@ -84,23 +87,18 @@ const ConsentLetterPreview = forwardRef(({ customer, firmDetails, date }, ref) =
       {/* Declarations */}
       <div className="pl-4 mb-6 space-y-2 text-justify">
         <div className="flex gap-4">
-            <span className="w-4 shrink-0">1.</span>
             <span>We satisfy the eligibility criteria as specified under Section 141 of the Companies Act, 2013;</span>
         </div>
         <div className="flex gap-4">
-            <span className="w-4 shrink-0">2.</span>
             <span>We are not disqualified from being appointed as Auditor under the provisions of the Companies Act, 2013, the Chartered Accountants Act, 1949, and the rules or regulations made thereunder;</span>
         </div>
         <div className="flex gap-4">
-            <span className="w-4 shrink-0">3.</span>
             <span>The proposed appointment is in accordance with the provisions of the Companies Act, 2013;</span>
         </div>
         <div className="flex gap-4">
-            <span className="w-4 shrink-0">4.</span>
             <span>The proposed appointment is within the limits laid down under the Act;</span>
         </div>
         <div className="flex gap-4">
-            <span className="w-4 shrink-0">5.</span>
             <span>There are no pending proceedings relating to professional misconduct against the firm or any of its partners under the Chartered Accountants Act, 1949.</span>
         </div>
       </div>
@@ -130,7 +128,7 @@ const ConsentLetterPreview = forwardRef(({ customer, firmDetails, date }, ref) =
           <p className="mb-0.5">Partner</p>
           <p className="mb-0.5">Membership No: 065257</p>
           <p className="mb-0.5">Place: Bhubaneswar</p>
-          <p className="mb-0.5">Date: {formattedToday}</p>
+          <p className="mb-0.5">Date: {fixedSignDate}</p>
         </div>
       </div>
 
