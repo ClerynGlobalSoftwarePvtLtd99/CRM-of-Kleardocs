@@ -155,6 +155,7 @@ export const createInvoice = async (data, userId) => {
     paid: 0,
     due: total,
     isRecurring: data.recurring || false,
+    description: data.description || "",
     compliance: data.complianceId || undefined,
     createdBy: userId
   });
@@ -181,6 +182,7 @@ export const createInvoice = async (data, userId) => {
       nextDate,
       interval: data.interval,
       intervalType: data.intervalType,
+      description: data.description || "",
       invoices: [invoice._id],
       createdBy: userId
     });
@@ -457,6 +459,7 @@ export const generateDueRecurringInvoices = async () => {
       paid: 0,
       due: total,
       isRecurring: true,
+      description: ri.description || "",
       recurringInvoice: ri._id
     });
 

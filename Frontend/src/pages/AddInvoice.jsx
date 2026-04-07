@@ -29,6 +29,8 @@ const AddInvoice = () => {
   const [interval, setInterval] = useState(1)
   const [intervalType, setIntervalType] = useState('Month')
   const [endDate, setEndDate] = useState('')
+  const [description, setDescription] = useState('')
+  const [showDescription, setShowDescription] = useState(false)
 
   // Invoice Items state
   const [items, setItems] = useState([])
@@ -69,6 +71,7 @@ const AddInvoice = () => {
       interval: isRecurring ? parseInt(interval) : undefined,
       intervalType: isRecurring ? intervalType : undefined,
       endDate: isRecurring && endDate ? endDate : undefined,
+      description: showDescription ? description : undefined,
     }
 
     try {
@@ -117,6 +120,10 @@ const AddInvoice = () => {
         setIntervalType={setIntervalType}
         endDate={endDate}
         setEndDate={setEndDate}
+        description={description}
+        setDescription={setDescription}
+        showDescription={showDescription}
+        setShowDescription={setShowDescription}
         customers={customers}
       />
 

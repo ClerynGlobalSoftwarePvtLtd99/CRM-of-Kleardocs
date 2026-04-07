@@ -413,6 +413,7 @@ function numberToWords(num) {
 export const generateInvoicePdf = (invoice, customer, res) => {
   const doc = new PDFDocument({ margin: 50, size: 'A4' });
   const primaryColor = '#D4A96B'; // Define the brown/gold color for fallback stamp
+  const docDescription = invoice.description || invoice.notes || invoice.remark || invoice.remarks || '—';
   doc.pipe(res);
 
   // Logo box (Black)
@@ -483,9 +484,26 @@ export const generateInvoicePdf = (invoice, customer, res) => {
   const footerY = 550;
   doc.moveTo(20, footerY).lineTo(570, footerY).stroke();
   
-  // Amounts in words
-  doc.fontSize(8).font('Helvetica-Bold').text('Amount in words:', 30, footerY + 10);
-  doc.font('Helvetica').text(numberToWords(Math.round(invoice.total || 0)), 30, footerY + 22, { width: 300 });
+  // Amounts in words & Description Table (Simulated)
+  const boxTop = footerY + 10;
+  const boxLeft = 20;
+  const col1Width = 320;
+  const col2Width = 230;
+  const boxHeight = 40;
+
+  // Header Box
+  doc.rect(boxLeft, boxTop, 550, 15).fill('#D4A96B');
+  doc.fillColor('black').font('Helvetica-Bold').fontSize(8);
+  doc.text('Invoice Amount In Words', boxLeft + 5, boxTop + 4, { width: col1Width - 10 });
+  doc.text('Description', boxLeft + col1Width + 5, boxTop + 4, { width: col2Width - 10 });
+
+  // Body Box
+  doc.rect(boxLeft, boxTop + 15, 550, boxHeight).stroke();
+  doc.moveTo(boxLeft + col1Width, boxTop).lineTo(boxLeft + col1Width, boxTop + 15 + boxHeight).stroke();
+  
+  doc.font('Helvetica').fontSize(8);
+  doc.text(numberToWords(Math.round(invoice.total || 0)), boxLeft + 5, boxTop + 20, { width: col1Width - 10 });
+  doc.text(docDescription, boxLeft + col1Width + 5, boxTop + 20, { width: col2Width - 10 });
 
   // Totals side
   let totalY = footerY + 10;
