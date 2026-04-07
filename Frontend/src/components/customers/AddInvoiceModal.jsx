@@ -11,8 +11,10 @@ const AddInvoiceModal = ({ customer, service, onClose, onAdd }) => {
     interval: 1,
     intervalType: 'Month',
     endDate: new Date().toLocaleDateString('en-GB'),
+    description: '',
   });
   
+  const [showDescription, setShowDescription] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const calendarRef = useRef(null);
 
@@ -160,6 +162,34 @@ const AddInvoiceModal = ({ customer, service, onClose, onAdd }) => {
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary font-bold">%</span>
             </div>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-3 py-2 px-1">
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  className="sr-only peer"
+                  checked={showDescription}
+                  onChange={(e) => setShowDescription(e.target.checked)}
+                />
+                <div className="w-11 h-6 bg-bg-tertiary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-crm-orange"></div>
+              </label>
+              <span className="text-sm font-bold text-text-primary uppercase tracking-wider">Add Description?</span>
+            </div>
+
+            {showDescription && (
+              <div className="fieldset-input animate-in fade-in slide-in-from-top-2 duration-200">
+                <span className="fieldset-label uppercase">Description</span>
+                <textarea 
+                  value={formData.description}
+                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  placeholder="Enter invoice description..."
+                  rows={3}
+                  className="w-full px-4 py-2.5 bg-bg-primary border border-bg-tertiary rounded-lg text-sm focus:outline-none focus:border-accent transition-colors text-text-primary resize-none"
+                />
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-3 py-2 px-1">

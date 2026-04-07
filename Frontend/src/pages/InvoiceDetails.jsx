@@ -214,6 +214,15 @@ const InvoiceDetails = () => {
                 </div>
               </div>
             </div>
+
+            {inv.description && (
+              <div className="mt-8 pt-6 border-t border-bg-tertiary">
+                <span className="text-text-secondary font-medium text-sm text-[11px] uppercase tracking-widest block mb-2">Invoice Description</span>
+                <div className="p-4 bg-bg-primary border border-bg-tertiary rounded-xl text-sm leading-relaxed text-text-primary italic">
+                  {inv.description}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="bg-bg-secondary border border-bg-tertiary rounded-xl shadow-sm mb-6 overflow-hidden">

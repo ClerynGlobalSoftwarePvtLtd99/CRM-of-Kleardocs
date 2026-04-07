@@ -26,6 +26,8 @@ const recurringInvoiceSchema = new mongoose.Schema(
 
     status: { type: String, enum: ["Active", "Inactive"], default: "Active" },
 
+    description: { type: String }, // Optional recurring invoice description
+
     // Generated invoices linked back
     invoices: [{ type: mongoose.Schema.Types.ObjectId, ref: "Invoice" }],
 
