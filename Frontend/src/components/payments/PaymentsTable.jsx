@@ -17,7 +17,7 @@ const PaymentsTable = ({ payments }) => {
     return (
       <div className="flex flex-col leading-tight">
         <span className="text-sm font-medium">{datePart}</span>
-        <span className="text-[10px] text-text-secondary">({timePart})</span>
+        <span className="text-[10px] text-[var(--color-text-secondary)]">({timePart})</span>
       </div>
     )
   }
@@ -31,30 +31,30 @@ const PaymentsTable = ({ payments }) => {
   }
 
   return (
-    <div className="bg-bg-secondary border border-bg-tertiary rounded-xl overflow-hidden shadow-sm flex flex-col h-[65vh] min-h-[400px]">
+    <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl overflow-hidden shadow-sm flex flex-col h-[65vh] min-h-[400px]">
       <div className="overflow-auto scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] flex-1 px-4">
         <table
           className="w-full text-left relative"
           style={{ borderSpacing: '0 10px', borderCollapse: 'separate' }}
         >
           <thead>
-            <tr className="text-text-secondary text-sm uppercase tracking-wider">
-              <th className="sticky top-0 z-20 bg-bg-secondary px-4 py-4 font-medium whitespace-nowrap min-w-[150px] shadow-[0_1px_0_var(--color-bg-tertiary)]">
+            <tr className="text-[var(--color-text-secondary)] text-sm uppercase tracking-wider">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium whitespace-nowrap min-w-[150px] shadow-[0_1px_0_var(--color-bg-tertiary)]">
                 Pay Date
               </th>
-              <th className="sticky top-0 z-20 bg-bg-secondary px-4 py-4 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">
                 Customer Name
               </th>
-              <th className="sticky top-0 z-20 bg-bg-secondary px-4 py-4 font-medium min-w-[200px] shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium min-w-[200px] shadow-[0_1px_0_var(--color-bg-tertiary)]">
                 Customer Company
               </th>
-              <th className="sticky top-0 z-20 bg-bg-secondary px-4 py-4 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">
                 Invoice No
               </th>
-              <th className="sticky top-0 z-20 bg-bg-secondary px-4 py-4 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium whitespace-nowrap shadow-[0_1px_0_var(--color-bg-tertiary)]">
                 Payment Mode
               </th>
-              <th className="sticky top-0 z-20 bg-bg-secondary px-4 py-4 font-medium whitespace-nowrap text-right shadow-[0_1px_0_var(--color-bg-tertiary)]">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-4 py-4 font-medium whitespace-nowrap text-right shadow-[0_1px_0_var(--color-bg-tertiary)]">
                 Amount
               </th>
             </tr>
@@ -63,36 +63,36 @@ const PaymentsTable = ({ payments }) => {
             {(payments || []).map((payment) => (
               <tr
                 key={payment._id || payment.id}
-                className="bg-bg-primary hover:bg-bg-tertiary transition-colors group rounded-md shadow-sm"
+                className="bg-[var(--color-bg-primary)] hover:bg-[var(--color-bg-tertiary)] transition-colors group rounded-md shadow-sm"
               >
-                <td className="px-4 py-6 text-sm rounded-l-lg whitespace-nowrap text-text-secondary">
+                <td className="px-4 py-6 text-sm rounded-l-lg whitespace-nowrap text-[var(--color-text-secondary)]">
                   {formatPayDate(payment.paymentDate)}
                 </td>
                 <td className="px-4 py-6 text-sm">
                   <Link
                     to={`/customer/${payment.customer?._id}`}
-                    className="font-medium text-text-primary hover:text-accent transition-colors underline decoration hover:text-text-primary underline-offset-4 hover:decorationbg-accent"
+                    className="font-medium text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors underline decoration-[var(--color-bg-tertiary)] underline-offset-4 hover:decoration-[var(--color-accent)]"
                   >
                     {payment.customer?.name || '-'}
                   </Link>
                 </td>
-                <td className="px-4 py-6 text-sm text-text-secondary">
+                <td className="px-4 py-6 text-sm text-[var(--color-text-secondary)]">
                   {payment.customer?.companyName || '-'}
                 </td>
                 <td className="px-4 py-6 text-sm">
                   <Link
                     to={`/invoice/${payment.invoice?._id}`}
-                    className="font-medium text-text-primary hover:text-accent transition-colors underline decoration hover:text-text-primary underline-offset-4 hover:decorationbg-accent"
+                    className="font-medium text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors underline decoration-[var(--color-bg-tertiary)] underline-offset-4 hover:decoration-[var(--color-accent)]"
                   >
                     {payment.invoice?.invoiceNo || '-'}
                   </Link>
                 </td>
-                <td className="px-4 py-6 text-sm text-text-secondary">
-                  <span className="px-3 py-1 bg-bg-tertiary rounded-full text-xs font-medium">
+                <td className="px-4 py-6 text-sm text-[var(--color-text-secondary)]">
+                  <span className="px-3 py-1 bg-[var(--color-bg-tertiary)] rounded-full text-xs font-medium">
                     {payment.mode}
                   </span>
                 </td>
-                <td className="px-4 py-6 rounded-r-lg font-semibold text-text-primary text-right">
+                <td className="px-4 py-6 rounded-r-lg font-semibold text-[var(--color-text-primary)] text-right">
                   {formatAmount(payment.amount)}
                 </td>
               </tr>
@@ -101,7 +101,7 @@ const PaymentsTable = ({ payments }) => {
               <tr>
                 <td
                   colSpan="6"
-                  className="px-4 py-8 text-center text-text-secondary"
+                  className="px-4 py-8 text-center text-[var(--color-text-secondary)]"
                 >
                   No payments found
                 </td>
