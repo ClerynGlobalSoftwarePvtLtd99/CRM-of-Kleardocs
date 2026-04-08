@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, CheckCircle, Loader2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-<<<<<<< HEAD
-=======
-import { X, CheckCircle, Briefcase, Calendar, DollarSign, Percent, ChevronDown, ChevronUp } from "lucide-react";
-import { fetchServices } from "../../redux/slices/servicesSlice";
->>>>>>> a76892a1ca06a972ef7462a46f78333b9ce3646e
 import { addServiceToCustomer, fetchCustomerById } from "../../redux/slices/customersSlice";
 import { fetchServices } from "../../redux/slices/servicesSlice";
 import toast from "react-hot-toast";
@@ -27,15 +22,8 @@ const AddServiceModal = ({ customerId, onClose, onAdd, selectedYear }) => {
     totalInstallments: 4,
     installmentIntervalMonths: 3,
   });
-<<<<<<< HEAD
   
   const [submitting, setSubmitting] = useState(false);
-=======
-
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  const [errors, setErrors] = useState({});
->>>>>>> a76892a1ca06a972ef7462a46f78333b9ce3646e
 
   useEffect(() => {
     dispatch(fetchServices());
@@ -141,7 +129,6 @@ const AddServiceModal = ({ customerId, onClose, onAdd, selectedYear }) => {
             <label className="text-[11px] font-bold text-text-secondary uppercase tracking-wider">
               Select Service <span className="text-crm-red">*</span>
             </label>
-<<<<<<< HEAD
             <select
               value={formData.serviceId}
               onChange={(e) => handleServiceChange(e.target.value)}
@@ -159,31 +146,6 @@ const AddServiceModal = ({ customerId, onClose, onAdd, selectedYear }) => {
                 ))
               )}
             </select>
-=======
-            <div className="relative">
-              <select
-                value={formData.serviceId}
-                onChange={handleServiceChange}
-                onFocus={() => setIsDropdownOpen(true)}
-                onBlur={() => setIsDropdownOpen(false)}
-                className={`w-full bg-bg-primary border ${errors.serviceId ? 'border-red-500' : 'border-bg-tertiary'} rounded-sm px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-crm-orange transition-all appearance-none cursor-pointer`}
-                disabled={servicesLoading}
-              >
-                <option value="" disabled>-- Choose Service --</option>
-                {services.map((s) => (
-                  <option key={s._id} value={s._id}>{s.name}</option>
-                ))}
-              </select>
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                {isDropdownOpen ? (
-                  <ChevronUp className="w-4 h-4 text-text-secondary" />
-                ) : (
-                  <ChevronDown className="w-4 h-4 text-text-secondary" />
-                )}
-              </div>
-            </div>
-            {errors.serviceId && <p className="text-[10px] text-red-500 font-medium">{errors.serviceId}</p>}
->>>>>>> a76892a1ca06a972ef7462a46f78333b9ce3646e
           </div>
 
           {/* DATES */}

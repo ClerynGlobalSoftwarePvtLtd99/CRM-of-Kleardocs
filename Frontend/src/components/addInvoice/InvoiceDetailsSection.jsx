@@ -159,7 +159,6 @@ const InvoiceDetailsSection = ({
         )}
 
         {/* Recurring Invoice Toggle */}
-<<<<<<< HEAD
         {canBeRecurring && (
           <div className="flex flex-col md:flex-row md:items-center gap-3">
             <label className="md:w-48 shrink-0 font-semibold text-text-secondary text-sm">
@@ -183,29 +182,6 @@ const InvoiceDetailsSection = ({
                 {isRecurring ? 'Yes – Recurring' : 'No – One time'}
               </span>
             </div>
-=======
-        <div className="flex flex-col md:flex-row md:items-center gap-3">
-          <label className="md:w-48 shrink-0 font-semibold text-[var(--color-text-secondary)] text-sm">
-            Recurring Invoice?
-          </label>
-          <div className="flex-1 flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setIsRecurring((p) => !p)}
-              className={`relative inline-flex w-12 h-6 rounded-full transition-colors duration-300 cursor-pointer focus:outline-none ${
-                isRecurring ? 'bg-[var(--color-accent)]' : 'bg-[var(--color-bg-tertiary)]'
-              }`}
-            >
-              <span
-                className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 ${
-                  isRecurring ? 'translate-x-6' : 'translate-x-0'
-                }`}
-              />
-            </button>
-            <span className="text-sm font-medium text-[var(--color-text-secondary)]">
-              {isRecurring ? 'Yes – Recurring' : 'No – One time'}
-            </span>
->>>>>>> a76892a1ca06a972ef7462a46f78333b9ce3646e
           </div>
         )}
 
