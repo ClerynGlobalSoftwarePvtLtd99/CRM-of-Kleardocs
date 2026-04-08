@@ -52,7 +52,9 @@ export const addCustomerServiceSchema = z.object({
   recurring: z.boolean().optional().default(false),
   interval: z.number().optional(),
   intervalType: z.enum(["Day", "Month"]).optional(),
-  endDate: z.string().optional()
+  endDate: z.string().optional(),
+  totalInstallments: z.number().min(1).optional().default(1),
+  installmentIntervalMonths: z.number().min(1).max(12).optional().default(3)
 });
 
 // ─── Add Financial Year ──────────────────────────────────────────────────────

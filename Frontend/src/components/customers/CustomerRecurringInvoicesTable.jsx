@@ -12,7 +12,7 @@ const CustomerRecurringInvoicesTable = ({ recurringInvoices = [], onAction }) =>
           <div>Start Date</div>
           <div>End Date</div>
           <div>Linked Service</div>
-          <div>Interval</div>
+          <div>Installments</div>
           <div>Next Date</div>
           <div>Status</div>
           <div className="text-center">View</div>
@@ -43,8 +43,8 @@ const CustomerRecurringInvoicesTable = ({ recurringInvoices = [], onAction }) =>
                 </div>
 
                 <div className="text-[13px] text-text-secondary">
-                  <span className="lg:hidden font-bold block mb-1 text-text-primary">Interval:</span>
-                  {inv.interval || '-'}
+                  <span className="lg:hidden font-bold block mb-1 text-text-primary">Installments:</span>
+                  {inv.totalInstallments || inv.interval || '-'}
                 </div>
 
                 <div className="text-[13px] text-text-secondary">

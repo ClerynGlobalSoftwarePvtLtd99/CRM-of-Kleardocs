@@ -10,6 +10,21 @@ const riItemSchema = new mongoose.Schema({
   hsn: { type: String, default: "998399" }
 });
 
+// ─── Installment Sub-Schema ──────────────────────────────────────────────────
+const installmentSchema = new mongoose.Schema({
+  number: { type: Number, required: true },     // 1, 2, 3, 4...
+  amount: { type: Number, required: true },     // Amount for this installment
+  dueDate: { type: Date, required: true },     // When this installment is due
+  invoice: { type: mongoose.Schema.Types.ObjectId, ref: "Invoice" }, // Linked invoice
+  status: { 
+    type: String, 
+    enum: ["Pending", "Invoiced", "Paid"], 
+    default: "Pending" 
+  },
+  paidDate: { type: Date },                     // When payment was made
+  paidAmount: { type: Number, default: 0 }      // Actual amount paid
+});
+
 // ─── Recurring Invoice Schema ─────────────────────────────────────────────────
 const recurringInvoiceSchema = new mongoose.Schema(
   {
@@ -27,6 +42,11 @@ const recurringInvoiceSchema = new mongoose.Schema(
     status: { type: String, enum: ["Active", "Inactive"], default: "Active" },
 
     description: { type: String }, // Optional recurring invoice description
+
+    // Installment tracking
+    totalInstallments: { type: Number, default: 1 },  // Number of installments (e.g., 4)
+    installmentIntervalMonths: { type: Number, default: 1 }, // Months between installments
+    installments: [installmentSchema], // Pre-calculated installments
 
     // Generated invoices linked back
     invoices: [{ type: mongoose.Schema.Types.ObjectId, ref: "Invoice" }],

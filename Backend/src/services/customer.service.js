@@ -477,9 +477,10 @@ export const addService = async (customerId, data, userId) => {
   });
 
   // 1.1 Create an invoice for this service (for Invoice History)
+  let createdInvoice = null;
   try {
     const { createInvoice } = await import("./invoice.service.js");
-    await createInvoice(
+    createdInvoice = await createInvoice(
       {
         customerId,
         invoiceDate: startDate,
@@ -538,7 +539,19 @@ export const addService = async (customerId, data, userId) => {
   // 3. If Recurring enabled → Create Recurring Invoice 
   if (data.recurring) {
     const { default: RecurringInvoice } = await import("../models/RecurringInvoice.model.js");
-    await RecurringInvoice.create({
+    
+    // Calculate end date if not provided (default to 1 year from start for Annual Compliance)
+    let endDate = data.endDate ? new Date(data.endDate) : null;
+    if (!endDate && serviceMaster.name === "Annual Compliance") {
+      endDate = new Date(startDate);
+      endDate.setFullYear(endDate.getFullYear() + 1);
+    }
+    
+    // Calculate total installments and interval months
+    const totalInstallments = data.totalInstallments || 1;
+    const installmentIntervalMonths = data.installmentIntervalMonths || 3; // Default quarterly
+    
+    const recurringInvoiceData = {
       customer: customerId,
       items: [{
         service: data.serviceId,
@@ -548,11 +561,68 @@ export const addService = async (customerId, data, userId) => {
         gstPercent: data.gst ?? 18,
       }],
       startDate,
+      endDate,
       nextDate: startDate, 
       interval: data.interval || 1,
       intervalType: data.intervalType || "Month",
+      totalInstallments,
+      installmentIntervalMonths,
       status: "Active"
-    });
+    };
+    
+    // Calculate installments if more than 1
+    if (totalInstallments > 1 && endDate) {
+      const { calculateInstallments } = await import("./invoice.service.js");
+      const professionalFees = data.professionalFees || 0;
+      const govtFees = data.govtFees || 0;
+      const gstPercent = data.gst ?? 18;
+      const subtotal = professionalFees + govtFees;
+      const gstAmount = Math.round(subtotal * (gstPercent / 100) * 100) / 100;
+      const totalAmount = subtotal + gstAmount; // Include GST in installment amounts
+      
+      // Calculate months between start and end dates
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      const monthsDiff = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+      const monthsPerInstallment = Math.floor(monthsDiff / totalInstallments);
+      recurringInvoiceData.installments = calculateInstallments(
+        totalAmount,
+        startDate,
+        endDate,
+        totalInstallments,
+        monthsPerInstallment || 3 // fallback to quarterly if calculation fails
+      );
+      recurringInvoiceData.installmentIntervalMonths = monthsPerInstallment || 3;
+    } else {
+      // Single installment
+      recurringInvoiceData.totalInstallments = 1;
+      recurringInvoiceData.installmentIntervalMonths = 0;
+      const singleSubtotal = (data.professionalFees || 0) + (data.govtFees || 0);
+      const singleGst = Math.round(singleSubtotal * ((data.gst ?? 18) / 100) * 100) / 100;
+      recurringInvoiceData.installments = [{
+        number: 1,
+        amount: singleSubtotal + singleGst,
+        dueDate: endDate || startDate,
+        status: 'Pending'
+      }];
+    }
+    
+    // Create the recurring invoice
+    const newRecurringInvoice = await RecurringInvoice.create(recurringInvoiceData);
+    
+    // Link the first installment to the created invoice (if invoice was created successfully)
+    if (createdInvoice && newRecurringInvoice.installments?.length > 0) {
+      // Update the first installment to link to the invoice
+      newRecurringInvoice.installments[0].invoice = createdInvoice._id;
+      newRecurringInvoice.installments[0].status = 'Invoiced';
+      await newRecurringInvoice.save();
+      
+      // Also link the invoice to this recurring invoice
+      const { default: Invoice } = await import("../models/Invoice.model.js");
+      await Invoice.findByIdAndUpdate(createdInvoice._id, {
+        recurringInvoice: newRecurringInvoice._id
+      });
+    }
   }
 
   return cs;

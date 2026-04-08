@@ -192,98 +192,103 @@ const AddInvoiceModal = ({ customer, service, onClose, onAdd }) => {
             )}
           </div>
 
-          <div className="flex items-center gap-3 py-2 px-1">
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input 
-                type="checkbox" 
-                className="sr-only peer"
-                checked={formData.isRecurring}
-                onChange={(e) => setFormData({...formData, isRecurring: e.target.checked})}
-              />
-              <div className="w-11 h-6 bg-bg-tertiary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-crm-orange"></div>
-            </label>
-            <span className="text-sm font-bold text-text-primary">Recurring Invoice?</span>
-          </div>
-
-          {formData.isRecurring && (
+          {service?.name === "Annual Compliance" && (
             <>
-              <div className="fieldset-input">
-                <span className="fieldset-label uppercase">Interval</span>
-                <input 
-                  type="number" 
-                  min="1"
-                  value={formData.interval}
-                  onChange={(e) => setFormData({...formData, interval: e.target.value})}
-                />
-              </div>
-
-              <div className="fieldset-input">
-                <span className="fieldset-label uppercase">Interval Type</span>
-                <div className="relative">
-                  <select
-                    value={formData.intervalType}
-                    onChange={(e) => setFormData({...formData, intervalType: e.target.value})}
-                    className="w-full appearance-none px-4 py-2.5 bg-bg-primary border border-bg-tertiary rounded-lg text-sm focus:outline-none focus:border-accent transition-colors cursor-pointer text-text-primary pr-10"
-                  >
-                    <option value="Day">Day</option>
-                    <option value="Month">Month</option>
-                  </select>
-                  <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
-                </div>
-              </div>
-
-              <div className="fieldset-input">
-                <span className="fieldset-label uppercase">Invoice End Date</span>
-                <div className="relative">
+              <div className="flex items-center gap-3 py-2 px-1">
+                <label className="relative inline-flex items-center cursor-pointer">
                   <input 
-                    type="text" 
-                    value={formData.endDate}
-                    onChange={handleEndDateChange}
-                    className="w-full px-4 py-2.5 bg-bg-primary border border-bg-tertiary rounded-lg text-sm focus:outline-none focus:border-accent transition-colors cursor-pointer text-text-primary pr-10"
-                    placeholder="dd/mm/yyyy"
+                    type="checkbox" 
+                    className="sr-only peer"
+                    checked={formData.isRecurring}
+                    onChange={(e) => setFormData({...formData, isRecurring: e.target.checked})}
                   />
-                  <button 
-                    type="button"
-                    onClick={handleEndDateCalendar}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-primary transition-colors"
-                  >
-                    <CalendarIcon size={18} />
-                  </button>
-                  
-                  {showCalendar && (
-                    <div 
-                      ref={calendarRef}
-                      className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-bg-secondary border border-bg-tertiary rounded-lg shadow-lg p-4 z-50 w-64"
-                    >
-                      <div className="text-center font-semibold mb-3 text-text-primary">
-                        {new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
-                      </div>
-                      <div className="grid grid-cols-7 gap-1 text-xs">
-                        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
-                          <div key={i} className="text-center font-semibold text-text-secondary py-1">
-                            {day}
-                          </div>
-                        ))}
-                        {generateCalendarDays().map((day, i) => (
-                          <div key={i} className="text-center py-1">
-                            {day && (
-                              <button
-                                type="button"
-                                onClick={() => handleDateSelect(new Date(new Date().getFullYear(), new Date().getMonth(), day))}
-                                className="w-8 h-8 rounded hover:bg-accent hover:text-white transition-colors text-sm"
-                              >
-                                {day}
-                              </button>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
+                  <div className="w-11 h-6 bg-bg-tertiary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-crm-orange"></div>
+                </label>
+                <span className="text-sm font-bold text-text-primary">Recurring Invoice?</span>
               </div>
+
+              {formData.isRecurring && (
+                <>
+                  <div className="fieldset-input">
+                    <span className="fieldset-label uppercase">Interval</span>
+                    <input 
+                      type="number" 
+                      min="1"
+                      value={formData.interval}
+                      onChange={(e) => setFormData({...formData, interval: e.target.value})}
+                    />
+                  </div>
+
+                  <div className="fieldset-input">
+                    <span className="fieldset-label uppercase">Interval Type</span>
+                    <div className="relative">
+                      <select
+                        value={formData.intervalType}
+                        onChange={(e) => setFormData({...formData, intervalType: e.target.value})}
+                        className="w-full appearance-none px-4 py-2.5 bg-bg-primary border border-bg-tertiary rounded-lg text-sm focus:outline-none focus:border-accent transition-colors cursor-pointer text-text-primary pr-10"
+                      >
+                        <option value="Day">Day</option>
+                        <option value="Month">Month</option>
+                      </select>
+                      <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <div className="fieldset-input">
+                    <span className="fieldset-label uppercase">Invoice End Date</span>
+                    <div className="relative">
+                      <input 
+                        type="text" 
+                        value={formData.endDate}
+                        onChange={handleEndDateChange}
+                        className="w-full px-4 py-2.5 bg-bg-primary border border-bg-tertiary rounded-lg text-sm focus:outline-none focus:border-accent transition-colors cursor-pointer text-text-primary pr-10"
+                        placeholder="dd/mm/yyyy"
+                      />
+                      <button 
+                        type="button"
+                        onClick={handleEndDateCalendar}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-primary transition-colors"
+                      >
+                        <CalendarIcon size={18} />
+                      </button>
+                      
+                      {showCalendar && (
+                        <div 
+                          ref={calendarRef}
+                          className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-bg-secondary border border-bg-tertiary rounded-lg shadow-lg p-4 z-50 w-64"
+                        >
+                          <div className="text-center font-semibold mb-3 text-text-primary">
+                            {new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
+                          </div>
+                          <div className="grid grid-cols-7 gap-1 text-xs">
+                            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
+                              <div key={i} className="text-center font-semibold text-text-secondary py-1">
+                                {day}
+                              </div>
+                            ))}
+                            {generateCalendarDays().map((day, i) => (
+                              <div key={i} className="text-center py-1">
+                                {day && (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDateSelect(new Date(new Date().getFullYear(), new Date().getMonth(), day))}
+                                    className="w-8 h-8 rounded hover:bg-accent hover:text-white transition-colors text-sm"
+                                  >
+                                    {day}
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
             </>
           )}
+
 
           <button
             type="submit"
