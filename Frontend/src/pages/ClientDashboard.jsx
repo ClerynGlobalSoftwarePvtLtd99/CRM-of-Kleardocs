@@ -91,7 +91,7 @@ const ClientDashboard = () => {
     return (
         <div className="p-4 md:p-8 space-y-8 animate-in fade-in duration-700">
             {/* Header Section */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-800 rounded-3xl p-6 md:p-10 shadow-2xl">
+            <div className="relative overflow-hidden bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-3xl p-6 md:p-10 shadow-xl">
                 <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
                     <LayoutDashboard size={120} className="text-crm-orange" />
                 </div>
@@ -102,10 +102,10 @@ const ClientDashboard = () => {
                             <Timer size={14} />
                             Client Portal
                         </div>
-                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">
+                        <h1 className="text-3xl md:text-4xl font-black text-[var(--color-text-primary)] tracking-tight">
                             Welcome, <span className="text-crm-orange">{customer.name}</span>
                         </h1>
-                        <p className="text-slate-400 font-medium max-w-xl">
+                        <p className="text-[var(--color-text-secondary)] font-medium max-w-xl">
                             Easily monitor your company's annual compliance status and director information in real-time.
                         </p>
                     </div>
@@ -114,14 +114,14 @@ const ClientDashboard = () => {
                 {/* Info Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-10">
                     {stats.map((stat, i) => (
-                        <div key={i} className="bg-slate-900/50 backdrop-blur border border-white/5 rounded-2xl p-4 transition-all hover:border-white/10 group">
+                        <div key={i} className="bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-2xl p-4 transition-all hover:border-crm-orange/30 group">
                             <div className="flex items-center gap-3 mb-2">
-                                <div className={`p-2 rounded-lg bg-slate-800/50 ${stat.color} group-hover:scale-110 transition-transform`}>
+                                <div className={`p-2 rounded-lg bg-[var(--color-bg-tertiary)]/30 ${stat.color} group-hover:scale-110 transition-transform`}>
                                     <stat.icon size={18} />
                                 </div>
-                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{stat.label}</span>
+                                <span className="text-[10px] font-bold text-[var(--color-text-secondary)] uppercase tracking-widest">{stat.label}</span>
                             </div>
-                            <div className="text-sm font-bold text-white truncate">{stat.value}</div>
+                            <div className="text-sm font-bold text-[var(--color-text-primary)] truncate">{stat.value}</div>
                         </div>
                     ))}
                 </div>
@@ -132,37 +132,37 @@ const ClientDashboard = () => {
                 {/* Left Column: Directors & Basic Info */}
                 <div className="lg:col-span-1 space-y-8">
                     {/* Contact Card */}
-                    <div className="bg-slate-900/40 border border-slate-800 rounded-3xl p-6">
-                        <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                    <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-3xl p-6 shadow-sm">
+                        <h3 className="text-lg font-bold text-[var(--color-text-primary)] mb-6 flex items-center gap-2">
                             <User2 size={20} className="text-crm-orange" />
                             Registered Details
                         </h3>
                         <div className="space-y-6">
                             <div className="flex items-start gap-4">
-                                <div className="p-3 bg-slate-800 rounded-2xl text-slate-400">
+                                <div className="p-3 bg-[var(--color-bg-primary)] rounded-2xl text-[var(--color-text-secondary)] border border-[var(--color-bg-tertiary)]">
                                     <Phone size={18} />
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Phone Number</p>
-                                    <p className="text-sm font-medium text-white">{customer.phone}</p>
+                                    <p className="text-xs font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Phone Number</p>
+                                    <p className="text-sm font-medium text-[var(--color-text-primary)]">{customer.phone}</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-4">
-                                <div className="p-3 bg-slate-800 rounded-2xl text-slate-400">
+                                <div className="p-3 bg-[var(--color-bg-primary)] rounded-2xl text-[var(--color-text-secondary)] border border-[var(--color-bg-tertiary)]">
                                     <Mail size={18} />
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Primary Email</p>
-                                    <p className="text-sm font-medium text-white">{customer.emails?.[0] || 'N/A'}</p>
+                                    <p className="text-xs font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Primary Email</p>
+                                    <p className="text-sm font-medium text-[var(--color-text-primary)]">{customer.emails?.[0] || 'N/A'}</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-4">
-                                <div className="p-3 bg-slate-800 rounded-2xl text-slate-400">
+                                <div className="p-3 bg-[var(--color-bg-primary)] rounded-2xl text-[var(--color-text-secondary)] border border-[var(--color-bg-tertiary)]">
                                     <MapPin size={18} />
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Registered Address</p>
-                                    <p className="text-sm font-medium text-white leading-relaxed">{customer.address || 'N/A'}</p>
+                                    <p className="text-xs font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">Registered Address</p>
+                                    <p className="text-sm font-medium text-[var(--color-text-primary)] leading-relaxed">{customer.address || 'N/A'}</p>
                                     <p className="text-[11px] font-bold text-crm-orange uppercase tracking-widest mt-1">{customer.state}</p>
                                 </div>
                             </div>
@@ -170,27 +170,27 @@ const ClientDashboard = () => {
                     </div>
 
                     {/* Directors Section */}
-                    <div className="bg-slate-900/40 border border-slate-800 rounded-3xl p-6">
-                        <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                    <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-3xl p-6 shadow-sm">
+                        <h3 className="text-lg font-bold text-[var(--color-text-primary)] mb-6 flex items-center gap-2">
                             <Users size={20} className="text-crm-orange" />
                             Directors
                         </h3>
                         {customer.directors?.length > 0 ? (
                             <div className="space-y-6">
                                 {customer.directors.map((director, idx) => (
-                                    <div key={idx} className="relative pl-6 border-l border-slate-800 group">
+                                    <div key={idx} className="relative pl-6 border-l border-[var(--color-bg-tertiary)] group">
                                         <div className="absolute top-0 left-0 -translate-x-1/2 w-2 h-2 bg-crm-orange rounded-full ring-4 ring-crm-orange/20"></div>
                                         <div className="space-y-1">
-                                            <h4 className="text-sm font-bold text-white group-hover:text-crm-orange transition-colors">
+                                            <h4 className="text-sm font-bold text-[var(--color-text-primary)] group-hover:text-crm-orange transition-colors">
                                                 {director.name || director.directorName}
                                             </h4>
                                             <div className="flex flex-col gap-1">
-                                                <p className="text-xs text-slate-400 flex items-center gap-2">
-                                                    <Phone size={12} className="text-slate-500" />
+                                                <p className="text-xs text-[var(--color-text-secondary)] flex items-center gap-2">
+                                                    <Phone size={12} className="text-[var(--color-text-secondary)]" />
                                                     {director.phone || 'N/A'}
                                                 </p>
                                                 {director.din && (
-                                                    <p className="text-[11px] font-mono text-slate-500 bg-slate-800/50 px-2 py-0.5 rounded w-fit">
+                                                    <p className="text-[11px] font-mono text-[var(--color-text-secondary)] bg-[var(--color-bg-primary)] px-2 py-0.5 rounded w-fit border border-[var(--color-bg-tertiary)]">
                                                         DIN: {director.din}
                                                     </p>
                                                 )}
@@ -205,7 +205,7 @@ const ClientDashboard = () => {
                                 ))}
                             </div>
                         ) : (
-                            <p className="text-sm italic text-slate-500">No directors listed.</p>
+                            <p className="text-sm italic text-[var(--color-text-secondary)]">No directors listed.</p>
                         )}
                     </div>
                 </div>
@@ -220,13 +220,13 @@ const ClientDashboard = () => {
                         readOnly={true}
                     />
                     
-                    <div className="bg-blue-600/10 border border-blue-500/20 rounded-2xl p-6 flex items-start gap-4">
-                        <div className="p-2 bg-blue-500/20 text-blue-400 rounded-lg">
+                    <div className="bg-blue-600/5 border border-blue-500/20 rounded-2xl p-6 flex items-start gap-4">
+                        <div className="p-2 bg-blue-500/10 text-blue-500 rounded-lg">
                             <History size={20} />
                         </div>
                         <div className="space-y-1">
-                            <h4 className="text-sm font-bold text-white">Need updates?</h4>
-                            <p className="text-xs text-slate-400 leading-relaxed">
+                            <h4 className="text-sm font-bold text-[var(--color-text-primary)]">Need updates?</h4>
+                            <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
                                 If any details are incorrect or if you want to request a status change for a compliance record, 
                                 please contact your relationship manager at Kleardocs.
                             </p>

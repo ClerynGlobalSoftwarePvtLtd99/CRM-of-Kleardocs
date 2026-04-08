@@ -37,7 +37,7 @@ const ComplianceTable = ({ compliances, onEdit, onDelete }) => {
                 className="py-8 text-center text-sm text-[var(--color-text-secondary)] italic"
               >
                 No compliances loaded. Please select a financial year and click
-                Load.
+                View.
               </td>
             </tr>
           ) : (

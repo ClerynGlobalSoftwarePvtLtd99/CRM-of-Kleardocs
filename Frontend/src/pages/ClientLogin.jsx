@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginCustomer } from '../redux/slices/authSlice';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-hot-toast';
-import { User, Lock, ArrowRight, ShieldCheck, Mail, Globe } from 'lucide-react';
+import { User, Lock, ArrowRight, ShieldCheck, Mail, Globe, Eye, EyeOff } from 'lucide-react';
 
 const ClientLogin = () => {
     const [credentials, setCredentials] = useState({ username: '', password: '' });
@@ -11,6 +11,7 @@ const ClientLogin = () => {
     const navigate = useNavigate();
     const { loading } = useSelector((state) => state.auth);
 
+    const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({ username: '', password: '' });
 
     const validate = () => {
@@ -108,8 +109,8 @@ const ClientLogin = () => {
                                     <Lock size={18} />
                                 </div>
                                 <input
-                                    type="password"
-                                    className={`w-full bg-slate-800/50 border ${errors.password ? 'border-red-500/50 focus:border-red-500' : 'border-slate-700/50 focus:border-crm-orange/50'} rounded-2xl py-3.5 pl-11 pr-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-4 ${errors.password ? 'focus:ring-red-500/10' : 'focus:ring-crm-orange/10'} transition-all`}
+                                    type={showPassword ? "text" : "password"}
+                                    className={`w-full bg-slate-800/50 border ${errors.password ? 'border-red-500/50 focus:border-red-500' : 'border-slate-700/50 focus:border-crm-orange/50'} rounded-2xl py-3.5 pl-11 pr-12 text-white placeholder:text-slate-600 focus:outline-none focus:ring-4 ${errors.password ? 'focus:ring-red-500/10' : 'focus:ring-crm-orange/10'} transition-all`}
                                     placeholder="••••••••"
                                     value={credentials.password}
                                     onChange={(e) => {
@@ -117,6 +118,13 @@ const ClientLogin = () => {
                                         if (errors.password) setErrors({ ...errors, password: '' });
                                     }}
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-500 hover:text-crm-orange transition-colors focus:outline-none"
+                                >
+                                    {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+                                </button>
                             </div>
                             {errors.password && <p className="text-[10px] text-red-500 font-bold ml-1 animate-in fade-in slide-in-from-top-1">{errors.password}</p>}
                         </div>

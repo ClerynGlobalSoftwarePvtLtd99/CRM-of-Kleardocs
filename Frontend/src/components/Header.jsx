@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useLocation } from 'react-router'
 import { useDispatch } from 'react-redux'
+import { LogOut } from 'lucide-react'
 import DateRangePicker from './DateRangePicker'
 import { useAppSelector } from '../redux/hooks'
 import { setDateRange } from '../redux/slices/dashboardSlice'
@@ -33,6 +34,7 @@ const MoonIcon = () => (
 const Header = () => {
   const location = useLocation()
   const dispatch = useDispatch()
+  const [showLogoutPopup, setShowLogoutPopup] = useState(false)
   
   const isSidebarPage = isSidebarRoute(location.pathname)
   const isDashboard = location.pathname === '/'
@@ -67,7 +69,7 @@ const Header = () => {
   }
 
   return (
-    <header className={`h-20 bg-[var(--color-bg-secondary)] border-b border-[var(--color-bg-tertiary)] flex items-center justify-between px-4 md:px-6 lg:px-8 z-10 w-full relative ${isSidebarPage ? 'mb-0 pb-0' : 'mb-1'}`}>
+    <header className={`h-20 bg-[var(--color-bg-secondary)] border-b border-[var(--color-bg-tertiary)] flex items-center justify-between px-4 md:px-6 lg:px-8 z-50 w-full relative ${isSidebarPage ? 'mb-0 pb-0' : 'mb-1'}`}>
       {/* Left side - Date Range Picker */}
       <div className="flex items-center sm:pr-10 pr-5">
         {isDashboard && (
@@ -140,20 +142,56 @@ const Header = () => {
           </div>
           <div className="w-10 h-10 rounded-full bg-[var(--color-accent)] flex items-center justify-center text-[var(--color-bg-primary)] font-bold shadow-lg ring-2 ring-[var(--color-bg-tertiary)] ring-offset-2 ring-offset-[var(--color-bg-secondary)] relative group">
             {getInitials(user?.name)}
-            
-            {/* Conditional Logout for Customers (since they have no sidebar) */}
-            {user?.role?.toLowerCase() === 'customer' && (
-              <button 
-                onClick={() => dispatch(logoutUser())} 
-                className="absolute -bottom-1 -right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white border-2 border-[var(--color-bg-secondary)] hover:bg-red-600 transition-colors cursor-pointer"
-                title="Logout"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-              </button>
-            )}
           </div>
+
+          {/* Conditional Logout for Customers (positioned to the right) */}
+          {user?.role?.toLowerCase() === 'customer' && (
+            <button 
+              onClick={() => setShowLogoutPopup(true)} 
+              className="w-10 h-10 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-xl flex items-center justify-center transition-all duration-300 cursor-pointer shadow-sm border border-red-500/20"
+              title="Logout"
+            >
+              <LogOut size={18} />
+            </button>
+          )}
         </div>
       </div>
+
+      {/* Logout Confirmation Popup */}
+      {showLogoutPopup && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-md p-4 transition-all duration-300">
+          <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-2xl shadow-2xl p-6 w-full max-w-sm flex flex-col items-center justify-center text-center animate-in fade-in zoom-in-95 duration-200">
+            <div className="w-14 h-14 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mb-5 ring-4 ring-red-500/20">
+              <LogOut size={28} className="translate-x-[2px]" />
+            </div>
+
+            <h2 className="text-2xl font-bold text-[var(--color-text-primary)] mb-2">
+              Logout?
+            </h2>
+            <p className="text-[var(--color-text-secondary)] mb-8 text-sm">
+              Are you sure you want to logout?
+            </p>
+
+            <div className="flex gap-3 w-full">
+              <button
+                onClick={() => setShowLogoutPopup(false)}
+                className="flex-1 px-4 py-2.5 border border-[var(--color-bg-tertiary)] cursor-pointer text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)] hover:text-white rounded-lg font-semibold transition-colors focus:ring-2 focus:ring-[var(--color-bg-tertiary)] focus:outline-none"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  dispatch(logoutUser())
+                  setShowLogoutPopup(false)
+                }}
+                className="flex-1 px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white cursor-pointer rounded-lg font-semibold transition-colors focus:ring-2 focus:ring-red-600 focus:outline-none"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   )
 }

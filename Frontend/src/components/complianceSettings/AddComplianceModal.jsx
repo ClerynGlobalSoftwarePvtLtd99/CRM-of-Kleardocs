@@ -19,10 +19,11 @@ const AddComplianceModal = ({ isOpen, onClose, onSubmit }) => {
     name: '',
     hasExpiry: false,
     expiryDate: '',
+    forNewCompany: false,
     inc20: 'No',
     daysOfExpiry: '30',
     expiryTemplate: 'None',
-    completeTemplate: 'Compliance Update',
+    completeTemplate: 'None',
   })
 
   if (!isOpen) return null
@@ -45,6 +46,7 @@ const AddComplianceModal = ({ isOpen, onClose, onSubmit }) => {
     const submissionData = {
       ...formData,
       inc20: formData.inc20 === 'Yes',
+      forNewCompany: !!formData.forNewCompany,
       daysOfExpiry: parseInt(formData.daysOfExpiry || '30'),
     }
     onSubmit(submissionData)
@@ -114,6 +116,27 @@ const AddComplianceModal = ({ isOpen, onClose, onSubmit }) => {
                 />
               </FormFieldWrapper>
             )}
+            
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-semibold text-[var(--color-text-primary)] mb-0">
+                New Company Only?
+              </label>
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, forNewCompany: !prev.forNewCompany }))}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+                    formData.forNewCompany
+                    ? 'bg-blue-500'
+                    : 'bg-gray-300'
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    formData.forNewCompany ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+            </div>
 
             <FormFieldWrapper label="Inc 20?" id="inc20">
               <select
