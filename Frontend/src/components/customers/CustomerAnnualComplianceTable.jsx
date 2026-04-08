@@ -42,7 +42,7 @@ const CustomerAnnualComplianceTable = ({ compliances = [], financialYears = [], 
                 onClick={() => onAction && financialYear && onAction('viewComplianceYear', financialYear)}
                 className="bg-[#298835] hover:bg-[#216d2b] text-white px-4 py-1.5 text-[11px] font-bold uppercase rounded-sm transition-colors custom-shadow-sm h-[34px]"
               >
-                LOAD
+                View
               </button>
             </div>
           )}

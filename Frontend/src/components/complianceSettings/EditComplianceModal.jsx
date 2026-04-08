@@ -23,10 +23,11 @@ const EditComplianceModal = ({ isOpen, onClose, data, onSubmit }) => {
     name: '',
     hasExpiry: false,
     expiryDate: '',
+    forNewCompany: false,
     inc20: 'No',
     daysOfExpiry: '30',
     expiryTemplate: 'None',
-    completeTemplate: 'Compliance Update',
+    completeTemplate: 'None',
   })
 
   // Populate data when editing
@@ -37,9 +38,10 @@ const EditComplianceModal = ({ isOpen, onClose, data, onSubmit }) => {
         hasExpiry: data.hasExpiry || false,
         expiryDate: data.expiryDate ? new Date(data.expiryDate).toISOString().split('T')[0] : '',
         inc20: data.inc20 ? 'Yes' : 'No',
+        forNewCompany: !!data.forNewCompany,
         daysOfExpiry: data.daysOfExpiry || '30',
         expiryTemplate: data.expiryTemplate?.name || 'None',
-        completeTemplate: data.completeTemplate?.name || 'Compliance Update',
+        completeTemplate: data.completeTemplate?.name || 'None',
       })
     }
   }, [data, isOpen])
@@ -64,6 +66,7 @@ const EditComplianceModal = ({ isOpen, onClose, data, onSubmit }) => {
       ...data, 
       ...formData,
       inc20: formData.inc20 === 'Yes',
+      forNewCompany: !!formData.forNewCompany,
       daysOfExpiry: parseInt(formData.daysOfExpiry)
     })
   }
@@ -135,6 +138,27 @@ const EditComplianceModal = ({ isOpen, onClose, data, onSubmit }) => {
                 />
               </FormFieldWrapper>
             )}
+
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-semibold text-[var(--color-text-primary)] mb-0">
+                New Company Only?
+              </label>
+              <button
+                type="button"
+                onClick={() => setFormData(prev => ({ ...prev, forNewCompany: !prev.forNewCompany }))}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+                    formData.forNewCompany
+                    ? 'bg-blue-500'
+                    : 'bg-gray-300'
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    formData.forNewCompany ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+            </div>
 
             <FormFieldWrapper label="Inc 20?" id="inc20">
               <select
