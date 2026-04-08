@@ -414,7 +414,6 @@ const RecurringInvoiceDetails = () => {
                     <th className="px-4 py-3 text-center shadow-[0_1px_0_var(--color-bg-tertiary)]">Action</th>
                   </tr>
                 </thead>
-<<<<<<< HEAD
                 <tbody className="space-y-1">
                   {ri.invoices?.length > 0 ? ri.invoices.map((inv, index) => {
                     // Find associated installment
@@ -459,27 +458,6 @@ const RecurringInvoiceDetails = () => {
                       </tr>
                     );
                   }) : (
-=======
-                <tbody className="divide-y divide-bg-tertiary">
-                  {ri.invoices?.length > 0 ? ri.invoices.map((inv, index) => (
-                    <tr key={index} className="hover:bg-bg-tertiary/10 transition-colors">
-                      <td className="px-4 py-3">{formatDate(inv.invoiceDate)}</td>
-                      <td className="px-4 py-3 font-medium">{inv.invoiceNo}</td>
-                      <td className="px-4 py-3 text-right">₹ {inv.total?.toFixed(2)}</td>
-                      <td className="px-4 py-3 text-right text-green-600">₹ {inv.paid?.toFixed(2)}</td>
-                      <td className="px-4 py-3 text-right text-red-600 font-semibold">₹ {inv.due?.toFixed(2)}</td>
-                      <td className="px-4 py-3 text-center">
-                        <button
-                          onClick={() => handleViewInvoice(inv._id)}
-                          className="p-1.5 hover:bg-[var(--color-accent)] hover:text-white rounded-lg transition-colors text-[var(--color-accent)]"
-                          title="View Details"
-                        >
-                          <Eye size={18} />
-                        </button>
-                      </td>
-                    </tr>
-                  )) : (
->>>>>>> a76892a1ca06a972ef7462a46f78333b9ce3646e
                     <tr>
                       <td colSpan={ri.totalInstallments > 1 ? 7 : 6} className="px-4 py-8 text-center text-text-secondary italic">No invoices generated yet.</td>
                     </tr>
