@@ -141,7 +141,7 @@ const Templates = () => {
   }
 
   return (
-    <div className="flex-1 p-4 md:p-8 w-full text-text-primary">
+    <div className="flex-1 p-4 md:p-8 w-full text-[var(--color-text-primary)]">
       <TemplatesHeader count={templates.length} onAddClick={openAddModal} />
       <TemplatesFilters
         searchFilter={searchFilter}
@@ -157,19 +157,19 @@ const Templates = () => {
       {/* Preview Modal */}
       {isPreviewModalOpen && selectedTemplate && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="bg-bg-secondary border border-bg-tertiary rounded-2xl shadow-xl w-full max-w-4xl flex flex-col max-h-[90vh]">
-            <div className="flex justify-between items-center p-5 border-b border-bg-tertiary bg-bg-primary rounded-t-2xl">
+          <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-2xl shadow-xl w-full max-w-4xl flex flex-col max-h-[90vh]">
+            <div className="flex justify-between items-center p-5 border-b border-[var(--color-bg-tertiary)] bg-[var(--color-bg-primary)] rounded-t-2xl">
               <div>
                 <h3 className="text-lg font-bold">Template Preview: {selectedTemplate.name}</h3>
-                <p className="text-sm text-text-secondary">Subject: {selectedTemplate.subject}</p>
+                <p className="text-sm text-[var(--color-text-secondary)]">Subject: {selectedTemplate.subject}</p>
               </div>
-              <button onClick={() => setIsPreviewModalOpen(false)} className="text-text-secondary hover:text-text-primary">
+              <button onClick={() => setIsPreviewModalOpen(false)} className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">
                 <X size={20} />
               </button>
             </div>
-            <div className="p-8 overflow-y-auto bg-gray-50 flex-1 text-gray-900 border-b border-bg-tertiary">
+            <div className="p-8 overflow-y-auto bg-gray-50 flex-1 text-gray-900 border-b border-[var(--color-bg-tertiary)]">
               <div 
-                className="bg-white shadow-lg p-10 mx-auto max-w-[800px] min-h-[600px] prose prose-blue text-gray-900"
+                className="bg-white shadow-lg p-10 mx-auto max-w-[800px] min-h-[600px] prose prose-blue max-w-none text-gray-900"
                 dangerouslySetInnerHTML={{ __html: injectTemplateData(selectedTemplate.body, PREVIEW_CONTEXT) }}
               />
               
@@ -198,13 +198,13 @@ const Templates = () => {
                 </div>
               )}
             </div>
-            <div className="p-5 border-t border-bg-tertiary flex justify-between items-center bg-bg-primary rounded-b-2xl">
-              <p className="text-xs text-text-secondary italic">
+            <div className="p-5 border-t border-[var(--color-bg-tertiary)] flex justify-between items-center bg-[var(--color-bg-primary)] rounded-b-2xl">
+              <p className="text-xs text-[var(--color-text-secondary)] italic">
                 * This preview uses sample data for placeholders like {"{{companyName}}"}
               </p>
               <button 
                 onClick={() => setIsPreviewModalOpen(false)} 
-                className="px-6 py-2 bg-bg-tertiary hover:bg-bg-secondary rounded-lg font-medium transition-colors"
+                className="px-6 py-2 bg-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-secondary)] rounded-lg font-medium transition-colors"
               >
                 Close Preview
               </button>
@@ -222,12 +222,12 @@ const Templates = () => {
       {/* ── Edit Template Modal ── */}
       {isEditModalOpen && selectedTemplate && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="bg-bg-secondary border border-bg-tertiary rounded-2xl shadow-xl w-full max-w-[80%] flex flex-col max-h-[90vh]">
-            <div className="flex justify-between items-center p-5 border-b border-bg-tertiary">
+          <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-2xl shadow-xl w-full max-w-[80%] flex flex-col max-h-[90vh]">
+            <div className="flex justify-between items-center p-5 border-b border-[var(--color-bg-tertiary)]">
               <h2 className="text-lg font-bold">Edit Email Template</h2>
               <button
                 onClick={() => setIsEditModalOpen(false)}
-                className="text-text-secondary hover:text-text-primary"
+                className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
               >
                 <X size={20} />
               </button>
@@ -240,11 +240,11 @@ const Templates = () => {
                 />
               </form>
             </div>
-            <div className="p-5 border-t border-bg-tertiary">
+            <div className="p-5 border-t border-[var(--color-bg-tertiary)]">
               <button
                 type="submit"
                 form="edit-template-form"
-                className="w-full bg-accent hover:bg-yellow-500 text-white py-2.5 rounded-lg font-bold transition-colors"
+                className="w-full bg-[var(--color-accent)] hover:bg-yellow-500 text-white py-2.5 rounded-lg font-bold transition-colors"
               >
                 Update Template
               </button>
@@ -256,19 +256,19 @@ const Templates = () => {
       {/* ── Manage Attachments Modal ── */}
       {isManageModalOpen && selectedTemplate && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="bg-bg-secondary border border-bg-tertiary rounded-2xl shadow-xl w-full max-w-md flex flex-col max-h-[90vh]">
-            <div className="flex justify-between items-center p-5 border-b border-bg-tertiary">
+          <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-2xl shadow-xl w-full max-w-md flex flex-col max-h-[90vh]">
+            <div className="flex justify-between items-center p-5 border-b border-[var(--color-bg-tertiary)]">
               <h2 className="text-lg font-bold">Email Attachments</h2>
               <button
                 onClick={() => setIsManageModalOpen(false)}
-                className="text-text-secondary hover:text-text-primary"
+                className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
               >
                 <X size={20} />
               </button>
             </div>
             <div className="p-5 flex-1 overflow-y-auto space-y-4">
-              <div className="bg-bg-tertiary rounded-lg px-4 py-3">
-                <p className="text-sm text-text-secondary">
+              <div className="bg-[var(--color-bg-tertiary)] rounded-lg px-4 py-3">
+                <p className="text-sm text-[var(--color-text-secondary)]">
                   Template Name
                 </p>
                 <p className="font-semibold">{selectedTemplate.name}</p>
@@ -276,19 +276,19 @@ const Templates = () => {
               {/* Attachments List */}
               <div className="space-y-2">
                 {(selectedTemplate.attachments || []).length === 0 ? (
-                  <p className="text-sm text-text-secondary italic text-center py-4">
+                  <p className="text-sm text-[var(--color-text-secondary)] italic text-center py-4">
                     No attachments yet.
                   </p>
                 ) : (
                   selectedTemplate.attachments.map((att) => (
                     <div
                       key={att}
-                      className="flex items-center justify-between bg-bg-primary border border-bg-tertiary rounded-lg px-3 py-2"
+                      className="flex items-center justify-between bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg px-3 py-2"
                     >
                       <div className="flex items-center gap-2">
                         <Paperclip
                           size={14}
-                          className="text-text-secondary"
+                          className="text-[var(--color-text-secondary)]"
                         />
                         <span className="text-sm truncate max-w-[200px]">{att.split('/').pop()}</span>
                       </div>
@@ -297,7 +297,7 @@ const Templates = () => {
                           href={`${BACKEND_URL}${att}`} 
                           target="_blank" 
                           rel="noreferrer"
-                          className="p-1 hover:bg-bg-tertiary rounded text-blue-400"
+                          className="p-1 hover:bg-[var(--color-bg-tertiary)] rounded text-blue-400"
                         >
                           <ExternalLink size={14} />
                         </a>
@@ -311,16 +311,16 @@ const Templates = () => {
                   ))
                 )}
               </div>
-              <label className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-bg-tertiary hover:border-accent rounded-lg py-3 text-sm font-semibold text-text-secondary hover:text-accent transition-colors cursor-pointer">
+              <label className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-[var(--color-bg-tertiary)] hover:border-[var(--color-accent)] rounded-lg py-3 text-sm font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors cursor-pointer">
                 <Plus size={16} />
                 Add new file
                 <input type="file" className="hidden" onChange={addAttachment} />
               </label>
             </div>
-            <div className="p-5 border-t border-bg-tertiary">
+            <div className="p-5 border-t border-[var(--color-bg-tertiary)]">
               <button
                 onClick={() => setIsManageModalOpen(false)}
-                className="w-full bg-bg-tertiary hover:bg-accent hover:text-white text-text-primary py-2.5 rounded-lg font-bold transition-colors"
+                className="w-full bg-[var(--color-bg-tertiary)] hover:bg-[var(--color-accent)] hover:text-white text-[var(--color-text-primary)] py-2.5 rounded-lg font-bold transition-colors"
               >
                 Done
               </button>

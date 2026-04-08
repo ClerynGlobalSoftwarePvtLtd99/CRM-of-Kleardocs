@@ -2,39 +2,39 @@ import React from 'react'
 
 const ComplianceTable = ({ compliances, onEdit, onDelete }) => {
   return (
-    <div className="overflow-x-auto bg-bg-secondary rounded-lg">
+    <div className="overflow-x-auto border border-[var(--color-bg-tertiary)] rounded-lg">
       <table className="w-full text-left border-collapse min-w-[1000px]">
         <thead>
-          <tr className="bg-bg-primary border-b border-bg-tertiary hover:bg-bg-primary">
-            <th className="py-3 px-4 font-semibold text-sm text-text-secondary min-w-[250px]">
+          <tr className="bg-[var(--color-bg-primary)] border-b border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-primary)]">
+            <th className="py-3 px-4 font-semibold text-sm text-[var(--color-text-secondary)] min-w-[250px]">
               Compliance Name
             </th>
-            <th className="py-3 px-4 font-semibold text-sm text-text-secondary">
+            <th className="py-3 px-4 font-semibold text-sm text-[var(--color-text-secondary)]">
               Expiry Date
             </th>
-            <th className="py-3 px-4 font-semibold text-sm text-text-secondary">
+            <th className="py-3 px-4 font-semibold text-sm text-[var(--color-text-secondary)]">
               New
             </th>
-            <th className="py-3 px-4 font-semibold text-sm text-text-secondary">
+            <th className="py-3 px-4 font-semibold text-sm text-[var(--color-text-secondary)]">
               Expiry after
             </th>
-            <th className="py-3 px-4 font-semibold text-sm text-text-secondary">
+            <th className="py-3 px-4 font-semibold text-sm text-[var(--color-text-secondary)]">
               Expiry Template
             </th>
-            <th className="py-3 px-4 font-semibold text-sm text-text-secondary">
+            <th className="py-3 px-4 font-semibold text-sm text-[var(--color-text-secondary)]">
               Complete Template
             </th>
-            <th className="py-3 px-4 font-semibold text-sm text-text-secondary text-right">
+            <th className="py-3 px-4 font-semibold text-sm text-[var(--color-text-secondary)] text-right">
               Action
             </th>
           </tr>
         </thead>
         <tbody>
           {compliances.length === 0 ? (
-            <tr className="hover:bg-bg-primary transition-colors">
+            <tr className="hover:bg-[var(--color-bg-primary)] transition-colors">
               <td
                 colSpan="7"
-                className="py-8 text-center text-sm text-text-secondary italic"
+                className="py-8 text-center text-sm text-[var(--color-text-secondary)] italic"
               >
                 No compliances loaded. Please select a financial year and click
                 Load.
@@ -44,12 +44,12 @@ const ComplianceTable = ({ compliances, onEdit, onDelete }) => {
             compliances.map((comp) => (
               <tr
                 key={comp._id}
-                className="border-b border-bg-tertiary hover:bg-bg-primary transition-colors last:border-0"
+                className="border-b border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-primary)] transition-colors last:border-0"
               >
-                <td className="py-4 px-4 text-sm font-medium hover:text-text-primary max-w-[300px]">
+                <td className="py-4 px-4 text-sm font-medium text-[var(--color-text-primary)] max-w-[300px]">
                   {comp.name}
                 </td>
-                <td className="py-4 px-4 text-sm text-text-secondary whitespace-nowrap">
+                <td className="py-4 px-4 text-sm text-[var(--color-text-secondary)] whitespace-nowrap">
                   {comp.expiryDate
                     ? new Date(comp.expiryDate).toLocaleDateString('en-GB', {
                         day: 'numeric',
@@ -58,24 +58,24 @@ const ComplianceTable = ({ compliances, onEdit, onDelete }) => {
                       })
                     : '-'}
                 </td>
-                <td className="py-4 px-4 text-sm text-text-secondary">
+                <td className="py-4 px-4 text-sm text-[var(--color-text-secondary)]">
                   <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold ${comp.forNewCompany ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
                     {comp.forNewCompany ? 'Yes' : 'No'}
                   </span>
                 </td>
-                <td className="py-4 px-4 text-sm text-text-secondary whitespace-nowrap">
+                <td className="py-4 px-4 text-sm text-[var(--color-text-secondary)] whitespace-nowrap">
                   {comp.daysOfExpiry ? (
-                    <span className="font-medium hover:text-text-primary">
+                    <span className="font-medium text-[var(--color-text-primary)]">
                       {comp.daysOfExpiry} days
                     </span>
                   ) : '-'}
                 </td>
-                <td className="py-4 px-4 text-sm text-text-secondary">
+                <td className="py-4 px-4 text-sm text-[var(--color-text-secondary)]">
                   <div className="max-w-[150px] truncate" title={comp.expiryTemplate?.name || 'None'}>
                     {comp.expiryTemplate?.name || 'None'}
                   </div>
                 </td>
-                <td className="py-4 px-4 text-sm text-text-secondary">
+                <td className="py-4 px-4 text-sm text-[var(--color-text-secondary)]">
                   <div className="max-w-[150px] truncate" title={comp.completeTemplate?.name || 'None'}>
                     {comp.completeTemplate?.name || 'None'}
                   </div>
@@ -83,7 +83,7 @@ const ComplianceTable = ({ compliances, onEdit, onDelete }) => {
                 <td className="py-4 px-4 text-sm text-right">
                   <button
                     onClick={() => onEdit(comp)}
-                    className="bg-transparent text-accent hover:text-yellow-600 font-bold cursor-pointer transition-all px-3 py-1.5 rounded-lg border border-transparent hover:border-accent hover:bg-yellow-50/10 active:scale-95 text-xs uppercase tracking-wider focus:ring-accent"
+                    className="bg-transparent text-[var(--color-accent)] hover:text-yellow-600 font-bold cursor-pointer transition-all px-3 py-1.5 rounded-lg border border-transparent hover:border-[var(--color-accent)] hover:bg-yellow-50/10 active:scale-95 text-xs uppercase tracking-wider"
                   >
                     Modify
                   </button>

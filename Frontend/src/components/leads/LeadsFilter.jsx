@@ -210,7 +210,7 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
           <button
             type="button"
             onClick={handleApplyFilters}
-            className="lg:flex-none px-4 py-2 bg-accent hover:bg-yellow-500 text-white rounded-lg transition-colors cursor-pointer flex items-center justify-end gap-1 font-bold text-[11px] uppercase tracking-tighter h-[38px]"
+            className="lg:flex-none px-4 py-2 bg-[var(--color-accent)] hover:bg-yellow-500 text-white rounded-lg transition-colors cursor-pointer flex items-center justify-end gap-1 font-bold text-[11px] uppercase tracking-tighter h-[38px]"
             title="Apply Filter"
           >
             <Filter size={16} />
@@ -220,7 +220,7 @@ const LeadsFilter = ({ onFilterChange, filters: externalFilters = {} }) => {
           <button
             type="button"
             onClick={handleClear}
-            className="lg:flex-none px-4 py-2 bg-bg-tertiary hover:bg-red-500 hover:text-white text-text-secondary rounded-lg transition-colors cursor-pointer flex items-center justify-end gap-1 font-bold text-[11px] uppercase tracking-tighter h-[38px]"
+            className="lg:flex-none px-4 py-2 bg-[var(--color-bg-tertiary)] hover:bg-red-500 hover:text-white text-[var(--color-text-secondary)] rounded-lg transition-colors cursor-pointer flex items-center justify-end gap-1 font-bold text-[11px] uppercase tracking-tighter h-[38px]"
             title="Clear Filters"
           >
             <X size={16} />

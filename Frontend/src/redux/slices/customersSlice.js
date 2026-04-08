@@ -173,7 +173,7 @@ export const endCustomerService = createAsyncThunk(
 
 export const downloadCustomerReport = createAsyncThunk(
   'customers/downloadReport',
-  async ({ customerId, type, params }, { rejectWithValue }) => {
+  async ({ customerId, type, params, fileName }, { rejectWithValue }) => {
     try {
       const endpointMap = {
         directorReport: 'director-report',
@@ -190,13 +190,26 @@ export const downloadCustomerReport = createAsyncThunk(
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `${type}_${customerId}.pdf`);
+      
+      // If fileName is provided, use it. Otherwise, default to generic name.
+      const downloadName = fileName || `${type}_${customerId}.pdf`;
+      link.setAttribute('download', downloadName);
       document.body.appendChild(link);
       link.click();
       link.remove();
       return true;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to download report');
+      let errorMessage = 'Failed to download report';
+      if (error.response?.data instanceof Blob) {
+        try {
+          const text = await error.response.data.text();
+          const json = JSON.parse(text);
+          errorMessage = json.message || errorMessage;
+        } catch (e) {}
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+      return rejectWithValue(errorMessage);
     }
   }
 );
