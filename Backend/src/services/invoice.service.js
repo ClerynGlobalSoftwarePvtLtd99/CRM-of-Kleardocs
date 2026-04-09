@@ -167,15 +167,6 @@ export const createInvoice = async (data, userId) => {
     const endDate = data.endDate ? new Date(data.endDate) : undefined;
     const nextDate = calcNextDate(startDate, data.interval, data.intervalType);
 
-    // Calculate installments if specified
-    let installments = [];
-    const totalInstallments = data.totalInstallments || 1;
-    const installmentIntervalMonths = data.installmentIntervalMonths || data.interval;
-    
-    if (totalInstallments > 1) {
-      installments = calculateInstallments(total, startDate, endDate, totalInstallments, installmentIntervalMonths);
-    }
-
     ri = await RecurringInvoice.create({
       customer: data.customerId,
       items: data.items.map((item) => ({
@@ -192,9 +183,6 @@ export const createInvoice = async (data, userId) => {
       interval: data.interval,
       intervalType: data.intervalType,
       description: data.description || "",
-      totalInstallments,
-      installmentIntervalMonths,
-      installments,
       invoices: [invoice._id],
       createdBy: userId
     });
@@ -259,52 +247,6 @@ export const addPayment = async (invoiceId, data, userId) => {
   // Auto-update invoice paid & due — return updated totals
   const updatedInvoice = await recalcDue(invoiceId);
 
-  // ─── Update installment status if this is a recurring invoice with installments
-  if (invoice.recurringInvoice) {
-    const ri = await RecurringInvoice.findById(invoice.recurringInvoice);
-    if (ri && ri.totalInstallments > 1 && ri.installments?.length > 0) {
-      // Find the installment linked to this invoice
-      let installment = ri.installments.find(inst => 
-        inst.invoice?.toString() === invoiceId
-      );
-      
-      // Fallback: find by due date if invoice link is missing (for existing data)
-      if (!installment) {
-        const invoiceDate = new Date(invoice.invoiceDate);
-        installment = ri.installments.find(inst => {
-          const instDueDate = new Date(inst.dueDate);
-          // Match if due dates are within 1 day of each other
-          const diffTime = Math.abs(instDueDate - invoiceDate);
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-          return diffDays <= 1 && inst.status !== 'Paid';
-        });
-        
-        // Link the invoice to this installment for future payments
-        if (installment) {
-          installment.invoice = invoiceId;
-        }
-      }
-      
-      if (installment) {
-        // Track partial payments - sum up all payments for this invoice
-        const allPayments = await InvoicePayment.find({ invoice: invoiceId });
-        const totalPaid = allPayments.reduce((sum, p) => sum + p.amount, 0);
-        
-        installment.paidAmount = totalPaid;
-        
-        // Determine status based on payment amount
-        if (updatedInvoice.due < 0.01) {
-          installment.status = "Paid";
-          installment.paidDate = new Date();
-        } else if (totalPaid > 0) {
-          installment.status = "Partial";
-        }
-        
-        await ri.save();
-      }
-    }
-  }
-
   return {
     payment,
     invoiceTotals: {
@@ -367,32 +309,6 @@ export const getAllPayments = async (query) => {
 // ══════════════════════════════════════════════════════════════════════════════
 // RECURRING INVOICE SERVICE
 // ══════════════════════════════════════════════════════════════════════════════
-
-// ─── Helper: calculate installments ────────────────────────────────────────
-export const calculateInstallments = (totalAmount, startDate, endDate, totalInstallments, intervalMonths) => {
-  if (!totalInstallments || totalInstallments <= 1) return [];
-  
-  const installments = [];
-  const installmentAmount = totalAmount / totalInstallments;
-  const start = new Date(startDate);
-  
-  for (let i = 0; i < totalInstallments; i++) {
-    const dueDate = new Date(start);
-    dueDate.setMonth(dueDate.getMonth() + (i * intervalMonths));
-    
-    installments.push({
-      number: i + 1,
-      amount: Math.round(installmentAmount * 100) / 100,
-      dueDate: dueDate,
-      status: i === 0 ? "Pending" : "Pending", // First one starts as pending
-      invoice: null,
-      paidDate: null,
-      paidAmount: 0
-    });
-  }
-  
-  return installments;
-};
 
 // ─── Helper: calculate next date ─────────────────────────────────────────────
 export const calcNextDate = (from, interval, intervalType) => {
@@ -484,7 +400,7 @@ export const getAllRecurringInvoicesForExport = async (query) => {
 // ─── 9. GET SINGLE RECURRING INVOICE ─────────────────────────────────────────
 export const getRecurringInvoiceById = async (riId) => {
   const ri = await RecurringInvoice.findById(riId)
-    .populate("customer", "name companyName phone emails address state")
+    .populate("customer", "name companyName phone emails")
     .populate("items.service", "name hsn")
     .populate("invoices")
     .lean();
@@ -531,11 +447,6 @@ export const generateDueRecurringInvoices = async () => {
     const placeOfSupply = stateCode ? `${stateCode} - ${ri.customer.state}` : ri.customer.state || "";
     const invoiceNo = await getNextInvoiceNo();
 
-    // Calculate installment amount if using installments
-    const installmentAmount = ri.totalInstallments > 1 
-      ? total / ri.totalInstallments 
-      : total;
-
     const invoice = await Invoice.create({
       invoiceNo,
       invoiceDate: now,
@@ -546,23 +457,11 @@ export const generateDueRecurringInvoices = async () => {
       totalGst,
       total,
       paid: 0,
-      due: ri.totalInstallments > 1 ? installmentAmount : total,
+      due: total,
       isRecurring: true,
       description: ri.description || "",
       recurringInvoice: ri._id
     });
-
-    // Find and update the corresponding installment
-    if (ri.totalInstallments > 1 && ri.installments?.length > 0) {
-      const upcomingInstallment = ri.installments.find(inst => 
-        inst.status === "Pending" && new Date(inst.dueDate) <= now
-      );
-      
-      if (upcomingInstallment) {
-        upcomingInstallment.status = "Invoiced";
-        upcomingInstallment.invoice = invoice._id;
-      }
-    }
 
     // Update recurring invoice
     ri.invoices.push(invoice._id);
