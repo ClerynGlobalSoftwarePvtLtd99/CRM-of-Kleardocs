@@ -30,7 +30,7 @@ const isLocalhost = window.location.hostname === 'localhost' ||
 
 const axiosInstance = axios.create({
   baseURL,
-  withCredentials: isLocalhost, // Only use cookies on localhost
+  withCredentials: true, // Always send cookies (works for local and cross-domain if configured correctly)
   headers: {
     'Content-Type': 'application/json',
   },
@@ -39,12 +39,11 @@ const axiosInstance = axios.create({
 // Request interceptor - add token for production
 axiosInstance.interceptors.request.use(
   (config) => {
-    // For production (cross-domain), use token from localStorage
-    if (!isLocalhost) {
-      const token = localStorage.getItem('accessToken');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+    // We always try to attach the token if it exists in localStorage 
+    // This serves as a secondary auth mechanism if cookies are blocked
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -53,35 +52,68 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response interceptor for global errors
+// Response interceptor for global errors and token refresh
 axiosInstance.interceptors.response.use(
   (response) => {
-    // For production, store tokens from response
-    if (!isLocalhost && response.data?.data?.accessToken) {
+    // If a response contains fresh tokens, update them in localStorage
+    if (response.data?.data?.accessToken) {
       localStorage.setItem('accessToken', response.data.data.accessToken);
-      if (response.data.data.refreshToken) {
-        localStorage.setItem('refreshToken', response.data.data.refreshToken);
-      }
+    }
+    if (response.data?.data?.refreshToken) {
+      localStorage.setItem('refreshToken', response.data.data.refreshToken);
     }
     return response;
   },
-  (error) => {
-    if (error.response?.status === 401) {
-      // Clear authentication data
-      localStorage.removeItem('isAuthenticated');
-      if (!isLocalhost) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+  async (error) => {
+    const originalRequest = error.config;
+
+    // If error is 401 and we haven't tried to refresh yet
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const refreshToken = localStorage.getItem('refreshToken');
+        
+        if (refreshToken) {
+          // Attempt to refresh the token
+          console.log('🔄 Attempting to refresh access token...');
+          const refreshResponse = await axios.post(`${baseURL}/auth/refresh`, {
+            refreshToken
+          }, { withCredentials: true });
+
+          const { accessToken, refreshToken: newRefreshToken } = refreshResponse.data.data;
+
+          // Update tokens
+          localStorage.setItem('accessToken', accessToken);
+          if (newRefreshToken) {
+            localStorage.setItem('refreshToken', newRefreshToken);
+          }
+
+          // Retry the original request with the new token
+          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+          console.log('✅ Token refreshed! Retrying original request.');
+          return axiosInstance(originalRequest);
+        }
+      } catch (refreshError) {
+        console.error('❌ Refresh token expired or invalid:', refreshError);
+        // Fall through to logout logic below
       }
       
-      // Prevent loop - only redirect if not already on login page and not in the middle of login
+      // If we reach here, refresh failed or was not possible
+      // Clear authentication data
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      
+      // Prevent loop - only redirect if not already on login page
       const isLoginPage = window.location.pathname === '/' || window.location.pathname === '/login';
-      const isLoginRequest = error.config?.url?.includes('/auth/login');
+      const isLoginRequest = originalRequest.url?.includes('/auth/login');
       
       if (!isLoginPage && !isLoginRequest) {
         window.location.href = '/'; 
       }
     }
+    
     return Promise.reject(error);
   }
 );
