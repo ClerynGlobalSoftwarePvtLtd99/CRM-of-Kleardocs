@@ -1,5 +1,6 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import stampUrl from '../assets/AuthStamp2.png';
 
 // Helper to convert number to words
 function numberToWords(num) {
@@ -304,8 +305,9 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   doc.text("For Kleardocs Solutions Private Limited", sigX + sigWidth / 2, footerY + 15, { align: "center" });
 
   // Add Authorized Signatory Stamp Image
+  // stampUrl is resolved by Vite at build time and works in all environments
   try {
-    const stampData = await getBase64ImageFromUrl('/src/assets/AuthStamp2.png');
+    const stampData = await getBase64ImageFromUrl(stampUrl);
     if (stampData) {
       const stampWidth = 100;
       const stampHeight = 100;
@@ -315,7 +317,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     }
   } catch (e) {
     console.error('Failed to load stamp image:', e);
-    // Fallback to placeholder if image fails
+    // Fallback placeholder circles if image fails
     const centerX = sigX + sigWidth / 2;
     const centerY = footerY + 75;
     doc.setLineWidth(1);

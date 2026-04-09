@@ -353,18 +353,35 @@ const CustomerDetailsPage = () => {
         service={selectedItem} 
         onClose={() => toggleModal('addInvoice', false)} 
         onAdd={(data) => {
+            // Convert dd/mm/yyyy → ISO yyyy-mm-dd
+            const toISO = (dateStr) => {
+              if (!dateStr) return undefined;
+              const parts = dateStr.split('/');
+              if (parts.length !== 3) return dateStr;
+              const [day, month, year] = parts;
+              return `${year}-${month}-${day}`;
+            };
+
+            // selectedItem may be a service or a compliance
+            // Service shape: { id, name, service (ObjectId ref), ... }
+            // Compliance shape: { _id, financialYear, name, ... }
+            const isCompliance = !!selectedItem?.financialYear;
+            const serviceId = !isCompliance 
+              ? (selectedItem?.service?._id || selectedItem?.service || selectedItem?.id || undefined)
+              : undefined;
+
             const payload = {
                 customerId: id,
-                invoiceDate: formatDateToISO(data.date),
+                invoiceDate: toISO(data.date),
                 recurring: data.isRecurring,
                 interval: data.isRecurring ? Number(data.interval) : undefined,
                 intervalType: data.isRecurring ? data.intervalType : undefined,
-                endDate: (data.isRecurring && data.endDate) ? formatDateToISO(data.endDate) : undefined,
+                endDate: (data.isRecurring && data.endDate) ? toISO(data.endDate) : undefined,
                 description: data.description || undefined,
-                complianceId: selectedItem?.financialYear ? selectedItem?._id : undefined,
+                complianceId: isCompliance ? selectedItem?._id : undefined,
                 items: [{
-                    serviceId: selectedItem?.service || undefined,
-                    description: selectedItem?.name || "", 
+                    serviceId,
+                    description: selectedItem?.name || selectedItem?.serviceName || "",
                     professionalFees: Number(data.price),
                     govtFees: Number(data.governmentFees),
                     gstPercent: Number(data.gst),
@@ -375,6 +392,9 @@ const CustomerDetailsPage = () => {
             dispatch(createInvoice(payload)).then(() => {
                 dispatch(fetchCustomerById({ customerId: id }));
                 toast.success("Invoice created successfully");
+                toggleModal('addInvoice', false);
+            }).catch((err) => {
+                toast.error(String(err) || "Failed to create invoice");
             });
         }} 
       />}
