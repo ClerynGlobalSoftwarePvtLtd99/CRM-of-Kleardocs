@@ -12,7 +12,7 @@ const CustomerRecurringInvoicesTable = ({ recurringInvoices = [], onAction }) =>
           <div>Start Date</div>
           <div>End Date</div>
           <div>Linked Service</div>
-          <div>Interval</div>
+          <div>Installments</div>
           <div>Next Date</div>
           <div>Status</div>
           <div className="text-center">View</div>

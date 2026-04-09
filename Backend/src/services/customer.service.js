@@ -7,6 +7,8 @@ import { ApiError } from "../utils/response.js";
 import crypto from "crypto";
 import mongoose from "mongoose";
 import EmailLog from "../models/EmailLog.model.js";
+import Invoice from "../models/Invoice.model.js";
+import RecurringInvoice from "../models/RecurringInvoice.model.js";
 
 // ─── Helper: generate 8-char random password ─────────────────────────────────
 const generatePassword = () => crypto.randomBytes(4).toString("hex");
@@ -192,15 +194,33 @@ const cloneComplianceSettingsToCustomerYear = async (customerId, financialYear) 
   let templates = [];
   try {
     const { default: ComplianceSetting } = await import("../models/ComplianceSetting.model.js");
+    
+    // Fetch customer to check newlyIncorporated status
+    const customer = await Customer.findById(customerId).select("newlyIncorporated").lean();
+    
+    // Fetch all templates for the year
     templates = await ComplianceSetting.find({ financialYear }).lean();
+
+    // SMART FILTERING:
+    // If customer is NOT newlyIncorporated, remove items flagged as new-company only.
+    // This addresses the requirement: "Not by default select three Annual Compliances" for existing companies.
+    if (customer && !customer.newlyIncorporated) {
+      templates = templates.filter(t => 
+        !t.forNewCompany && 
+        !t.isNewCompany && 
+        !t.inc20 && 
+        !t.name.toLowerCase().includes("adt-01") &&
+        !t.name.toLowerCase().includes("inc - 20a") &&
+        !t.name.toLowerCase().includes("share certificate")
+      );
+    }
   } catch (error) {
     console.error("Error fetching compliance templates:", error);
   }
 
   if (templates.length === 0) return { inserted: 0 };
 
-  // Insert only missing records (do not stop when 1 record already exists).
-  // Uniqueness key uses name+expiryDate to allow same name with different dates.
+  // Insert only missing records (idempotent).
   const existingCompliances = await CustomerCompliance.find({
     customer: customerId,
     financialYear
@@ -274,7 +294,8 @@ export const getCustomerById = async (customerId, year) => {
   }
 
   const invoiceFilter = { customer: customerId };
-  if (dateRange) {
+  // Only filter by year if explicitly requested or needed, otherwise show all recent history
+  if (year && dateRange) {
     invoiceFilter.invoiceDate = { $gte: dateRange.startDate, $lte: dateRange.endDate };
   }
 
@@ -323,9 +344,9 @@ export const getCustomerById = async (customerId, year) => {
     console.error("Email template fallback resolution failed:", err);
   }
 
-  // Auto-init: clone any missing compliance settings for the effective year.
-  // This is idempotent — already-existing records are skipped by cloneComplianceSettingsToCustomerYear.
-  // Runs on every page load so any newly added global settings are backfilled automatically.
+  // COMPLIANCE AUTO-INIT REMOVED: 
+  // Initialization is now a manual step triggered by the "View" action in the frontend.
+  /*
   if (attachedFinancialYears.includes(effectiveYear)) {
     try {
       await cloneComplianceSettingsToCustomerYear(customerId, effectiveYear);
@@ -334,15 +355,15 @@ export const getCustomerById = async (customerId, year) => {
       console.error("Auto-init compliance error:", err);
     }
   }
+  */
 
-  // Lazy-load Invoice & RecurringInvoice models
+  // Load Invoice & RecurringInvoice
   let invoices = [];
   let recurringInvoices = [];
   try {
-    const { default: Invoice } = await import("../models/Invoice.model.js");
     const rawInvoices = await Invoice.find(invoiceFilter)
       .populate("items.service", "name")
-      .sort({ createdAt: -1 })
+      .sort({ invoiceDate: -1, createdAt: -1 })
       .lean();
     
     invoices = rawInvoices.map(inv => ({
@@ -353,11 +374,13 @@ export const getCustomerById = async (customerId, year) => {
       price: inv.subTotal || 0,
       gstAmount: inv.totalGst || 0,
       total: inv.total || 0,
+      due: inv.due || 0,
     }));
-  } catch (_) {}
+  } catch (err) {
+    console.error("Error fetching invoices for customer history:", err);
+  }
 
   try {
-    const { default: RecurringInvoice } = await import("../models/RecurringInvoice.model.js");
     const rawRecurring = await RecurringInvoice.find(recurringFilter)
       .populate("items.service", "name")
       .sort({ createdAt: -1 })
@@ -368,7 +391,9 @@ export const getCustomerById = async (customerId, year) => {
       id: ri._id,
       linkedService: ri.items?.[0]?.description || ri.items?.[0]?.service?.name || '-',
     }));
-  } catch (_) {}
+  } catch (err) {
+    console.error("Error fetching recurring invoices for customer history:", err);
+  }
 
   return {
     ...customer,
@@ -492,7 +517,11 @@ export const addService = async (customerId, data, userId) => {
             gstPercent: data.gst ?? 18,
             hsn: serviceMaster.hsn || "998399"
           }
-        ]
+        ],
+        recurring: data.recurring || false,
+        interval: data.interval || 1,
+        intervalType: data.intervalType || "Month",
+        endDate: data.endDate
       },
       userId
     );
@@ -517,7 +546,9 @@ export const addService = async (customerId, data, userId) => {
     console.error("Auto email-history log failed:", err);
   }
 
-  // 2. If "Annual Compliance" → Add to Compliance History 
+  // AUTO-INIT COMPLIANCE REMOVED:
+  // Customers must now manually add a financial year in the history section.
+  /*
   if (serviceMaster.name === "Annual Compliance") {
     // Generate Financial Year (April-March logic)
     const month = startDate.getMonth(); // 0-indexed, Jan=0, Mar=2, Apr=3
@@ -534,26 +565,9 @@ export const addService = async (customerId, data, userId) => {
       }
     }
   }
+  */
 
-  // 3. If Recurring enabled → Create Recurring Invoice 
-  if (data.recurring) {
-    const { default: RecurringInvoice } = await import("../models/RecurringInvoice.model.js");
-    await RecurringInvoice.create({
-      customer: customerId,
-      items: [{
-        service: data.serviceId,
-        description: serviceMaster.name,
-        professionalFees: data.professionalFees || 0,
-        govtFees: data.govtFees || 0,
-        gstPercent: data.gst ?? 18,
-      }],
-      startDate,
-      nextDate: startDate, 
-      interval: data.interval || 1,
-      intervalType: data.intervalType || "Month",
-      status: "Active"
-    });
-  }
+
 
   return cs;
 };
@@ -586,25 +600,20 @@ export const getCompliances = async (customerId, year) => {
   return compliances;
 };
 
-// ─── ADD FINANCIAL YEAR (clone from ComplianceSetting templates) ─────────────
+// ─── ADD FINANCIAL YEAR ──────────────────────────────────────────────────────
 export const addFinancialYear = async (customerId, financialYear) => {
   const customer = await Customer.findById(customerId);
   if (!customer) throw new ApiError(404, "Customer not found");
 
   const existingYears = Array.isArray(customer.financialYears) ? customer.financialYears : [];
 
-  // Add the year to the customer record only if not already present.
-  // Do NOT throw 400 — we always want to clone any missing compliance records below.
   if (!existingYears.includes(financialYear)) {
     customer.financialYears = [...existingYears, financialYear];
     await customer.save();
   }
 
-  // PERMANENTLY assign compliance records from global settings templates.
-  // This is idempotent: existing records are skipped, only missing ones are inserted.
-  await cloneComplianceSettingsToCustomerYear(customerId, financialYear);
-
-  // Return the assigned compliance records so the frontend can display them immediately.
+  // AUTO-CLONING REMOVED from here. 
+  // We only return empty compliances if none exist yet.
   const compliances = await CustomerCompliance.find({
     customer: customerId,
     financialYear
@@ -613,6 +622,28 @@ export const addFinancialYear = async (customerId, financialYear) => {
     .lean();
 
   return { financialYear, compliances };
+};
+
+// ─── INIT COMPLIANCES FOR YEAR (Triggered manually) ──────────────────────────
+export const initCompliancesForYear = async (customerId, financialYear) => {
+  const customer = await Customer.findById(customerId);
+  if (!customer) throw new ApiError(404, "Customer not found");
+
+  const existingYears = Array.isArray(customer.financialYears) ? customer.financialYears : [];
+  if (!existingYears.includes(financialYear)) {
+    throw new ApiError(400, `Financial year ${financialYear} is not attached to this customer`);
+  }
+
+  await cloneComplianceSettingsToCustomerYear(customerId, financialYear);
+
+  const compliances = await CustomerCompliance.find({
+    customer: customerId,
+    financialYear
+  })
+    .sort({ createdAt: 1 })
+    .lean();
+
+  return compliances;
 };
 
 // ─── UPDATE SINGLE COMPLIANCE ─────────────────────────────────────────────────

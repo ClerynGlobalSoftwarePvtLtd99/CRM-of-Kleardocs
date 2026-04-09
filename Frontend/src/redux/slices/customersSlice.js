@@ -173,6 +173,18 @@ export const updateCustomerCompliance = createAsyncThunk(
   }
 );
 
+export const initCustomerCompliances = createAsyncThunk(
+  'customers/initCompliances',
+  async ({ customerId, financialYear }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(`/customers/${customerId}/compliances/init`, { financialYear });
+      return { customerId, compliances: response.data.data };
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to initialize compliances');
+    }
+  }
+);
+
 export const endCustomerService = createAsyncThunk(
   'customers/endService',
   async ({ customerId, serviceId }, { rejectWithValue }) => {
@@ -552,6 +564,22 @@ const customersSlice = createSlice({
         }
       })
       .addCase(endCustomerService.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Init customer compliances
+      .addCase(initCustomerCompliances.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(initCustomerCompliances.fulfilled, (state, action) => {
+        state.loading = false;
+        const { customerId, compliances } = action.payload;
+        if (state.currentCustomer && state.currentCustomer._id === customerId) {
+          state.currentCustomer.compliances = compliances;
+        }
+      })
+      .addCase(initCustomerCompliances.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

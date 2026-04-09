@@ -58,11 +58,35 @@ const recalcDue = async (invoiceId) => {
 
 // ─── Helper: auto-generate invoice number ────────────────────────────────────
 const getNextInvoiceNo = async () => {
-  const count = await Invoice.countDocuments();
   const year = new Date().getFullYear();
   const shortYear = String(year).slice(-2);
   const nextShortYear = String(year + 1).slice(-2);
-  return `INV-${shortYear}-${nextShortYear}${String(count + 1).padStart(5, "0")}`;
+  const prefix = `INV-${shortYear}-${nextShortYear}`;
+
+  try {
+    // Find the latest invoice for the current financial year pattern
+    const latestInvoice = await Invoice.findOne({
+      invoiceNo: { $regex: new RegExp(`^${prefix}`) }
+    })
+    .sort({ invoiceNo: -1 })
+    .lean();
+
+    let nextSequence = 1;
+    if (latestInvoice && latestInvoice.invoiceNo) {
+      // Extract the numeric part (last 5 digits)
+      const lastSequence = parseInt(latestInvoice.invoiceNo.slice(-5));
+      if (!isNaN(lastSequence)) {
+        nextSequence = lastSequence + 1;
+      }
+    }
+
+    return `${prefix}${String(nextSequence).padStart(5, "0")}`;
+  } catch (err) {
+    console.error("Error generating invoice number:", err);
+    // Fallback logic using count as a last resort, but hopefully avoid collisions
+    const count = await Invoice.countDocuments();
+    return `${prefix}${String(count + 100).padStart(5, "0")}`;
+  }
 };
 
 // ══════════════════════════════════════════════════════════════════════════════

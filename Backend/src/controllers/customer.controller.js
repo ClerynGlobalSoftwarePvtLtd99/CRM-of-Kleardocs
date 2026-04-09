@@ -144,6 +144,15 @@ export const addFinancialYear = async (req, res) => {
   res.status(201).json(new ApiResponse(201, result, "Financial year added successfully"));
 };
 
+// ─── POST /api/v1/customers/:customerId/compliances/init ─────────────────────
+export const initCompliances = async (req, res) => {
+  const compliances = await customerService.initCompliancesForYear(
+    req.params.customerId,
+    req.body.financialYear
+  );
+  res.status(200).json(new ApiResponse(200, compliances, "Compliances initialized successfully"));
+};
+
 // ─── PUT /api/v1/customers/:customerId/compliances/:complianceId ──────────────
 export const updateCompliance = async (req, res) => {
   const compliance = await customerService.updateCompliance(
