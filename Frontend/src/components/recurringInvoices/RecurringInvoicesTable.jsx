@@ -5,6 +5,7 @@ import CompanyLogo from '../common/CompanyLogo'
 
 const RecurringInvoicesTable = ({ invoices }) => {
   return (
+<<<<<<< HEAD
     <div className="bg-bg-secondary border border-bg-tertiary rounded-xl overflow-hidden shadow-sm flex flex-col h-[65vh] min-h-[400px]">
       <div className="overflow-auto scrollbar-thin scrollbar-thumb-bg-tertiary flex-1 px-4">
         <table className="w-full text-left relative" style={{ borderSpacing: '0 10px', borderCollapse: 'separate' }}>
@@ -38,21 +39,65 @@ const RecurringInvoicesTable = ({ invoices }) => {
                 Status
               </th>
               <th className="sticky top-0 z-20 bg-bg-secondary px-1.5 py-3 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+=======
+    <div className="bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-xl overflow-hidden shadow-sm flex flex-col h-[65vh] min-h-[400px]">
+      <div className="overflow-auto scrollbar-thin scrollbar-thumb-[var(--color-bg-tertiary)] flex-1 px-4">
+        <table className="w-full text-left relative" style={{ borderSpacing: '0 10px', borderCollapse: 'separate' }}>
+          <thead>
+            <tr className="text-[var(--color-text-secondary)] text-sm uppercase tracking-wider">
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Created
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Customer & Company
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Services
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Start
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                End
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Interval
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Next Inv.
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+                Status
+              </th>
+              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+>>>>>>> a76892a1ca06a972ef7462a46f78333b9ce3646e
                 Details
               </th>
             </tr>
           </thead>
           <tbody>
             {(invoices || []).map((inv) => (
+<<<<<<< HEAD
               <tr key={inv._id} className="bg-bg-primary hover:bg-bg-tertiary transition-colors group rounded-md shadow-sm">
                 <td className="px-1.5 py-6 text-sm rounded-l-lg">
                   <CompanyLogo name={inv.customer?.companyName || inv.customer?.name} size="w-10 h-10" />
                 </td>
                 <td className="px-1.5 py-6 text-sm text-text-secondary whitespace-nowrap">
+=======
+              <tr key={inv._id} className="bg-[var(--color-bg-primary)] hover:bg-[var(--color-bg-tertiary)] transition-colors group rounded-md shadow-sm">
+                <td className="px-1.5 py-6 text-sm rounded-l-lg">
+                  <CompanyLogo name={inv.customer?.companyName || inv.customer?.name} size="w-10 h-10" />
+                </td>
+                <td className="px-1.5 py-6 text-sm text-[var(--color-text-secondary)] whitespace-nowrap">
+>>>>>>> a76892a1ca06a972ef7462a46f78333b9ce3646e
                   {inv.createdAt ? new Date(inv.createdAt).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).replace(',', '') : '-'}
                 </td>
                 <td className="px-1.5 py-6 text-sm">
                   <div className="flex flex-col gap-0.5 w-full">
+<<<<<<< HEAD
                     <Link to={`/customer/${inv.customer?._id}`} className="font-medium text-text-primary hover:text-accent transition-colors underline decoration-bg-tertiary underline-offset-4 hover:decoration-accent break-words" title={inv.customer?.name}>
                       {inv.customer?.name || 'Unknown'}
                     </Link>
@@ -60,6 +105,15 @@ const RecurringInvoicesTable = ({ invoices }) => {
                   </div>
                 </td>
                 <td className="px-1.5 py-6 text-sm text-text-secondary">
+=======
+                    <Link to={`/customer/${inv.customer?._id}`} className="font-medium text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors underline decoration-[var(--color-bg-tertiary)] underline-offset-4 hover:decoration-[var(--color-accent)] break-words" title={inv.customer?.name}>
+                      {inv.customer?.name || 'Unknown'}
+                    </Link>
+                    <span className="text-xs text-[var(--color-text-secondary)] break-words" title={inv.customer?.companyName}>{inv.customer?.companyName || '-'}</span>
+                  </div>
+                </td>
+                <td className="px-1.5 py-6 text-sm text-[var(--color-text-secondary)]">
+>>>>>>> a76892a1ca06a972ef7462a46f78333b9ce3646e
                   {inv.items?.map(it => it.service?.name || it.description).join(', ') || 'No services'}
                 </td>
                 <td className="px-1.5 py-6 text-sm text-[var(--color-text-secondary)] whitespace-nowrap">
