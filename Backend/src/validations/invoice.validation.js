@@ -28,7 +28,7 @@ export const createInvoiceSchema = z.object({
 // ─── Add Payment ──────────────────────────────────────────────────────────────
 export const addPaymentSchema = z.object({
   amount: z.number().positive("Amount must be positive"),
-  mode: z.enum(["Cash", "UPI", "Card", "Net Banking", "Cheque", "Other"]).default("UPI"),
+  mode: z.enum(["Cash", "UPI", "Card", "Bank Transfer", "Cheque", "Other"]).default("UPI"),
   note: z.string().optional(),
   paymentDate: z.string().optional()
 });

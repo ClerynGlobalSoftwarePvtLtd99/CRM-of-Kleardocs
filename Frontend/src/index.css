@@ -152,6 +152,11 @@ button {
   border-color: var(--color-crm-orange);
 }
 
+/* Prefix symbol (e.g. ₹) inside a fieldset-input */
+.fieldset-input .has-prefix {
+  padding-left: 28px !important;
+}
+
 /* Dropdown Theme Fix */
 select option {
   background-color: var(--color-bg-secondary);

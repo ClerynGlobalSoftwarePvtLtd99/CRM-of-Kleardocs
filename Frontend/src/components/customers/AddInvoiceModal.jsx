@@ -128,12 +128,12 @@ const AddInvoiceModal = ({ customer, service, onClose, onAdd }) => {
           <div className="fieldset-input">
             <span className="fieldset-label uppercase">Professional Fees *</span>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">₹</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary font-medium pointer-events-none select-none">₹</span>
               <input 
                 type="number" 
                 value={formData.price}
                 onChange={(e) => setFormData({...formData, price: e.target.value})}
-                className="pl-8"
+                className="w-full pl-7 pr-4 py-2.5 bg-bg-primary border border-bg-tertiary rounded-lg text-sm focus:outline-none focus:border-accent transition-colors text-text-primary has-prefix"
               />
             </div>
           </div>
@@ -141,12 +141,12 @@ const AddInvoiceModal = ({ customer, service, onClose, onAdd }) => {
           <div className="fieldset-input">
             <span className="fieldset-label uppercase">Government Fees *</span>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">₹</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary font-medium pointer-events-none select-none">₹</span>
               <input 
                 type="number" 
                 value={formData.governmentFees}
                 onChange={(e) => setFormData({...formData, governmentFees: e.target.value})}
-                className="pl-8"
+                className="w-full pl-7 pr-4 py-2.5 bg-bg-primary border border-bg-tertiary rounded-lg text-sm focus:outline-none focus:border-accent transition-colors text-text-primary has-prefix"
               />
             </div>
           </div>

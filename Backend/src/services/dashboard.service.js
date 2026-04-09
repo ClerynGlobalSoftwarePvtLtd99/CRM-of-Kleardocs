@@ -7,8 +7,18 @@ const getDateMatch = (startDate, endDate, dateField = "createdAt") => {
   const match = {};
   if (startDate || endDate) {
     match[dateField] = {};
-    if (startDate) match[dateField].$gte = new Date(startDate);
-    if (endDate) match[dateField].$lte = new Date(`${endDate}T23:59:59.999Z`);
+    if (startDate) {
+      // Ensure we start at the very beginning of the startDate (00:00:00 local-ish / UTC normalized)
+      const s = new Date(startDate);
+      s.setUTCHours(0, 0, 0, 0);
+      match[dateField].$gte = s;
+    }
+    if (endDate) {
+      // Ensure we go to the very end of the endDate
+      const e = new Date(endDate);
+      e.setUTCHours(23, 59, 59, 999);
+      match[dateField].$lte = e;
+    }
   }
   return match;
 };
@@ -47,19 +57,25 @@ export const getLeadStats = async (startDate, endDate) => {
     prevTotalDateMatch = { createdAt: { $lt: thirtyDaysAgo } };
   }
 
-  // Current stats
-  const total = await Lead.countDocuments({ ...dateMatch, isCustomer: { $ne: true } });
-  const newLeads = await Lead.countDocuments({ ...periodMatch, isCustomer: { $ne: true } });
+  // Current stats (Cumulative for Total/Status, Period-specific for New/Interactions)
+  console.log("DEBUG: getLeadStats dateMatch:", JSON.stringify(dateMatch));
+  console.log("DEBUG: getLeadStats periodMatch:", JSON.stringify(periodMatch));
+  
+  const total = await Lead.countDocuments({}); 
+  const newLeads = await Lead.countDocuments(periodMatch);
   const interactedLeads = await LeadHistory.distinct("lead", { ...periodMatch, type: "interaction" }).then(res => res.length);
-  const hot = await Lead.countDocuments({ ...dateMatch, isCustomer: { $ne: true }, type: "Hot" });
-  const cold = await Lead.countDocuments({ ...dateMatch, isCustomer: { $ne: true }, type: "Cold" });
+  const hot = await Lead.countDocuments({ type: "Hot" });
+  const cold = await Lead.countDocuments({ type: "Cold" });
+
+  console.log(`DEBUG: Counts - Total: ${total}, New: ${newLeads}, Hot: ${hot}, Cold: ${cold}`);
 
   // Previous stats for trends
-  const prevTotalAllTime = await Lead.countDocuments({ isCustomer: { $ne: true }, ...prevTotalDateMatch });
-  const prevNewLeads = await Lead.countDocuments({ ...prevPeriodMatch, isCustomer: { $ne: true } });
+  const prevDateMatchForTotal = startDate && endDate ? { createdAt: { $lt: new Date(startDate) } } : { createdAt: { $lt: thirtyDaysAgo } };
+  const prevTotalAllTime = await Lead.countDocuments({ ...prevDateMatchForTotal });
+  const prevNewLeads = await Lead.countDocuments(prevPeriodMatch);
   const prevInteracted = await LeadHistory.distinct("lead", { ...prevPeriodMatch, type: "interaction" }).then(res => res.length);
-  const prevHot = await Lead.countDocuments({ isCustomer: { $ne: true }, type: "Hot", ...prevTotalDateMatch });
-  const prevCold = await Lead.countDocuments({ isCustomer: { $ne: true }, type: "Cold", ...prevTotalDateMatch });
+  const prevHot = await Lead.countDocuments({ type: "Hot", ...prevTotalDateMatch });
+  const prevCold = await Lead.countDocuments({ type: "Cold", ...prevTotalDateMatch });
 
   const trendTotal = getPercentChange(total, prevTotalAllTime);
   const trendNew = getPercentChange(newLeads, prevNewLeads);
@@ -82,10 +98,12 @@ export const getCustomerStats = async (startDate, endDate) => {
   const now = new Date();
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-  // Current stats
-  const total = await Customer.countDocuments({ ...dateMatch, active: true });
-  const customersWithCompliance = await CustomerCompliance.distinct("customer", { ...getDateMatch(startDate, endDate) });
+  // Current stats (Cumulative for Total, Period-specific for Compliance if needed, but usually cumulative is preferred for status cards)
+  const total = await Customer.countDocuments({ active: true });
+  const customersWithCompliance = await CustomerCompliance.distinct("customer");
   const withAnnualCompliance = customersWithCompliance.length;
+  
+  console.log(`DEBUG: Customer Counts - Total: ${total}, Compliance: ${withAnnualCompliance}`);
 
   // Previous stats for trends
   let prevDateMatch, prevComplianceMatch;
