@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, Link, useNavigate } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { Download, Eye, Send, CreditCard, Trash2, X, ArrowLeft } from 'lucide-react'
+import { generateInvoicePdf } from '../utils/invoicePdfGenerator'
 import {
   fetchInvoiceById,
   deleteInvoice,
@@ -78,12 +79,39 @@ const InvoiceDetails = () => {
     }
   }, [inv])
 
-  const handleGeneratePdf = (action) => {
+  const handleGeneratePdf = async (action) => {
     if (!inv) return;
-    dispatch(downloadInvoicePdf({
-      invoiceId: inv._id,
-      invoiceNo: inv.invoiceNo
-    }));
+
+    // Build invoice payload matching the generator's expected format
+    const invoicePayload = {
+      invoiceNo: inv.invoiceNo,
+      invoiceDate: inv.invoiceDate,
+      placeOfSupply: inv.placeOfSupply,
+      description: inv.description,
+      items: (inv.items || []).map(i => ({
+        product: { name: i.service?.name || i.description },
+        hsn: i.hsn,
+        price: i.price,
+        amount: i.amount,
+        gstPercent: i.gstPercent,
+        gstAmount: i.gstAmount
+      })),
+      subTotal: inv.subTotal,
+      totalGst: inv.totalGst,
+      total: inv.total,
+      paid: inv.paid,
+      due: inv.due
+    };
+
+    const customerPayload = {
+      companyName: inv.customer?.companyName || inv.customer?.name,
+      customerName: inv.customer?.name,
+      phone: inv.customer?.phone,
+      address: inv.customer?.address,
+      state: inv.customer?.state
+    };
+
+    await generateInvoicePdf(invoicePayload, customerPayload, action);
   };
 
   const handleConfirmDelete = async () => {
@@ -487,6 +515,7 @@ const InvoiceDetails = () => {
                     <option value="Bank Transfer">Bank Transfer</option>
                     <option value="Card">Card</option>
                     <option value="Cheque">Cheque</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
                 <div>

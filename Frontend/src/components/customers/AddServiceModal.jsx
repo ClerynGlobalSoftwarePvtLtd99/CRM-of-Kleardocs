@@ -45,6 +45,23 @@ const AddServiceModal = ({ customerId, onClose, selectedYear }) => {
     }
   }, [services]);
 
+  // Auto-calculate End Date (1 year after Start Date) when Recurring is enabled
+  useEffect(() => {
+    if (formData.recurring && formData.startDate) {
+      const start = new Date(formData.startDate);
+      const end = new Date(start);
+      end.setFullYear(start.getFullYear() + 1);
+      const endStr = end.toISOString().split('T')[0];
+      
+      if (formData.endDate !== endStr) {
+        setFormData(prev => ({ ...prev, endDate: endStr }));
+      }
+    } else if (!formData.recurring) {
+      // Optional: Clear end date if not recurring? 
+      // User said: "(System automacally take end date will be after year exact date)"
+    }
+  }, [formData.recurring, formData.startDate]);
+
   const handleServiceChange = (e) => {
     const selectedId = e.target.value;
     const service = services.find(s => s._id === selectedId);
@@ -233,7 +250,7 @@ const AddServiceModal = ({ customerId, onClose, selectedYear }) => {
                   </div>
                   <div className="col-span-2 space-y-1.5">
                     <label className="text-[10px] font-bold text-text-secondary uppercase tracking-wider flex items-center gap-1.5">
-                      <Calendar className="w-3 h-3" /> End Date (Optional)
+                      <Calendar className="w-3 h-3" /> End Date (Auto-calculated: 1 Year)
                     </label>
                     <input
                       type="date"

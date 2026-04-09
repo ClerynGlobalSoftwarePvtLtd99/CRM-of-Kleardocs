@@ -369,6 +369,7 @@ export const getCustomerById = async (customerId, year) => {
     invoices = rawInvoices.map(inv => ({
       ...inv,
       id: inv._id,
+      invoiceId: inv._id,   // used by frontend for navigation to /invoice/:id
       date: inv.invoiceDate, // Standardize naming for frontend
       linkedService: inv.items?.[0]?.description || inv.items?.[0]?.service?.name || '-',
       price: inv.subTotal || 0,

@@ -53,7 +53,7 @@ const paymentSchema = new mongoose.Schema(
     amount: { type: Number, required: true },
     mode: {
       type: String,
-      enum: ["Cash", "UPI", "Card", "Net Banking", "Cheque", "Other"],
+      enum: ["Cash", "UPI", "Card", "Bank Transfer", "Cheque", "Other"],
       default: "UPI"
     },
     note: { type: String },
