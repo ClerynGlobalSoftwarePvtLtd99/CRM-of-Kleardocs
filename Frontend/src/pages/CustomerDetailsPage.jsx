@@ -9,7 +9,11 @@ import {
   Search, ChevronDown, IdCard, ShieldCheck
 } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { fetchCustomerById, updateCustomerEmails, addCustomerDirector, addServiceToCustomer, endCustomerService, sendCustomerWhatsapp, addCustomerFinancialYear } from "../redux/slices/customersSlice";
+import { 
+  fetchCustomerById, updateCustomerEmails, addCustomerDirector, 
+  addServiceToCustomer, endCustomerService, sendCustomerWhatsapp, 
+  addCustomerFinancialYear, initCustomerCompliances 
+} from "../redux/slices/customersSlice";
 import { createInvoice } from "../redux/slices/invoicesSlice";
 import ErrorBoundary from "../components/ErrorBoundary";
 import ContentLoader from "../components/common/ContentLoader";
@@ -131,8 +135,26 @@ const CustomerDetailsPage = () => {
       case 'viewComplianceYear':
         // Load compliances for selected financial year
         setSelectedYear(payload);
-        dispatch(fetchCustomerById({ customerId: id, year: payload }));
-        toast.success(`Showing records for financial year: ${payload}`);
+        dispatch(fetchCustomerById({ customerId: id, year: payload })).unwrap().then((data) => {
+          // Requirement check: "when click view button this time assign all Annual compliance"
+          // If the fetched compliances are empty, we can offer to initialize or do it automatically.
+          // For now, the user sees the "Assign" button in the table if it's empty.
+          toast.success(`Showing records for financial year: ${payload}`);
+        });
+        break;
+      case 'initCompliances':
+        // Trigger manual assignment of compliance templates
+        toast.promise(
+          dispatch(initCustomerCompliances({ customerId: id, financialYear: payload })).unwrap(),
+          {
+            loading: 'Assigning default compliances...',
+            success: 'Compliances assigned successfully',
+            error: (err) => `Failed to assign: ${err}`
+          }
+        ).then(() => {
+          // Refresh data after assignment
+          dispatch(fetchCustomerById({ customerId: id, year: payload }));
+        });
         break;
       default:
         console.log("Unhandled action:", action, payload);

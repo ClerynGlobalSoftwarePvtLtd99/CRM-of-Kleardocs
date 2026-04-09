@@ -147,10 +147,20 @@ const CustomerAnnualComplianceTable = ({ compliances = [], financialYears = [], 
               </div>
             )})
           ) : (
-            <div className="bg-bg-secondary p-8 rounded-xl border border-dashed border-bg-tertiary text-center text-sm text-text-secondary italic">
-              {financialYears?.length === 0
-                ? "No financial year attached yet."
-                : "No compliances found for the selected year."}
+            <div className="bg-bg-secondary p-8 rounded-xl border border-dashed border-bg-tertiary text-center space-y-4">
+              <p className="text-sm text-text-secondary italic">
+                {financialYears?.length === 0
+                  ? "No financial year attached yet."
+                  : "No compliances found for the selected year."}
+              </p>
+              {financialYears?.length > 0 && !readOnly && (
+                <button 
+                  onClick={() => onAction && onAction('initCompliances', financialYear)}
+                  className="bg-[#1976d2] hover:bg-[#1565c0] text-white px-4 py-2 text-[11px] font-bold uppercase rounded-sm transition-colors shadow-md mx-auto block"
+                >
+                  Assign Default Compliances
+                </button>
+              )}
             </div>
           )}
         </div>

@@ -15,7 +15,10 @@ const AddServiceModal = ({ customerId, onClose, selectedYear }) => {
     professionalFees: 0,
     govtFees: 0,
     gst: 18,
-    recurring: false
+    recurring: false,
+    interval: 1,
+    intervalType: "Month",
+    endDate: ""
   });
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -49,7 +52,8 @@ const AddServiceModal = ({ customerId, onClose, selectedYear }) => {
       ...prev, 
       serviceId: selectedId,
       professionalFees: service?.professionalFees || 0,
-      govtFees: service?.govtFees || 0
+      govtFees: service?.govtFees || 0,
+      recurring: service?.name === "Annual Compliance" ? prev.recurring : false
     }));
   };
 
@@ -185,22 +189,63 @@ const AddServiceModal = ({ customerId, onClose, selectedYear }) => {
             />
           </div>
 
-          {/* RECURRING TOGGLE */}
-          <div className="flex items-center justify-between p-3 bg-bg-primary/50 rounded-sm border border-bg-tertiary/50">
-            <div className="flex flex-col">
-              <span className="text-[13px] font-bold text-text-primary">Recurring Invoice?</span>
-              <span className="text-[10px] text-text-secondary">Enable for automatic monthly billing</span>
+          {/* RECURRING TOGGLE - Only for Annual Compliance */}
+          {services.find(s => s._id === formData.serviceId)?.name === "Annual Compliance" && (
+            <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="flex items-center justify-between p-3 bg-bg-primary/50 rounded-sm border border-bg-tertiary/50">
+                <div className="flex flex-col">
+                  <span className="text-[13px] font-bold text-text-primary">Recurring Invoice?</span>
+                  <span className="text-[10px] text-text-secondary">Enable for automatic monthly billing</span>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    className="sr-only peer" 
+                    checked={formData.recurring}
+                    onChange={(e) => setFormData({ ...formData, recurring: e.target.checked })}
+                  />
+                  <div className="w-11 h-6 bg-bg-tertiary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-crm-orange"></div>
+                </label>
+              </div>
+
+              {/* RECURRING FIELDS - Shown when toggle is open */}
+              {formData.recurring && (
+                <div className="grid grid-cols-2 gap-4 p-4 bg-bg-primary/30 rounded-sm border border-dashed border-bg-tertiary animate-in zoom-in-95 duration-200">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-text-secondary uppercase tracking-wider">Installments</label>
+                    <input
+                      type="number"
+                      value={formData.interval}
+                      onChange={(e) => setFormData({ ...formData, interval: Number(e.target.value) })}
+                      className="w-full bg-bg-primary border border-bg-tertiary rounded-sm px-3 py-1.5 text-sm text-text-primary focus:outline-none focus:border-crm-orange"
+                      min="1"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold text-text-secondary uppercase tracking-wider">Type</label>
+                    <select
+                      value={formData.intervalType}
+                      onChange={(e) => setFormData({ ...formData, intervalType: e.target.value })}
+                      className="w-full bg-bg-primary border border-bg-tertiary rounded-sm px-3 py-1.5 text-sm text-text-primary focus:outline-none focus:border-crm-orange"
+                    >
+                      <option value="Month">Month</option>
+                    </select>
+                  </div>
+                  <div className="col-span-2 space-y-1.5">
+                    <label className="text-[10px] font-bold text-text-secondary uppercase tracking-wider flex items-center gap-1.5">
+                      <Calendar className="w-3 h-3" /> End Date (Optional)
+                    </label>
+                    <input
+                      type="date"
+                      value={formData.endDate}
+                      onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                      className="w-full bg-bg-primary border border-bg-tertiary rounded-sm px-3 py-1.5 text-sm text-text-primary focus:outline-none focus:border-crm-orange"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input 
-                type="checkbox" 
-                className="sr-only peer" 
-                checked={formData.recurring}
-                onChange={(e) => setFormData({ ...formData, recurring: e.target.checked })}
-              />
-              <div className="w-11 h-6 bg-bg-tertiary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-crm-orange"></div>
-            </label>
-          </div>
+          )}
 
           {/* ACTION BUTTONS */}
           <div className="flex gap-3 pt-4">

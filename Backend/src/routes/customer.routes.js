@@ -14,6 +14,7 @@ import {
   endService,
   getCompliances,
   addFinancialYear,
+  initCompliances,
   updateCompliance,
   getDirectorReport,
   getBoardResolution,
@@ -65,6 +66,7 @@ router.put("/:customerId/services/:serviceId/end", checkRole("admin", "agent"), 
 // ─── COMPLIANCES ──────────────────────────────────────────────────────────────
 router.get("/:customerId/compliances", getCompliances);
 router.post("/:customerId/financial-year", checkRole("admin"), validate(addFinancialYearSchema), addFinancialYear);
+router.post("/:customerId/compliances/init", checkRole("admin", "agent"), initCompliances);
 router.put("/:customerId/compliances/:complianceId", checkRole("admin", "accountant"), validate(updateComplianceSchema), updateCompliance);
 
 // ─── ACTION PANEL (Reports & Messaging) ───────────────────────────────────────
