@@ -13,26 +13,15 @@ const InvoiceDetailsSection = ({
   setIntervalType,
   endDate,
   setEndDate,
-  totalInstallments,
-  setTotalInstallments,
-  installmentIntervalMonths,
-  setInstallmentIntervalMonths,
   description,
   setDescription,
   showDescription,
   setShowDescription,
   customers = [],
-  canBeRecurring = false,
 }) => {
   const [search, setSearch] = useState('')
   const [open, setOpen] = useState(false)
   const dropdownRef = useRef(null)
-
-  useEffect(() => {
-    if (!canBeRecurring && isRecurring) {
-      setIsRecurring(false)
-    }
-  }, [canBeRecurring, isRecurring, setIsRecurring])
 
   const filtered = (customers || []).filter(
     (c) =>
@@ -159,31 +148,6 @@ const InvoiceDetailsSection = ({
         )}
 
         {/* Recurring Invoice Toggle */}
-<<<<<<< HEAD
-        {canBeRecurring && (
-          <div className="flex flex-col md:flex-row md:items-center gap-3">
-            <label className="md:w-48 shrink-0 font-semibold text-text-secondary text-sm">
-              Recurring Invoice?
-            </label>
-            <div className="flex-1 flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => setIsRecurring((p) => !p)}
-                className={`relative inline-flex w-12 h-6 rounded-full transition-colors duration-300 cursor-pointer focus:outline-none ${
-                  isRecurring ? 'bg-accent' : 'bg-bg-tertiary'
-                }`}
-              >
-                <span
-                  className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 ${
-                    isRecurring ? 'translate-x-6' : 'translate-x-0'
-                  }`}
-                />
-              </button>
-              <span className="text-sm font-medium text-text-secondary">
-                {isRecurring ? 'Yes – Recurring' : 'No – One time'}
-              </span>
-            </div>
-=======
         <div className="flex flex-col md:flex-row md:items-center gap-3">
           <label className="md:w-48 shrink-0 font-semibold text-[var(--color-text-secondary)] text-sm">
             Recurring Invoice?
@@ -205,10 +169,8 @@ const InvoiceDetailsSection = ({
             <span className="text-sm font-medium text-[var(--color-text-secondary)]">
               {isRecurring ? 'Yes – Recurring' : 'No – One time'}
             </span>
->>>>>>> a76892a1ca06a972ef7462a46f78333b9ce3646e
           </div>
-        )}
-
+        </div>
 
         {/* Description Toggle */}
         <div className="flex flex-col md:flex-row md:items-center gap-3">
@@ -300,49 +262,6 @@ const InvoiceDetailsSection = ({
                   className="w-full md:max-w-xs px-4 py-2.5 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded-lg text-sm focus:outline-none focus:border-[var(--color-accent)] transition-colors cursor-pointer text-[var(--color-text-primary)]"
                 />
               </div>
-            </div>
-
-            {/* Installment Configuration */}
-            <div className="mt-4 pt-4 border-t border-bg-tertiary">
-              <h4 className="text-sm font-semibold text-text-secondary mb-3">Installment Configuration (Optional)</h4>
-              
-              <div className="flex flex-col md:flex-row md:items-center gap-3 mb-3">
-                <label className="md:w-48 shrink-0 font-semibold text-text-secondary text-sm">
-                  Number of Installments
-                </label>
-                <div className="flex-1">
-                  <input
-                    type="number"
-                    min="1"
-                    value={totalInstallments}
-                    onChange={(e) => setTotalInstallments(parseInt(e.target.value) || 1)}
-                    className="w-full md:max-w-xs px-4 py-2.5 bg-bg-primary border border-bg-tertiary rounded-lg text-sm focus:outline-none focus:border-accent transition-colors text-text-primary"
-                    placeholder="e.g., 4 for quarterly payments"
-                  />
-                </div>
-              </div>
-
-              {totalInstallments > 1 && (
-                <div className="flex flex-col md:flex-row md:items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
-                  <label className="md:w-48 shrink-0 font-semibold text-text-secondary text-sm">
-                    Months per Installment
-                  </label>
-                  <div className="flex-1">
-                    <input
-                      type="number"
-                      min="1"
-                      max="12"
-                      value={installmentIntervalMonths}
-                      onChange={(e) => setInstallmentIntervalMonths(parseInt(e.target.value) || 3)}
-                      className="w-full md:max-w-xs px-4 py-2.5 bg-bg-primary border border-bg-tertiary rounded-lg text-sm focus:outline-none focus:border-accent transition-colors text-text-primary"
-                      placeholder="e.g., 3 for every 3 months"
-                    />
-                    <p className="text-xs text-text-secondary mt-1">
-                      Example: For 1 year with 4 installments, set 3 months per installment
-                    </p>
-                  </div>
-                </div>
-              )}
             </div>
           </>
         )}

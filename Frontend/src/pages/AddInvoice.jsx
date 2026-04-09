@@ -29,8 +29,6 @@ const AddInvoice = () => {
   const [interval, setInterval] = useState(1)
   const [intervalType, setIntervalType] = useState('Month')
   const [endDate, setEndDate] = useState('')
-  const [totalInstallments, setTotalInstallments] = useState(1)
-  const [installmentIntervalMonths, setInstallmentIntervalMonths] = useState(3)
   const [description, setDescription] = useState('')
   const [showDescription, setShowDescription] = useState(false)
 
@@ -73,8 +71,6 @@ const AddInvoice = () => {
       interval: isRecurring ? parseInt(interval) : undefined,
       intervalType: isRecurring ? intervalType : undefined,
       endDate: isRecurring && endDate ? endDate : undefined,
-      totalInstallments: isRecurring ? totalInstallments : undefined,
-      installmentIntervalMonths: isRecurring && totalInstallments > 1 ? installmentIntervalMonths : undefined,
       description: showDescription ? description : undefined,
     }
 
@@ -96,9 +92,6 @@ const AddInvoice = () => {
         setSelectedCustomer(null)
         setItems([])
         setIsRecurring(false)
-        setEndDate('')
-        setTotalInstallments(1)
-        setInstallmentIntervalMonths(3)
         setInvoiceDate(today)
       } else {
         toast.error(resultAction.payload || 'Failed to create invoice')
@@ -127,16 +120,11 @@ const AddInvoice = () => {
         setIntervalType={setIntervalType}
         endDate={endDate}
         setEndDate={setEndDate}
-        totalInstallments={totalInstallments}
-        setTotalInstallments={setTotalInstallments}
-        installmentIntervalMonths={installmentIntervalMonths}
-        setInstallmentIntervalMonths={setInstallmentIntervalMonths}
         description={description}
         setDescription={setDescription}
         showDescription={showDescription}
         setShowDescription={setShowDescription}
         customers={customers}
-        canBeRecurring={items.some(item => item.product?.name === "Annual Compliance")}
       />
 
       {/* Section 3: Invoice Items */}

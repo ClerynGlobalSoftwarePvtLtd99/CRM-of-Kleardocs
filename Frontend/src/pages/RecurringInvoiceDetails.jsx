@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { ArrowLeft, X, MapPin, Calendar, Pause, Eye, Clock, CheckCircle, AlertCircle, CreditCard } from 'lucide-react';
+import { ArrowLeft, X, MapPin, Calendar, Pause, Eye } from 'lucide-react';
 import { fetchRecurringInvoiceById, disableRecurringInvoice, clearSelectedInvoice } from '../redux/slices/recurringInvoicesSlice';
 import Loader from '../components/Loader';
 import ConfirmationModal from '../components/common/ConfirmationModal';
@@ -130,7 +130,7 @@ const RecurringInvoiceDetails = () => {
             </div>
           </div>
 
-          {/* Dates, Customer & Location */}
+          {/* Location & Dates */}
           <div className="p-6 border-b border-bg-tertiary grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-1">
               <p className="text-xs text-text-secondary uppercase font-bold tracking-wider">Dates</p>
@@ -150,239 +150,49 @@ const RecurringInvoiceDetails = () => {
               <div className="text-sm truncate">{ri.customer?.emails?.join(', ')}</div>
             </div>
             <div className="space-y-1">
-              <p className="text-xs text-text-secondary uppercase font-bold tracking-wider">Location</p>
+              <p className="text-xs text-text-secondary uppercase font-bold tracking-wider">Address</p>
               <div className="text-sm flex gap-2">
                 <MapPin size={14} className="text-text-secondary shrink-0 mt-0.5" />
-                <div>
-                  <div>{ri.customer?.address || '-'}</div>
-                  {ri.customer?.state && (
-                    <div className="text-text-secondary text-xs mt-0.5">
-                      Place of Supply: {ri.customer.state}
-                    </div>
-                  )}
-                </div>
+                <span>{ri.customer?.address}</span>
               </div>
             </div>
           </div>
-
-          {/* Installments Schedule */}
-          {ri.totalInstallments > 1 && ri.installments?.length > 0 && (
-            <div className="p-6 border-b border-bg-tertiary">
-              <h3 className="text-lg font-bold mb-4 text-text-primary flex items-center gap-2">
-                <Calendar size={18} className="text-accent" />
-                Payment Schedule ({ri.totalInstallments} Installments)
-              </h3>
-              
-              {/* Pending Payments Summary Card */}
-              {ri.installments.filter(i => i.status === "Pending" || i.status === "Invoiced").length > 0 && (
-                <div className="mb-6 p-4 bg-accent/10 border border-accent/30 rounded-xl">
-                  <h4 className="text-sm font-bold text-accent mb-3 flex items-center gap-2">
-                    <AlertCircle size={16} className="animate-pulse" />
-                    Pending Payments Summary
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                    {ri.installments
-                      .filter(i => i.status === "Pending" || i.status === "Invoiced")
-                      .map(inst => {
-                        const isNext = ri.installments
-                          .slice(0, ri.installments.indexOf(inst))
-                          .every(prev => prev.status === "Paid");
-                        const periodEnd = new Date(new Date(inst.dueDate).setMonth(
-                          new Date(inst.dueDate).getMonth() + (ri.installmentIntervalMonths || 3)
-                        ));
-                        return (
-                          <div 
-                            key={inst.number}
-                            className={`p-3 rounded-lg border ${
-                              isNext 
-                                ? 'bg-accent border-accent text-white shadow-md' 
-                                : 'bg-bg-primary border-bg-tertiary'
-                            }`}
-                          >
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="font-bold">#{inst.number}</span>
-                              {isNext && <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full">NEXT</span>}
-                            </div>
-                            <div className={`text-sm ${isNext ? 'text-white/90' : 'text-text-secondary'}`}>
-                              Due: {new Date(inst.dueDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
-                            </div>
-                            <div className={`text-sm ${isNext ? 'text-white/90' : 'text-text-secondary'}`}>
-                              Expires: {periodEnd.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-                            </div>
-                            <div className={`font-bold mt-1 ${isNext ? 'text-white' : 'text-text-primary'}`}>
-                              ₹ {inst.amount?.toFixed(2)}
-                            </div>
-                          </div>
-                        );
-                      })}
-                  </div>
-                </div>
-              )}
-              
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm border-separate" style={{ borderSpacing: '0 4px' }}>
-                  <thead className="bg-bg-tertiary/20 text-xs font-semibold text-text-secondary uppercase tracking-widest">
-                    <tr>
-                      <th className="px-4 py-3 text-left">#</th>
-                      <th className="px-4 py-3 text-left">Payment Period</th>
-                      <th className="px-4 py-3 text-left">Due Date</th>
-                      <th className="px-4 py-3 text-right">Amount</th>
-                      <th className="px-4 py-3 text-center">Status</th>
-                      <th className="px-4 py-3 text-center">Invoice</th>
-                      <th className="px-4 py-3 text-left">Paid Date</th>
-                    </tr>
-                  </thead>
-                  <tbody className="space-y-1">
-                    {ri.installments.map((inst, index) => {
-                      const isNextPending = inst.status === "Pending" && 
-                        ri.installments.slice(0, index).every(prev => prev.status === "Paid");
-                      const isPaid = inst.status === "Paid";
-                      const isInvoiced = inst.status === "Invoiced";
-                      
-                      // Calculate period end date (3 months after due date for quarterly)
-                      const periodStart = new Date(inst.dueDate);
-                      const periodEnd = new Date(periodStart);
-                      periodEnd.setMonth(periodEnd.getMonth() + (ri.installmentIntervalMonths || 3));
-                      
-                      return (
-                        <tr 
-                          key={inst.number} 
-                          className={`transition-all duration-300 ${
-                            isNextPending ? 'bg-accent/15 border-l-4 border-l-accent shadow-md' : 
-                            isPaid ? 'bg-green-500/10 opacity-75' : 
-                            'bg-bg-primary/40'
-                          } ${isNextPending ? 'ring-2 ring-accent/50 rounded-lg scale-[1.02]' : 'rounded-lg'}`}
-                        >
-                          <td className={`px-4 py-3 rounded-l-lg font-semibold ${isPaid ? 'line-through text-text-secondary' : ''}`}>
-                            <div className="flex items-center gap-2">
-                              {isPaid ? (
-                                <CheckCircle size={16} className="text-green-500" />
-                              ) : isNextPending ? (
-                                <AlertCircle size={16} className="text-accent animate-pulse" />
-                              ) : (
-                                <Clock size={16} className="text-text-secondary" />
-                              )}
-                              <span>{inst.number}</span>
-                            </div>
-                            {isNextPending && (
-                              <span className="ml-6 px-2 py-0.5 text-[10px] bg-accent text-white rounded-full font-bold">
-                                NEXT PAYMENT
-                              </span>
-                            )}
-                          </td>
-                          <td className={`px-4 py-3 text-xs ${isPaid ? 'line-through text-text-secondary' : ''}`}>
-                            <div className="flex flex-col">
-                              <span className="text-text-secondary">Coverage:</span>
-                              <span>{formatDate(periodStart)}</span>
-                              <span className="text-text-secondary">to</span>
-                              <span>{formatDate(periodEnd)}</span>
-                            </div>
-                          </td>
-                          <td className={`px-4 py-3 ${isPaid ? 'line-through text-text-secondary' : isNextPending ? 'font-bold text-accent' : ''}`}>
-                            {formatDate(inst.dueDate)}
-                          </td>
-                          <td className={`px-4 py-3 text-right font-semibold ${isPaid ? 'line-through text-text-secondary' : 'text-text-primary'}`}>
-                            ₹ {inst.amount?.toFixed(2)}
-                          </td>
-                          <td className="px-4 py-3 text-center">
-                            <span className={`px-3 py-1 text-xs font-bold rounded-full ${
-                              isPaid ? 'bg-green-500/20 text-green-500' :
-                              isInvoiced ? 'bg-yellow-500/20 text-yellow-500' :
-                              isNextPending ? 'bg-accent/20 text-accent animate-pulse' :
-                              'bg-gray-500/20 text-gray-400'
-                            }`}>
-                              {inst.status}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 text-center">
-                            {inst.invoice ? (
-                              <button
-                                onClick={() => handleViewInvoice(inst.invoice)}
-                                className={`${isPaid ? 'text-text-secondary' : 'text-accent hover:underline'} font-medium`}
-                                disabled={isPaid}
-                              >
-                                {isPaid ? 'Paid' : 'View'}
-                              </button>
-                            ) : (
-                              <span className="text-text-secondary">-</span>
-                            )}
-                          </td>
-                          <td className={`px-4 py-3 rounded-r-lg ${isPaid ? 'text-green-500 font-medium' : 'text-text-secondary'}`}>
-                            {inst.paidDate ? formatDate(inst.paidDate) : '-'}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-              
-              {/* Installment Progress */}
-              <div className="mt-4 p-4 bg-bg-tertiary/30 rounded-lg">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-semibold text-text-secondary">Payment Progress</span>
-                  <span className="text-sm font-bold text-accent">
-                    {ri.installments.filter(i => i.status === "Paid").length} / {ri.totalInstallments} Installments Paid
-                  </span>
-                </div>
-                <div className="w-full bg-bg-tertiary rounded-full h-3">
-                  <div 
-                    className="bg-accent h-3 rounded-full transition-all duration-500"
-                    style={{ 
-                      width: `${(ri.installments.filter(i => i.status === "Paid").length / ri.totalInstallments) * 100}%` 
-                    }}
-                  />
-                </div>
-                <div className="mt-2 text-xs text-text-secondary text-center">
-                  {ri.installments.filter(i => i.status === "Pending" && 
-                    ri.installments.slice(0, ri.installments.indexOf(i)).every(prev => prev.status === "Paid")).length > 0 ? (
-                    <span className="text-accent font-semibold">
-                      Next payment due: {formatDate(ri.installments.find(i => i.status === "Pending" && 
-                        ri.installments.slice(0, ri.installments.indexOf(i)).every(prev => prev.status === "Paid"))?.dueDate)}
-                    </span>
-                  ) : ri.installments.every(i => i.status === "Paid") ? (
-                    <span className="text-green-500 font-semibold">All installments paid successfully!</span>
-                  ) : null}
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* Invoice Items */}
           <div className="p-6 border-b border-bg-tertiary">
             <h3 className="text-lg font-bold mb-4 text-text-primary">Invoice Items</h3>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm border-separate" style={{ borderSpacing: '0 4px' }}>
-                <thead className="bg-bg-tertiary/20 text-xs font-semibold text-text-secondary uppercase tracking-widest">
+              <table className="w-full text-sm">
+                <thead className="bg-bg-tertiary/20 text-xs font-semibold text-text-secondary uppercase tracking-widest border-b border-bg-tertiary">
                   <tr>
-                    <th className="px-4 py-3 text-left shadow-[0_1px_0_var(--color-bg-tertiary)]">No</th>
-                    <th className="px-4 py-3 text-left shadow-[0_1px_0_var(--color-bg-tertiary)]">HSN/SAC</th>
-                    <th className="px-4 py-3 text-left shadow-[0_1px_0_var(--color-bg-tertiary)]">Product</th>
-                    <th className="px-4 py-3 text-right shadow-[0_1px_0_var(--color-bg-tertiary)]">Price</th>
-                    <th className="px-4 py-3 text-right shadow-[0_1px_0_var(--color-bg-tertiary)]">GST</th>
-                    <th className="px-4 py-3 text-right shadow-[0_1px_0_var(--color-bg-tertiary)]">Amount</th>
+                    <th className="px-4 py-3 text-left">No</th>
+                    <th className="px-4 py-3 text-left">HSN/SAC</th>
+                    <th className="px-4 py-3 text-left">Product</th>
+                    <th className="px-4 py-3 text-right">Price</th>
+                    <th className="px-4 py-3 text-right">GST</th>
+                    <th className="px-4 py-3 text-right">Amount</th>
                   </tr>
                 </thead>
-                <tbody className="space-y-1">
+                <tbody className="divide-y divide-bg-tertiary">
                   {ri.items?.map((item, index) => {
                     const price = (item.professionalFees || 0) + (item.govtFees || 0);
                     const gstAmount = (price * (item.gstPercent || 0)) / 100;
                     return (
-                      <tr key={index} className="bg-bg-primary/40 hover:bg-bg-tertiary/20 transition-colors">
-                        <td className="px-4 py-3 rounded-l-lg">{index + 1}</td>
+                      <tr key={index} className="hover:bg-bg-tertiary/10 transition-colors">
+                        <td className="px-4 py-3">{index + 1}</td>
                         <td className="px-4 py-3">{item.hsn}</td>
-                        <td className="px-4 py-3 font-medium text-accent">{item.service?.name || item.description}</td>
-                        <td className="px-4 py-3 text-right text-text-primary">₹ {price.toFixed(2)}</td>
-                        <td className="px-4 py-3 text-right text-text-secondary">₹ {gstAmount.toFixed(2)} @ {item.gstPercent}%</td>
-                        <td className="px-4 py-3 text-right font-semibold text-text-primary rounded-r-lg">₹ {(price + gstAmount).toFixed(2)}</td>
+                        <td className="px-4 py-3 font-medium">{item.service?.name || item.description}</td>
+                        <td className="px-4 py-3 text-right">₹ {price.toFixed(2)}</td>
+                        <td className="px-4 py-3 text-right">₹ {gstAmount.toFixed(2)} @ {item.gstPercent}%</td>
+                        <td className="px-4 py-3 text-right font-semibold">₹ {(price + gstAmount).toFixed(2)}</td>
                       </tr>
                     )
                   })}
                 </tbody>
                 <tfoot className="bg-bg-tertiary/10">
                   <tr className="font-bold">
-                    <td colSpan="5" className="px-4 py-3 text-right text-text-secondary">TOTAL</td>
-                    <td className="px-4 py-3 text-right text-accent text-lg">₹ {total.toFixed(2)}</td>
+                    <td colSpan="5" className="px-4 py-3 text-right">TOTAL</td>
+                    <td className="px-4 py-3 text-right">₹ {total.toFixed(2)}</td>
                   </tr>
                 </tfoot>
               </table>
@@ -391,75 +201,19 @@ const RecurringInvoiceDetails = () => {
 
           {/* Generated Invoices */}
           <div className="p-6">
-            <h3 className="text-lg font-bold mb-4 text-text-primary">
-              Generated Invoices History
-              {ri.totalInstallments > 1 && (
-                <span className="ml-2 text-sm font-normal text-text-secondary">
-                  (Installment Invoices)
-                </span>
-              )}
-            </h3>
+            <h3 className="text-lg font-bold mb-4 text-text-primary">Generated Invoices History</h3>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm border-separate" style={{ borderSpacing: '0 4px' }}>
-                <thead className="bg-bg-tertiary/20 text-xs font-semibold text-text-secondary uppercase tracking-widest">
+              <table className="w-full text-sm">
+                <thead className="bg-bg-tertiary/20 text-xs font-semibold text-text-secondary uppercase tracking-widest border-b border-bg-tertiary">
                   <tr>
-                    <th className="px-4 py-3 text-left shadow-[0_1px_0_var(--color-bg-tertiary)]">Invoice Date</th>
-                    <th className="px-4 py-3 text-left shadow-[0_1px_0_var(--color-bg-tertiary)]">Invoice No</th>
-                    {ri.totalInstallments > 1 && (
-                      <th className="px-4 py-3 text-center shadow-[0_1px_0_var(--color-bg-tertiary)]">Installment</th>
-                    )}
-                    <th className="px-4 py-3 text-right shadow-[0_1px_0_var(--color-bg-tertiary)]">Total</th>
-                    <th className="px-4 py-3 text-right shadow-[0_1px_0_var(--color-bg-tertiary)]">Paid</th>
-                    <th className="px-4 py-3 text-right shadow-[0_1px_0_var(--color-bg-tertiary)]">Due</th>
-                    <th className="px-4 py-3 text-center shadow-[0_1px_0_var(--color-bg-tertiary)]">Action</th>
+                    <th className="px-4 py-3 text-left">Invoice Date</th>
+                    <th className="px-4 py-3 text-left">Invoice No</th>
+                    <th className="px-4 py-3 text-right">Total</th>
+                    <th className="px-4 py-3 text-right">Paid</th>
+                    <th className="px-4 py-3 text-right">Due</th>
+                    <th className="px-4 py-3 text-center">Action</th>
                   </tr>
                 </thead>
-<<<<<<< HEAD
-                <tbody className="space-y-1">
-                  {ri.invoices?.length > 0 ? ri.invoices.map((inv, index) => {
-                    // Find associated installment
-                    const installment = ri.installments?.find(inst => 
-                      inst.invoice?._id === inv._id || inst.invoice === inv._id
-                    );
-                    const isPaid = inv.due < 0.01;
-                    
-                    return (
-                      <tr key={index} className={`transition-colors ${
-                        isPaid ? 'bg-green-500/5' : 'bg-bg-primary/40 hover:bg-bg-tertiary/20'
-                      }`}>
-                        <td className="px-4 py-3 rounded-l-lg">{formatDate(inv.invoiceDate)}</td>
-                        <td className="px-4 py-3 font-medium text-accent hover:underline cursor-pointer" onClick={() => handleViewInvoice(inv._id)}>{inv.invoiceNo}</td>
-                        {ri.totalInstallments > 1 && (
-                          <td className="px-4 py-3 text-center">
-                            {installment ? (
-                              <span className={`px-2 py-1 text-xs font-bold rounded-full ${
-                                installment.status === 'Paid' 
-                                  ? 'bg-green-500/20 text-green-500' 
-                                  : 'bg-yellow-500/20 text-yellow-500'
-                              }`}>
-                                #{installment.number}
-                              </span>
-                            ) : (
-                              <span className="text-text-secondary">-</span>
-                            )}
-                          </td>
-                        )}
-                        <td className="px-4 py-3 text-right text-text-primary">₹ {inv.total?.toFixed(2)}</td>
-                        <td className="px-4 py-3 text-right text-green-500 font-medium">₹ {inv.paid?.toFixed(2)}</td>
-                        <td className="px-4 py-3 text-right text-red-500 font-semibold">₹ {inv.due?.toFixed(2)}</td>
-                        <td className="px-4 py-3 text-center rounded-r-lg">
-                          <button
-                            onClick={() => handleViewInvoice(inv._id)}
-                            className="p-1.5 hover:bg-accent hover:text-white rounded-lg transition-colors text-accent"
-                            title="View Details"
-                          >
-                            <Eye size={18} />
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  }) : (
-=======
                 <tbody className="divide-y divide-bg-tertiary">
                   {ri.invoices?.length > 0 ? ri.invoices.map((inv, index) => (
                     <tr key={index} className="hover:bg-bg-tertiary/10 transition-colors">
@@ -479,9 +233,8 @@ const RecurringInvoiceDetails = () => {
                       </td>
                     </tr>
                   )) : (
->>>>>>> a76892a1ca06a972ef7462a46f78333b9ce3646e
                     <tr>
-                      <td colSpan={ri.totalInstallments > 1 ? 7 : 6} className="px-4 py-8 text-center text-text-secondary italic">No invoices generated yet.</td>
+                      <td colSpan="6" className="px-4 py-8 text-center text-text-secondary italic">No invoices generated yet.</td>
                     </tr>
                   )}
                 </tbody>
