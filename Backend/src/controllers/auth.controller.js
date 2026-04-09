@@ -24,7 +24,8 @@ export const login = async (req, res) => {
      .cookie("accessToken", result.accessToken, { ...options, expires: new Date(Date.now() + 15 * 60 * 1000), path: "/" }) 
      .json(new ApiResponse(200, {
         user: result.user || result.customer,
-        accessToken: result.accessToken 
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken
      }, "User logged in successfully"));
 };
 
@@ -37,7 +38,8 @@ export const customerLogin = async (req, res) => {
      .cookie("accessToken", result.accessToken, { ...options, expires: new Date(Date.now() + 15 * 60 * 1000), path: "/" })
      .json(new ApiResponse(200, {
         customer: result.customer,
-        accessToken: result.accessToken
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken
      }, "Customer logged in successfully"));
 };
 
@@ -50,12 +52,14 @@ export const refresh = async (req, res) => {
   }
 
   const result = await authService.refreshAccessToken(rawRefreshToken);
+  const options = getCookieOptions(req);
 
   res.status(200)
-     .cookie("refreshToken", result.refreshToken, { ...cookieOptions, expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), path: "/" })
-     .cookie("accessToken", result.accessToken, { ...cookieOptions, expires: new Date(Date.now() + 15 * 60 * 1000), path: "/" })
+     .cookie("refreshToken", result.refreshToken, { ...options, expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), path: "/" })
+     .cookie("accessToken", result.accessToken, { ...options, expires: new Date(Date.now() + 15 * 60 * 1000), path: "/" })
      .json(new ApiResponse(200, {
-        accessToken: result.accessToken
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken
      }, "Token refreshed successfully"));
 };
 
