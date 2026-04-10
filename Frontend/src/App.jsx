@@ -26,6 +26,7 @@ import Customers from './pages/Customers'
 import Login from './pages/Login'
 import ClientLogin from './pages/ClientLogin'
 import ClientDashboard from './pages/ClientDashboard'
+import { ping } from './utils/ping'
 
 const RequireAuth = ({ children, allowedRoles }) => {
   const { isAuthenticated, loading, user } = useAppSelector((state) => state.auth)
@@ -64,6 +65,11 @@ const App = () => {
 
     return () => clearTimeout(timer)
   }, [dispatch, token])
+
+  //ping to keep the session alive
+  useEffect(() => {
+    ping()
+  }, [])
 
   const handleLogin = (credentials) => {
     dispatch(loginUser(credentials))
