@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Helper to determine the backend base URL (Local vs Render)
-const getBaseURL = () => {
+export const getBaseURL = () => {
     // Priority 1: User-specified manual override in local storage
     const manualBase = localStorage.getItem('API_URL_OVERRIDE');
     if (manualBase) return manualBase;
