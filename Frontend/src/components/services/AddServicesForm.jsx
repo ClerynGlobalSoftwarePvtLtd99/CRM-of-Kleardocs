@@ -7,6 +7,7 @@ const getInitialForm = (data) => ({
   hsn: data?.hsn || "",
   professionalFees: data?.professionalFees || "",
   govtFees: data?.govtFees || "",
+  gst: data?.gst || 0,
   status: data?.status !== undefined ? data?.status : true,
 });
 
@@ -122,6 +123,15 @@ const ServiceFormModal = ({ onClose, onSubmit, initialData }) => {
             value={form.govtFees}
             onChange={handleChange}
             placeholder="₹ Government Fees"
+            className="w-full border border-bg-tertiary bg-bg-primary text-text-primary p-2 rounded"
+          />
+
+          <input
+            name="gst"
+            type="number"
+            value={form.gst}
+            onChange={handleChange}
+            placeholder="GST Percentage (%)"
             className="w-full border border-bg-tertiary bg-bg-primary text-text-primary p-2 rounded"
           />
 

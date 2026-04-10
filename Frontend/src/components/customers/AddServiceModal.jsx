@@ -14,7 +14,7 @@ const AddServiceModal = ({ customerId, onClose, selectedYear }) => {
     startDate: new Date().toISOString().split('T')[0],
     professionalFees: 0,
     govtFees: 0,
-    gst: 18,
+    gst: 0,
     recurring: false,
     interval: 1,
     intervalType: "Month",
@@ -39,7 +39,8 @@ const AddServiceModal = ({ customerId, onClose, selectedYear }) => {
           ...prev, 
           serviceId: defaultService._id,
           professionalFees: defaultService.professionalFees || 0,
-          govtFees: defaultService.govtFees || 0
+          govtFees: defaultService.govtFees || 0,
+          gst: defaultService.gst || 0
         }));
       }
     }
@@ -70,6 +71,7 @@ const AddServiceModal = ({ customerId, onClose, selectedYear }) => {
       serviceId: selectedId,
       professionalFees: service?.professionalFees || 0,
       govtFees: service?.govtFees || 0,
+      gst: service?.gst || 0,
       recurring: service?.name === "Annual Compliance" ? prev.recurring : false
     }));
   };

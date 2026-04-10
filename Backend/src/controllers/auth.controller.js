@@ -1,12 +1,13 @@
 import * as authService from "../services/auth.service.js";
 import { ApiResponse } from "../utils/response.js";
-
+ 
 const getCookieOptions = (req) => {
   const isProd = process.env.NODE_ENV === "production";
   return {
     httpOnly: true,
     secure: isProd, // Only true in production (HTTPS)
-    sameSite: isProd ? "none" : "lax" // "none" for cross-site prod, "lax" for local dev
+    // sameSite: isProd ? "none" : "lax" 
+    // "none" for cross-site prod, "lax" for local dev
   };
 };
 
