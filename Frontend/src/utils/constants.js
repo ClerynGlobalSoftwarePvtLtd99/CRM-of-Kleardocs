@@ -88,23 +88,23 @@ export const COMPANY_TYPES = [
 
 export const EMAIL_TEMPLATES = [
   { id: 1, name: "Compliance Update", subject: "Compliance Update - {{complianceName}} for {{companyName}}" },
-  { id: 2, name: "Annual Compliance Service Jagjyot Singh", subject: "Annual Compliance Service by Startup Station" },
+  { id: 2, name: "Annual Compliance Service Jagjyot Singh", subject: "Annual Compliance Service by Kleardocs Solutions Private Limited" },
   { id: 3, name: "Annual Compliance Service - Ritu Kaur", subject: "Annual Compliance Package for {{companyName}}" },
   { id: 4, name: "Annual Compliance Service plus GST plus ESI - Ritu Kaur", subject: "Annual Compliance Package for {{companyName}}" },
-  { id: 5, name: "Annual Compliance - Onboarding", subject: "Welcome to Startup Station – Your Annual Compliance Access" },
+  { id: 5, name: "Annual Compliance - Onboarding", subject: "Welcome to Kleardocs Solutions Private Limited – Your Annual Compliance Access" },
   { id: 6, name: "Startup India Registration", subject: "Startup India Registration - Next Steps & Document Submission" },
-  { id: 7, name: "Startup India Promotion", subject: "Get Your Startup India Registration (DPIIT Certificate) at Just ₹2,999 with Startup Station! 🚀" },
+  { id: 7, name: "Startup India Promotion", subject: "Get Your Startup India Registration (DPIIT Certificate) at Just ₹2,999 with Kleardocs Solutions Private Limited! 🚀" },
   { id: 8, name: "Your Website at just Rs 5000!", subject: "Your Website at just Rs 5000!" },
   { id: 9, name: "Professional Tax", subject: "Get Professional Tax Registration immediately!" },
   { id: 10, name: "GST Filing", subject: "Urgent: Submit Your GST Invoices by 6th for Timely Filing!" },
-  { id: 11, name: "Service List", subject: "Discover Our Key Services to Boost Your Business – Startup Station" },
+  { id: 11, name: "Service List", subject: "Discover Our Key Services to Boost Your Business – Kleardocs Solutions Private Limited" },
   { id: 12, name: "Next Quarter Payment", subject: "Reminder: Upcoming Quarter's Payment – Complete Within 5 Days" },
   { id: 13, name: "INC 20A Reminder", subject: "Urgent: INC-20A Filing Pending – Avoid Late Penalties!" },
-  { id: 14, name: "ROC plus GST plus ES", subject: "Annual Compliance Package by Startup Station" },
-  { id: 15, name: "plus TDS", subject: "Annual Compliance Package by Startup Station" },
-  { id: 16, name: "Package plus payment details", subject: "Annual Compliance Package by Startup Station plus Bookkeeping Services" },
+  { id: 14, name: "ROC plus GST plus ES", subject: "Annual Compliance Package by Kleardocs Solutions Private Limited" },
+  { id: 15, name: "plus TDS", subject: "Annual Compliance Package by Kleardocs Solutions Private Limited" },
+  { id: 16, name: "Package plus payment details", subject: "Annual Compliance Package by Kleardocs Solutions Private Limited plus Bookkeeping Services" },
   { id: 17, name: "Annual Compliance plus Bookkeeping", subject: "Annual Compliance Package for {{companyName}}" },
-  { id: 18, name: "Director Registration", subject: "Startup Station - Director Resignation Services" },
+  { id: 18, name: "Director Registration", subject: "Kleardocs Solutions Private Limited - Director Resignation Services" },
 ];
 
 export const WHATSAPP_TEMPLATES = [
@@ -118,7 +118,7 @@ export const WHATSAPP_TEMPLATES = [
   },
   {
     name: "serviceautomation_v3",
-    content: "Hello {{CustomerName}},\n\nThank you for choosing Startup Station for {{service name}}. The total cost for the service is Rs. {{Price}}. We kindly request you to transfer the amount at your earliest convenience and share a screenshot of the payment confirmation.\n\nTo complete your payment, you can:\n\nScan the QR code above, or\nTransfer the amount to our UPI ID: startupstation@idfcbank, or\nDirectly transfer the amount to our bank account:\nBanking Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED\nBank Name: IDFC Bank\nAccount Number: 89674560601\nIFSC Code: IDFB0060119.\nYour dedicated Relationship Manager, Ritu Kaur, will be in touch with you shortly to assist further.\n\nBest regards,\nStartup Station\n\nIgnore if the payment is made!"
+    content: "Hello {{CustomerName}},\n\nThank you for choosing Kleardocs Solutions Private Limited for {{service name}}. The total cost for the service is Rs. {{Price}}. We kindly request you to transfer the amount at your earliest convenience and share a screenshot of the payment confirmation.\n\nTo complete your payment, you can:\n\nScan the QR code above, or\nTransfer the amount to our UPI ID: kleardocssolutions@okaxis, or\nDirectly transfer the amount to our bank account:\nBanking Name: KLEARDOCS SOLUTIONS PRIVATE LIMITED\nBank Name: Axis Bank\nAccount Number: 925020025764619\nIFSC Code: UTIB0004234.\nYour dedicated Relationship Manager, Ritu Kaur, will be in touch with you shortly to assist further.\n\nBest regards,\nKleardocs Solutions Private Limited\n\nIgnore if the payment is made!"
   },
   {
     name: "ac2500_v5",
@@ -126,15 +126,15 @@ export const WHATSAPP_TEMPLATES = [
   },
   {
     name: "2nd_quarter_payment_v6idfc_v2",
-    content: "Hello {{Name}},\n\nThis is a friendly reminder regarding the payment for the SECOND QUARTER of your Annual Compliances with Startup Station. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.\n\nPayment Options:\n\n1. UPI Transfer:\nUPI ID: startupstation@idfcbank\n\n2. Bank Transfer:\nBanking Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED\nBank Name: IDFC Bank\nAccount Number: 89674560601\nIFSC Code: IDFB0060119\n\nIf you prefer, you can also scan the QR code below to complete the payment via UPI.\n\nInvoice for the 2nd quarter will be shared upon receiving the payment confirmation. Please share screenshot once the payment is made.\n\nThank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.\n\nIgnore if the payment is already made."
+    content: "Hello {{Name}},\n\nThis is a friendly reminder regarding the payment for the SECOND QUARTER of your Annual Compliances with Kleardocs Solutions Private Limited. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.\n\nPayment Options:\n\n1. UPI Transfer:\nUPI ID: kleardocssolutions@okaxis\n\n2. Bank Transfer:\nBanking Name: KLEARDOCS SOLUTIONS PRIVATE LIMITED\nBank Name: Axis Bank\nAccount Number: 925020025764619\nIFSC Code: UTIB0004234\n\nIf you prefer, you can also scan the QR code below to complete the payment via UPI.\n\nInvoice for the 2nd quarter will be shared upon receiving the payment confirmation. Please share screenshot once the payment is made.\n\nThank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.\n\nIgnore if the payment is already made."
   },
   {
     name: "2nd_quarter_payment_v6idfc",
-    content: "Hello {{Name}},\n\nThis is a friendly reminder regarding the payment for the SECOND QUARTER of your Annual Compliances with Startup Station. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.\n\nPayment Options:\n\n1. UPI Transfer:\nUPI ID: startupstation.axl\n\n2. Bank Transfer:\nBanking Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED\nBank Name: IDFC Bank\nAccount Number: 89774560601\nIFSC Code: IDFB0060119\n\nIf you prefer, you can also scan the QR code below to complete the payment via UPI.\n\nInvoice for the 2nd quarter will be shared upon receiving the payment confirmation. Please share screenshot once the payment is made.\n\nThank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.\n\nIgnore if the payment is already made"
+    content: "Hello {{Name}},\n\nThis is a friendly reminder regarding the payment for the SECOND QUARTER of your Annual Compliances with Kleardocs Solutions Private Limited. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.\n\nPayment Options:\n\n1. UPI Transfer:\nUPI ID: kleardocssolutions@okaxis\n\n2. Bank Transfer:\nBanking Name: KLEARDOCS SOLUTIONS PRIVATE LIMITED\nBank Name: Axis Bank\nAccount Number: 925020025764619\nIFSC Code: UTIB0004234\n\nIf you prefer, you can also scan the QR code below to complete the payment via UPI.\n\nInvoice for the 2nd quarter will be shared upon receiving the payment confirmation. Please share screenshot once the payment is made.\n\nThank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.\n\nIgnore if the payment is already made"
   },
   {
     name: "1st_quarter_payment_v2idfc",
-    content: "Hello {{Name}},\n\nWe are thrilled to assist you with your Annual Compliances. Please make the payment for the first quarter at your earliest convenience.\n\nYou can complete your payment by either scanning the QR code above or transferring the amount to our UPI ID: startupstation@idfcbank.\n\nAlternatively, you can transfer the amount directly to our bank account:\n\nBanking Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED\nBank Name: IDFC Bank\nAccount Number: 89674560601\nIFSC Code: IDFB0060119.\n\nIgnore if the payment is already made."
+    content: "Hello {{Name}},\n\nWe are thrilled to assist you with your Annual Compliances. Please make the payment for the first quarter at your earliest convenience.\n\nYou can complete your payment by either scanning the QR code above or transferring the amount to our UPI ID: kleardocssolutions@okaxis.\n\nAlternatively, you can transfer the amount directly to our bank account:\n\nBanking Name: KLEARDOCS SOLUTIONS PRIVATE LIMITED\nBank Name: Axis Bank\nAccount Number: 925020025764619\nIFSC Code: UTIB0004234.\n\nIgnore if the payment is already made."
   },
   {
     name: "ac2500_v4",
@@ -178,11 +178,11 @@ export const WHATSAPP_TEMPLATES = [
   },
   {
     name: "holi2",
-    content: "🎨🌈 Wishing you a vibrant and joyous Holi from all of us at Startup Station! 🌸 May this festival of colors fill your life with happiness, success, and endless opportunities. Let's celebrate the spirit of innovation and creativity together. Have a colorful and prosperous Holi!\n\nWarm regards,\nStartup Station Team"
+    content: "🎨🌈 Wishing you a vibrant and joyous Holi from all of us at Kleardocs Solutions Private Limited! 🌸 May this festival of colors fill your life with happiness, success, and endless opportunities. Let's celebrate the spirit of innovation and creativity together. Have a colorful and prosperous Holi!\n\nWarm regards,\nKleardocs Solutions Private Limited Team"
   },
   {
     name: "holi",
-    content: "🎨🌈 Wishing you a vibrant and joyous Holi from all of us at Startup Station! 🌸 May this festival of colors fill your life with happiness, success, and endless opportunities. Let's celebrate the spirit of innovation and creativity together. Have a colorful and prosperous Holi!\n\nRegards,\nStartup Station Team"
+    content: "🎨🌈 Wishing you a vibrant and joyous Holi from <img src=\"logo.png\" alt=\"Kleardocs Solutions Private Limited Logo\" /> 🌸 May this festival of colors fill your life with happiness, success, and endless opportunities. Let's celebrate the spirit of innovation and creativity together. Have a colorful and prosperous Holi!\n\nRegards,\nStartup Station Team"
   },
   {
     name: "section8package_v3",
@@ -190,15 +190,15 @@ export const WHATSAPP_TEMPLATES = [
   },
   {
     name: "serviceautomation_v2",
-    content: "Hello {{CustomerName}},\n\nThank you for choosing Startup Station for {{service name}}. The total cost for the service is Rs. {{Price}}. We kindly request you to transfer the amount at your earliest convenience and share a screenshot of the payment confirmation.\n\nTo complete your payment, you can:\n\nScan the QR code above, or\nTransfer the amount to our UPI ID: startupstation@axl, or\nDirectly transfer the amount to our bank account:\nBank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED\nAccount Number: 50200094441194\nIFSC Code: HDFC0005385\nYour dedicated Relationship Manager, Ritu Kaur, will be in touch with you shortly to assist further.\n\nBest regards,\nStartup Station\n\nIgnore if the payment is made!"
+    content: "Hello {{CustomerName}},\n\nThank you for choosing Kleardocs Solutions Private Limited for {{service name}}. The total cost for the service is Rs. {{Price}}. We kindly request you to transfer the amount at your earliest convenience and share a screenshot of the payment confirmation.\n\nTo complete your payment, you can:\n\nScan the QR code above, or\nTransfer the amount to our UPI ID: kleardocssolutions@okaxis, or\nDirectly transfer the amount to our bank account:\nBank Name: KLEARDOCS SOLUTIONS PRIVATE LIMITED\nAccount Number: 925020025764619\nIFSC Code: UTIB0004234\nYour dedicated Relationship Manager, Ritu Kaur, will be in touch with you shortly to assist further.\n\nBest regards,\nKleardocs Solutions Private Limited\n\nIgnore if the payment is made!"
   },
   {
     name: "serviceautomation",
-    content: "Hello {{CustomerName}},\n\nThank you for choosing Startup Station for {{service name}}. The total cost for the service is Rs. {{Price}}. We kindly request you to transfer the amount at your earliest convenience and share a screenshot of the payment confirmation.\n\nTo complete your payment, you can:\n\nScan the QR code above, or\nTransfer the amount to our UPI ID: startupstation@axl, or\nDirectly transfer the amount to our bank account:\nBank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED\nAccount Number: 50200094441194\nIFSC Code: HDFC0005385\nYour dedicated Relationship Manager, Ritu Kaur, will be in touch with you shortly to assist further.\n\nBest regards,\nStartup Station\n\nIgnore if the payment is made!"
+    content: "Hello {{CustomerName}},\n\nThank you for choosing Kleardocs Solutions Private Limited for {{service name}}. The total cost for the service is Rs. {{Price}}. We kindly request you to transfer the amount at your earliest convenience and share a screenshot of the payment confirmation.\n\nTo complete your payment, you can:\n\nScan the QR code above, or\nTransfer the amount to our UPI ID: kleardocssolutions@okaxis, or\nDirectly transfer the amount to our bank account:\nBank Name: KLEARDOCS SOLUTIONS PRIVATE LIMITED\nAccount Number: 925020025764619\nIFSC Code: UTIB0004234\nYour dedicated Relationship Manager, Ritu Kaur, will be in touch with you shortly to assist further.\n\nBest regards,\nKleardocs Solutions Private Limited\n\nIgnore if the payment is made!"
   },
   {
     name: "1st_quarter_payment_v3",
-    content: "Hello {{Name}},\n\nWe are thrilled to assist you with your Annual Compliances. Please make the payment for the second quarter at your earliest convenience.\n\nYou can complete your payment by either scanning the QR code above or transferring the amount to our UPI ID: startupstation@axl. Alternatively, you can transfer the amount directly to our bank account:\n\nBank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED\nAccount Number: 50200094441194\nIFSC Code: HDFC0005385.\n\nIgnore if the payment is already made."
+    content: "Hello {{Name}},\n\nWe are thrilled to assist you with your Annual Compliances. Please make the payment for the second quarter at your earliest convenience.\n\nYou can complete your payment by either scanning the QR code above or transferring the amount to our UPI ID: kleardocssolutions@okaxis. Alternatively, you can transfer the amount directly to our bank account:\n\nBank Name: KLEARDOCS SOLUTIONS PRIVATE LIMITED\nAccount Number: 925020025764619\nIFSC Code: UTIB0004234.\n\nIgnore if the payment is already made."
   },
   {
     name: "video",
@@ -210,7 +210,7 @@ export const WHATSAPP_TEMPLATES = [
   },
   {
     name: "2nd_quarter_payment_v5",
-    content: "Hello {{Name}},\n\nThis is a friendly reminder regarding the payment for the SECOND QUARTER of your Annual Compliances with Startup Station. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.\n\nPayment Options:\n\n1. UPI Transfer:\nUPI ID: startupstation.axl\n\n2. Bank Transfer:\nBank Name: STARTUP STATION FINANCIAL SERVICES PRIVATE LIMITED\nAccount Number: 50200094441194\nIFSC Code: HDFC0005385\n\nIf you prefer, you can also scan the QR code below to complete the payment via UPI.\n\nInvoice for the 2nd quarter will be shared upon receiving the payment confirmation. Please share screenshot once the payment is made.\n\nThank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.\n\nIgnore if the payment is already made."
+    content: "Hello {{Name}},\n\nThis is a friendly reminder regarding the payment for the SECOND QUARTER of your Annual Compliances with Kleardocs Solutions Private Limited. Kindly complete the payment at your earliest convenience to ensure uninterrupted services.\n\nPayment Options:\n\n1. UPI Transfer:\nUPI ID: kleardocssolutions@okaxis\n\n2. Bank Transfer:\nBank Name: KLEARDOCS SOLUTIONS PRIVATE LIMITED\nAccount Number: 925020025764619\nIFSC Code: UTIB0004234\n\nIf you prefer, you can also scan the QR code below to complete the payment via UPI.\n\nInvoice for the 2nd quarter will be shared upon receiving the payment confirmation. Please share screenshot once the payment is made.\n\nThank you for sticking with us. We truly value your partnership and look forward to continuing our service to you.\n\nIgnore if the payment is already made."
   },
   {
     name: "2nd_quarter_payment_v4",
@@ -222,7 +222,7 @@ export const WHATSAPP_TEMPLATES = [
   },
   {
     name: "durgapuja",
-    content: "Dear Sir/Madam,\n\nWe would like to inform you that our office will remain closed from 10th October 2024 to 13th October 2024 in observance of the Durga Puja Festival, a significant celebration here in West Bengal.\n\nRegular operations will resume on 14th October 2024.\n\nWishing you and your family a joyous and prosperous Durga Puja!\n\nWarm regards,\nStartup Station."
+    content: "Dear Sir/Madam,\n\nWe would like to inform you that our office will remain closed from 10th October 2024 to 13th October 2024 in observance of the Durga Puja Festival, a significant celebration here in West Bengal.\n\nRegular operations will resume on 14th October 2024.\n\nWishing you and your family a joyous and prosperous Durga Puja!\n\nWarm regards,\nKleardocs Solutions Private Limited."
   },
   {
     name: "companycompliances_v3",

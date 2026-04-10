@@ -78,9 +78,38 @@ export const sendEmail = async ({ to, subject, html, customerId, leadId, templat
       console.log("[MAILER] SMTP not configured. Using JSON logger.");
     }
 
+    // Standard Branded Wrapper
+    const brandedHtml = `
+      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 10px; overflow: hidden;">
+        <!-- Header with Logo -->
+        <div style="background-color: #f8f9fa; padding: 20px; text-align: center; border-bottom: 2px solid #e9ecef;">
+          <img src="cid:companyLogo" alt="Kleardocs" style="max-height: 60px;" />
+        </div>
+        
+        <!-- Main Content -->
+        <div style="padding: 30px; text-align: justify;">
+          ${html}
+        </div>
+
+        ${(html.toLowerCase().includes("qr") || html.toLowerCase().includes("payment") || html.toLowerCase().includes("account number")) && !html.includes("cid:paymentQR") && !html.includes("data:image/") ? `
+        <!-- QR Code for Payment -->
+        <div style="padding: 20px; text-align: center; background-color: #fffaf0; border-top: 1px dashed #ffd700;">
+          <p style="font-weight: bold; color: #856404; margin-bottom: 15px;">Scan to Pay</p>
+          <img src="cid:paymentQR" alt="Payment QR" style="max-width: 200px; border: 5px solid #fff; shadow: 0 4px 6px rgba(0,0,0,0.1);" />
+          <p style="font-size: 12px; color: #666; margin-top: 10px;">Please share a screenshot after payment.</p>
+        </div>
+        ` : ''}
+
+        <!-- Footer -->
+        <div style="background-color: #343a40; color: #ffffff; padding: 20px; text-align: center; font-size: 13px;">
+          <p style="margin: 0;">&copy; ${new Date().getFullYear()} <strong>Kleardocs Solutions Private Limited</strong>. All rights reserved.</p>
+          <p style="margin: 5px 0 0 0; color: #adb5bd;">Compliance | Excellence | Integrity</p>
+        </div>
+      </div>
+    `;
+
     // Format attachments for Nodemailer
     const formattedAttachments = attachments.map(filepath => {
-      // filepath is like /uploads/templates/filename.pdf
       const fullPath = path.join(process.cwd(), "public", filepath);
       return {
         filename: path.basename(filepath),
@@ -88,11 +117,31 @@ export const sendEmail = async ({ to, subject, html, customerId, leadId, templat
       };
     });
 
+    // Add Embedded Branding Images
+    const logoPath = path.join(process.cwd(), "..", "Frontend", "src", "assets", "logo.png");
+    const qrPath = path.join(process.cwd(), "..", "PaymentQR.jpeg");
+
+    if (fs.existsSync(logoPath)) {
+      formattedAttachments.push({
+        filename: 'logo.png',
+        path: logoPath,
+        cid: 'companyLogo'
+      });
+    }
+
+    if (fs.existsSync(qrPath) && (html.toLowerCase().includes("qr") || html.toLowerCase().includes("payment") || html.toLowerCase().includes("account number"))) {
+      formattedAttachments.push({
+        filename: 'PaymentQR.jpeg',
+        path: qrPath,
+        cid: 'paymentQR'
+      });
+    }
+
     const mailOptions = {
-      from: process.env.SMTP_FROM || '"KlearDocs" <kleardocssolutions@gmail.com>',
+      from: process.env.SMTP_FROM || '"Kleardocs Solutions Private Limited" <kleardocssolutions@gmail.com>',
       to,
       subject,
-      html,
+      html: brandedHtml,
       attachments: formattedAttachments
     };
 
