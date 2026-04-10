@@ -29,7 +29,7 @@ const Login = ({ onLogin }) => {
         <div className="flex flex-col items-center">
           <img 
             src="/logo.svg" 
-            alt="Startup Station Logo" 
+            alt="Kleardocs Solutions Private Limited Logo" 
             className="h-24 w-auto mb-6 transition-transform hover:scale-105 duration-300" 
           />
           <h2 className="text-2xl font-bold text-[var(--color-text-primary)] group">
