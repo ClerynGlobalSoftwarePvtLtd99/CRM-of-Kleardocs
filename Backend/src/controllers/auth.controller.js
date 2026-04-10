@@ -3,10 +3,11 @@ import { ApiResponse } from "../utils/response.js";
  
 const getCookieOptions = (req) => {
   const isProd = process.env.NODE_ENV === "production";
+
   return {
     httpOnly: true,
     secure: isProd, // Only true in production (HTTPS)
-    sameSite:  "None" 
+    sameSite: isProd ? "None" : "Lax",
     // "none" for cross-site prod, "lax" for local dev
   };
 };
