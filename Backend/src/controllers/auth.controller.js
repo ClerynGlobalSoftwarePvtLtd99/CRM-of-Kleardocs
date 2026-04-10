@@ -6,7 +6,7 @@ const getCookieOptions = (req) => {
   return {
     httpOnly: true,
     secure: isProd, // Only true in production (HTTPS)
-    // sameSite: isProd ? "none" : "lax" 
+    sameSite:  "None" 
     // "none" for cross-site prod, "lax" for local dev
   };
 };
