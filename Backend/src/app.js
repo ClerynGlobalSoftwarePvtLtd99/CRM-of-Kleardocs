@@ -68,8 +68,8 @@ app.use(helmet({
 
 // DDoS & Brute Force Protection (Max 100 requests per 15 mins per IP)
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
+  windowMs: 1 * 60 * 1000,
+  max: 60,
   message: { status: false, message: "Too many requests, please try again later." }
 });
 app.use("/api", limiter);
@@ -92,6 +92,12 @@ app.use(express.static("public"));
 app.get("/", (req, res) => {
   res.send("Server is healthy ✅");
 });
+
+// ping request after 3 minutes
+app.get("/ping", (req, res) => {
+  res.send({ status: true, message: "Server is healthy ✅" });
+});
+
 app.use("/api/v1/auth", AuthRoutes);
 app.use("/api/v1/leads", LeadRoutes);
 app.use("/api/v1/customers", CustomerRoutes);
@@ -107,6 +113,8 @@ app.use("/api/v1/compliances", ComplianceRoutes);
 app.use("/api/v1/templates", TemplateRoutes);
 app.use("/api/v1/jobs", JobRoutes);
 app.use("/api/v1/users", UserRoutes);
+
+
 
 // Global Error Handler (must be after all routes) 
 app.use(errorHandler);

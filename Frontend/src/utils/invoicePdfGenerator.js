@@ -66,9 +66,11 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   const borderColor = [0, 0, 0];
 
   // Title
-  doc.setFontSize(10);
-  doc.setFont("helvetica", "bold");
-  doc.text("Tax Invoice", pageWidth / 2, 20, { align: "center" });
+  if (t.gst > 0) {
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.text("Tax Invoice", pageWidth / 2, 20, { align: "center" });
+  }
 
   // Main Border
   doc.setLineWidth(0.5);
@@ -93,7 +95,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   // Company Details (Top Right)
   doc.setFontSize(14);
   doc.setFont("helvetica", "bold");
-  doc.text("Kleardocs Solutions", pageWidth - 25, 50, { align: "right" });
+  doc.text("Kleardocs Solutions Private Limited", pageWidth - 25, 50, { align: "right" });
 
   doc.setFontSize(8);
   doc.setFont("helvetica", "normal");
@@ -109,7 +111,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   curY += lineH;
   doc.text("CIN: U69200WB2025PTC278630 | PAN: AALCK7855M", detailsX, curY, { align: "right" });
   curY += lineH;
-  doc.text("Bank A/C No: 925020025764619, IFSC: UTIB0004234, Bank: HDFC Bank", detailsX, curY, { align: "right" });
+  doc.text("Bank A/C No: 925020025764619, IFSC: UTIB0004234, Bank Name: AXIS BANK", detailsX, curY, { align: "right" });
 
   // Section Header 1 (Bill To, Transport, Details)
   autoTable(doc, {
@@ -327,7 +329,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     doc.setFontSize(7);
     doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
     doc.setFont("helvetica", "bold");
-    doc.text("KLEARDOCS SOLUTIONS", centerX, centerY - 5, { align: "center" });
+    doc.text("KLEARDOCS SOLUTIONS PRIVATE LIMITED", centerX, centerY - 5, { align: "center" });
     doc.setTextColor(0, 0, 0);
   }
 

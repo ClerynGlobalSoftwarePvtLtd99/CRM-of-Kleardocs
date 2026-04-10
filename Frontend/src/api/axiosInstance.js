@@ -77,7 +77,7 @@ axiosInstance.interceptors.response.use(
         if (refreshToken) {
           // Attempt to refresh the token
           console.log('🔄 Attempting to refresh access token...');
-          const refreshResponse = await axios.post(`${baseURL}/auth/refresh`, {
+          const refreshResponse = await axios.post(`${baseURL}/auth/refresh-token`, {
             refreshToken
           }, { withCredentials: true });
 

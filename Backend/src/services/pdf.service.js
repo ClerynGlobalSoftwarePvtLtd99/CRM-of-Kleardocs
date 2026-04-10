@@ -907,6 +907,11 @@ export const generateInvoicePdf = (invoice, customer, res) => {
   const docDescription = invoice.description || invoice.notes || invoice.remark || invoice.remarks || '—';
   doc.pipe(res);
 
+  // Tax Invoice Title
+  if (invoice.totalGst > 0) {
+    doc.fillColor('black').fontSize(10).font('Helvetica-Bold').text("Tax Invoice", 0, 10, { align: 'center', width: doc.page.width });
+  }
+
   // Logo box (Black)
   doc.rect(20, 20, 160, 90).fill('black');
   doc.fillColor('white').fontSize(16).font('Helvetica-Bold').text('KLEARDOCS', 35, 55);
@@ -915,7 +920,7 @@ export const generateInvoicePdf = (invoice, customer, res) => {
   doc.fillColor('black');
   
   // Company Info (Top Right)
-  doc.fontSize(14).font('Helvetica-Bold').text('Kleardocs Solutions', 300, 30, { align: 'right' });
+  doc.fontSize(14).font('Helvetica-Bold').text('Kleardocs Solutions Private Limited', 300, 30, { align: 'right' });
   doc.fontSize(8).font('Helvetica').text('Phone: +91 98755 15290 | Email: info@kleardocs.com', 300, 50, { align: 'right' });
   doc.text('366, Amritalal Mukherjee Road, Kolkata, 700063', 300, 62, { align: 'right' });
   doc.text('CIN: U69200WB2025PTC278630 | PAN: AALCK7855M', 300, 74, { align: 'right' });
@@ -1021,7 +1026,7 @@ export const generateInvoicePdf = (invoice, customer, res) => {
   const signatoryY = lastY;
   const signatoryWidth = 150;
 
-  doc.fontSize(10).font('Helvetica-Bold').text('For Kleardocs Solutions', signatoryX, signatoryY, { align: 'center', width: signatoryWidth });
+  doc.fontSize(10).font('Helvetica-Bold').text('For Kleardocs Solutions Private Limited', signatoryX, signatoryY, { align: 'center', width: signatoryWidth });
 
   // Add stamp image
   try {
@@ -1036,7 +1041,7 @@ export const generateInvoicePdf = (invoice, customer, res) => {
     doc.circle(centerX, centerY, 45);
     doc.circle(centerX, centerY, 40);
     doc.stroke();
-    doc.fillColor(primaryColor).fontSize(7).font('Helvetica-Bold').text('KLEARDOCS SOLUTIONS', centerX, centerY - 5, { align: 'center' });
+    doc.fillColor(primaryColor).fontSize(7).font('Helvetica-Bold').text('KLEARDOCS SOLUTIONS PRIVATE LIMITED', centerX, centerY - 5, { align: 'center' });
     doc.fillColor('black');
   }
 
