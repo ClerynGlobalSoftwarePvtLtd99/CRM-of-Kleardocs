@@ -214,3 +214,16 @@ Private Limited Company
 ==========================================================================================
 
 06/04/2026 (Monday)  
+
+============
+
+RECURRING INVOICE DETAILS
+page section modification.(Those customer have recurring invoice)
+
+Blow Invoice Items section( in This RECURRING INVOICE DETAILS)
+
+first i want make a progress bar based on recurring invoice type installment.
+when crm aget add service form -> select Annual compliance -> then appear RECURRING INVOICE toggle -> then select -> agent select (1 or 2 or 3 or 4) installment based on select installment make couple of components for good ui.
+ a)progress bar for good ui (theme will crm theme)
+ b)horizontall div(based on price if price 2000) if client want to give one installment show 2000 in div , two installment (after 6 months),three intallment show three installemnt div with seperate
+@contextScopeItemMention 
