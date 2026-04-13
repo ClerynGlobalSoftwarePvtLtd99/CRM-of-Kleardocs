@@ -60,8 +60,8 @@ async function nukeAndFix() {
                 <table align="center" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto; display: inline-table;">
                   <tr>
                     <td align="center" style="text-align: center;">
-                      <p style="font-weight: bold; font-size: 20px; margin: 0 0 20px 0; color: #1abc9c; text-align: center; font-family: sans-serif;">Scan to Pay: QR Code</p>
-                      <img src="${qrDataUri}" alt="Payment QR Code" width="240" style="display: block; border: 8px solid #1abc9c; border-radius: 15px; margin: 0 auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
+                      <p style="font-weight: bold; font-size: 20px; margin: 0 0 20px 0; color: #000000; text-align: center; font-family: sans-serif;">Scan to Pay: QR Code</p>
+                      <img src="${qrDataUri}" alt="Payment QR Code" width="240" style="display: block; border: 8px solid #000000; border-radius: 15px; margin: 0 auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
                       <p style="font-size: 14px; color: #7f8c8d; margin: 15px 0 0 0; text-align: center; font-family: sans-serif;">Please share a screenshot after payment.</p>
                     </td>
                   </tr>

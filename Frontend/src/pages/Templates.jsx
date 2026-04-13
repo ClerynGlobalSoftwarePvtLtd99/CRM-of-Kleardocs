@@ -7,11 +7,12 @@ import TemplatesTable from '../components/templates/TemplatesTable'
 import AddTemplateModal from '../components/templates/AddTemplateModal'
 import { TemplateFormFields, DEFAULT_FORM } from '../components/templates/AddTemplateModal'
 import { fetchTemplates, updateTemplate, deleteTemplate, uploadTemplateAttachment, removeTemplateAttachment } from '../redux/slices/templatesSlice'
+import { fetchServices } from '../redux/slices/servicesSlice'
 import { injectTemplateData } from '../utils/templateEngine'
 import ContentLoader from '../components/common/ContentLoader'
 import toast from 'react-hot-toast'
 
-const PREVIEW_CONTEXT = {
+const BASE_PREVIEW_CONTEXT = {
   companyName: 'CLERYN GLOBAL SOFTWARE PVT LTD',
   customerName: 'Raju Bandar',
   address: 'Salt Lake, Sector V, Kolkata',
@@ -19,7 +20,6 @@ const PREVIEW_CONTEXT = {
   password: 'hashedpassword123',
   invoiceNo: 'KLD-2024-001',
   invoiceDate: '24 Mar 2026',
-  invoiceAmount: '₹15,000',
   complianceName: 'ROC Filing',
   complianceDoneDate: '25 Mar 2026',
   complianceExpiryDate: '31 Mar 2026'
@@ -46,7 +46,9 @@ const INITIAL_TEMPLATES = []
 const Templates = () => {
   const dispatch = useDispatch()
   const { list: templates = [], loading, error } = useSelector((state) => state.templates) || {}
+  const { services = [] } = useSelector((state) => state.services) || {}
   const [searchFilter, setSearchFilter] = useState('')
+  const [previewContext, setPreviewContext] = useState(BASE_PREVIEW_CONTEXT)
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
@@ -58,6 +60,7 @@ const Templates = () => {
 
   useEffect(() => {
     dispatch(fetchTemplates())
+    dispatch(fetchServices())
   }, [dispatch])
 
   const filteredTemplates = useMemo(() => {
@@ -91,8 +94,33 @@ const Templates = () => {
   }
 
   const handlePreviewClick = (template) => {
-    setSelectedTemplate(template)
-    setIsPreviewModalOpen(true)
+    // Dynamically determine invoiceAmount based on template name
+    let amount = '₹15,000'; // Default fallback
+    
+    // Find matching service price
+    const templateNameLower = template.name.toLowerCase();
+    const matchingService = services.find(s => 
+      templateNameLower.includes(s.name.toLowerCase()) || 
+      s.name.toLowerCase().includes(templateNameLower)
+    );
+
+    if (matchingService) {
+      amount = `₹${matchingService.professionalFees?.toLocaleString('en-IN')}`;
+    } else {
+      // Manual fallback for common services if not found in DB
+      if (templateNameLower.includes('gst registration')) amount = '₹1,000';
+      if (templateNameLower.includes('msme')) amount = '₹1,000';
+      if (templateNameLower.includes('startup india')) amount = '₹3,000';
+      if (templateNameLower.includes('dsc')) amount = '₹3,000';
+    }
+
+    setPreviewContext({
+      ...BASE_PREVIEW_CONTEXT,
+      invoiceAmount: amount
+    });
+    
+    setSelectedTemplate(template);
+    setIsPreviewModalOpen(true);
   }
 
   const handleEditSubmit = (e) => {
@@ -170,7 +198,7 @@ const Templates = () => {
             <div className="p-8 overflow-y-auto bg-gray-50 flex-1 text-gray-900 border-b border-[var(--color-bg-tertiary)]">
               <div 
                 className="bg-white shadow-lg p-10 mx-auto max-w-[800px] min-h-[600px] prose prose-blue max-w-none text-gray-900"
-                dangerouslySetInnerHTML={{ __html: injectTemplateData(selectedTemplate.body, PREVIEW_CONTEXT) }}
+                dangerouslySetInnerHTML={{ __html: injectTemplateData(selectedTemplate.body, previewContext) }}
               />
               
               {/* Preview Attachments */}

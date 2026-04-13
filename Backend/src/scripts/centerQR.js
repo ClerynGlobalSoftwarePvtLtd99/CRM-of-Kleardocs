@@ -42,7 +42,7 @@ async function center() {
           <div align="center" style="text-align: center; margin: 30px 0; width: 100%;">
             <p style="font-weight: bold; font-size: 18px; margin-bottom: 15px; color: #333; text-align: center;">Scan to Pay: QR Code</p>
             <div style="display: block; margin: 0 auto; text-align: center;">
-              <img src="data:image/jpeg;base64,REPLACE_BASE64" alt="Payment QR Code" width="200" style="display: inline-block; border: 5px solid #1abc9c; border-radius: 12px; max-width: 200px; height: auto;" />
+              <img src="data:image/jpeg;base64,REPLACE_BASE64" alt="Payment QR Code" width="200" style="display: inline-block; border: 5px solid #000000; border-radius: 12px; max-width: 200px; height: auto;" />
             </div>
           </div>
         `;

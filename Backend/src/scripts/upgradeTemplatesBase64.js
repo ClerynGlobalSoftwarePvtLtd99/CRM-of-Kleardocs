@@ -52,7 +52,7 @@ async function upgrade() {
         const qrSectionHtml = `
           <div style="text-align: center; margin: 20px 0;">
             <p style="font-weight: bold; font-size: 16px; margin-bottom: 10px;">Scan to Pay: QR Code</p>
-            <img src="${qrDataUri}" alt="Payment QR Code" style="max-width: 200px; border: 4px solid #1abc9c; border-radius: 10px;" />
+            <img src="${qrDataUri}" alt="Payment QR Code" style="max-width: 200px; border: 4px solid #000000; border-radius: 10px;" />
           </div>
         `;
 

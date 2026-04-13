@@ -61,7 +61,7 @@ async function finalFix() {
             <table align="center" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
               <tr>
                 <td align="center" style="text-align: center;">
-                  <img src="${qrDataUri}" alt="Payment QR Code" width="220" style="display: block; border: 6px solid #1abc9c; border-radius: 12px; margin: 0 auto;" />
+                  <img src="${qrDataUri}" alt="Payment QR Code" width="220" style="display: block; border: 6px solid #000000; border-radius: 12px; margin: 0 auto;" />
                 </td>
               </tr>
             </table>
