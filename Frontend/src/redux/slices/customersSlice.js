@@ -242,12 +242,51 @@ export const downloadCustomerReport = createAsyncThunk(
 
 export const sendCustomerEmail = createAsyncThunk(
   'customers/sendEmail',
-  async ({ customerId, templateId, data }, { rejectWithValue }) => {
+  async ({ customerId, templateId, data, attachmentType, attachmentRefId }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(`/customers/${customerId}/send-email`, { templateId, ...data });
+      // Use new comprehensive email API
+      const response = await axiosInstance.post('/emails/send-template', {
+        entityType: 'customer',
+        entityId: customerId,
+        templateId,
+        customSubject: data?.subject,
+        customHtml: data?.content,
+        attachmentType,
+        attachmentRefId
+      });
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Failed to send email');
+    }
+  }
+);
+
+export const previewEmailTemplate = createAsyncThunk(
+  'customers/previewEmail',
+  async ({ entityType, entityId, templateId }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post('/emails/preview', {
+        entityType,
+        entityId,
+        templateId
+      });
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to preview email');
+    }
+  }
+);
+
+export const fetchEmailHistory = createAsyncThunk(
+  'customers/fetchEmailHistory',
+  async ({ entityType, entityId, limit = 50 }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/emails/history/${entityType}/${entityId}`, {
+        params: { limit }
+      });
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch email history');
     }
   }
 );
@@ -580,6 +619,38 @@ const customersSlice = createSlice({
         }
       })
       .addCase(initCustomerCompliances.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Preview email template
+      .addCase(previewEmailTemplate.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(previewEmailTemplate.fulfilled, (state, action) => {
+        state.loading = false;
+        // Store preview data in current customer
+        if (state.currentCustomer) {
+          state.currentCustomer.emailPreview = action.payload;
+        }
+      })
+      .addCase(previewEmailTemplate.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Fetch email history
+      .addCase(fetchEmailHistory.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchEmailHistory.fulfilled, (state, action) => {
+        state.loading = false;
+        // Store email history in current customer
+        if (state.currentCustomer) {
+          state.currentCustomer.emailHistory = action.payload.emails || action.payload;
+        }
+      })
+      .addCase(fetchEmailHistory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
