@@ -217,7 +217,12 @@ const CustomerDetailsPage = () => {
                 <button onClick={() => toggleModal('edit', true)} className="bg-[#1976d2] hover:bg-[#1565c0] text-white px-4 py-2 rounded-[4px] text-[0.8125rem] leading-tight font-bold uppercase shadow-md transition-all text-center min-w-[100px] flex items-center justify-center min-h-[56px]">
                   Edit
                 </button>
-                <button onClick={() => toggleModal('sendTemplate', true)} className="bg-[#2e7d32] hover:bg-[#1b5e20] text-white px-4 py-2 rounded-[4px] text-[0.8125rem] leading-tight font-bold uppercase shadow-md transition-all text-center min-w-[100px] flex items-center justify-center min-h-[56px]">
+                <button 
+                  onClick={() => toggleModal('sendTemplate', true)} 
+                  disabled={!customer.emails || customer.emails.length === 0}
+                  title={!customer.emails || customer.emails.length === 0 ? "Add an email first to send templates" : ""}
+                  className="bg-[#2e7d32] hover:bg-[#1b5e20] text-white px-4 py-2 rounded-[4px] text-[0.8125rem] leading-tight font-bold uppercase shadow-md transition-all text-center min-w-[100px] flex items-center justify-center min-h-[56px] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#2e7d32]"
+                >
                   Send<br/>Template
                 </button>
               </div>
