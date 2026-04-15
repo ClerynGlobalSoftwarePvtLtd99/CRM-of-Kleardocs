@@ -230,34 +230,23 @@ export const getAuditorsReport = async (req, res) => {
 
 export const sendCustomerEmail = async (req, res) => {
   const { customerId } = req.params;
-  const { templateId, templateName, data } = req.body;
-  const customer = await customerService.getCustomerById(customerId);
+  const { templateId, templateName, data, attachmentType, attachmentRefId } = req.body;
   
-  if (!customer.emails || customer.emails.length === 0) {
-    throw new ApiError(400, "Customer has no registered emails");
-  }
-
-  // Fetch template to get attachments
-  let attachments = [];
-  if (templateId) {
-    const template = await templateService.getTemplateById(templateId);
-    if (template && template.attachments) {
-      attachments = template.attachments;
-    }
-  }
-
-  await communicationService.sendEmail({
-    to: customer.emails[0], // Send to primary email
-    subject: data.subject,
-    html: data.content,
-    customerId,
+  // Use new comprehensive email service
+  const { sendTemplateEmail } = await import("../services/email.service.js");
+  
+  const result = await sendTemplateEmail({
+    entityType: "customer",
+    entityId: customerId,
     templateId,
-    templateName,
-    userId: req.user.id,
-    attachments // Pass attachments to the service
+    customSubject: data?.subject,
+    customHtml: data?.content,
+    attachmentType,
+    attachmentRefId,
+    userId: req.user.id
   });
 
-  res.status(200).json(new ApiResponse(200, null, "Email sent successfully"));
+  res.status(200).json(new ApiResponse(200, result.data, result.message));
 };
 
 export const sendCustomerWhatsapp = async (req, res) => {

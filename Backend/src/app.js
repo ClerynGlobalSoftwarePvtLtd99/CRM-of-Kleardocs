@@ -21,6 +21,7 @@ import ComplianceRoutes from "./routes/compliance.routes.js";
 import TemplateRoutes from "./routes/template.routes.js";
 import JobRoutes from "./routes/job.routes.js";
 import UserRoutes from "./routes/user.routes.js";
+import EmailRoutes from "./routes/email.routes.js";
 
 // Pre-register models needed for populate (even if their routes aren't built yet)
 import "./models/Service.model.js";
@@ -113,6 +114,7 @@ app.use("/api/v1/compliances", ComplianceRoutes);
 app.use("/api/v1/templates", TemplateRoutes);
 app.use("/api/v1/jobs", JobRoutes);
 app.use("/api/v1/users", UserRoutes);
+app.use("/api/v1/emails", EmailRoutes);
 
 
 

@@ -6,7 +6,8 @@ import {
   updateTemplate,
   deleteTemplate,
   uploadAttachment,
-  removeAttachment
+  removeAttachment,
+  updateTemplateLogos
 } from "../controllers/template.controller.js";
 import { upload } from "../middleware/multer.middleware.js";
 import { auth, authorize } from "../middleware/auth.middleware.js";
@@ -24,5 +25,8 @@ router.delete("/:id", authorize("admin"), deleteTemplate);
 // Attachments
 router.post("/:id/attachments", authorize("admin"), upload.single("file"), uploadAttachment);
 router.delete("/:id/attachments/:filename", authorize("admin"), removeAttachment);
+
+// Fix logo URLs in all templates (one-time migration)
+router.post("/fix-logos", authorize("admin"), updateTemplateLogos);
 
 export default router;

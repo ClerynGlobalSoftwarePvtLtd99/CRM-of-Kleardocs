@@ -10,7 +10,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center;">
-        <img src="https://crm.kleardocs.com/logo.svg" alt="Klear docs Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://www.kleardocs.com/logo.svg" alt="Klear docs Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -61,7 +61,7 @@ export const SEED_TEMPLATES = [
   <tbody>
     <tr>
       <td style="padding: 20px; text-align: center; background-color: #000000;">
-        <img src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="180" style="display: block; margin: 0 auto;">
+        <img src="https://www.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="180" style="display: block; margin: 0 auto;">
       </td>
     </tr>
     <tr>
@@ -105,7 +105,7 @@ export const SEED_TEMPLATES = [
     name: 'Package plus payment details',
     subject: 'Annual Compliance Package by Kleardocs',
     type: 'Email',
-    body: `<tbody><tr><td style="text-align: justify;" data-mce-style="text-align: justify;"><img style="margin-bottom: 10px; margin:0 auto; display: block;" src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" data-mce-style="margin-bottom: 10px;" data-mce-src="https://crm.kleardocs.com/logo.svg"><h2 style="color: #333; text-align: center;" data-mce-style="color: #333; text-align: center;">Annual Compliance Package</h2><p style="font-size: 16px; color: #555;" data-mce-style="font-size: 16px; color: #555;">Dear Sir,</p><p style="font-size: 14px; color: #555;" data-mce-style="font-size: 14px; color: #555;">We are excited to serve you in the upcoming year and ensure smooth compliance for your company.</p><p style="font-size: 14px; color: #555;" data-mce-style="font-size: 14px; color: #555;">Please find below our <strong>Annual Compliance Package</strong>, which covers all necessary Annual ROC Compliances and Income Tax Return filing services.</p><hr style="border: 0; height: 1px; background: #ddd; margin: 20px 0;" data-mce-style="border: 0; height: 1px; background: #ddd; margin: 20px 0;"><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Package Details:</h3><ul style="text-align: left; color: #444; font-size: 14px; line-height: 1.6;" data-mce-style="text-align: left; color: #444; font-size: 14px; line-height: 1.6;"><li>Preparation &amp; Filing of Form ADT-01 (Auditor Appointment)</li><li>Preparation &amp; Filing of Form INC-20A (Commencement of Business)</li><li>Issuance of Share Certificates (for all Shareholders)</li><li>Preparation of Board Meeting &amp; AGM/EGM Minutes</li><li>Filing of Form AOC-04 (Financial Annual Return)</li><li>Filing of Form MGT-07 (Management Annual Return)</li><li>Preparation of Statutory Registers</li><li>Filing of Balance Sheet, P&amp;L, and Audit Reports</li><li>Income Tax Return Filing</li><li>Filing of DPT-3, MGT-14, DIR-3 E-KYC</li><li><strong>Free legal &amp; compliance consultation</strong></li></ul><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Pricing:</h3><ul style="text-align: left; color: #444; font-size: 14px;" data-mce-style="text-align: left; color: #444; font-size: 14px;"><li><strong>Annual ROC Compliances:</strong> ₹2,000 plus government fees (Approx ₹0) payable quarterly</li><li><strong>GST Filings:</strong> ₹300 for NIL return, ₹500 for normal filings per month</li></ul><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Required Documents:</h3><ul style="text-align: left; color: #444; font-size: 14px;" data-mce-style="text-align: left; color: #444; font-size: 14px;"><li>MOA and AOA</li><li>Certificate of Incorporation</li><li>PAN of any 1 director</li></ul><hr style="border: 0; height: 1px; background: #ddd; margin: 20px 0;" data-mce-style="border: 0; height: 1px; background: #ddd; margin: 20px 0;"><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Bank Account Details:</h3><p style="color: #555; font-size: 14px;" data-mce-style="color: #555; font-size: 14px;">Please find our bank account details below for the transfer:</p><p style="color: #222; font-size: 14px; font-weight: bold;" data-mce-style="color: #222; font-size: 14px; font-weight: bold;">Banking Name: KLEARDOCS SOLUTIONS PRIVATE LIMITED<br>Bank Name: AXIS BANK<br>Account Number: 925020025764619<br>IFSC Code: UTIB0004234<br>Company PAN: AALCK7855M</p><p style="font-size: 14px; color: #555;" data-mce-style="font-size: 14px; color: #555;">Please let us know if you need any assistance. We look forward to working with you!</p></td></tr></tbody>`,
+    body: `<tbody><tr><td style="text-align: justify;" data-mce-style="text-align: justify;"><img style="margin-bottom: 10px; margin:0 auto; display: block;" src="https://www.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" data-mce-style="margin-bottom: 10px;" data-mce-src="https://www.kleardocs.com/logo.svg"><h2 style="color: #333; text-align: center;" data-mce-style="color: #333; text-align: center;">Annual Compliance Package</h2><p style="font-size: 16px; color: #555;" data-mce-style="font-size: 16px; color: #555;">Dear Sir,</p><p style="font-size: 14px; color: #555;" data-mce-style="font-size: 14px; color: #555;">We are excited to serve you in the upcoming year and ensure smooth compliance for your company.</p><p style="font-size: 14px; color: #555;" data-mce-style="font-size: 14px; color: #555;">Please find below our <strong>Annual Compliance Package</strong>, which covers all necessary Annual ROC Compliances and Income Tax Return filing services.</p><hr style="border: 0; height: 1px; background: #ddd; margin: 20px 0;" data-mce-style="border: 0; height: 1px; background: #ddd; margin: 20px 0;"><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Package Details:</h3><ul style="text-align: left; color: #444; font-size: 14px; line-height: 1.6;" data-mce-style="text-align: left; color: #444; font-size: 14px; line-height: 1.6;"><li>Preparation &amp; Filing of Form ADT-01 (Auditor Appointment)</li><li>Preparation &amp; Filing of Form INC-20A (Commencement of Business)</li><li>Issuance of Share Certificates (for all Shareholders)</li><li>Preparation of Board Meeting &amp; AGM/EGM Minutes</li><li>Filing of Form AOC-04 (Financial Annual Return)</li><li>Filing of Form MGT-07 (Management Annual Return)</li><li>Preparation of Statutory Registers</li><li>Filing of Balance Sheet, P&amp;L, and Audit Reports</li><li>Income Tax Return Filing</li><li>Filing of DPT-3, MGT-14, DIR-3 E-KYC</li><li><strong>Free legal &amp; compliance consultation</strong></li></ul><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Pricing:</h3><ul style="text-align: left; color: #444; font-size: 14px;" data-mce-style="text-align: left; color: #444; font-size: 14px;"><li><strong>Annual ROC Compliances:</strong> ₹2,000 plus government fees (Approx ₹0) payable quarterly</li><li><strong>GST Filings:</strong> ₹300 for NIL return, ₹500 for normal filings per month</li></ul><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Required Documents:</h3><ul style="text-align: left; color: #444; font-size: 14px;" data-mce-style="text-align: left; color: #444; font-size: 14px;"><li>MOA and AOA</li><li>Certificate of Incorporation</li><li>PAN of any 1 director</li></ul><hr style="border: 0; height: 1px; background: #ddd; margin: 20px 0;" data-mce-style="border: 0; height: 1px; background: #ddd; margin: 20px 0;"><h3 style="color: #007bff;" data-mce-style="color: #007bff;">Bank Account Details:</h3><p style="color: #555; font-size: 14px;" data-mce-style="color: #555; font-size: 14px;">Please find our bank account details below for the transfer:</p><p style="color: #222; font-size: 14px; font-weight: bold;" data-mce-style="color: #222; font-size: 14px; font-weight: bold;">Banking Name: KLEARDOCS SOLUTIONS PRIVATE LIMITED<br>Bank Name: AXIS BANK<br>Account Number: 925020025764619<br>IFSC Code: UTIB0004234<br>Company PAN: AALCK7855M</p><p style="font-size: 14px; color: #555;" data-mce-style="font-size: 14px; color: #555;">Please let us know if you need any assistance. We look forward to working with you!</p></td></tr></tbody>`,
   },
   {
     name: 'ROC plus GST plus ESI plus TDS',
@@ -115,7 +115,7 @@ export const SEED_TEMPLATES = [
   <tbody>
     <tr>
       <td style="padding: 20px; text-align: center; background-color: #000000;">
-        <img src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="180px" style="display: block; margin: 0 auto;">
+        <img src="https://www.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="180px" style="display: block; margin: 0 auto;">
       </td>
     </tr>
     <tr>
@@ -173,7 +173,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center; background-color: #000000;">
-        <img src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://www.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -217,7 +217,7 @@ export const SEED_TEMPLATES = [
   {
     name: 'Next Quarter Payment',
     subject: "Reminder: Upcoming Quarter's Payment \u2013 Complete Within 5 Days",
-    body: `<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#f4f4f4" class="mce-item-table"><tbody><tr><td align="center"><table style="border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); overflow: hidden;" width="600" cellspacing="0" cellpadding="20" bgcolor="#ffffff" data-mce-style="border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); overflow: hidden;" class="mce-item-table"><tbody><tr><td style="background-color: #000000; padding: 30px;" align="center" data-mce-style="background-color: #000000; padding: 30px;"><img style="margin-bottom: 20px;" src="https://crm.kleardocs.com/logo.svg" alt="Kleardocs Logo" width="170" data-mce-style="margin-bottom: 20px;" data-mce-src="https://crm.kleardocs.com/logo.svg"><h1 style="color: #fff; margin: 0; font-size: 28px; letter-spacing: 1px;" data-mce-style="color: #fff; margin: 0; font-size: 28px; letter-spacing: 1px;">Upcoming Quarter's Payment Notification</h1></td></tr><tr><td style="font-size: 16px; color: #34495e; padding: 20px; line-height: 1.8; text-align: justify;" data-mce-style="font-size: 16px; color: #34495e; padding: 20px; line-height: 1.8; text-align: justify;">Dear Valued Client,<br><br>This is a reminder for your <strong>upcoming quarter's payment</strong>. Kindly make the payment within <strong>5 days from the due date</strong> to continue enjoying our services seamlessly. <br><br><a style="display: inline-block; padding: 14px 32px; background-color: #3498db; color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: bold; margin-top: 20px;" href="" data-mce-style="display: inline-block; padding: 14px 32px; background-color: #3498db; color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: bold; margin-top: 20px;" data-mce-href="">Track Compliances &amp; Payment</a> <br><br><strong>Bank Account Details:</strong><br><strong>Banking Name:</strong> KLEARDOCS SOLUTIONS PRIVATE LIMITED<br><strong>Bank Name:</strong> AXIS BANK<br><strong>Account Number:</strong> 925020025764619<br><strong>IFSC Code:</strong> UTIB0004234<br><strong>Company PAN:</strong> AALCK7855M</td></tr><tr><td style="font-size: 15px; color: #34495e; background-color: #ecf0f1; padding: 20px; line-height: 1.7;" data-mce-style="font-size: 15px; color: #34495e; background-color: #ecf0f1; padding: 20px; line-height: 1.7;"><strong>Contact Us:</strong><br>Phone: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="tel:+919875515290">+91 98755 15290</a><br>WhatsApp: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="https://wa.me/919875515290">+91 98755 15290</a><br>Email 1: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="mailto:info@kleardocs.com">info@kleardocs.com</a><br>Email 2: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="mailto:kleardocssolutions@gmail.com">kleardocssolutions@gmail.com</a></td></tr><tr><td style="font-size: 12px; color: #ffffff; padding: 20px; background-color: #000000;" align="center" data-mce-style="font-size: 12px; color: #ffffff; padding: 20px; background-color: #000000;">© 2025 KlearDocs Solutions Private Limited. All rights reserved.</td></tr></tbody></table></td></tr></tbody></table>`,
+    body: `<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#f4f4f4" class="mce-item-table"><tbody><tr><td align="center"><table style="border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); overflow: hidden;" width="600" cellspacing="0" cellpadding="20" bgcolor="#ffffff" data-mce-style="border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); overflow: hidden;" class="mce-item-table"><tbody><tr><td style="background-color: #000000; padding: 30px;" align="center" data-mce-style="background-color: #000000; padding: 30px;"><img style="margin-bottom: 20px;" src="https://www.kleardocs.com/logo.svg" alt="Kleardocs Logo" width="170" data-mce-style="margin-bottom: 20px;" data-mce-src="https://www.kleardocs.com/logo.svg"><h1 style="color: #fff; margin: 0; font-size: 28px; letter-spacing: 1px;" data-mce-style="color: #fff; margin: 0; font-size: 28px; letter-spacing: 1px;">Upcoming Quarter's Payment Notification</h1></td></tr><tr><td style="font-size: 16px; color: #34495e; padding: 20px; line-height: 1.8; text-align: justify;" data-mce-style="font-size: 16px; color: #34495e; padding: 20px; line-height: 1.8; text-align: justify;">Dear Valued Client,<br><br>This is a reminder for your <strong>upcoming quarter's payment</strong>. Kindly make the payment within <strong>5 days from the due date</strong> to continue enjoying our services seamlessly. <br><br><a style="display: inline-block; padding: 14px 32px; background-color: #3498db; color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: bold; margin-top: 20px;" href="" data-mce-style="display: inline-block; padding: 14px 32px; background-color: #3498db; color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: bold; margin-top: 20px;" data-mce-href="">Track Compliances &amp; Payment</a> <br><br><strong>Bank Account Details:</strong><br><strong>Banking Name:</strong> KLEARDOCS SOLUTIONS PRIVATE LIMITED<br><strong>Bank Name:</strong> AXIS BANK<br><strong>Account Number:</strong> 925020025764619<br><strong>IFSC Code:</strong> UTIB0004234<br><strong>Company PAN:</strong> AALCK7855M</td></tr><tr><td style="font-size: 15px; color: #34495e; background-color: #ecf0f1; padding: 20px; line-height: 1.7;" data-mce-style="font-size: 15px; color: #34495e; background-color: #ecf0f1; padding: 20px; line-height: 1.7;"><strong>Contact Us:</strong><br>Phone: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="tel:+919875515290">+91 98755 15290</a><br>WhatsApp: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="https://wa.me/919875515290">+91 98755 15290</a><br>Email 1: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="mailto:info@kleardocs.com">info@kleardocs.com</a><br>Email 2: <a style="color: #008CBA; text-decoration: none; font-weight: bold;" href="mailto:kleardocssolutions@gmail.com">kleardocssolutions@gmail.com</a></td></tr><tr><td style="font-size: 12px; color: #ffffff; padding: 20px; background-color: #000000;" align="center" data-mce-style="font-size: 12px; color: #ffffff; padding: 20px; background-color: #000000;">© 2025 KlearDocs Solutions Private Limited. All rights reserved.</td></tr></tbody></table></td></tr></tbody></table>`,
   },
   {
     name: 'Service List',
@@ -227,7 +227,7 @@ export const SEED_TEMPLATES = [
   <tbody>
     <tr>
       <td style="background-color: #000000; padding: 20px;" align="center" data-mce-style="background-color: #000000; padding: 20px;">
-        <img style="margin-bottom: 15px;" src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="160" data-mce-style="margin-bottom: 15px;" data-mce-src="https://crm.kleardocs.com/logo.svg">
+        <img style="margin-bottom: 15px;" src="https://www.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="160" data-mce-style="margin-bottom: 15px;" data-mce-src="https://www.kleardocs.com/logo.svg">
         <h1 style="color: #f1c40f; margin: 0; font-size: 28px;" data-mce-style="color: #f1c40f; margin: 0; font-size: 28px;">Explore Our Key Services</h1>
       </td>
     </tr>
@@ -271,7 +271,7 @@ export const SEED_TEMPLATES = [
   <tbody>
     <tr>
       <td align="center" style="background-color: #000000;">
-        <img src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" data-mce-src="https://crm.kleardocs.com/logo.svg">
+        <img src="https://www.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" data-mce-src="https://www.kleardocs.com/logo.svg">
       </td>
     </tr>
     <tr>
@@ -308,7 +308,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center; background-color: #000000;">
-        <img src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://www.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -377,7 +377,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center; background-color: #000000;">
-        <img src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://www.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -441,7 +441,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center;">
-        <img src="https://crm.kleardocs.com/logo.svg" alt="Kleardocs Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://www.kleardocs.com/logo.svg" alt="Kleardocs Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -505,7 +505,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center; background-color: #000000;">
-        <img src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://www.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -566,7 +566,7 @@ export const SEED_TEMPLATES = [
   <tbody>
     <tr>
       <td style="padding: 20px; text-align: center; background-color: #000000;">
-        <img src="https://crm.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="180px" style="display: block; margin: 0 auto;">
+        <img src="https://www.kleardocs.com/logo.svg" alt="KlearDocs Logo" width="180px" style="display: block; margin: 0 auto;">
       </td>
     </tr>
     <tr>
@@ -620,7 +620,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center;">
-        <img src="https://crm.kleardocs.com/logo.svg" alt="Kleardocs Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://www.kleardocs.com/logo.svg" alt="Kleardocs Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -666,7 +666,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center;">
-        <img src="https://crm.kleardocs.com/logo.svg" alt="Kleardocs Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://www.kleardocs.com/logo.svg" alt="Kleardocs Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -712,7 +712,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center;">
-        <img src="https://crm.kleardocs.com/logo.svg" alt="Kleardocs Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://www.kleardocs.com/logo.svg" alt="Kleardocs Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>
@@ -758,7 +758,7 @@ export const SEED_TEMPLATES = [
     </tr>
     <tr>
       <td style="padding: 15px; text-align: center;">
-        <img src="https://crm.kleardocs.com/logo.svg" alt="Kleardocs   Logo" width="150" style="display: block; margin: 0 auto;" />
+        <img src="https://www.kleardocs.com/logo.svg" alt="Kleardocs   Logo" width="150" style="display: block; margin: 0 auto;" />
       </td>
     </tr>
     <tr>

@@ -191,7 +191,7 @@ const CustomerDetailsPage = () => {
                   {customer.companyName}
                 </h6>
                 {customer.newlyIncorporated && (
-                    <div className="bg-[#2e7d32] text-white px-3 py-1 rounded-[16px] text-[0.8125rem] flex items-center justify-center font-medium leading-[1]">
+                    <div className="bg-[#2e7d32] text-white px-3 py-1 rounded-[16px] text-[0.8125rem] flex items-center justify-center font-medium leading-none">
                       <span>New Incorporation</span>
                     </div>
                 )}
@@ -267,7 +267,7 @@ const CustomerDetailsPage = () => {
              <div className="flex flex-col gap-3 flex-1">
                 <div className="flex flex-col">
                    <h6 className="text-[1.1rem] leading-[1.6]"><b className="font-bold">Emails</b></h6>
-                   <div className="text-[1rem] leading-[1.5] tracking-[0.00938em]">
+                   <div className="text-[1rem] leading-normal tracking-[0.00938em]">
                      {customer.emails && customer.emails.length > 0 ? (
                         customer.emails.map((email, i) => <p key={i}>{email}</p>)
                      ) : <p className="italic text-text-secondary">No emails added</p>}
@@ -275,7 +275,7 @@ const CustomerDetailsPage = () => {
                 </div>
                 <div className="flex flex-col">
                    <h6 className="text-[1.1rem] leading-[1.6]"><b className="font-bold">Address</b></h6>
-                   <p className="text-[1rem] leading-[1.5] tracking-[0.00938em] break-words">{customer.address}</p>
+                   <p className="text-[1rem] leading-normal tracking-[0.00938em] wrap-break-word">{customer.address}</p>
                 </div>
                 <h6 className="text-[1.1rem] leading-[1.6]"><b className="font-bold">State:</b> <span className="uppercase">{customer.state}</span></h6>
                 <h6 className="text-[1.1rem] leading-[1.6]"><b className="font-bold">Username:</b> {customer.username}</h6>
