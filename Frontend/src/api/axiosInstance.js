@@ -19,10 +19,6 @@ export const getBaseURL = () => {
 
 const baseURL = getBaseURL();
 
-// Debug logging (remove in production)
-console.log('🔗 API Base URL:', baseURL);
-console.log('🌐 Current hostname:', window.location.hostname);
-
 // Check if running on localhost (for cookie-based auth) vs production (for token-based auth)
 const isLocalhost = window.location.hostname === 'localhost' ||
   window.location.hostname === '127.0.0.1' ||
@@ -66,18 +62,13 @@ axiosInstance.interceptors.response.use( //I have should keep it but remove loca
       originalRequest._retry = true;
     
       try {
-
         // Attempt to refresh the token
-        console.log('🔄 Attempting to refresh access token...');
-
-       await refreshAccessTokens();
+        await refreshAccessTokens();
 
         // Retry the original request with the new token
-        console.log('✅ Token refreshed! Retrying original request.');
         return axiosInstance(originalRequest);
 
       } catch (refreshError) {
-        console.error('❌ Refresh token expired or invalid:', refreshError);
         // Fall through to logout logic below
       }
 

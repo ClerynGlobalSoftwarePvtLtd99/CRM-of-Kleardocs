@@ -321,10 +321,14 @@ export const validateTemplate = ({ subject, body, data }) => {
 export const wrapWithBrandedTemplate = (htmlContent, options = {}) => {
   const {
     companyName = "Kleardocs Solutions Private Limited",
-    logoUrl = "https://kleardocs.com/logo.png",
+    logoUrl = null,
+    logoBase64 = null,
     primaryColor = "#03479f",
     accentColor = "#ed6c02"
   } = options;
+  
+  // Use base64 logo if provided, otherwise fallback to URL
+  const finalLogoUrl = logoBase64 || logoUrl;
 
   const currentYear = new Date().getFullYear();
 
@@ -345,8 +349,8 @@ export const wrapWithBrandedTemplate = (htmlContent, options = {}) => {
           <!-- Header -->
           <tr>
             <td style="background-color: ${primaryColor}; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
-              <img src="${logoUrl}" alt="${companyName}" style="max-height: 50px;" onerror="this.style.display='none'" />
-              <h2 style="color: #ffffff; margin: 10px 0 0 0; font-size: 20px;">${companyName}</h2>
+              ${finalLogoUrl ? `<img src="${finalLogoUrl}" alt="${companyName}" style="max-height: 50px; margin-bottom: 10px;" onerror="this.style.display='none'" />` : ''}
+              <h2 style="color: #ffffff; margin: 0; font-size: 20px;">${companyName}</h2>
             </td>
           </tr>
           

@@ -205,13 +205,14 @@ export const sendTemplateEmail = async ({
       data: placeholderData
     });
 
-    if (!validation.isValid) {
-      console.warn("[EMAIL_SERVICE] Template has undefined placeholders:", validation.missing);
-    }
+    // Template validation warnings are silent in production
 
-    // Step 7: Wrap with branded template
+    // Step 7: Wrap with branded template - use external logo URL
+    const logoUrl = "https://www.kleardocs.com/logo.svg";
+    
     const brandedHtml = wrapWithBrandedTemplate(parsedBody, {
       companyName: "Kleardocs Solutions Private Limited",
+      logoUrl: logoUrl,
       primaryColor: "#03479f"
     });
 
@@ -234,7 +235,6 @@ export const sendTemplateEmail = async ({
       // Validate attachment size
       const sizeValidation = validateAttachmentSize(attachments);
       if (!sizeValidation.isValid) {
-        console.warn("[EMAIL_SERVICE] Attachment size issues:", sizeValidation.issues);
         // Remove oversized attachments but continue with email
         attachments = attachments.filter(att => {
           const binarySize = att.content ? (att.content.length * 0.75) : 0;
@@ -246,10 +246,6 @@ export const sendTemplateEmail = async ({
     // Step 9: Send via Brevo
     const senderEmail = process.env.BREVO_SENDER_EMAIL;
     const senderName = process.env.BREVO_SENDER_NAME || "Kleardocs Solutions";
-
-    // Debug: Log API key presence (not the actual key)
-    console.log("[EMAIL_SERVICE_DEBUG] BREVO_API_KEY present:", !!process.env.BREVO_API_KEY);
-    console.log("[EMAIL_SERVICE_DEBUG] BREVO_SENDER_EMAIL:", senderEmail);
 
     const brevoResult = await sendEmailViaBrevo({
       toArray: Array.isArray(toEmails) ? toEmails : [toEmails],

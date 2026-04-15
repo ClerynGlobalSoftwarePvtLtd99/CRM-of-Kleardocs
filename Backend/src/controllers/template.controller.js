@@ -2,6 +2,7 @@ import * as templateService from "../services/template.service.js";
 import { ApiResponse, ApiError } from "../utils/response.js";
 import fs from "fs";
 import path from "path";
+import EmailTemplate from "../models/EmailTemplate.model.js";
 
 export const createTemplate = async (req, res, next) => {
   try {
@@ -92,6 +93,42 @@ export const removeAttachment = async (req, res, next) => {
     }
     
     res.status(200).json(new ApiResponse(200, template, "Attachment removed successfully"));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Fix logo URLs in all templates (one-time migration)
+ * POST /api/v1/templates/fix-logos
+ */
+export const updateTemplateLogos = async (req, res, next) => {
+  try {
+    // Find all templates with old logo URL
+    const templates = await EmailTemplate.find({
+      body: { $regex: 'crm.kleardocs.com/logo.svg', $options: 'i' }
+    });
+
+    // Update each template
+    let updatedCount = 0;
+    for (const template of templates) {
+      const oldBody = template.body;
+      const newBody = oldBody.replace(
+        /https:\/\/crm\.kleardocs\.com\/logo\.svg/g,
+        'https://www.kleardocs.com/logo.svg'
+      );
+
+      if (oldBody !== newBody) {
+        template.body = newBody;
+        await template.save();
+        updatedCount++;
+      }
+    }
+
+    res.status(200).json(new ApiResponse(200, { 
+      found: templates.length, 
+      updated: updatedCount 
+    }, `Fixed logo URLs in ${updatedCount} templates`));
   } catch (error) {
     next(error);
   }

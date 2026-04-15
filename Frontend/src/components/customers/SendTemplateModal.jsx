@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { X, Send, Paperclip, Eye, Loader2, AlertCircle, CheckCircle, ChevronDown, ChevronUp } from "lucide-react";
-import { EMAIL_TEMPLATES } from "../../utils/constants";
+import { X, Send, Paperclip, Loader2, AlertCircle, CheckCircle, ChevronDown, ChevronUp } from "lucide-react";
 import RichTextEditor from "../RichTextEditor";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { 
   sendCustomerEmail, 
-  fetchCustomerById,
-  previewEmailTemplate 
+  fetchCustomerById
 } from "../../redux/slices/customersSlice";
 import { fetchTemplates } from "../../redux/slices/templatesSlice";
-import logo from "../../assets/logo.png";
 
 const TEMPLATE_VARIABLES = [
   { title: 'Customer:', vars: ['{{name}}', '{{companyName}}', '{{address}}', '{{phone}}', '{{email}}', '{{username}}', '{{password}}'] },
@@ -21,17 +18,12 @@ const TEMPLATE_VARIABLES = [
 
 const SendTemplateModal = ({ customer, onClose }) => {
   const dispatch = useDispatch();
-  const { list: backendTemplates, loading: templatesLoading } = useSelector((state) => state.templates);
+  const { list: templates, loading: templatesLoading } = useSelector((state) => state.templates);
   const { loading: sendingEmail } = useSelector((state) => state.customers);
-  
-  // Use backend templates
-  const templates = backendTemplates.length > 0 ? backendTemplates : EMAIL_TEMPLATES;
 
   const [selectedTemplateId, setSelectedTemplateId] = useState("");
   const [subject, setSubject] = useState("");
   const [content, setContent] = useState("");
-  const [showPreview, setShowPreview] = useState(false);
-  const [previewData, setPreviewData] = useState(null);
   const [showVariables, setShowVariables] = useState(false);
   const [validationWarnings, setValidationWarnings] = useState([]);
 
@@ -69,7 +61,6 @@ const SendTemplateModal = ({ customer, onClose }) => {
 
         setSubject(processedSubject);
         setContent(processedBody);
-        setPreviewData(null); // Reset preview when template changes
         setValidationWarnings([]);
       }
     }
@@ -79,31 +70,6 @@ const SendTemplateModal = ({ customer, onClose }) => {
     setSelectedTemplateId(e.target.value);
   };
 
-  const handlePreview = async () => {
-    if (!selectedTemplateId) {
-      toast.error("Please select a template first");
-      return;
-    }
-
-    try {
-      const result = await dispatch(previewEmailTemplate({
-        entityType: 'customer',
-        entityId: customer._id,
-        templateId: selectedTemplateId
-      })).unwrap();
-
-      setPreviewData(result);
-      setShowPreview(true);
-
-      // Show warnings if any
-      if (result.validation?.missingPlaceholders?.length > 0) {
-        setValidationWarnings(result.validation.missingPlaceholders);
-        toast.warning(`Template has ${result.validation.missingPlaceholders.length} undefined variables`);
-      }
-    } catch (err) {
-      toast.error(err || "Failed to preview email");
-    }
-  };
 
   const handleSend = async () => {
     if (!selectedTemplateId || !subject || !content) {
@@ -145,12 +111,11 @@ const SendTemplateModal = ({ customer, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 text-[var(--color-text-primary)]">
-      <div className="w-full max-w-5xl bg-[var(--color-bg-secondary)] border border-[var(--color-bg-tertiary)] rounded-2xl shadow-xl flex flex-col max-h-[95vh] overflow-hidden animate-in fade-in zoom-in duration-200">
+      <div className="w-full max-w-5xl bg-bg-secondary border border-[var(--color-bg-tertiary)] rounded-2xl shadow-xl flex flex-col max-h-[95vh] overflow-hidden animate-in fade-in zoom-in duration-200">
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-[var(--color-bg-tertiary)]">
           <div className="flex-1" />
           <div className="flex flex-col items-center gap-1">
-            <img src={logo} alt="CRM Logo" className="h-8 object-contain" />
             <h2 className="text-lg font-bold">Send Email Template</h2>
             <p className="text-xs text-[var(--color-text-secondary)]">via Brevo Transactional Email</p>
           </div>
@@ -192,8 +157,8 @@ const SendTemplateModal = ({ customer, onClose }) => {
           </div>
         )}
 
-        <div className="flex flex-col lg:flex-row gap-0 overflow-hidden flex-1">
-          {/* Left Panel - Editor */}
+        <div className="flex flex-col overflow-hidden flex-1">
+          {/* Editor Panel */}
           <div className="flex-1 p-5 space-y-5 overflow-y-auto custom-scrollbar">
             {/* Template Selection */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -202,11 +167,16 @@ const SendTemplateModal = ({ customer, onClose }) => {
                 <select 
                   value={selectedTemplateId || ""} 
                   onChange={handleTemplateChange}
-                  disabled={templatesLoading}
+                  disabled={templatesLoading || templates.length === 0}
                   className="bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] text-[var(--color-text-primary)]"
                 >
                   <option value="">
-                    {templatesLoading ? "Loading templates..." : "-- Choose Template --"}
+                    {templatesLoading 
+                      ? "Loading templates..." 
+                      : templates.length === 0 
+                        ? "No templates available - create in Templates section" 
+                        : "-- Choose Template --"
+                    }
                   </option>
                   {templates.map((t) => (
                     <option key={t.id || t._id} value={t.id || t._id}>{t.name}</option>
@@ -312,90 +282,11 @@ const SendTemplateModal = ({ customer, onClose }) => {
             </div>
           </div>
 
-          {/* Right Panel - Preview */}
-          <div className="lg:w-[400px] border-t lg:border-t-0 lg:border-l border-[var(--color-bg-tertiary)] bg-[var(--color-bg-primary)]/30 flex flex-col">
-            <div className="p-4 border-b border-[var(--color-bg-tertiary)] flex items-center justify-between">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">
-                Preview
-              </h3>
-              <button
-                onClick={handlePreview}
-                disabled={!selectedTemplateId || templatesLoading}
-                className="text-xs flex items-center gap-1.5 px-3 py-1.5 bg-[var(--color-bg-secondary)] hover:bg-[var(--color-bg-tertiary)] rounded transition-colors disabled:opacity-50"
-              >
-                {templatesLoading ? <Loader2 size={14} className="animate-spin" /> : <Eye size={14} />}
-                Refresh Preview
-              </button>
-            </div>
-
-            <div className="flex-1 p-4 overflow-y-auto custom-scrollbar">
-              {previewData ? (
-                <div className="space-y-4">
-                  {/* Preview Subject */}
-                  <div className="bg-[var(--color-bg-secondary)] p-3 rounded-lg border border-[var(--color-bg-tertiary)]">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)] mb-1">Subject</p>
-                    <p className="text-sm text-[var(--color-text-primary)]">{previewData.subject}</p>
-                  </div>
-
-                  {/* Preview Recipients */}
-                  <div className="bg-[var(--color-bg-secondary)] p-3 rounded-lg border border-[var(--color-bg-tertiary)]">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)] mb-1">To</p>
-                    <p className="text-sm text-[var(--color-text-primary)]">{previewData.recipients?.join(", ") || "N/A"}</p>
-                  </div>
-
-                  {/* Validation Status */}
-                  <div className={`p-3 rounded-lg border ${previewData.validation?.isValid ? 'bg-green-500/10 border-green-500/30' : 'bg-yellow-500/10 border-yellow-500/30'}`}>
-                    <div className="flex items-center gap-2">
-                      {previewData.validation?.isValid ? (
-                        <>
-                          <CheckCircle className="text-green-500" size={16} />
-                          <span className="text-sm font-medium text-green-400">All placeholders resolved</span>
-                        </>
-                      ) : (
-                        <>
-                          <AlertCircle className="text-yellow-500" size={16} />
-                          <span className="text-sm font-medium text-yellow-400">
-                            {previewData.validation?.missingPlaceholders?.length || 0} undefined variables
-                          </span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* HTML Preview */}
-                  <div className="bg-white rounded-lg overflow-hidden">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500 p-2 bg-gray-100 border-b">Rendered HTML</p>
-                    <iframe
-                      srcDoc={previewData.htmlBody}
-                      className="w-full h-[300px] border-0"
-                      title="Email Preview"
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center h-full text-[var(--color-text-secondary)] space-y-3">
-                  <Eye size={48} className="opacity-30" />
-                  <p className="text-sm text-center">
-                    Select a template and click<br />"Refresh Preview" to see rendered email
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
         </div>
 
         {/* Footer Actions */}
         <div className="p-5 border-t border-[var(--color-bg-tertiary)] bg-[var(--color-bg-tertiary)]/10">
           <div className="flex gap-3">
-            <button
-              onClick={handlePreview}
-              disabled={!selectedTemplateId || templatesLoading}
-              className="flex-shrink-0 px-4 py-3 bg-[var(--color-bg-secondary)] hover:bg-[var(--color-bg-tertiary)] text-[var(--color-text-primary)] rounded-lg text-sm font-bold uppercase tracking-wider transition-colors disabled:opacity-50 flex items-center gap-2"
-            >
-              {templatesLoading ? <Loader2 size={18} className="animate-spin" /> : <Eye size={18} />}
-              Preview
-            </button>
-            
             <button
               onClick={handleSend}
               disabled={!selectedTemplateId || !hasEmails || sendingEmail}

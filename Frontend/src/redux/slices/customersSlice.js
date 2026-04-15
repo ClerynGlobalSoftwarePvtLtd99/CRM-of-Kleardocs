@@ -321,7 +321,6 @@ const customersSlice = createSlice({
       .addCase(fetchCustomers.fulfilled, (state, action) => {
         state.loading = false;
         state.list = action.payload;
-        console.log('Redux fetchCustomers fulfilled with payload:', action.payload);
       })
       .addCase(fetchCustomers.rejected, (state, action) => {
         state.loading = false;
@@ -405,8 +404,6 @@ const customersSlice = createSlice({
       })
       .addCase(updateCustomerEmails.fulfilled, (state, action) => {
         state.loading = false;
-        console.log('updateCustomerEmails fulfilled, state.currentCustomer:', state.currentCustomer);
-        console.log('action.payload:', action.payload);
         
         // Update current customer emails - handle null payload
         if (state.currentCustomer) {
@@ -416,14 +413,7 @@ const customersSlice = createSlice({
               state.currentCustomer.emails = [];
             }
             state.currentCustomer.emails = action.payload.emails;
-          } else if (action.payload === null) {
-            console.error('API returned null for email update');
-            // Don't update emails if API returned null
-          } else {
-            console.error('Unexpected payload structure:', action.payload);
           }
-        } else {
-          console.error('state.currentCustomer is null in updateCustomerEmails.fulfilled');
         }
       })
       .addCase(updateCustomerEmails.rejected, (state, action) => {

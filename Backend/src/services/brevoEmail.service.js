@@ -36,9 +36,14 @@ export const sendEmailViaBrevo = async ({
 }) => {
   try {
     // Validate required environment variables
-    const apiKey = process.env.BREVO_API_KEY;
+    const apiKey = (process.env.BREVO_API_KEY || "").trim();
     if (!apiKey) {
       throw new ApiError(500, "BREVO_API_KEY is not configured");
+    }
+
+    // Validate key format
+    if (!apiKey.startsWith('xkeysib-')) {
+      console.error("[BREVO_DEBUG] WARNING: API key doesn't start with 'xkeysib-'. This may be an old v2 key or invalid key.");
     }
 
     // Validate sender
