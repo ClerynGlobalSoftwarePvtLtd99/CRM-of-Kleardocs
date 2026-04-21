@@ -106,13 +106,13 @@ const CustomerInvoicesTable = ({ invoices = [], onAction }) => {
                     <Eye size={16} />
                   </button>
                   {/* Download: Generate PDF using shared template */}
-                  <button 
+                  {/* <button 
                     onClick={() => handleDownload(inv)}
                     className="p-1.5 text-yellow-500 hover:bg-yellow-500/10 rounded-lg transition-colors cursor-pointer"
                     title="Download Invoice PDF"
                   >
                     <Download size={16} />
-                  </button>
+                  </button> */}
                 </div>
               </div>
             ))

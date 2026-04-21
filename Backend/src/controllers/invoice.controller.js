@@ -126,3 +126,9 @@ export const downloadInvoicePdf = async (req, res) => {
   res.setHeader('Content-Disposition', `attachment; filename=Invoice_${invoice.invoiceNo}.pdf`);
   pdfService.generateInvoicePdf(invoice, invoice.customer, res);
 };
+
+// PATCH /api/v1/invoices/:invoiceId/description
+export const updateInvoiceDescription = async (req, res) => {
+  const invoice = await invoiceService.updateInvoiceDescription(req.params.invoiceId, req.body.description);
+  res.status(200).json(new ApiResponse(200, invoice, "Invoice description updated successfully"));
+};

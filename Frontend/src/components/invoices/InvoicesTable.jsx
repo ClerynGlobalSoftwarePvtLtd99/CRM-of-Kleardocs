@@ -84,9 +84,9 @@ const InvoicesTable = ({ invoices }) => {
               <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium text-right shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
                 Due Balance
               </th>
-              <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
+              {/* <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
                 PDF
-              </th>
+              </th> */}
               <th className="sticky top-0 z-20 bg-[var(--color-bg-secondary)] px-1.5 py-3 font-medium text-center shadow-[0_1px_0_var(--color-bg-tertiary)] text-sm">
                 Details
               </th>
@@ -129,7 +129,7 @@ const InvoicesTable = ({ invoices }) => {
                 <td className="px-1.5 py-6 text-sm text-right font-semibold text-red-500 whitespace-nowrap">
                   {formatCurrency(inv.due)}
                 </td>
-                <td className="px-1.5 py-6 text-center">
+                {/* <td className="px-1.5 py-6 text-center">
                   <div className="flex items-center justify-center gap-2">
                     <button 
                       onClick={() => handlePdfAction(inv, 'view')}
@@ -146,7 +146,7 @@ const InvoicesTable = ({ invoices }) => {
                       <Download size={18} />
                     </button>
                   </div>
-                </td>
+                </td> */}
                 <td className="px-1.5 py-6 text-center rounded-r-lg">
                   <Link to={`/invoice/${inv._id}`} className="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md text-sm font-semibold shadow-sm transition-colors cursor-pointer inline-block">
                     Details

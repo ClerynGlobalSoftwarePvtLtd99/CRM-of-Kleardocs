@@ -9,7 +9,8 @@ import {
   addPayment,
   deletePayment,
   clearSelectedInvoice,
-  downloadInvoicePdf
+  downloadInvoicePdf,
+  updateInvoiceDescription
 } from '../redux/slices/invoicesSlice'
 import RichTextEditor from '../components/RichTextEditor'
 import ContentLoader from '../components/common/ContentLoader'
@@ -25,6 +26,9 @@ const InvoiceDetails = () => {
   const [showEmailModal, setShowEmailModal] = useState(false)
   const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showDescModal, setShowDescModal] = useState(false)
+  const [pendingAction, setPendingAction] = useState(null)
+  const [tempDescription, setTempDescription] = useState('')
 
   const [emailSubject, setEmailSubject] = useState('')
   const [emailBody, setEmailBody] = useState('')
@@ -81,37 +85,59 @@ const InvoiceDetails = () => {
 
   const handleGeneratePdf = async (action) => {
     if (!inv) return;
+    setPendingAction(action);
+    setTempDescription(inv.description || '');
+    setShowDescModal(true);
+  };
 
-    // Build invoice payload matching the generator's expected format
-    const invoicePayload = {
-      invoiceNo: inv.invoiceNo,
-      invoiceDate: inv.invoiceDate,
-      placeOfSupply: inv.placeOfSupply,
-      description: inv.description,
-      items: (inv.items || []).map(i => ({
-        product: { name: i.service?.name || i.description },
-        hsn: i.hsn,
-        price: i.price,
-        amount: i.amount,
-        gstPercent: i.gstPercent,
-        gstAmount: i.gstAmount
-      })),
-      subTotal: inv.subTotal,
-      totalGst: inv.totalGst,
-      total: inv.total,
-      paid: inv.paid,
-      due: inv.due
-    };
+  const confirmPdfAction = async () => {
+    if (!inv || !pendingAction) return;
 
-    const customerPayload = {
-      companyName: inv.customer?.companyName || inv.customer?.name,
-      customerName: inv.customer?.name,
-      phone: inv.customer?.phone,
-      address: inv.customer?.address,
-      state: inv.customer?.state
-    };
+    try {
+      // Update description if it changed
+      if (tempDescription !== inv.description) {
+        await dispatch(updateInvoiceDescription({ 
+          invoiceId: id, 
+          description: tempDescription 
+        })).unwrap();
+        toast.success('Description updated');
+      }
 
-    await generateInvoicePdf(invoicePayload, customerPayload, action);
+      // Build invoice payload matching the generator's expected format
+      const invoicePayload = {
+        invoiceNo: inv.invoiceNo,
+        invoiceDate: inv.invoiceDate,
+        placeOfSupply: inv.placeOfSupply,
+        description: tempDescription, // Use the new description for PDF
+        items: (inv.items || []).map(i => ({
+          product: { name: i.service?.name || i.description },
+          hsn: i.hsn,
+          price: i.price,
+          amount: i.amount,
+          gstPercent: i.gstPercent,
+          gstAmount: i.gstAmount
+        })),
+        subTotal: inv.subTotal,
+        totalGst: inv.totalGst,
+        total: inv.total,
+        paid: inv.paid,
+        due: inv.due
+      };
+
+      const customerPayload = {
+        companyName: inv.customer?.companyName || inv.customer?.name,
+        customerName: inv.customer?.name,
+        phone: inv.customer?.phone,
+        address: inv.customer?.address,
+        state: inv.customer?.state
+      };
+
+      await generateInvoicePdf(invoicePayload, customerPayload, pendingAction);
+      setShowDescModal(false);
+      setPendingAction(null);
+    } catch (err) {
+      toast.error(err || 'Failed to process request');
+    }
   };
 
   const handleConfirmDelete = async () => {
@@ -544,6 +570,53 @@ const InvoiceDetails = () => {
         confirmText="Yes, Delete Permanently"
         type="danger"
       />
+
+      {/* Description Popup Modal */}
+      {showDescModal && (
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
+          <div className="bg-bg-secondary border border-bg-tertiary rounded-2xl shadow-2xl p-7 w-full max-w-md flex flex-col scale-in-center">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-black italic text-accent flex items-center gap-2 uppercase tracking-tight">Invoice Description</h2>
+              <button onClick={() => setShowDescModal(false)} className="p-2 hover:bg-bg-tertiary rounded-xl transition-all cursor-pointer">
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="space-y-5">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-widest mb-1.5 text-text-secondary px-1">
+                  Description for Client
+                </label>
+                <textarea 
+                  value={tempDescription} 
+                  placeholder="Enter some description for your client..." 
+                  onChange={(e) => setTempDescription(e.target.value)} 
+                  rows={4} 
+                  className="w-full px-4 py-3 bg-bg-primary border border-bg-tertiary rounded-xl focus:outline-none focus:border-accent transition-all resize-none font-medium text-sm leading-relaxed"
+                ></textarea>
+                <p className="mt-2 text-[10px] text-text-secondary italic px-1">
+                  * This description will be saved to the invoice and shown on the PDF.
+                </p>
+              </div>
+
+              <div className="flex gap-4 mt-4">
+                <button 
+                  onClick={() => setShowDescModal(false)} 
+                  className="flex-1 px-4 py-3 btn-raised-gray rounded-xl font-bold transition-all cursor-pointer text-sm bg-bg-tertiary"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={confirmPdfAction} 
+                  className="flex-1 px-6 py-3 bg-yellow-500 rounded-xl font-black text-white transition-all cursor-pointer shadow-md text-sm uppercase tracking-wider"
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   )
