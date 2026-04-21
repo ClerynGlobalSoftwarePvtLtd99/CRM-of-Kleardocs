@@ -294,7 +294,7 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     headStyles: { fillColor: primaryColor, textColor: 0, fontStyle: 'bold', lineWidth: 0.5, lineColor: borderColor, fontSize: 9 },
     bodyStyles: { textColor: 0, lineWidth: 0.5, lineColor: borderColor, fontSize: 8, minCellHeight: 120 },
     head: [['Terms and Conditions']],
-    body: [['Thanks for buying']]
+    body: [['Thanks for buying.']]
   });
 
   // Signature Block (Right)

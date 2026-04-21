@@ -103,6 +103,18 @@ export const downloadInvoicePdf = createAsyncThunk(
   }
 );
 
+export const updateInvoiceDescription = createAsyncThunk(
+  'invoices/updateDescription',
+  async ({ invoiceId, description }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.patch(`/invoices/${invoiceId}/description`, { description });
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to update description');
+    }
+  }
+);
+
 const invoicesSlice = createSlice({
   name: 'invoices',
   initialState,
@@ -174,6 +186,16 @@ const invoicesSlice = createSlice({
       // Delete Invoice
       .addCase(deleteInvoice.fulfilled, (state, action) => {
         state.list = state.list.filter(inv => inv._id !== action.payload);
+      })
+      // Update Description
+      .addCase(updateInvoiceDescription.fulfilled, (state, action) => {
+        if (state.selectedInvoice && state.selectedInvoice._id === action.payload._id) {
+          state.selectedInvoice.description = action.payload.description;
+        }
+        const index = state.list.findIndex(inv => inv._id === action.payload._id);
+        if (index !== -1) {
+          state.list[index].description = action.payload.description;
+        }
       });
   },
 });

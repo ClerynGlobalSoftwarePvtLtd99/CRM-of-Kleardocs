@@ -58,34 +58,41 @@ const recalcDue = async (invoiceId) => {
 
 // ─── Helper: auto-generate invoice number ────────────────────────────────────
 const getNextInvoiceNo = async () => {
-  const year = new Date().getFullYear();
-  const shortYear = String(year).slice(-2);
-  const nextShortYear = String(year + 1).slice(-2);
-  const prefix = `INV-${shortYear}-${nextShortYear}`;
+  const { default: SystemSetting } = await import("../models/SystemSetting.model.js");
+  let settings = await SystemSetting.findOne();
+  if (!settings) {
+    settings = await SystemSetting.create({});
+  }
+
+  const prefix = settings.invoicePrefix || "INV";
+  const startNum = settings.invoiceStartingNumber || 1;
 
   try {
-    // Find the latest invoice for the current financial year pattern
+    // Find the latest invoice with the current prefix
     const latestInvoice = await Invoice.findOne({
       invoiceNo: { $regex: new RegExp(`^${prefix}`) }
     })
     .sort({ invoiceNo: -1 })
     .lean();
 
-    let nextSequence = 1;
+    let nextSequence = startNum;
     if (latestInvoice && latestInvoice.invoiceNo) {
-      // Extract the numeric part (last 5 digits)
-      const lastSequence = parseInt(latestInvoice.invoiceNo.slice(-5));
-      if (!isNaN(lastSequence)) {
-        nextSequence = lastSequence + 1;
+      // Try to extract the numeric part at the end
+      const match = latestInvoice.invoiceNo.match(/\d+$/);
+      if (match) {
+        const lastSequence = parseInt(match[0]);
+        // If the last sequence found is greater than or equal to startNum, increment it
+        if (lastSequence >= startNum) {
+          nextSequence = lastSequence + 1;
+        }
       }
     }
 
-    return `${prefix}${String(nextSequence).padStart(5, "0")}`;
+    // Format with at least 6 digits padding (as per user example 000001)
+    return `${prefix}${String(nextSequence).padStart(6, "0")}`;
   } catch (err) {
     console.error("Error generating invoice number:", err);
-    // Fallback logic using count as a last resort, but hopefully avoid collisions
-    const count = await Invoice.countDocuments();
-    return `${prefix}${String(count + 100).padStart(5, "0")}`;
+    return `${prefix}${String(startNum).padStart(6, "0")}`;
   }
 };
 
@@ -243,6 +250,19 @@ export const deleteInvoice = async (invoiceId) => {
   if (!invoice) throw new ApiError(404, "Invoice not found");
   await InvoicePayment.deleteMany({ invoice: invoiceId });
   await invoice.deleteOne();
+};
+
+// ─── 4.1 UPDATE INVOICE DESCRIPTION ──────────────────────────────────────────
+export const updateInvoiceDescription = async (invoiceId, description) => {
+  const invoice = await Invoice.findByIdAndUpdate(
+    invoiceId,
+    { description },
+    { new: true }
+  ).populate("customer", "name phone companyName emails address state")
+   .populate("items.service", "name hsn");
+
+  if (!invoice) throw new ApiError(404, "Invoice not found");
+  return invoice;
 };
 
 // ══════════════════════════════════════════════════════════════════════════════
