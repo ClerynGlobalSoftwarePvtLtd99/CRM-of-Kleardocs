@@ -38,6 +38,7 @@ const customerComplianceSchema = new mongoose.Schema(
     financialYear: { type: String, required: true }, // e.g. "2025-2026"
     name: { type: String, required: true },
     expiryDate: { type: Date },
+    expiryAfter: { type: String }, // e.g. "30 days", "60 days", "-" (from compliance settings)
     status: {
       type: String,
       enum: ["To Be Done", "Ongoing", "Done"],
