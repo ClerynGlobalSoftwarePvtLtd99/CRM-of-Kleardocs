@@ -241,6 +241,7 @@ const cloneComplianceSettingsToCustomerYear = async (customerId, financialYear) 
       financialYear,
       name: t.name,
       expiryDate: t.expiryDate || undefined,
+      expiryAfter: t.daysOfExpiry ? `${t.daysOfExpiry} days` : (t.expiryAfter || "-"),
       status: "To Be Done",
       hasExpiry: !!t.hasExpiry
     }));
@@ -424,7 +425,7 @@ export const getCustomerById = async (customerId, year) => {
   };
 };
 
-// ─── UPDATE CUSTOMER ──────────────────────────────────────────────────────────
+// ─── UPDATE CUSTOMER ───────────────────────────────────────────────────────────
 export const updateCustomer = async (customerId, data) => {
   const customer = await Customer.findById(customerId);
   if (!customer) throw new ApiError(404, "Customer not found");
@@ -451,7 +452,7 @@ export const updateCustomer = async (customerId, data) => {
   return updatedCustomer;
 };
 
-// ─── UPDATE EMAILS ────────────────────────────────────────────────────────────
+// ─── UPDATE EMAILS ─────────────────────────────────────────────────────────────
 export const updateEmails = async (customerId, emails) => {
   const customer = await Customer.findById(customerId);
   if (!customer) throw new ApiError(404, "Customer not found");
@@ -459,7 +460,7 @@ export const updateEmails = async (customerId, emails) => {
   await customer.save();
 };
 
-// ─── ADD DIRECTOR ─────────────────────────────────────────────────────────────
+// ─── ADD DIRECTOR ──────────────────────────────────────────────────────────────
 export const addDirector = async (customerId, data) => {
   const customer = await Customer.findById(customerId);
   if (!customer) throw new ApiError(404, "Customer not found");
@@ -468,7 +469,7 @@ export const addDirector = async (customerId, data) => {
   return director;
 };
 
-// ─── DELETE DIRECTOR ──────────────────────────────────────────────────────────
+// ─── DELETE DIRECTOR ───────────────────────────────────────────────────────────
 export const deleteDirector = async (customerId, directorId) => {
   const director = await Director.findOne({ _id: directorId, customer: customerId });
   if (!director) throw new ApiError(404, "Director not found");
@@ -573,7 +574,7 @@ export const addService = async (customerId, data, userId) => {
   return cs;
 };
 
-// ─── END SERVICE ──────────────────────────────────────────────────────────────
+// ─── END SERVICE ────────────────────────────────────────────────────────────────
 export const endService = async (customerId, customerServiceId) => {
   const cs = await CustomerService.findOne({
     _id: customerServiceId,
