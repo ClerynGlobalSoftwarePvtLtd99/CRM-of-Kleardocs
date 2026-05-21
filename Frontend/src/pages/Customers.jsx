@@ -33,13 +33,13 @@ const Customers = () => {
       limit: 50
     };
     
-    console.log('Fetching customers with params:', queryParams);
+    // console.log('Fetching customers with params:', queryParams);
     dispatch(fetchCustomers(queryParams));
   }, [dispatch, filters.search, filters.type, filters.activeService]);
 
   // Debug customers data
   useEffect(() => {
-    console.log('Customers data from Redux:', customers);
+    // console.log('Customers data from Redux:', customers);
   }, [customers]);
 
   const handleAddCustomer = async (customerData) => {
