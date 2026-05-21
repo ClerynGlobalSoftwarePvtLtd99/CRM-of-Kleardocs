@@ -60,10 +60,11 @@ const CustomerAnnualComplianceTable = ({ compliances = [], financialYears = [], 
       {/* LIST WRAPPER */}
       <div className="bg-bg-primary p-4">
         
-        {/* LIST HEADER */}
-        <div className={`hidden lg:grid ${readOnly ? 'lg:grid-cols-[2.5fr_1fr_1fr_1fr_1fr]' : 'lg:grid-cols-[2.5fr_1fr_1fr_1fr_1fr_80px]'} gap-4 px-4 py-2 mb-1 text-[13px] font-bold text-text-primary`}>
+        {/* LIST HEADER - DESKTOP */}
+        <div className={`hidden lg:grid ${readOnly ? 'lg:grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr]' : 'lg:grid-cols-[2fr_0.8fr_1fr_1fr_1fr_1fr_80px]'} gap-4 px-4 py-2 mb-1 text-[13px] font-bold text-text-primary`}>
           <div>Compliance Name</div>
           <div>Expiry Date</div>
+          <div>Expiry After</div>
           <div>Status</div>
           <div>Completed On</div>
           <div>Accountant</div>
@@ -81,69 +82,119 @@ const CustomerAnnualComplianceTable = ({ compliances = [], financialYears = [], 
               return (
               <div 
                 key={i} 
-                className={`bg-bg-secondary p-4 rounded-xl shadow-md border-l-4 ${isDone ? 'border-l-emerald-500' : isPending ? 'border-l-amber-500' : 'border-l-blue-500'} border-y border-r border-bg-tertiary lg:grid ${readOnly ? 'lg:grid-cols-[2.5fr_1fr_1fr_1fr_1fr]' : 'lg:grid-cols-[2.5fr_1fr_1fr_1fr_1fr_80px]'} lg:items-center gap-4 flex flex-col transition-all hover:shadow-lg`}
+                className={`bg-bg-secondary p-4 rounded-xl shadow-md border-l-4 ${isDone ? 'border-l-emerald-500' : isPending ? 'border-l-amber-500' : 'border-l-blue-500'} border-y border-r border-bg-tertiary`}
               >
-                {/* Mobile Header: Name + Badge */}
-                <div className="flex flex-col sm:flex-row justify-between items-start gap-2 lg:block">
-                  <div className="text-[14px] font-bold text-text-primary lg:font-normal lg:text-[13px]">
-                    <span className="lg:hidden text-[10px] uppercase tracking-wider text-text-secondary block mb-0.5">Compliance Name</span>
+                {/* MOBILE LAYOUT */}
+                <div className="lg:hidden space-y-3">
+                  {/* Name */}
+                  <div className="text-[14px] font-bold text-text-primary">
+                    <span className="text-[10px] uppercase tracking-wider text-text-secondary block mb-0.5">Compliance Name</span>
                     {c.name || c.complianceName || "Compliance Record"}
                   </div>
-                  
-                  <div className="lg:hidden">
+
+                  {/* Status Badge */}
+                  <div className="flex gap-3">
                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-tight ${isDone ? 'bg-emerald-500/10 text-emerald-500' : isPending ? 'bg-amber-500/10 text-amber-500' : 'bg-blue-500/10 text-blue-500'}`}>
                       {isDone ? <CheckCircle2 size={12} /> : isPending ? <Clock size={12} /> : <AlertCircle size={12} />}
                       {c.status || 'To Be Done'}
                     </span>
                   </div>
+
+                  {/* Expiry Date */}
+                  <div className={`text-[13px] ${showRedDate ? 'text-red-600' : 'text-text-secondary'}`}>
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-text-primary block mb-1">Expiry Date</span>
+                    <div className="flex items-center gap-2">
+                      <Calendar size={14} className="opacity-70" />
+                      {c.expiryDate ? new Date(c.expiryDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}
+                    </div>
+                  </div>
+
+                  {/* Expiry After - NEW COLUMN */}
+                  <div className="text-[13px] text-text-secondary">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-text-primary block mb-1">Expiry After</span>
+                    <div className="text-[12px] font-medium">
+                      {c.expiryAfter || '-'}
+                    </div>
+                  </div>
+
+                  {/* Completed On */}
+                  <div className="text-[13px] text-text-secondary">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-text-primary block mb-1">Completed On</span>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 size={14} className="opacity-70" />
+                      {c.completedOn ? new Date(c.completedOn).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}
+                    </div>
+                  </div>
+
+                  {/* Accountant */}
+                  <div className="text-[13px] text-text-secondary">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-text-primary block mb-1">Accountant</span>
+                    <div className="flex items-center gap-2">
+                      <User size={14} className="opacity-70" />
+                      {typeof c.accountant === 'object' ? c.accountant?.name : (c.accountant || '-')}
+                    </div>
+                  </div>
+
+                  {/* Modify Action (Mobile) */}
+                  {!readOnly && (
+                    <div className="flex justify-end pt-2 border-t border-bg-tertiary">
+                      <button 
+                        onClick={() => onAction && onAction('modifyCompliance', c)}
+                        className="bg-[#298835] hover:bg-[#216d2b] text-white px-5 py-2 font-bold text-[11px] uppercase rounded-[4px] transition-colors shadow-sm w-full"
+                      >
+                        MODIFY
+                      </button>
+                    </div>
+                  )}
                 </div>
 
-                {/* Expiry Date */}
-                <div className={`text-[13px] ${showRedDate ? 'text-red-600' : 'text-text-secondary'}`}>
-                  <span className="lg:hidden text-[10px] uppercase font-bold tracking-wider text-text-primary block mb-1">Expiry Date</span>
-                  <div className="flex items-center gap-2">
-                    <Calendar size={14} className="lg:hidden opacity-70" />
+                {/* DESKTOP LAYOUT */}
+                <div className="hidden lg:grid lg:grid-cols-[2fr_0.8fr_1fr_1fr_1fr_1fr_80px] gap-4 items-center px-2 py-3">
+                  {/* Name */}
+                  <div className="text-[13px] text-text-primary font-medium truncate">
+                    {c.name || c.complianceName || "Compliance Record"}
+                  </div>
+
+                  {/* Expiry Date */}
+                  <div className={`text-[13px] ${showRedDate ? 'text-red-600 font-bold' : 'text-text-secondary'}`}>
                     {c.expiryDate ? new Date(c.expiryDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}
                   </div>
-                </div>
 
-                {/* Desktop Status */}
-                <div className="hidden lg:block text-[13px]">
-                  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-tight ${isDone ? 'bg-emerald-500/10 text-emerald-500' : isPending ? 'bg-amber-500/10 text-amber-500' : 'bg-blue-500/10 text-blue-500'}`}>
-                    {isDone ? <CheckCircle2 size={12} /> : isPending ? <Clock size={12} /> : <AlertCircle size={12} />}
-                    {c.status || 'To Be Done'}
-                  </span>
-                </div>
+                  {/* Expiry After - NEW COLUMN */}
+                  <div className="text-[13px] text-text-secondary font-medium">
+                    {c.expiryAfter || '-'}
+                  </div>
 
-                {/* Completed On */}
-                <div className="text-[13px] text-text-secondary">
-                  <span className="lg:hidden text-[10px] uppercase font-bold tracking-wider text-text-primary block mb-1">Completed On</span>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="lg:hidden opacity-70" />
+                  {/* Status Badge */}
+                  <div>
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-tight ${isDone ? 'bg-emerald-500/10 text-emerald-500' : isPending ? 'bg-amber-500/10 text-amber-500' : 'bg-blue-500/10 text-blue-500'}`}>
+                      {isDone ? <CheckCircle2 size={12} /> : isPending ? <Clock size={12} /> : <AlertCircle size={12} />}
+                      {c.status || 'To Be Done'}
+                    </span>
+                  </div>
+
+                  {/* Completed On */}
+                  <div className="text-[13px] text-text-secondary">
                     {c.completedOn ? new Date(c.completedOn).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}
                   </div>
-                </div>
 
-                {/* Accountant */}
-                <div className="text-[13px] text-text-secondary">
-                  <span className="lg:hidden text-[10px] uppercase font-bold tracking-wider text-text-primary block mb-1 text-text-primary">Accountant</span>
-                  <div className="flex items-center gap-2">
-                    <User size={14} className="lg:hidden opacity-70" />
+                  {/* Accountant */}
+                  <div className="text-[13px] text-text-secondary">
                     {typeof c.accountant === 'object' ? c.accountant?.name : (c.accountant || '-')}
                   </div>
-                </div>
 
-                {/* Modify Action (Admin Only) */}
-                {!readOnly && (
-                  <div className="flex justify-end lg:block lg:text-center pt-2 lg:pt-0 border-t border-bg-tertiary lg:border-none">
-                    <button 
-                      onClick={() => onAction && onAction('modifyCompliance', c)}
-                      className="bg-[#298835] hover:bg-[#216d2b] text-white px-5 py-2 lg:px-3 lg:py-1 font-bold text-[11px] uppercase rounded-[4px] transition-colors shadow-sm w-full lg:w-fit"
-                    >
-                      MODIFY
-                    </button>
-                  </div>
-                )}
+                  {/* Modify Button */}
+                  {!readOnly && (
+                    <div className="text-center">
+                      <button 
+                        onClick={() => onAction && onAction('modifyCompliance', c)}
+                        className="bg-[#298835] hover:bg-[#216d2b] text-white px-3 py-1 font-bold text-[11px] uppercase rounded-[4px] transition-colors shadow-sm w-full"
+                      >
+                        MODIFY
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             )})
           ) : (
@@ -151,7 +202,7 @@ const CustomerAnnualComplianceTable = ({ compliances = [], financialYears = [], 
               <p className="text-sm text-text-secondary italic">
                 {financialYears?.length === 0
                   ? "No financial year attached yet."
-                  : "No compliances found for the selected year."}
+                  : "No compliances found for the selected year. Click 'Assign Default Compliances' to initialize them."}
               </p>
               {financialYears?.length > 0 && !readOnly && (
                 <button 
