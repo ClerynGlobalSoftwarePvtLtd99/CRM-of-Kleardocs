@@ -78,7 +78,8 @@ const customerSchema = new mongoose.Schema(
     financialYears: [{ type: String }], // attached FYs, e.g. ["2025-2026"]
     saleBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     leadId: { type: mongoose.Schema.Types.ObjectId, ref: "Lead" },
-    active: { type: Boolean, default: true }
+    active: { type: Boolean, default: true },
+    refreshToken: { type: String, select: false } // stored for token rotation; excluded from normal queries
   },
   { timestamps: true }
 );

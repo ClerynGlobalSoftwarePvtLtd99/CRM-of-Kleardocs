@@ -58,31 +58,41 @@ export const refreshAccessToken = async (incomingRefreshToken) => {
   // Verify the refresh token cryptographically
   const decoded = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
 
-  // Find user and verify the token wasn't revoked/replaced in DB
-  const user = await User.findOne({ _id: decoded.id, refreshToken: incomingRefreshToken });
-  if (!user) {
-    throw new ApiError(403, "Invalid or revoked refresh token");
-  }
+  const isCustomerRole = decoded.role?.toLowerCase() === "customer";
 
-  // Check if they were fully banned since the refresh token was issued
-  if (!user.active || user.deletedAt) throw new ApiError(403, "This account is inactive or deleted");
+  let account = null;
+  let newRole = null;
+
+  if (isCustomerRole) {
+    // Customer refresh path — must explicitly select refreshToken (field has select: false)
+    account = await Customer.findById(decoded.id).select('+refreshToken');
+    if (!account || account.refreshToken !== incomingRefreshToken) throw new ApiError(403, "Invalid or revoked refresh token");
+    if (!account.active) throw new ApiError(403, "This account is inactive or deleted");
+    newRole = "Customer";
+  } else {
+    // Staff (admin/agent/accountant) refresh path
+    account = await User.findOne({ _id: decoded.id, refreshToken: incomingRefreshToken });
+    if (!account) throw new ApiError(403, "Invalid or revoked refresh token");
+    if (!account.active || account.deletedAt) throw new ApiError(403, "This account is inactive or deleted");
+    newRole = account.role;
+  }
 
   // Generate new tokens
   const accessToken = jwt.sign(
-    { id: user._id, role: user.role },
+    { id: account._id, role: newRole },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN || "15m" }
   );
 
   const refreshToken = jwt.sign(
-    { id: user._id },
+    { id: account._id, role: newRole },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || "30d" }
   );
 
-  // Update DB 
-  user.refreshToken = refreshToken;
-  await user.save();
+  // Rotate the token in DB
+  account.refreshToken = refreshToken;
+  await account.save();
 
   return { accessToken, refreshToken };
 };
@@ -109,10 +119,14 @@ export const loginCustomerAccount = async (data) => {
   );
 
   const refreshToken = jwt.sign(
-    { id: customer._id },
+    { id: customer._id, role: "Customer" },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || "30d" }
   );
+
+  // Persist the refresh token so it can be validated on refresh
+  customer.refreshToken = refreshToken;
+  await customer.save();
 
   // Return generated tokens back to controller
   return { customer: { id: customer._id, name: customer.name, companyName: customer.companyName, username: customer.username, role: "customer" }, accessToken, refreshToken };

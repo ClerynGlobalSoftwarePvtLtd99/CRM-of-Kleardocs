@@ -47,13 +47,16 @@ const RequireAuth = ({ children, allowedRoles }) => {
 
 const App = () => {
   const dispatch = useAppDispatch()
-  const { isAuthenticated, loading, token, user } = useAppSelector((state) => state.auth)
+  const { isAuthenticated, loading, user } = useAppSelector((state) => state.auth)
   const { theme } = useAppSelector((state) => state.ui)
   const [initialLoading, setInitialLoading] = useState(true)
 
   useEffect(() => {
+    // 'isAuthenticated' is a non-sensitive hint stored in localStorage.
+    // It triggers a /auth/me call on page reload; the backend validates
+    // the session via the httpOnly refreshToken cookie.
     const storedAuth = localStorage.getItem('isAuthenticated');
-    if (token || storedAuth === 'true') {
+    if (storedAuth === 'true') {
       dispatch(fetchCurrentUser()).catch(() => {
         dispatch(clearAuth());
       });
@@ -64,7 +67,7 @@ const App = () => {
     }, 1000)
 
     return () => clearTimeout(timer)
-  }, [dispatch, token])
+  }, [dispatch])
 
   //ping to keep the session alive
   useEffect(() => {

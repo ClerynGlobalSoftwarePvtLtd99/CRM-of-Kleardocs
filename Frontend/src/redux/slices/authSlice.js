@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axiosInstance from '../../api/axiosInstance';
+import axiosInstance, { setInMemoryToken, clearInMemoryToken } from '../../api/axiosInstance';
 
 const initialState = {
   user: null,
-  isAuthenticated: false, // Don't trust localStorage blindly
-  loading: false, // Start as false to avoid infinite loading
+  isAuthenticated: false,
+  loading: false,
   error: null,
 };
 
@@ -66,9 +66,8 @@ const authSlice = createSlice({
     clearAuth: (state) => {
       state.user = null;
       state.isAuthenticated = false;
+      clearInMemoryToken();
       localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
     },
     setAuthenticated: (state, action) => {
       state.isAuthenticated = action.payload;
@@ -86,14 +85,12 @@ const authSlice = createSlice({
         state.user = action.payload.user || action.payload.customer;
         state.isAuthenticated = true;
         localStorage.setItem('isAuthenticated', 'true');
-        
-        // Store tokens for cross-domain (production) use
+
+        // Store accessToken in memory only (never in localStorage)
         if (action.payload.accessToken) {
-          localStorage.setItem('accessToken', action.payload.accessToken);
+          setInMemoryToken(action.payload.accessToken);
         }
-        if (action.payload.refreshToken) {
-          localStorage.setItem('refreshToken', action.payload.refreshToken);
-        }
+        // refreshToken is an httpOnly cookie — no frontend storage needed
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -108,8 +105,10 @@ const authSlice = createSlice({
         state.user = action.payload.customer;
         state.isAuthenticated = true;
         localStorage.setItem('isAuthenticated', 'true');
-        if (action.payload.accessToken) localStorage.setItem('accessToken', action.payload.accessToken);
-        if (action.payload.refreshToken) localStorage.setItem('refreshToken', action.payload.refreshToken);
+
+        // Store accessToken in memory only
+        if (action.payload.accessToken) setInMemoryToken(action.payload.accessToken);
+        // refreshToken is an httpOnly cookie — no frontend storage needed
       })
       .addCase(loginCustomer.rejected, (state, action) => {
         state.loading = false;
@@ -118,16 +117,14 @@ const authSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.isAuthenticated = false;
+        clearInMemoryToken();
         localStorage.removeItem('isAuthenticated');
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
       })
       .addCase(logoutUser.rejected, (state) => {
         state.user = null;
         state.isAuthenticated = false;
+        clearInMemoryToken();
         localStorage.removeItem('isAuthenticated');
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
       })
       .addCase(fetchCurrentUser.pending, (state) => {
         state.loading = true;
@@ -142,9 +139,8 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = null;
         state.isAuthenticated = false;
+        clearInMemoryToken();
         localStorage.removeItem('isAuthenticated');
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
       });
   },
 });
