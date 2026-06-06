@@ -324,7 +324,8 @@ export const wrapWithBrandedTemplate = (htmlContent, options = {}) => {
     logoUrl = null,
     logoBase64 = null,
     primaryColor = "#03479f",
-    accentColor = "#ed6c02"
+    accentColor = "#ed6c02",
+    noHeader = false
   } = options;
   
   // Use base64 logo if provided, otherwise fallback to URL
@@ -346,6 +347,7 @@ export const wrapWithBrandedTemplate = (htmlContent, options = {}) => {
       <td align="center" style="padding: 20px 0;">
         <table role="presentation" style="width: 100%; max-width: 600px; border-collapse: collapse; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
           
+          ${noHeader ? "" : `
           <!-- Header -->
           <tr>
             <td style="background-color: #0d0d0d; padding: 24px 20px 16px; text-align: center; border-radius: 8px 8px 0 0;">
@@ -356,6 +358,7 @@ export const wrapWithBrandedTemplate = (htmlContent, options = {}) => {
           <tr>
             <td style="background-color: ${primaryColor}; height: 4px;"></td>
           </tr>
+          `}
           
           <!-- Main Content -->
           <tr>
