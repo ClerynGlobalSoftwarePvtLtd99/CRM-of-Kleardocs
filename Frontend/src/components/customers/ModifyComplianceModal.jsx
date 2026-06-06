@@ -19,6 +19,7 @@ const ModifyComplianceModal = ({ customerId, compliance, onClose }) => {
     hasExpiry: false,
     status: "To Be Done",
     accountant: "None",
+    completedOn: "",
   });
 
   useEffect(() => {
@@ -40,14 +41,39 @@ const ModifyComplianceModal = ({ customerId, compliance, onClose }) => {
 
   useEffect(() => {
     if (compliance) {
+      let compDateStr = "";
+      if (compliance.completedOn) {
+        try {
+          compDateStr = new Date(compliance.completedOn).toISOString().split('T')[0];
+        } catch (e) {
+          console.error(e);
+        }
+      } else if (compliance.status === "Done" || compliance.status === "Ongoing") {
+        compDateStr = new Date().toISOString().split('T')[0];
+      }
       setFormData({
         name: compliance.name || "",
         hasExpiry: compliance.hasExpiry || false,
         status: compliance.status || "To Be Done",
         accountant: compliance.accountant || "None",
+        completedOn: compDateStr,
       });
     }
   }, [compliance]);
+
+  const handleStatusChange = (newStatus) => {
+    setFormData(prev => {
+      const updated = { ...prev, status: newStatus };
+      if (newStatus === "Done" || newStatus === "Ongoing") {
+        if (!prev.completedOn) {
+          updated.completedOn = new Date().toISOString().split('T')[0];
+        }
+      } else {
+        updated.completedOn = "";
+      }
+      return updated;
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,9 +82,11 @@ const ModifyComplianceModal = ({ customerId, compliance, onClose }) => {
     try {
       const updateData = { ...formData };
 
-      // Automatically set completion date if status is changed to 'Done'
-      if (formData.status === "Done") {
-        updateData.completedOn = new Date().toISOString();
+      // Automatically set/clear completion date if status is changed
+      if (formData.status === "Done" || formData.status === "Ongoing") {
+        updateData.completedOn = formData.completedOn ? new Date(formData.completedOn).toISOString() : new Date().toISOString();
+      } else {
+        updateData.completedOn = null;
       }
 
       await dispatch(updateCustomerCompliance({
@@ -120,13 +148,26 @@ const ModifyComplianceModal = ({ customerId, compliance, onClose }) => {
             <label className="fieldset-label bg-bg-secondary">Status *</label>
             <select
               value={formData.status}
-              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+              onChange={(e) => handleStatusChange(e.target.value)}
             >
               <option value="Ongoing">Ongoing</option>
               <option value="To Be Done">To Be Done</option>
               <option value="Done">Done</option>
             </select>
           </div>
+
+          {/* Completed On Calendar Field */}
+          {(formData.status === "Done" || formData.status === "Ongoing") && (
+            <div className="fieldset-input">
+              <label className="fieldset-label bg-bg-secondary">Completed On *</label>
+              <input
+                type="date"
+                value={formData.completedOn}
+                onChange={(e) => setFormData({ ...formData, completedOn: e.target.value })}
+                required
+              />
+            </div>
+          )}
 
           {/* Accountant Dropdown */}
           <div className="fieldset-input">

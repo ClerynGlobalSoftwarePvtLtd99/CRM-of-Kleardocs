@@ -65,6 +65,6 @@ export const updateComplianceSchema = z.object({
   name: z.string().optional(),
   status: z.enum(["Ongoing", "To Be Done", "Done"]).optional(),
   accountant: z.string().optional(),
-  completedOn: z.string().optional(),
+  completedOn: z.string().nullable().optional(),
   hasExpiry: z.boolean().optional()
 });

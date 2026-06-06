@@ -24,11 +24,12 @@ const ConsentLetterModal = ({ customer, onClose }) => {
 
   const handleDownloadPDF = async () => {
     try {
+      const compName = customer.companyName || customer.name || 'Company';
       await dispatch(downloadCustomerReport({
         customerId: customer._id,
         type: 'consentLetter',
         params: { date },
-        fileName: 'CA SUSANTA KUMAR SWAIN.pdf'
+        fileName: `Consent Letter - ${compName}.pdf`
       })).unwrap();
       
       toast.success("Consent Letter PDF downloaded");

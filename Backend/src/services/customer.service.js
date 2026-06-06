@@ -675,9 +675,19 @@ export const updateCompliance = async (customerId, complianceId, data) => {
   }
 
   if (data.name !== undefined) compliance.name = data.name;
-  if (data.status !== undefined) compliance.status = data.status;
+  if (data.status !== undefined) {
+    compliance.status = data.status;
+    if (data.status === "To Be Done") {
+      compliance.completedOn = null;
+    }
+  }
   if (data.accountant !== undefined) compliance.accountant = data.accountant;
-  if (data.completedOn) compliance.completedOn = new Date(data.completedOn);
+  
+  if (data.completedOn) {
+    compliance.completedOn = new Date(data.completedOn);
+  } else if (data.completedOn === null || data.completedOn === "") {
+    compliance.completedOn = null;
+  }
   
   // Detailed configuration fields
   if (data.hasExpiry !== undefined) compliance.hasExpiry = data.hasExpiry;
@@ -685,7 +695,8 @@ export const updateCompliance = async (customerId, complianceId, data) => {
   if (data.daysAfterInc !== undefined) compliance.daysAfterInc = data.daysAfterInc;
   if (data.expiryTemplate !== undefined) compliance.expiryTemplate = data.expiryTemplate;
   if (data.completeTemplate !== undefined) compliance.completeTemplate = data.completeTemplate;
-  else if (data.status === "Done" && !compliance.completedOn) {
+  
+  if ((compliance.status === "Done" || compliance.status === "Ongoing") && !compliance.completedOn) {
     compliance.completedOn = new Date();
   }
 
