@@ -15,6 +15,9 @@ const CustomerInvoicesTable = ({ invoices = [], onAction }) => {
       items: (inv.items || []).map(i => ({
         product: { name: i.service?.name || i.description },
         hsn: i.hsn,
+        quantity: i.quantity || 1,
+        professionalFees: i.professionalFees,
+        govtFees: i.govtFees,
         price: i.price,
         amount: i.amount,
         gstPercent: i.gstPercent,

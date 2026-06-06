@@ -172,48 +172,6 @@ const InvoiceDetailsSection = ({
           </div>
         </div>
 
-        {/* Description Toggle */}
-        <div className="flex flex-col md:flex-row md:items-center gap-3">
-          <label className="md:w-48 shrink-0 font-semibold text-text-secondary text-sm">
-            Add Description?
-          </label>
-          <div className="flex-1 flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setShowDescription((p) => !p)}
-              className={`relative inline-flex w-12 h-6 rounded-full transition-colors duration-300 cursor-pointer focus:outline-none ${
-                showDescription ? 'bg-accent' : 'bg-bg-tertiary'
-              }`}
-            >
-              <span
-                className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 ${
-                  showDescription ? 'translate-x-6' : 'translate-x-0'
-                }`}
-              />
-            </button>
-            <span className="text-sm font-medium text-text-secondary">
-              {showDescription ? 'Yes' : 'No'}
-            </span>
-          </div>
-        </div>
-
-        {/* Description Textarea */}
-        {showDescription && (
-          <div className="flex flex-col md:flex-row md:items-start gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
-            <label className="md:w-48 shrink-0 font-semibold text-text-secondary text-sm pt-2">
-              Description
-            </label>
-            <div className="flex-1">
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Enter invoice description..."
-                rows={3}
-                className="w-full px-4 py-2.5 bg-bg-primary border border-bg-tertiary rounded-lg text-sm focus:outline-none focus:border-accent transition-colors text-text-primary resize-none shadow-inner"
-              />
-            </div>
-          </div>
-        )}
 
         {/* Recurring Fields */}
         {isRecurring && (
