@@ -23,8 +23,20 @@ const ConsentLetterPreview = forwardRef(({ customer, firmDetails, date }, ref) =
   };
 
   const formattedIncDate = customer.incorporationDate ? getOrdinalDate(customer.incorporationDate, false) : "N/A";
-  const formattedToday = "15th January, 2026";
-  const fixedSignDate = "15/01/2026";
+  const letterDateObj = date ? new Date(date) : new Date();
+  const formattedToday = getOrdinalDate(letterDateObj, true) || "14th May, 2026";
+  
+  const getSlashDate = (dObj) => {
+    try {
+      const day = dObj.getDate().toString().padStart(2, '0');
+      const month = (dObj.getMonth() + 1).toString().padStart(2, '0');
+      const year = dObj.getFullYear();
+      return `${day}/${month}/${year}`;
+    } catch (e) {
+      return null;
+    }
+  };
+  const fixedSignDate = getSlashDate(letterDateObj) || "14/05/2026";
   
   // Dynamic Year Logic: "When next year 31 march 2027 cross this time automatically show '31 March 2028'"
   // If month >= 3 (April), the next March 31 is in the next year.
@@ -47,7 +59,7 @@ const ConsentLetterPreview = forwardRef(({ customer, firmDetails, date }, ref) =
           <img src={caTitle} alt="CA Logo" className="h-20 w-auto object-contain" />
         </div>
         <div className="flex-grow">
-          <h1 className="text-2xl font-bold tracking-tight mb-0" style={{ color: '#000' }}>DDCA & ASSOCIATES</h1>
+          <h1 className="text-2xl font-bold tracking-tight mb-0" style={{ color: '#000' }}>BRAHMANADA & CO.</h1>
           <p className="text-lg font-bold uppercase" style={{ color: '#000' }}>CHARTERED ACCOUNTANTS</p>
         </div>
       </div>
@@ -76,7 +88,7 @@ const ConsentLetterPreview = forwardRef(({ customer, firmDetails, date }, ref) =
 
       {/* Body 1 */}
       <p className="mb-5 text-justify">
-        We, <span className="font-bold font-serif">M/s. DDCA & ASSOCIATES</span>, Chartered Accountants, hereby give our consent to be appointed as the <span className="font-bold">First Auditor</span> of <span className="font-bold uppercase">{customer.companyName || customer.name}</span> under Section 139(6) of the Companies Act, 2013, for the financial year commencing from <span className="font-bold">{formattedIncDate} (Date of Incorporation)</span> to <span className="font-bold">{financialYearEndLabel}.</span>
+        We, <span className="font-bold font-serif">M/s. BRAHMANADA & CO.</span>, Chartered Accountants, hereby give our consent to be appointed as the <span className="font-bold">First Auditor</span> of <span className="font-bold uppercase">{customer.companyName || customer.name}</span> under Section 139(6) of the Companies Act, 2013, for the financial year commencing from <span className="font-bold">{formattedIncDate} (Date of Incorporation)</span> to <span className="font-bold">{financialYearEndLabel}.</span>
       </p>
 
       {/* Body 2 */}
@@ -109,7 +121,7 @@ const ConsentLetterPreview = forwardRef(({ customer, firmDetails, date }, ref) =
       <div className="mb-4">
         <p className="mb-0">Thanking You,</p>
         <p className="mb-4">Yours faithfully,</p>
-        <p className="font-bold mb-1 uppercase tracking-tight">For DDCA & ASSOCIATES</p>
+        <p className="font-bold mb-1 uppercase tracking-tight">For BRAHMANADA & CO.</p>
         <p className="font-bold mb-4 uppercase text-[9.5pt]">Chartered Accountants</p>
         
         {/* Signatures & Stamp */}
@@ -123,7 +135,7 @@ const ConsentLetterPreview = forwardRef(({ customer, firmDetails, date }, ref) =
         </div>
 
         <div className="space-y-0 text-[10pt] mt-4">
-          <p className="font-bold uppercase mb-0.5">FRN: 0330380E</p>
+          <p className="font-bold uppercase mb-0.5">FRN: 315153E</p>
           <p className="font-bold uppercase mb-0.5">CA SUSANTA KUMAR SWAIN</p>
           <p className="mb-0.5">Partner</p>
           <p className="mb-0.5">Membership No: 065257</p>
