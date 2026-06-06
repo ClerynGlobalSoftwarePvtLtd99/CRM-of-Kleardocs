@@ -190,7 +190,7 @@ export const generateBoardResolution = async (customer, data, res) => {
   doc.moveDown(0.2);
 
   const certText = `CERTIFIED TRUE COPY OF THE RESOLUTION PASSED AT THE MEETING OF THE BOARD OF DIRECTORS OF ${companyName} HELD AT ${companyAddress}.`;
-  doc.font("Poppins-Bold").fontSize(11).text(certText, { align: "left" });
+  doc.font("Poppins-Bold").fontSize(11).text(certText, { align: "justify", width: 495 });
 
   doc.moveDown(0.8);
 
@@ -662,11 +662,10 @@ export const generateConsentLetter = async (customer, data, res) => {
   console.log("Financial year end:", financialYearEndLabel);
   console.log("====================================");
 
-  // Letter date is fixed as per requirement
-  const formattedLetterDate = "15th January, 2026";
-
-  // FIXED SIGNATURE DATE - Always use the static date for CA details
-  const fixedSignDate = "15/01/2026"; // Fixed as per requirement
+  // Dynamic letter date and signature date based on data.date or current date
+  const inputDate = data.date ? new Date(data.date) : new Date();
+  const formattedLetterDate = formatDisplayDate(inputDate) || "14th May, 2026";
+  const fixedSignDate = formatSlashDate(inputDate) || "14/05/2026";
 
   // Load images from assets folder
   const assetsPath = path.join(__dirname, "../assets/consent-letter/");
@@ -690,7 +689,7 @@ export const generateConsentLetter = async (customer, data, res) => {
         .font("Times-Bold")
         .fontSize(14)
         .fillColor(blackColor)
-        .text("DDCA & ASSOCIATES", 120, currentY + 8);
+        .text("BRAHMANADA & CO.", 120, currentY + 8);
       doc
         .font("Times-Bold")
         .fontSize(11)
@@ -701,7 +700,7 @@ export const generateConsentLetter = async (customer, data, res) => {
         .font("Times-Bold")
         .fontSize(16)
         .fillColor(blackColor)
-        .text("DDCA & ASSOCIATES", { align: "center" });
+        .text("BRAHMANADA & CO.", { align: "center" });
       doc
         .font("Times-Bold")
         .fontSize(12)
@@ -714,7 +713,7 @@ export const generateConsentLetter = async (customer, data, res) => {
       .font("Times-Bold")
       .fontSize(16)
       .fillColor(blackColor)
-      .text("DDCA & ASSOCIATES", { align: "center" });
+      .text("BRAHMANADA & CO.", { align: "center" });
     doc
       .font("Times-Bold")
       .fontSize(12)
@@ -742,7 +741,7 @@ export const generateConsentLetter = async (customer, data, res) => {
   doc
     .font("Times-Roman")
     .fontSize(10.5)
-    .text("Date: 15th January, 2026", 50, currentY);
+    .text(`Date: ${formattedLetterDate}`, 50, currentY);
   currentY += 18;
 
   // --- Subject Line ---
@@ -763,7 +762,7 @@ export const generateConsentLetter = async (customer, data, res) => {
   // --- Body Paragraph 1 ---
   doc.font("Times-Roman").lineGap(3);
   doc.text("We, ", 50, currentY, { continued: true, width: 510 });
-  doc.font("Times-Bold").text("M/s. DDCA & ASSOCIATES", { continued: true });
+  doc.font("Times-Bold").text("M/s. BRAHMANADA & CO.", { continued: true });
   doc
     .font("Times-Roman")
     .text(
@@ -901,7 +900,7 @@ export const generateConsentLetter = async (customer, data, res) => {
   doc
     .font("Times-Bold")
     .fontSize(11)
-    .text("For DDCA & ASSOCIATES", 50, currentY);
+    .text("For BRAHMANADA & CO.", 50, currentY);
   doc.font("Times-Roman").text("Chartered Accountants", 50, doc.y);
   currentY = doc.y + 8;
 
@@ -921,11 +920,11 @@ export const generateConsentLetter = async (customer, data, res) => {
   currentY += 60;
 
   // --- Partner Details ---
-  // NORMAL: "FRN: 0330380E"
+  // NORMAL: "FRN: 315153E"
   // BOLD: "CA SUSANTA KUMAR SWAIN"
   // NORMAL: Rest of details
-  // FIXED DATE: Always "15/01/2026"
-  doc.font("Times-Roman").fontSize(10).text("FRN: 0330380E", 50, currentY);
+  // FIXED DATE: Dynamic from board resolution date
+  doc.font("Times-Roman").fontSize(10).text("FRN: 315153E", 50, currentY);
   doc.font("Times-Bold").text("CA SUSANTA KUMAR SWAIN", 50, doc.y);
   doc.font("Times-Roman").text("Partner", 50, doc.y);
   doc.text("Membership No: 065257", 50, doc.y);
