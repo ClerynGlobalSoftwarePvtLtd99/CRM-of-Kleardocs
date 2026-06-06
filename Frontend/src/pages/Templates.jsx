@@ -11,6 +11,7 @@ import { fetchServices } from '../redux/slices/servicesSlice'
 import { injectTemplateData } from '../utils/templateEngine'
 import ContentLoader from '../components/common/ContentLoader'
 import toast from 'react-hot-toast'
+import kleardocsLogo from '../assets/logo.png'
 
 const BASE_PREVIEW_CONTEXT = {
   companyName: 'CLERYN GLOBAL SOFTWARE PVT LTD',
@@ -197,8 +198,13 @@ const Templates = () => {
             </div>
             <div className="p-8 overflow-y-auto bg-gray-50 flex-1 text-gray-900 border-b border-[var(--color-bg-tertiary)]">
               <div 
-                className="bg-white shadow-lg p-10 mx-auto max-w-[800px] min-h-[600px] prose prose-blue max-w-none text-gray-900"
-                dangerouslySetInnerHTML={{ __html: injectTemplateData(selectedTemplate.body, previewContext) }}
+                className="bg-white shadow-lg p-10 mx-auto max-w-[800px] min-h-[600px]"
+                dangerouslySetInnerHTML={{ __html: 
+                  // Replace any logo URL variant with the locally bundled asset (always works in dev & prod)
+                  injectTemplateData(selectedTemplate.body, previewContext)
+                    .replace(/https?:\/\/[^"']*\/logo\.svg/g, kleardocsLogo)
+                    .replace(/https?:\/\/[^"']*\/logo\.png/g, kleardocsLogo)
+                }}
               />
               
               {/* Preview Attachments */}

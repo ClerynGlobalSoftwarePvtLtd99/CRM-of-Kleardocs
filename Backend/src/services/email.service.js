@@ -208,7 +208,7 @@ export const sendTemplateEmail = async ({
     // Template validation warnings are silent in production
 
     // Step 7: Wrap with branded template - use external logo URL
-    const logoUrl = "https://www.kleardocs.com/logo.svg";
+    const logoUrl = "https://crm.kleardocs.com/logo.png"; // Kleardocs branded logo (served from backend /public)
     
     const brandedHtml = wrapWithBrandedTemplate(parsedBody, {
       companyName: "Kleardocs Solutions Private Limited",
