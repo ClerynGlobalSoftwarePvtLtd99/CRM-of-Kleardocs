@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginCustomer } from '../redux/slices/authSlice';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-hot-toast';
-import { User, Lock, ArrowRight, ShieldCheck, Mail, Globe, Eye, EyeOff } from 'lucide-react';
+import { User, Lock, ArrowRight, Mail, Globe, Eye, EyeOff } from 'lucide-react';
+import logo from '../assets/logo.png';
 
 const ClientLogin = () => {
     const [credentials, setCredentials] = useState({ username: '', password: '' });
@@ -41,7 +42,7 @@ const ClientLogin = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!validate()) {
             toast.error('Please fix the errors before submitting');
             return;
@@ -70,11 +71,11 @@ const ClientLogin = () => {
             <div className="relative w-full max-w-[450px]">
                 {/* Logo Area */}
                 <div className="flex flex-col items-center mb-10 animate-in fade-in slide-in-from-top-4 duration-700">
-                    <div className="w-16 h-16 bg-gradient-to-br from-crm-orange to-orange-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-crm-orange/20 mb-6 rotate-3 hover:rotate-0 transition-transform duration-300">
-                        <ShieldCheck size={36} className="text-white" />
+                    <div className="w-20 h-20 flex items-center justify-center mb-6 transition-transform hover:scale-105 duration-300">
+                        <img src={logo} alt="Company Logo" className="w-25 h-25 object-contain" />
                     </div>
-                    <h1 className="text-3xl font-black text-white tracking-tight mb-2">
-                        KLEARDOCS <span className="text-crm-orange">CLIENTS</span>
+                    <h1 className="text-3xl font-black text-crm-orange tracking-tight mb-2">
+                        KLEARDOCS <span className="text-white">CLIENTS</span>
                     </h1>
                     <p className="text-slate-400 text-sm font-medium">Access your annual compliance records</p>
                 </div>
@@ -148,14 +149,14 @@ const ClientLogin = () => {
 
                 {/* Footer Info */}
                 <div className="mt-10 flex flex-col items-center gap-4 text-slate-500 text-xs font-medium animate-in fade-in slide-in-from-bottom-2 duration-700 delay-300">
-                    <div className="flex items-center gap-4">
+                    {/* <div className="flex items-center gap-4">
                         <a href="#" className="hover:text-white transition-colors">Support</a>
                         <span className="w-1 h-1 bg-slate-700 rounded-full" />
                         <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
                         <span className="w-1 h-1 bg-slate-700 rounded-full" />
                         <a href="#" className="hover:text-white transition-colors">Terms</a>
-                    </div>
-                    <p>© 2026 Kleardocs Solutions. All rights reserved.</p>
+                    </div> */}
+                    <p>© 2026 Kleardocs Solutions Private Limited. All rights reserved.</p>
                 </div>
             </div>
         </div>
