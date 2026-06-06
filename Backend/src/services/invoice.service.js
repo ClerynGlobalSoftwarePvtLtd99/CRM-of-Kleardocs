@@ -29,7 +29,9 @@ const STATE_CODES = {
 
 // ─── Helper: calculate item totals ───────────────────────────────────────────
 const calcItem = (item, no, gstType = "IGST") => {
-  const price = (Number(item.professionalFees) || 0) + (Number(item.govtFees) || 0);
+  const quantity = Number(item.quantity) || 1;
+  const unitPrice = (Number(item.professionalFees) || 0) + (Number(item.govtFees) || 0);
+  const price = unitPrice * quantity;
   const gstPercent = Number(item.gstPercent) || 0;
   const gstAmount = Math.round((price * gstPercent) / 100 * 100) / 100;
 
@@ -44,6 +46,7 @@ const calcItem = (item, no, gstType = "IGST") => {
     service: item.serviceId || undefined,
     hsn: item.hsn || "998399",
     description: item.description || "",
+    quantity,
     professionalFees: Number(item.professionalFees) || 0,
     govtFees: Number(item.govtFees) || 0,
     price,
@@ -513,6 +516,7 @@ export const generateDueRecurringInvoices = async () => {
     const items = ri.items.map((item, i) => calcItem({
       serviceId: item.service,
       description: item.description,
+      quantity: item.quantity || 1,
       professionalFees: item.professionalFees,
       govtFees: item.govtFees,
       gstPercent: item.gstPercent,

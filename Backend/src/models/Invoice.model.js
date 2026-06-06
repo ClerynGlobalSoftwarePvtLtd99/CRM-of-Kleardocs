@@ -6,6 +6,7 @@ const invoiceItemSchema = new mongoose.Schema({
   service: { type: mongoose.Schema.Types.ObjectId, ref: "Service" },
   hsn: { type: String, default: "998399" },
   description: { type: String },            // service name shown on invoice
+  quantity: { type: Number, default: 1 },
   professionalFees: { type: Number, default: 0 },
   govtFees: { type: Number, default: 0 },
   price: { type: Number, default: 0 },      // professionalFees + govtFees

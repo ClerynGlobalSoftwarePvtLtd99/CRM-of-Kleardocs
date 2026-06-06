@@ -24,20 +24,48 @@ const InvoiceItemsSection = ({ items, setItems, services = [] }) => {
     if (!selectedProduct) return
     const newPrice = selectedProduct.professionalFees || 0;
     const newGovFee = selectedProduct.govtFees || 0;
-    setItems((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        no: prev.length + 1,
-        product: selectedProduct,
-        price: newPrice,
-        govFee: newGovFee,
-        gstPercentage: '',
-        gstAmount: 0,
-        gst: newGovFee,
-        amount: newPrice + newGovFee,
-      },
-    ])
+    const existingIndex = items.findIndex((item) => item.product?._id === selectedProduct._id);
+
+    if (existingIndex > -1) {
+      setItems((prev) =>
+        prev.map((item, idx) => {
+          if (idx === existingIndex) {
+            const nextQty = (item.quantity || 1) + 1;
+            const percentage = parseFloat(item.gstPercentage) || 0;
+            const nextPrice = newPrice * nextQty;
+            const nextGov = newGovFee * nextQty;
+            const taxableAmount = nextPrice + nextGov;
+            const gstAmount = (taxableAmount * percentage) / 100;
+            const amount = taxableAmount + gstAmount;
+            return {
+              ...item,
+              quantity: nextQty,
+              price: nextPrice,
+              govFee: nextGov,
+              gstAmount,
+              amount,
+            };
+          }
+          return item;
+        })
+      );
+    } else {
+      setItems((prev) => [
+        ...prev,
+        {
+          id: Date.now(),
+          no: prev.length + 1,
+          product: selectedProduct,
+          quantity: 1,
+          price: newPrice,
+          govFee: newGovFee,
+          gstPercentage: '',
+          gstAmount: 0,
+          gst: newGovFee,
+          amount: newPrice + newGovFee,
+        },
+      ]);
+    }
     setSelectedProduct(null)
     setProductSearch('')
   }
@@ -50,16 +78,63 @@ const InvoiceItemsSection = ({ items, setItems, services = [] }) => {
     )
   }
 
+  const handleQuantityChange = (id, newQty) => {
+    const qty = parseInt(newQty) || 1;
+    setItems((prev) =>
+      prev.map((item) => {
+        if (item.id === id) {
+          const unitPrice = item.product?.professionalFees || 0;
+          const unitGov = item.product?.govtFees || 0;
+          const nextPrice = unitPrice * qty;
+          const nextGov = unitGov * qty;
+          const percentage = parseFloat(item.gstPercentage) || 0;
+          const taxableAmount = nextPrice + nextGov;
+          const gstAmount = (taxableAmount * percentage) / 100;
+          const amount = taxableAmount + gstAmount;
+          return {
+            ...item,
+            quantity: qty,
+            price: nextPrice,
+            govFee: nextGov,
+            gstAmount,
+            amount,
+          };
+        }
+        return item;
+      })
+    );
+  };
+
   const handleGstPercentageChange = (id, newPercentage) => {
     setItems((prev) =>
       prev.map((item) => {
         if (item.id === id) {
           const percentage = parseFloat(newPercentage) || 0;
-          const govFee = item.govFee !== undefined ? item.govFee : (item.gst || 0);
-          const taxableAmount = (item.price || 0) + (govFee || 0);
+          const taxableAmount = (item.price || 0) + (item.govFee || 0);
           const gstAmount = (taxableAmount * percentage) / 100;
           const amount = taxableAmount + gstAmount;
           return { ...item, gstPercentage: newPercentage, gstAmount, amount };
+        }
+        return item;
+      })
+    );
+  };
+
+  const handlePriceChange = (id, newPriceVal) => {
+    const newPrice = parseFloat(newPriceVal) || 0;
+    setItems((prev) =>
+      prev.map((item) => {
+        if (item.id === id) {
+          const percentage = parseFloat(item.gstPercentage) || 0;
+          const taxableAmount = newPrice + (item.govFee || 0);
+          const gstAmount = (taxableAmount * percentage) / 100;
+          const amount = taxableAmount + gstAmount;
+          return {
+            ...item,
+            price: newPrice,
+            gstAmount,
+            amount,
+          };
         }
         return item;
       })
@@ -82,7 +157,9 @@ const InvoiceItemsSection = ({ items, setItems, services = [] }) => {
           <thead>
             <tr className="border-b border-[var(--color-bg-tertiary)] text-xs text-[var(--color-text-secondary)] uppercase tracking-wider bg-[var(--color-bg-tertiary)]/20">
               <th className="px-5 py-3 font-semibold">No</th>
+              <th className="px-5 py-3 font-semibold">HSN/SAC</th>
               <th className="px-5 py-3 font-semibold w-full">Name</th>
+              <th className="px-5 py-3 font-semibold text-center whitespace-nowrap">Quantity</th>
               <th className="px-5 py-3 font-semibold text-right whitespace-nowrap">Price</th>
               <th className="px-5 py-3 font-semibold text-right whitespace-nowrap">GST</th>
               <th className="px-5 py-3 font-semibold text-right whitespace-nowrap">Amount</th>
@@ -92,7 +169,7 @@ const InvoiceItemsSection = ({ items, setItems, services = [] }) => {
           <tbody>
             {items.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-5 py-8 text-center text-[var(--color-text-secondary)] text-sm">
+                <td colSpan={8} className="px-5 py-8 text-center text-[var(--color-text-secondary)] text-sm">
                   No items added yet. Select a product and click "Add Product".
                 </td>
               </tr>
@@ -100,6 +177,7 @@ const InvoiceItemsSection = ({ items, setItems, services = [] }) => {
               items.map((item) => (
                 <tr key={item.id} className="border-b border-[var(--color-bg-tertiary)] hover:bg-[var(--color-bg-tertiary)]/30 transition-colors align-top">
                   <td className="px-5 py-4 text-sm font-medium text-[var(--color-text-secondary)]">{item.no}</td>
+                  <td className="px-5 py-4 text-sm font-medium text-[var(--color-text-primary)]">{item.product?.hsn || '998399'}</td>
                   <td className="px-5 py-4">
                     <div className="text-sm font-semibold text-[var(--color-text-primary)]">{item.product.name}</div>
                     <div className="text-xs text-right text-white font-bold mt-1">Professional Fees ₹ {item.price.toFixed(2)}</div>
@@ -107,8 +185,26 @@ const InvoiceItemsSection = ({ items, setItems, services = [] }) => {
                       Govt Fees: ₹{(item.govFee !== undefined ? item.govFee : (item.gst || 0)).toFixed(2)}
                     </div>
                   </td>
+                  <td className="px-5 py-4 text-center">
+                    <input
+                      type="number"
+                      min="1"
+                      value={item.quantity || 1}
+                      onChange={(e) => handleQuantityChange(item.id, e.target.value)}
+                      className="w-16 px-2 py-1 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded text-sm text-center focus:outline-none focus:border-[var(--color-accent)]"
+                    />
+                  </td>
                   <td className="px-5 py-4 text-sm text-right whitespace-nowrap font-medium text-[var(--color-text-primary)]">
-                    ₹{item.price.toFixed(2)}
+                    <div className="flex items-center justify-end gap-1">
+                      <span className="text-[var(--color-text-secondary)]">₹</span>
+                      <input
+                        type="number"
+                        min="0"
+                        value={item.price !== undefined ? item.price : ''}
+                        onChange={(e) => handlePriceChange(item.id, e.target.value)}
+                        className="w-24 px-2 py-1 bg-[var(--color-bg-primary)] border border-[var(--color-bg-tertiary)] rounded text-sm text-right focus:outline-none focus:border-[var(--color-accent)] font-medium text-[var(--color-text-primary)]"
+                      />
+                    </div>
                   </td>
                   <td className="px-5 py-4 text-sm text-right whitespace-nowrap">
                     <div className="flex items-center justify-end gap-1 mb-1">
@@ -145,7 +241,7 @@ const InvoiceItemsSection = ({ items, setItems, services = [] }) => {
 
             {/* Totals Row */}
             <tr className="bg-[var(--color-bg-tertiary)]/30 border-t border-[var(--color-bg-tertiary)]">
-              <td colSpan={2} className="px-5 py-4 text-sm font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">
+              <td colSpan={4} className="px-5 py-4 text-sm font-bold text-[var(--color-text-secondary)] uppercase tracking-wider">
                 Total
               </td>
               <td className="px-5 py-4 text-right whitespace-nowrap font-bold text-[var(--color-text-primary)]">

@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 const riItemSchema = new mongoose.Schema({
   service: { type: mongoose.Schema.Types.ObjectId, ref: "Service" },
   description: { type: String },
+  quantity: { type: Number, default: 1 },
   professionalFees: { type: Number, default: 0 },
   govtFees: { type: Number, default: 0 },
   gstPercent: { type: Number, default: 0 },

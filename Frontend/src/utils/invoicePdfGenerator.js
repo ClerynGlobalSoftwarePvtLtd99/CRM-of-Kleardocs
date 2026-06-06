@@ -150,13 +150,16 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   // Header adapts: West Bengal shows CGST+SGST columns, other states show IGST
   const tableHeaders = hasGst
     ? isWestBengal
-      ? [['#', 'HSN/SAC', 'Item Name', 'Price', 'CGST (9%)', 'SGST (9%)', 'Amount']]
-      : [['#', 'HSN/SAC', 'Item Name', 'Price', 'IGST (18%)', 'Amount']]
-    : [['#', 'HSN/SAC', 'Item Name', 'Price', 'Amount']];
+      ? [['#', 'HSN/SAC', 'Item Name', 'Quantity', 'Price', 'CGST (9%)', 'SGST (9%)', 'Amount']]
+      : [['#', 'HSN/SAC', 'Item Name', 'Quantity', 'Price', 'IGST (18%)', 'Amount']]
+    : [['#', 'HSN/SAC', 'Item Name', 'Quantity', 'Price', 'Amount']];
 
   const tableRows = (invoice.items || []).map((item, idx) => {
     const rate = item.gstPercent ?? item.gstPercentage ?? 0;
-    const price = parseFloat(item.price || 0);
+    const price = parseFloat(item.price || 0); // total base price
+    const qty = parseInt(item.quantity || 1);
+    const unitPrice = parseFloat(item.professionalFees || 0) + parseFloat(item.govtFees || 0) || (price / qty);
+
     const gstAmount = parseFloat(item.gstAmount || 0);
     const cgst = parseFloat(item.cgst || 0);
     const sgst = parseFloat(item.sgst || 0);
@@ -167,7 +170,8 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
       (idx + 1).toString(),
       item.hsn || '998399',
       item.product?.name || item.name || item.description,
-      formatMoney(price)
+      qty.toString(),
+      formatMoney(unitPrice)
     ];
 
     if (hasGst) {
@@ -186,20 +190,20 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   const totalRow = hasGst
     ? isWestBengal
       ? [
-        { content: 'Total', colSpan: 3, styles: { fontStyle: 'bold', halign: 'right' } },
+        { content: 'Total', colSpan: 4, styles: { fontStyle: 'bold', halign: 'right' } },
         formatMoney(t.subTotal),
         formatMoney(t.cgst),
         formatMoney(t.sgst),
         formatMoney(t.total)
       ]
       : [
-        { content: 'Total', colSpan: 3, styles: { fontStyle: 'bold', halign: 'right' } },
+        { content: 'Total', colSpan: 4, styles: { fontStyle: 'bold', halign: 'right' } },
         formatMoney(t.subTotal),
         formatMoney(t.gst),
         formatMoney(t.total)
       ]
     : [
-      { content: 'Total', colSpan: 3, styles: { fontStyle: 'bold', halign: 'right' } },
+      { content: 'Total', colSpan: 4, styles: { fontStyle: 'bold', halign: 'right' } },
       formatMoney(t.subTotal),
       formatMoney(t.total)
     ];
@@ -221,25 +225,28 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
           0: { cellWidth: 22, halign: 'center' },
           1: { cellWidth: 55, halign: 'center' },
           2: { cellWidth: 'auto' },
-          3: { cellWidth: 75, halign: 'right' },
+          3: { cellWidth: 60, halign: 'center' },
           4: { cellWidth: 65, halign: 'right' },
-          5: { cellWidth: 65, halign: 'right' },
-          6: { cellWidth: 70, halign: 'right' }
+          5: { cellWidth: 55, halign: 'right' },
+          6: { cellWidth: 55, halign: 'right' },
+          7: { cellWidth: 60, halign: 'right' }
         }
         : {
           0: { cellWidth: 22, halign: 'center' },
           1: { cellWidth: 55, halign: 'center' },
           2: { cellWidth: 'auto' },
-          3: { cellWidth: 80, halign: 'right' },
-          4: { cellWidth: 85, halign: 'right' },
-          5: { cellWidth: 80, halign: 'right' }
+          3: { cellWidth: 60, halign: 'center' },
+          4: { cellWidth: 70, halign: 'right' },
+          5: { cellWidth: 70, halign: 'right' },
+          6: { cellWidth: 70, halign: 'right' }
         }
       : {
           0: { cellWidth: 22, halign: 'center' },
           1: { cellWidth: 55, halign: 'center' },
           2: { cellWidth: 'auto' },
-          3: { cellWidth: 80, halign: 'right' },
-          4: { cellWidth: 80, halign: 'right' }
+          3: { cellWidth: 60, halign: 'center' },
+          4: { cellWidth: 70, halign: 'right' },
+          5: { cellWidth: 70, halign: 'right' }
         }
   });
 
