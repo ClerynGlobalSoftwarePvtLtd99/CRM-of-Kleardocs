@@ -922,8 +922,9 @@ export const generateInvoicePdf = (invoice, customer, res) => {
   // Company Info (Top Right)
   doc.fontSize(14).font('Helvetica-Bold').text('Kleardocs Solutions Private Limited', 300, 30, { align: 'right' });
   doc.fontSize(8).font('Helvetica').text('Phone: +91 98755 15290 | Email: info@kleardocs.com', 300, 50, { align: 'right' });
-  doc.text('366, Amritalal Mukherjee Road, Kolkata, 700063', 300, 62, { align: 'right' });
-  doc.text('CIN: U69200WB2025PTC278630 | PAN: AALCK7855M', 300, 74, { align: 'right' });
+  doc.text('465, VIP Nagar, Hastings Colony,', 300, 62, { align: 'right' });
+  doc.text('Near VIP Bazar Metro Station, Kolkata - 700100', 300, 74, { align: 'right' });
+  doc.text('CIN: U69200WB2025PTC278630 | PAN: AALCK7855M', 300, 86, { align: 'right' });
 
   doc.moveDown(4);
   doc.moveTo(20, 120).lineTo(570, 120).stroke();

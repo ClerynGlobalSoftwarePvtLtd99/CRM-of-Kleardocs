@@ -105,9 +105,9 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
 
   doc.text("Phone no.: +91 98755 15290, Email: info@kleardocs.com", detailsX, curY, { align: "right" });
   curY += lineH;
-  doc.text("366, Amritalal Mukherjee Road, p.o- Thakurpukur,", detailsX, curY, { align: "right" });
+  doc.text("465, VIP Nagar, Hastings Colony,", detailsX, curY, { align: "right" });
   curY += lineH;
-  doc.text("Paschim Barisha, Kolkata, West Bengal, India, 700063", detailsX, curY, { align: "right" });
+  doc.text("Near VIP Bazar Metro Station, Kolkata - 700100", detailsX, curY, { align: "right" });
   curY += lineH;
   doc.text("CIN: U69200WB2025PTC278630 | PAN: AALCK7855M", detailsX, curY, { align: "right" });
   curY += lineH;
