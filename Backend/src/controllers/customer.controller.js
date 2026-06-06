@@ -208,8 +208,9 @@ export const getConsentLetter = async (req, res) => {
     console.log('Query params for PDF:', req.query);
     console.log('====================================\n');
     
+    const compName = customer.companyName || customer.name || 'Company';
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename="CA SUSANTA KUMAR SWAIN.pdf"');
+    res.setHeader('Content-Disposition', `attachment; filename="Consent Letter - ${compName}.pdf"`);
     await pdfService.generateConsentLetter(customer, req.query, res);
   } catch (error) {
     console.error('Consent Letter Error:', error);
