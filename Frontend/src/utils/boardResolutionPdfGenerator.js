@@ -63,9 +63,9 @@ export const generateBoardResolutionPdf = async (customer, date, action = 'view'
   
   doc.text("Contact Us", rightAlignX, startY, { align: "right" });
   startY += lineSpacing;
-  doc.text("366, Amritalal Mukherjee Road, p.o- Thakurpukur,", rightAlignX, startY, { align: "right" });
+  doc.text("465, VIP Nagar, Hastings Colony,", rightAlignX, startY, { align: "right" });
   startY += lineSpacing;
-  doc.text("Paschim Barisha, Kolkata, West Bengal, India, 700063", rightAlignX, startY, { align: "right" });
+  doc.text("Near VIP Bazar Metro Station, Kolkata - 700100", rightAlignX, startY, { align: "right" });
   startY += lineSpacing;
   doc.text("+91 98755 15290", rightAlignX, startY, { align: "right" });
   startY += lineSpacing;

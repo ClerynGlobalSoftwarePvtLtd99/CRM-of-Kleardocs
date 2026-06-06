@@ -219,3 +219,5 @@ Private Limited Company
 06/04/2026 (Monday)  
 
 ============
+Email error
+BREVO_API_KEY is not configured

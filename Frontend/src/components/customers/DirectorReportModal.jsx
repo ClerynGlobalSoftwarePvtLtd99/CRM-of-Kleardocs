@@ -115,7 +115,7 @@ const DirectorReportModal = ({ customer, onClose }) => {
     
     // Company contact details
     const companyDetails = {
-      address: "366, Amritalal Mukherjee Road, p.o- Thakurpukur, Paschim Barisha,\nKolkata, West Bengal, India, 700063",
+      address: "465, VIP Nagar, Hastings Colony, Near VIP Bazar Metro Station, Kolkata - 700100",
       phone: "+91 98755 15290",
       phone2: "+91 98755 15290",
       email: "info@kleardocs.com",
