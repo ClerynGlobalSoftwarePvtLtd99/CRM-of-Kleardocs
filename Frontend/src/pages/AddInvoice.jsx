@@ -84,7 +84,12 @@ const AddInvoice = () => {
         // Populate the customer data as it was selected in UI
         const pdfData = {
           ...invoice,
-          customer: selectedCustomer
+          customer: selectedCustomer,
+          // Ensure GST split fields are passed for correct PDF rendering
+          gstType: invoice.gstType,
+          totalCgst: invoice.totalCgst,
+          totalSgst: invoice.totalSgst,
+          totalIgst: invoice.totalIgst,
         }
         generateInvoicePdf(pdfData, selectedCustomer)
 

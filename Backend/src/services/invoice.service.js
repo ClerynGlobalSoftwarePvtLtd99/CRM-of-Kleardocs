@@ -3,6 +3,15 @@ import RecurringInvoice from "../models/RecurringInvoice.model.js";
 import Customer, { CustomerCompliance } from "../models/Customer.model.js";
 import { ApiError } from "../utils/response.js";
 
+// ─── West Bengal state variants (all-caps as stored in DB) ───────────────────
+const WEST_BENGAL_VARIANTS = new Set(["WEST BENGAL", "WB", "WESTBENGAL"]);
+
+// ─── Helper: determine GST type from customer state ──────────────────────────
+const getGstType = (state) => {
+  const upper = (state || "").toUpperCase().trim();
+  return WEST_BENGAL_VARIANTS.has(upper) ? "CGST_SGST" : "IGST";
+};
+
 // ─── State code lookup (for placeOfSupply) ───────────────────────────────────
 const STATE_CODES = {
   "ANDHRA PRADESH": "37", "ARUNACHAL PRADESH": "12", "ASSAM": "18",
@@ -19,9 +28,17 @@ const STATE_CODES = {
 };
 
 // ─── Helper: calculate item totals ───────────────────────────────────────────
-const calcItem = (item, no) => {
+const calcItem = (item, no, gstType = "IGST") => {
   const price = (Number(item.professionalFees) || 0) + (Number(item.govtFees) || 0);
-  const gstAmount = Math.round((price * (Number(item.gstPercent) || 0)) / 100 * 100) / 100;
+  const gstPercent = Number(item.gstPercent) || 0;
+  const gstAmount = Math.round((price * gstPercent) / 100 * 100) / 100;
+
+  // GST Split based on customer state
+  const isWestBengal = gstType === "CGST_SGST";
+  const cgst = isWestBengal ? Math.round(gstAmount / 2 * 100) / 100 : 0;
+  const sgst = isWestBengal ? Math.round((gstAmount - cgst) * 100) / 100 : 0; // handle odd paise
+  const igst = isWestBengal ? 0 : gstAmount;
+
   return {
     no,
     service: item.serviceId || undefined,
@@ -30,8 +47,11 @@ const calcItem = (item, no) => {
     professionalFees: Number(item.professionalFees) || 0,
     govtFees: Number(item.govtFees) || 0,
     price,
-    gstPercent: Number(item.gstPercent) || 0,
+    gstPercent,
     gstAmount,
+    cgst,
+    sgst,
+    igst,
     amount: price + gstAmount
   };
 };
@@ -162,11 +182,19 @@ export const createInvoice = async (data, userId) => {
   const customer = await Customer.findById(data.customerId);
   if (!customer) throw new ApiError(404, "Customer not found");
 
-  // Build items with calculated amounts
-  const items = data.items.map((item, i) => calcItem(item, i + 1));
+  // Determine GST type from customer state
+  const gstType = getGstType(customer.state);
+
+  // Build items with calculated amounts and GST split
+  const items = data.items.map((item, i) => calcItem(item, i + 1, gstType));
   const subTotal = items.reduce((s, it) => s + it.price, 0);
   const totalGst = items.reduce((s, it) => s + it.gstAmount, 0);
   const total = subTotal + totalGst;
+
+  // GST split totals
+  const totalCgst = items.reduce((s, it) => s + it.cgst, 0);
+  const totalSgst = items.reduce((s, it) => s + it.sgst, 0);
+  const totalIgst = items.reduce((s, it) => s + it.igst, 0);
 
   // Place of supply from customer state code
   const stateCode = STATE_CODES[customer.state?.toUpperCase()] || "";
@@ -185,6 +213,10 @@ export const createInvoice = async (data, userId) => {
     total,
     paid: 0,
     due: total,
+    gstType,
+    totalCgst,
+    totalSgst,
+    totalIgst,
     isRecurring: data.recurring || false,
     description: data.description || "",
     compliance: data.complianceId || undefined,
@@ -474,7 +506,10 @@ export const generateDueRecurringInvoices = async () => {
   for (const ri of due) {
     if (!ri.customer) continue;
 
-    // Build invoice items
+    // Determine GST type from customer state
+    const gstType = getGstType(ri.customer.state);
+
+    // Build invoice items with GST split
     const items = ri.items.map((item, i) => calcItem({
       serviceId: item.service,
       description: item.description,
@@ -482,11 +517,14 @@ export const generateDueRecurringInvoices = async () => {
       govtFees: item.govtFees,
       gstPercent: item.gstPercent,
       hsn: item.hsn
-    }, i + 1));
+    }, i + 1, gstType));
 
     const subTotal = items.reduce((s, it) => s + it.price, 0);
     const totalGst = items.reduce((s, it) => s + it.gstAmount, 0);
     const total = subTotal + totalGst;
+    const totalCgst = items.reduce((s, it) => s + it.cgst, 0);
+    const totalSgst = items.reduce((s, it) => s + it.sgst, 0);
+    const totalIgst = items.reduce((s, it) => s + it.igst, 0);
     const stateCode = STATE_CODES[ri.customer.state?.toUpperCase()] || "";
     const placeOfSupply = stateCode ? `${stateCode} - ${ri.customer.state}` : ri.customer.state || "";
     const invoiceNo = await getNextInvoiceNo();
@@ -502,10 +540,15 @@ export const generateDueRecurringInvoices = async () => {
       total,
       paid: 0,
       due: total,
+      gstType,
+      totalCgst,
+      totalSgst,
+      totalIgst,
       isRecurring: true,
       description: ri.description || "",
       recurringInvoice: ri._id
     });
+
 
     // Update recurring invoice
     ri.invoices.push(invoice._id);

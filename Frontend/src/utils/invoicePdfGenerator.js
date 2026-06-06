@@ -52,7 +52,14 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     total: invoice.total ?? invoice.totals?.amount ?? invoice.totals?.total ?? 0,
     paid: invoice.paid ?? invoice.totals?.paid ?? 0,
     due: invoice.due ?? invoice.totals?.due ?? 0,
+    cgst: invoice.totalCgst ?? 0,
+    sgst: invoice.totalSgst ?? 0,
+    igst: invoice.totalIgst ?? 0,
+    gstType: invoice.gstType ?? "IGST",
   };
+
+  // Determine if West Bengal (CGST+SGST) or other state (IGST)
+  const isWestBengal = t.gstType === "CGST_SGST";
 
   // Normalize invoice number / date
   const invoiceNumber = invoice.invoiceNo || invoice.number || '—';
@@ -140,14 +147,20 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   // Items Table
   const hasGst = (invoice.items || []).some(item => (parseFloat(item.gstAmount || 0) > 0 || parseFloat(item.gstPercent || item.gstPercentage || 0) > 0));
 
+  // Header adapts: West Bengal shows CGST+SGST columns, other states show IGST
   const tableHeaders = hasGst
-    ? [['#', 'HSN/SAC', 'Item Name', 'Price', 'IGST', 'Amount']]
+    ? isWestBengal
+      ? [['#', 'HSN/SAC', 'Item Name', 'Price', 'CGST (9%)', 'SGST (9%)', 'Amount']]
+      : [['#', 'HSN/SAC', 'Item Name', 'Price', 'IGST (18%)', 'Amount']]
     : [['#', 'HSN/SAC', 'Item Name', 'Price', 'Amount']];
 
   const tableRows = (invoice.items || []).map((item, idx) => {
     const rate = item.gstPercent ?? item.gstPercentage ?? 0;
     const price = parseFloat(item.price || 0);
     const gstAmount = parseFloat(item.gstAmount || 0);
+    const cgst = parseFloat(item.cgst || 0);
+    const sgst = parseFloat(item.sgst || 0);
+    const igst = parseFloat(item.igst || 0);
     const totalAmount = parseFloat(item.amount || 0);
 
     const row = [
@@ -158,7 +171,12 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     ];
 
     if (hasGst) {
-      row.push(`${formatMoney(gstAmount)}\n(${formatPercent(rate)})`);
+      if (isWestBengal) {
+        row.push(formatMoney(cgst));  // CGST 9%
+        row.push(formatMoney(sgst));  // SGST 9%
+      } else {
+        row.push(`${formatMoney(igst || gstAmount)}\n(${formatPercent(rate)})`); // IGST 18%
+      }
     }
 
     row.push(formatMoney(totalAmount));
@@ -166,12 +184,20 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
   });
 
   const totalRow = hasGst
-    ? [
-      { content: 'Total', colSpan: 3, styles: { fontStyle: 'bold', halign: 'right' } },
-      formatMoney(t.subTotal),
-      formatMoney(t.gst),
-      formatMoney(t.total)
-    ]
+    ? isWestBengal
+      ? [
+        { content: 'Total', colSpan: 3, styles: { fontStyle: 'bold', halign: 'right' } },
+        formatMoney(t.subTotal),
+        formatMoney(t.cgst),
+        formatMoney(t.sgst),
+        formatMoney(t.total)
+      ]
+      : [
+        { content: 'Total', colSpan: 3, styles: { fontStyle: 'bold', halign: 'right' } },
+        formatMoney(t.subTotal),
+        formatMoney(t.gst),
+        formatMoney(t.total)
+      ]
     : [
       { content: 'Total', colSpan: 3, styles: { fontStyle: 'bold', halign: 'right' } },
       formatMoney(t.subTotal),
@@ -189,34 +215,54 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
       ...tableRows,
       totalRow
     ],
-    columnStyles: hasGst ? {
-      0: { cellWidth: 22, halign: 'center' },
-      1: { cellWidth: 55, halign: 'center' },
-      2: { cellWidth: 'auto' },
-      3: { cellWidth: 80, halign: 'right' },
-      4: { cellWidth: 85, halign: 'right' },
-      5: { cellWidth: 80, halign: 'right' }
-    } : {
-      0: { cellWidth: 22, halign: 'center' },
-      1: { cellWidth: 55, halign: 'center' },
-      2: { cellWidth: 'auto' },
-      3: { cellWidth: 80, halign: 'right' },
-      4: { cellWidth: 80, halign: 'right' }
-    }
+    columnStyles: hasGst
+      ? isWestBengal
+        ? {
+          0: { cellWidth: 22, halign: 'center' },
+          1: { cellWidth: 55, halign: 'center' },
+          2: { cellWidth: 'auto' },
+          3: { cellWidth: 75, halign: 'right' },
+          4: { cellWidth: 65, halign: 'right' },
+          5: { cellWidth: 65, halign: 'right' },
+          6: { cellWidth: 70, halign: 'right' }
+        }
+        : {
+          0: { cellWidth: 22, halign: 'center' },
+          1: { cellWidth: 55, halign: 'center' },
+          2: { cellWidth: 'auto' },
+          3: { cellWidth: 80, halign: 'right' },
+          4: { cellWidth: 85, halign: 'right' },
+          5: { cellWidth: 80, halign: 'right' }
+        }
+      : {
+          0: { cellWidth: 22, halign: 'center' },
+          1: { cellWidth: 55, halign: 'center' },
+          2: { cellWidth: 'auto' },
+          3: { cellWidth: 80, halign: 'right' },
+          4: { cellWidth: 80, halign: 'right' }
+        }
   });
 
   // Tax Breakdown & Summary
   const nextY = doc.lastAutoTable.finalY + 10;
 
-  // Tax Table (Left)
+  // Tax Table (Left) — shows CGST+SGST rows for West Bengal, IGST row for others
   const taxRows = (invoice.items || [])
     .filter(item => (parseFloat(item.gstAmount || 0) > 0 || parseFloat(item.gstPercent || item.gstPercentage || 0) > 0))
-    .map(item => [
-      'IGST',
-      formatMoney(item.price || (item.professionalFees + item.govtFees)),
-      formatPercent(item.gstPercent ?? item.gstPercentage ?? 0),
-      formatMoney(item.gstAmount)
-    ]);
+    .flatMap(item => {
+      const price = formatMoney(item.price || (item.professionalFees + item.govtFees));
+      const cgst = parseFloat(item.cgst || 0);
+      const sgst = parseFloat(item.sgst || 0);
+      const igst = parseFloat(item.igst || item.gstAmount || 0);
+      if (isWestBengal) {
+        return [
+          ['CGST', price, '9%', formatMoney(cgst)],
+          ['SGST', price, '9%', formatMoney(sgst)],
+        ];
+      } else {
+        return [['IGST', price, formatPercent(item.gstPercent ?? item.gstPercentage ?? 0), formatMoney(igst)]];
+      }
+    });
 
   autoTable(doc, {
     startY: nextY,
@@ -227,7 +273,9 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     head: [['Tax Type', 'Taxable amount', 'Rate', 'Tax amount']],
     body: taxRows.length > 0
       ? [...taxRows, [{ content: 'Total', styles: { fontStyle: 'bold' } }, '', '', { content: formatMoney(t.gst), styles: { fontStyle: 'bold' } }]]
-      : [['IGST', formatMoney(0), '0%', formatMoney(0)]],
+      : isWestBengal
+        ? [['CGST', formatMoney(0), '9%', formatMoney(0)], ['SGST', formatMoney(0), '9%', formatMoney(0)]]
+        : [['IGST', formatMoney(0), '0%', formatMoney(0)]],
     columnStyles: {
       0: { cellWidth: 40 },
       1: { halign: 'right' },
@@ -236,13 +284,18 @@ export const generateInvoicePdf = async (invoice, customer, action = 'view') => 
     }
   });
 
-  // Summary Table (Right)
+  // Summary Table (Right) — shows CGST+SGST or GST in summary
   const summaryBody = [
     ['Sub Total', formatMoney(t.subTotal)]
   ];
 
   if (hasGst) {
-    summaryBody.push(['GST', formatMoney(t.gst)]);
+    if (isWestBengal) {
+      summaryBody.push(['CGST (9%)', formatMoney(t.cgst)]);
+      summaryBody.push(['SGST (9%)', formatMoney(t.sgst)]);
+    } else {
+      summaryBody.push(['IGST (18%)', formatMoney(t.gst)]);
+    }
   }
 
   summaryBody.push(

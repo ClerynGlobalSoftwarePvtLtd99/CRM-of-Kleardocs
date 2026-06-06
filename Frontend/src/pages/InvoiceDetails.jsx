@@ -109,13 +109,21 @@ const InvoiceDetails = () => {
         invoiceDate: inv.invoiceDate,
         placeOfSupply: inv.placeOfSupply,
         description: tempDescription, // Use the new description for PDF
+        // GST type + split totals (West Bengal = CGST+SGST, others = IGST)
+        gstType: inv.gstType || 'IGST',
+        totalCgst: inv.totalCgst || 0,
+        totalSgst: inv.totalSgst || 0,
+        totalIgst: inv.totalIgst || 0,
         items: (inv.items || []).map(i => ({
           product: { name: i.service?.name || i.description },
           hsn: i.hsn,
           price: i.price,
           amount: i.amount,
           gstPercent: i.gstPercent,
-          gstAmount: i.gstAmount
+          gstAmount: i.gstAmount,
+          cgst: i.cgst || 0,
+          sgst: i.sgst || 0,
+          igst: i.igst || 0,
         })),
         subTotal: inv.subTotal,
         totalGst: inv.totalGst,
@@ -324,10 +332,24 @@ const InvoiceDetails = () => {
                 <span className="font-semibold text-text-secondary text-sm">Sub Total</span>
                 <span className="font-bold">{formatCurrency(inv.subTotal)}</span>
               </div>
-              <div className="flex justify-between items-center py-2 border-b border-bg-tertiary">
-                <span className="font-semibold text-text-secondary text-sm">GST Amount</span>
-                <span className="font-bold">{formatCurrency(inv.totalGst)}</span>
-              </div>
+              {/* GST split: West Bengal shows CGST+SGST, other states show IGST */}
+              {inv.gstType === 'CGST_SGST' ? (
+                <>
+                  <div className="flex justify-between items-center py-2 border-b border-bg-tertiary">
+                    <span className="font-semibold text-text-secondary text-sm">CGST (9%)</span>
+                    <span className="font-bold">{formatCurrency(inv.totalCgst)}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-bg-tertiary">
+                    <span className="font-semibold text-text-secondary text-sm">SGST (9%)</span>
+                    <span className="font-bold">{formatCurrency(inv.totalSgst)}</span>
+                  </div>
+                </>
+              ) : (
+                <div className="flex justify-between items-center py-2 border-b border-bg-tertiary">
+                  <span className="font-semibold text-text-secondary text-sm">IGST (18%)</span>
+                  <span className="font-bold">{formatCurrency(inv.totalGst)}</span>
+                </div>
+              )}
               <div className="flex justify-between items-center py-2 border-b border-bg-tertiary bg-bg-tertiary/30 -mx-6 px-6 rounded-md">
                 <span className="font-black text-lg uppercase tracking-tight italic">TOTAL</span>
                 <span className="font-black text-lg text-accent">{formatCurrency(inv.total)}</span>
