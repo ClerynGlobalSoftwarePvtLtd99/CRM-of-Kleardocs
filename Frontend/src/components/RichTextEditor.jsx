@@ -37,6 +37,11 @@ const RichTextEditor = ({ value, onChange, placeholder = 'Start typing...', heig
           skin_url: '/tinymce/skins/ui/oxide',
           content_css: '/tinymce/skins/content/default/content.min.css',
 
+          // Prevent TinyMCE from converting absolute URLs to relative paths
+          convert_urls: false,
+          relative_urls: false,
+          remove_script_host: false,
+
           content_style: `
             body { 
               font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
