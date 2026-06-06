@@ -61,7 +61,7 @@ const CustomerAnnualComplianceTable = ({ compliances = [], financialYears = [], 
       <div className="bg-bg-primary p-4">
         
         {/* LIST HEADER - DESKTOP */}
-        <div className={`hidden lg:grid ${readOnly ? 'lg:grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr]' : 'lg:grid-cols-[2fr_0.8fr_1fr_1fr_1fr_1fr_80px]'} gap-4 px-4 py-2 mb-1 text-[13px] font-bold text-text-primary`}>
+        <div className={`hidden lg:grid ${readOnly ? 'lg:grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr]' : 'lg:grid-cols-[2fr_0.8fr_1fr_1fr_1fr_1fr_80px]'} gap-4 px-4 py-2 mb-1 text-[13px] font-bold text-text-primary border-b border-bg-tertiary`}>
           <div>Compliance Name</div>
           <div>Expiry Date</div>
           <div>Expiry After</div>
@@ -149,7 +149,7 @@ const CustomerAnnualComplianceTable = ({ compliances = [], financialYears = [], 
                 </div>
 
                 {/* DESKTOP LAYOUT */}
-                <div className="hidden lg:grid lg:grid-cols-[2fr_0.8fr_1fr_1fr_1fr_1fr_80px] gap-4 items-center px-2 py-3">
+                <div className={`hidden lg:grid ${readOnly ? 'lg:grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr]' : 'lg:grid-cols-[2fr_0.8fr_1fr_1fr_1fr_1fr_80px]'} gap-4 items-center px-4 py-3`}>
                   {/* Name */}
                   <div className="text-[13px] text-text-primary font-medium truncate">
                     {c.name || c.complianceName || "Compliance Record"}
