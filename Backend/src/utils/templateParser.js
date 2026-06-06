@@ -348,10 +348,13 @@ export const wrapWithBrandedTemplate = (htmlContent, options = {}) => {
           
           <!-- Header -->
           <tr>
-            <td style="background-color: ${primaryColor}; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
-              ${finalLogoUrl ? `<img src="${finalLogoUrl}" alt="${companyName}" style="max-height: 50px; margin-bottom: 10px;" onerror="this.style.display='none'" />` : ''}
-              <h2 style="color: #ffffff; margin: 0; font-size: 20px;">${companyName}</h2>
+            <td style="background-color: #0d0d0d; padding: 24px 20px 16px; text-align: center; border-radius: 8px 8px 0 0;">
+              ${finalLogoUrl ? `<img src="${finalLogoUrl}" alt="${companyName}" style="height: 80px; width: auto; display: inline-block;" onerror="this.style.display='none'" />` : `<h2 style="color: #c8a951; margin: 0; font-size: 22px; letter-spacing: 2px;">${companyName}</h2>`}
             </td>
+          </tr>
+          <!-- Header accent bar -->
+          <tr>
+            <td style="background-color: ${primaryColor}; height: 4px;"></td>
           </tr>
           
           <!-- Main Content -->
