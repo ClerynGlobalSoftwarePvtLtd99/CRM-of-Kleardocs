@@ -8,7 +8,7 @@ import AddTemplateModal from '../components/templates/AddTemplateModal'
 import { TemplateFormFields, DEFAULT_FORM } from '../components/templates/AddTemplateModal'
 import { fetchTemplates, updateTemplate, deleteTemplate, uploadTemplateAttachment, removeTemplateAttachment } from '../redux/slices/templatesSlice'
 import { fetchServices } from '../redux/slices/servicesSlice'
-import { injectTemplateData } from '../utils/templateEngine'
+import { injectTemplateData, wrapWithBrandedTemplate } from '../utils/templateEngine'
 import ContentLoader from '../components/common/ContentLoader'
 import toast from 'react-hot-toast'
 import kleardocsLogo from '../assets/logo.png'
@@ -198,13 +198,24 @@ const Templates = () => {
             </div>
             <div className="p-8 overflow-y-auto bg-gray-50 flex-1 text-gray-900 border-b border-[var(--color-bg-tertiary)]">
               <div 
-                className="bg-white shadow-lg p-10 mx-auto max-w-[800px] min-h-[600px]"
-                dangerouslySetInnerHTML={{ __html: 
-                  // Replace any logo URL variant with the locally bundled asset (always works in dev & prod)
-                  injectTemplateData(selectedTemplate.body, previewContext)
-                    .replace(/https?:\/\/[^"']*\/logo\.svg/g, kleardocsLogo)
-                    .replace(/https?:\/\/[^"']*\/logo\.png/g, kleardocsLogo)
-                }}
+                className="bg-[#f5f5f5] shadow-lg p-4 md:p-8 mx-auto max-w-[800px] min-h-[600px]"
+                dangerouslySetInnerHTML={{ __html: (() => {
+                  const parsedContent = injectTemplateData(selectedTemplate.body, previewContext);
+                  const hasInlineLogo = parsedContent.toLowerCase().includes("logo.png") || 
+                                        parsedContent.toLowerCase().includes("logo.svg") || 
+                                        parsedContent.toLowerCase().includes("logo.jpeg") ||
+                                        parsedContent.toLowerCase().includes("logo.jpg") ||
+                                        parsedContent.includes("data:image/");
+                  return wrapWithBrandedTemplate(
+                    parsedContent,
+                    {
+                      companyName: "Kleardocs Solutions Private Limited",
+                      logoUrl: kleardocsLogo,
+                      primaryColor: "#03479f",
+                      noHeader: hasInlineLogo
+                    }
+                  ).replace(/https?:\/\/[^"']*\/logo\.(svg|png)/g, kleardocsLogo);
+                })() }}
               />
               
               {/* Preview Attachments */}

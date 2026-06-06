@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import fs from "fs";
+import path from "path";
 import EmailTemplate from "../models/EmailTemplate.model.js";
 import EmailLog from "../models/EmailLog.model.js";
 import Customer from "../models/Customer.model.js";
@@ -153,23 +155,27 @@ export const sendTemplateEmail = async ({
       settings: null // Can be loaded from SystemSettings if needed
     });
 
-    // Add invoice data if invoice context provided
+    // Add invoice data if invoice context provided, or fall back to the most recent invoice
     if (contextData.invoiceId) {
       const invoice = await Invoice.findById(contextData.invoiceId).lean();
       if (invoice) {
         Object.assign(placeholderData, buildPlaceholderData({ invoice }));
       }
+    } else if (relatedData.invoices && relatedData.invoices.length > 0) {
+      Object.assign(placeholderData, buildPlaceholderData({ invoice: relatedData.invoices[0] }));
     }
 
-    // Add compliance data if compliance context provided
+    // Add compliance data if compliance context provided, or fall back to the most recent compliance
     if (contextData.complianceId) {
       const compliance = await CustomerCompliance.findById(contextData.complianceId).lean();
       if (compliance) {
         Object.assign(placeholderData, buildPlaceholderData({ compliance }));
       }
+    } else if (relatedData.compliances && relatedData.compliances.length > 0) {
+      Object.assign(placeholderData, buildPlaceholderData({ compliance: relatedData.compliances[0] }));
     }
 
-    // Add service data if service context provided
+    // Add service data if service context provided, or fall back to the first service
     if (contextData.serviceId && relatedData.services) {
       const service = relatedData.services.find(s => 
         s._id.toString() === contextData.serviceId || 
@@ -178,14 +184,18 @@ export const sendTemplateEmail = async ({
       if (service) {
         Object.assign(placeholderData, buildPlaceholderData({ service }));
       }
+    } else if (relatedData.services && relatedData.services.length > 0) {
+      Object.assign(placeholderData, buildPlaceholderData({ service: relatedData.services[0] }));
     }
 
-    // Add director data if director context provided
+    // Add director data if director context provided, or fall back to the first director
     if (contextData.directorId && relatedData.directors) {
       const director = relatedData.directors.find(d => d._id.toString() === contextData.directorId);
       if (director) {
         Object.assign(placeholderData, buildPlaceholderData({ director }));
       }
+    } else if (relatedData.directors && relatedData.directors.length > 0) {
+      Object.assign(placeholderData, buildPlaceholderData({ director: relatedData.directors[0] }));
     }
 
     // Merge with additional context data
@@ -207,13 +217,19 @@ export const sendTemplateEmail = async ({
 
     // Template validation warnings are silent in production
 
-    // Step 7: Wrap with branded template - use external logo URL
-    const logoUrl = "https://crm.kleardocs.com/logo.png"; // Kleardocs branded logo (served from backend /public)
+    // Step 7: Wrap with branded template - use absolute backend URL for public logo
+    const logoUrl = "https://crm-of-kleardocs-backend.onrender.com/logo.png";
     
+    const hasInlineLogo = parsedBody.toLowerCase().includes("logo.png") || 
+                          parsedBody.toLowerCase().includes("logo.svg") || 
+                          parsedBody.toLowerCase().includes("logo.jpeg") ||
+                          parsedBody.toLowerCase().includes("logo.jpg");
+
     const brandedHtml = wrapWithBrandedTemplate(parsedBody, {
       companyName: "Kleardocs Solutions Private Limited",
       logoUrl: logoUrl,
-      primaryColor: "#03479f"
+      primaryColor: "#03479f",
+      noHeader: hasInlineLogo
     });
 
     // Step 8: Build attachments
@@ -368,19 +384,47 @@ export const previewTemplateEmail = async ({
       lead: entityType === "lead" ? entity : null
     });
 
-    // Add invoice/compliance/service/director data if provided
+    // Add invoice data if invoice context provided, or fall back to the most recent invoice
     if (contextData.invoiceId) {
       const invoice = await Invoice.findById(contextData.invoiceId).lean();
       if (invoice) {
         Object.assign(placeholderData, buildPlaceholderData({ invoice }));
       }
+    } else if (relatedData.invoices && relatedData.invoices.length > 0) {
+      Object.assign(placeholderData, buildPlaceholderData({ invoice: relatedData.invoices[0] }));
     }
 
+    // Add compliance data if compliance context provided, or fall back to the most recent compliance
     if (contextData.complianceId) {
       const compliance = await CustomerCompliance.findById(contextData.complianceId).lean();
       if (compliance) {
         Object.assign(placeholderData, buildPlaceholderData({ compliance }));
       }
+    } else if (relatedData.compliances && relatedData.compliances.length > 0) {
+      Object.assign(placeholderData, buildPlaceholderData({ compliance: relatedData.compliances[0] }));
+    }
+
+    // Add service data if service context provided, or fall back to the first service
+    if (contextData.serviceId && relatedData.services) {
+      const service = relatedData.services.find(s => 
+        s._id.toString() === contextData.serviceId || 
+        s.service?._id?.toString() === contextData.serviceId
+      );
+      if (service) {
+        Object.assign(placeholderData, buildPlaceholderData({ service }));
+      }
+    } else if (relatedData.services && relatedData.services.length > 0) {
+      Object.assign(placeholderData, buildPlaceholderData({ service: relatedData.services[0] }));
+    }
+
+    // Add director data if director context provided, or fall back to the first director
+    if (contextData.directorId && relatedData.directors) {
+      const director = relatedData.directors.find(d => d._id.toString() === contextData.directorId);
+      if (director) {
+        Object.assign(placeholderData, buildPlaceholderData({ director }));
+      }
+    } else if (relatedData.directors && relatedData.directors.length > 0) {
+      Object.assign(placeholderData, buildPlaceholderData({ director: relatedData.directors[0] }));
     }
 
     // Parse template
@@ -395,9 +439,18 @@ export const previewTemplateEmail = async ({
     });
 
     // Build preview
+    const logoUrl = "https://crm-of-kleardocs-backend.onrender.com/logo.png";
+    
+    const hasInlineLogo = parsedBody.toLowerCase().includes("logo.png") || 
+                          parsedBody.toLowerCase().includes("logo.svg") || 
+                          parsedBody.toLowerCase().includes("logo.jpeg") ||
+                          parsedBody.toLowerCase().includes("logo.jpg");
+
     const brandedHtml = wrapWithBrandedTemplate(parsedBody, {
       companyName: "Kleardocs Solutions Private Limited",
-      primaryColor: "#03479f"
+      logoUrl: logoUrl,
+      primaryColor: "#03479f",
+      noHeader: hasInlineLogo
     });
 
     return {
