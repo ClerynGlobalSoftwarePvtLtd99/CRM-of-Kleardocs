@@ -70,6 +70,15 @@ const Header = () => {
 
   return (
     <header className={`h-20 bg-[var(--color-bg-secondary)] border-b border-[var(--color-bg-tertiary)] flex items-center justify-between px-4 md:px-6 lg:px-8 z-50 w-full relative ${isSidebarPage ? 'mb-0 pb-0' : 'mb-1'}`}>
+      {/* Centered Brand Text only for Client Dashboard */}
+      {location.pathname === '/clients/dashboard' && (
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none hidden sm:block max-w-[calc(100%-200px)] overflow-hidden">
+          <span className="text-sm md:text-lg lg:text-xl font-extrabold text-[var(--color-text-primary)] tracking-wide whitespace-nowrap block text-center">
+            Kleardocs Solutions Private Limited
+          </span>
+        </div>
+      )}
+
       {/* Left side - Date Range Picker */}
       <div className="flex items-center sm:pr-10 pr-5">
         {isDashboard && (

@@ -72,7 +72,7 @@ const ClientLogin = () => {
                 {/* Logo Area */}
                 <div className="flex flex-col items-center mb-10 animate-in fade-in slide-in-from-top-4 duration-700">
                     <div className="w-20 h-20 flex items-center justify-center mb-6 transition-transform hover:scale-105 duration-300">
-                        <img src={logo} alt="Company Logo" className="w-25 h-25 object-contain" />
+                        <img src={logo} alt="Company Logo" className="w-full h-full object-contain" />
                     </div>
                     <h1 className="text-3xl font-black text-crm-orange tracking-tight mb-2">
                         KLEARDOCS <span className="text-white">CLIENTS</span>
