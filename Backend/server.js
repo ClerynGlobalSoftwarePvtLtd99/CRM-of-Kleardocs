@@ -1,5 +1,5 @@
+import "./src/config/config.js"; // ← MUST be first so dotenv loads before any service modules
 import app from "./src/app.js";
-import "./src/config/config.js";
 import { connectDB } from "./src/config/db.js";
 import { startRecurringInvoiceCron } from "./src/cron/automation.cron.js";
 

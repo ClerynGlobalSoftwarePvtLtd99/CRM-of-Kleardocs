@@ -100,7 +100,7 @@ const SendTemplateModal = ({ customer, onClose }) => {
         </div>
       );
       
-      dispatch(fetchCustomerById(customer._id));
+      dispatch(fetchCustomerById({ customerId: customer._id }));
       onClose();
     } catch (err) {
       toast.error(err || "Failed to send email");
