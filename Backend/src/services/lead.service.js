@@ -365,36 +365,10 @@ export const convertToCustomer = async (leadId, data, userId) => {
   });
 
   // ─── Post-Conversion Setup ──────────────────────────────────────────────────
-  try {
-      const { CustomerService, CustomerCompliance } = await import("../models/Customer.model.js");
-      const { default: Service } = await import("../models/Service.model.js");
-      const { default: ComplianceSetting } = await import("../models/ComplianceSetting.model.js");
-
-      // 1. Do not auto-attach service on conversion.
-      // Services should be added only from Customer Details -> Add Service.
-
-      // 2. Initial Compliance setup (New Company Standard)
-      const settings = await ComplianceSetting.find({ 
-        $or: [{ forNewCompany: true }, { isNewCompany: true }] 
-      });
-      for (const s of settings) {
-        let expiry = s.expiryDate;
-        if (s.hasExpiry && s.daysOfExpiry) {
-          expiry = new Date(customer.incorporationDate || customer.onboardingDate);
-          expiry.setDate(expiry.getDate() + s.daysOfExpiry);
-        }
-        await CustomerCompliance.create({
-          customer: customer._id,
-          financialYear: s.financialYear,
-          name: s.name,
-          expiryDate: expiry,
-          status: "To Be Done"
-        });
-      }
-  } catch (err) {
-      console.error("Post-conversion setup failed:", err);
-      // We don't throw here to avoid failing the conversion itself
-  }
+  // NOTE: No compliances are auto-seeded on conversion.
+  // Admin must manually: Add Financial Year → then click "Assign Default Compliances"
+  // The assignment logic (11 for newlyIncorporated, 8 for others) is handled in
+  // cloneComplianceSettingsToCustomerYear() inside customer.service.js.
 
   return customer;
 };

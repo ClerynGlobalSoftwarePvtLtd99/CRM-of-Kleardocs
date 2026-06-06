@@ -190,6 +190,27 @@ const resolveTemplateByName = async (name) => {
   return templates[0] || null;
 };
 
+const isExistingCompanyExclusion = (name) => {
+  if (!name) return false;
+  const nameLower = name.toLowerCase();
+
+  // Check for INC-20A / INC - 20A / INC 20A / INC20A  (new incorporation form — excluded)
+  const isInc20 = nameLower.includes("inc-20") || 
+                  nameLower.includes("inc - 20") || 
+                  nameLower.includes("inc 20") || 
+                  nameLower.includes("inc20") ||
+                  /inc[- ]?20/i.test(nameLower);
+
+  // Check for Share Certificates  (new incorporation only — excluded)
+  const isShareCert = nameLower.includes("share certificate") || 
+                      nameLower.includes("share-certificate") || 
+                      nameLower.includes("share cert");
+
+  // ADT-01 (Auditor Appointment) is NOW INCLUDED for all customers — do NOT exclude it here.
+
+  return isInc20 || isShareCert;
+};
+
 const cloneComplianceSettingsToCustomerYear = async (customerId, financialYear) => {
   let templates = [];
   try {
@@ -201,18 +222,22 @@ const cloneComplianceSettingsToCustomerYear = async (customerId, financialYear) 
     // Fetch all templates for the year
     templates = await ComplianceSetting.find({ financialYear }).lean();
 
-    // SMART FILTERING:
-    // If customer is NOT newlyIncorporated, remove items flagged as new-company only.
-    // This addresses the requirement: "Not by default select three Annual Compliances" for existing companies.
+    // FILTERING RULES:
+    // newlyIncorporated = true  → ALL 11 compliances assigned (no filter)
+    // newlyIncorporated = false → 9 compliances — exclude only INC-20A and Share Certificates
+    //                             ADT-01 IS included for existing companies.
     if (customer && !customer.newlyIncorporated) {
-      templates = templates.filter(t => 
-        !t.forNewCompany && 
-        !t.isNewCompany && 
-        !t.inc20 && 
-        !t.name.toLowerCase().includes("adt-01") &&
-        !t.name.toLowerCase().includes("inc - 20a") &&
-        !t.name.toLowerCase().includes("share certificate")
-      );
+      templates = templates.filter(t => {
+        // Only exclude compliances that are strictly for new incorporations
+        // (INC-20A and Share Certificates).
+        // Note: inc20 flag and isNewCompany/forNewCompany only exclude if name also matches.
+        const excludeByName = isExistingCompanyExclusion(t.name);
+        // Also exclude if the compliance-settings admin explicitly flagged it as
+        // INC-20A (inc20: true) — but NOT merely because forNewCompany/isNewCompany is set,
+        // because ADT-01 may have forNewCompany=true but must still be included.
+        const excludeByFlag = t.inc20 === true;
+        return !(excludeByName || excludeByFlag);
+      });
     }
   } catch (error) {
     console.error("Error fetching compliance templates:", error);
@@ -261,17 +286,7 @@ export const getCustomerById = async (customerId, year) => {
 
   if (!customer) throw new ApiError(404, "Customer not found");
   
-  // DEBUG: Log raw customer data from database
-  console.log('\n===== getCustomerById DEBUG =====');
-  console.log('Customer ID:', customerId);
-  console.log('All fields in customer:', Object.keys(customer));
-  console.log('customer.incorporationDate:', customer.incorporationDate);
-  console.log('customer.companyName:', customer.companyName);
-  console.log('customer.name:', customer.name);
-  console.log('customer.address:', customer.address);
-  console.log('customer.type:', customer.type);
-  console.log('Full customer from DB:', JSON.stringify(customer, null, 2));
-  console.log('================================\n');
+
 
   // Auto-detect current financial year if none explicitly requested.
   // This ensures compliances are always shown on initial page load.
