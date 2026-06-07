@@ -186,7 +186,7 @@ export const generateBoardResolution = async (customer, data, res) => {
     .text(companyAddress, { align: "center" });
 
   doc.moveDown(0.2);
-  doc.font("Poppins-Regular").fillColor(blackColor).text("|", { align: "center" });
+  doc.font("Poppins-Regular").fillColor(blackColor).text(" ", { align: "center" });
   doc.moveDown(0.2);
 
   const certText = `CERTIFIED TRUE COPY OF THE RESOLUTION PASSED AT THE MEETING OF THE BOARD OF DIRECTORS OF ${companyName} HELD AT ${companyAddress}.`;
@@ -733,7 +733,7 @@ export const generateConsentLetter = async (customer, data, res) => {
 
   // Separator Pipe line as seen in Screenshot 2
   doc.moveDown(0.5);
-  doc.text("|", 50, doc.y);
+  doc.text(" ", 50, doc.y);
   doc.moveDown(0.2);
   currentY = doc.y;
 
